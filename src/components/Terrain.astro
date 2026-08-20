@@ -44,9 +44,9 @@ const preuves = [
     icone: 'terrain',
   },
   {
-    titre: 'Une association, pas un centre de formation',
+    titre: 'Pas seulement un organisme de formation',
     texte:
-      `Créée en ${asso.fondation}, agréée sécurité civile, elle porte secours d’abord. La formation prolonge cette mission, elle ne la remplace pas.`,
+      `Créée en ${asso.fondation} et agréée sécurité civile, l’association porte secours toute l’année. La formation prolonge cette mission, elle ne la résume pas.`,
     icone: 'coeur',
   },
   {
@@ -74,18 +74,29 @@ const CHEMINS = {
     situation.
   </p>
 
-  <div class="ter__l">
-    {preuves.map((p) => (
-      <article class="pr">
-        <span class="pr__ic" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-            <path d={CHEMINS[p.icone]} />
-          </svg>
-        </span>
-        <h3>{p.titre}</h3>
-        <p>{p.texte}</p>
-      </article>
-    ))}
+  <div class="ter__grille">
+    <div class="ter__l">
+      {preuves.map((p) => (
+        <article class="pr">
+          <span class="pr__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d={CHEMINS[p.icone]} />
+            </svg>
+          </span>
+          <h3>{p.titre}</h3>
+          <p>{p.texte}</p>
+        </article>
+      ))}
+    </div>
+
+    <figure class="ter__photo">
+      <img
+        src="/img/dps/vpsp-coucher-soleil.jpg"
+        alt="Deux secouristes de l'association, sac d'intervention au dos, rejoignant le véhicule de premiers secours en fin de dispositif."
+        width="1013" height="1800" loading="lazy" decoding="async"
+      />
+      <figcaption>Fin de dispositif — les mêmes qui animent nos sessions.</figcaption>
+    </figure>
   </div>
 
   <div class="ter__liens">
@@ -97,10 +108,34 @@ const CHEMINS = {
 <style>
   .ter { padding-block: clamp(2rem, 5vw, 3rem); }
 
-  .ter__l {
-    margin-top: 2.5rem; display: grid; gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  /* La photo occupe la colonne de droite : à quatre cartes sur trois colonnes,
+     la dernière restait seule sur sa ligne. */
+  .ter__grille {
+    margin-top: 2.5rem;
+    display: grid; gap: clamp(1rem, 2.5vw, 1.5rem);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
   }
+  @media (max-width: 1000px) { .ter__grille { grid-template-columns: 1fr; } }
+
+  .ter__l {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 620px) { .ter__l { grid-template-columns: 1fr; } }
+
+  .ter__photo { margin: 0; }
+  .ter__photo img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 3 / 4; object-fit: cover; object-position: center 40%;
+    border-radius: var(--r-lg); border: 1px solid var(--line);
+  }
+  @media (max-width: 1000px) {
+    .ter__photo img { aspect-ratio: 16 / 9; object-position: center 55%; max-height: 340px; }
+  }
+  .ter__photo figcaption { margin-top: .6rem; font-size: .84rem; color: var(--ink-mute); }
+  .ter--sombre .ter__photo figcaption { color: var(--on-navy-soft); }
+  .ter--sombre .ter__photo img { border-color: rgba(255,255,255,.16); }
   .pr {
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
