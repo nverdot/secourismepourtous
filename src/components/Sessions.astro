@@ -31,7 +31,10 @@ const reste = sessions.length - visibles.length;
         <ul class="sessions__grille">
           {visibles.map((s) => (
             <li>
-              <a class="sess" href={s.urlInscription ?? '/contact'} target={s.urlInscription ? '_blank' : undefined} rel={s.urlInscription ? 'noopener' : undefined}>
+              <button type="button" class="sess" data-inscription
+                      data-event-id={s.id}
+                      data-url={s.urlInscription ?? ''}
+                      data-libelle={`${sigle} — ${formatJour(s.debut)} ${formatNumero(s.debut)} ${formatMois(s.debut)} ${formatAnnee(s.debut)}`}>
                 <span class="sess__date">
                   <span class="sess__num">{formatNumero(s.debut)}</span>
                   <span class="sess__mois">{formatMois(s.debut)}</span>
@@ -42,7 +45,7 @@ const reste = sessions.length - visibles.length;
                   {s.lieu && <span class="sess__lieu">{s.lieu}</span>}
                 </span>
                 <span class="sess__cta" aria-hidden="true">S'inscrire</span>
-              </a>
+              </button>
             </li>
           ))}
         </ul>
@@ -91,14 +94,17 @@ const reste = sessions.length - visibles.length;
   }
 
   .sess {
+    width: 100%;
+    border: 1px solid var(--line);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 1rem;
     background: var(--surface);
-    border: 1px solid var(--line);
     border-radius: var(--r-md);
     padding: 1rem 1.15rem;
-    text-decoration: none;
     color: inherit;
     height: 100%;
     transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;

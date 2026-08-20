@@ -1,0 +1,367 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+
+/**
+ * Sauvetage sportif — pôle compétition, pôle loisirs et école jeunesse.
+ *
+ * Contenu repris des pages « Sauvetage sportif » et « École de natation et de
+ * sauvetage » du site actuel. C'est la partie de l'activité qu'aucun concurrent
+ * local ne peut revendiquer : un club classé parmi les dix meilleurs de France,
+ * des titres mondiaux, et des nageurs au Pôle France.
+ */
+
+const palmares = [
+  { titre: 'Champions de France', detail: 'Sur le 200 SLS, l’épreuve reine de la discipline' },
+  { titre: 'Champions de France', detail: 'Sur le 200 m obstacles' },
+  { titre: 'Champions d’Europe', detail: 'Championnats d’Europe de sauvetage sportif, septembre 2022' },
+  { titre: 'Vice-champion', detail: 'Jeux Mondiaux 2022' },
+  { titre: 'Champions du monde', detail: 'Sur différentes épreuves' },
+];
+
+const poles = [
+  {
+    cle: 'competition',
+    nom: 'Pôle compétition',
+    accroche: 'Viser les podiums nationaux et internationaux',
+    texte:
+      'Former des athlètes performants, rapides, capables de réaliser l’ensemble des épreuves du sauvetage sportif. Nos nageurs s’entraînent chaque semaine pour atteindre les plus hautes marches.',
+    points: [
+      'Classé parmi les dix meilleurs clubs français chaque année',
+      'Des nageurs intégrés au Pôle France de Montpellier',
+      'Finales, podiums et titres aux Championnats de France, eau plate et côtier',
+    ],
+    image: '/img/sauvetage-sportif.jpg',
+  },
+  {
+    cle: 'loisirs',
+    nom: 'Pôle loisirs',
+    accroche: 'Découvrir la discipline, à son rythme',
+    texte:
+      'Faire découvrir le sauvetage sportif au plus grand nombre : un sport varié et ludique, en piscine comme en extérieur, au rythme qui convient à chacun.',
+    points: [
+      'Mieux connaître la mer, ses loisirs et ses dangers',
+      'Comprendre les enjeux de la protection du milieu maritime',
+      'Deux groupes de niveaux, encadrement personnalisé',
+    ],
+    image: '/img/sauvetage-bassin.jpg',
+  },
+];
+
+const materiel = ['Bouée tube', 'Filin', 'Palmes', 'Paddleboard'];
+---
+
+<Base
+  title="Sauvetage sportif à Nice | Club Secourisme Pour Tous"
+  description="Club de sauvetage sportif à Nice : compétition, loisirs et école jeunesse dès 4 ans. Champions de France, d'Europe et du monde. Licence annuelle, entraînements hebdomadaires."
+  chemin="/sauvetage-sportif"
+>
+  <header class="tete">
+    <div class="tete__photo" aria-hidden="true"></div>
+    <div class="tete__voile" aria-hidden="true"></div>
+    <div class="wrap tete__in">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Sauvetage sportif</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--eau">Top 10 des clubs français</span>
+        <span class="badge badge--contour">Depuis {asso.fondation}</span>
+      </div>
+      <h1 class="tete__h1">Un sport complet,<br />exigeant et passionnant</h1>
+      <p class="tete__t">
+        Nager vite, ramer, courir sur le sable, porter secours. Le sauvetage sportif
+        transforme les gestes du sauveteur en discipline de compétition — et nos
+        athlètes montent sur les podiums mondiaux.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="#inscription">Rejoindre le club</a>
+        <a class="btn btn--fantome" href="#ecole">L'école jeunesse</a>
+      </div>
+    </div>
+    <svg class="tete__vague" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,90 L0,44 C240,4 480,0 720,18 C960,36 1200,66 1440,44 L1440,90 Z" />
+    </svg>
+  </header>
+
+  <!-- ========== PALMARÈS ========== -->
+  <section class="wrap palm" aria-labelledby="t-palmares">
+    <p class="eyebrow">Palmarès</p>
+    <h2 class="h-section" id="t-palmares">Ce que le club a gagné</h2>
+    <ul class="palm__liste">
+      {palmares.map((p) => (
+        <li class="palm__item">
+          <span class="palm__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+            </svg>
+          </span>
+          <div>
+            <strong>{p.titre}</strong>
+            <span>{p.detail}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="palm__note">
+      Une vingtaine d'athlètes de haut niveau, titrés aux championnats de France et du monde.
+    </p>
+  </section>
+
+  <!-- ========== DISCIPLINE ========== -->
+  <section class="section" aria-labelledby="t-discipline">
+    <div class="wrap disc">
+      <div>
+        <p class="eyebrow">La discipline</p>
+        <h2 class="h-section" id="t-discipline">Du secours réel à la performance</h2>
+        <p class="lede">
+          En intervention, il s'agit de porter assistance le plus vite et le plus
+          efficacement possible. En compétition, de réaliser la course le plus
+          rapidement possible. Le geste est le même — la vitesse en plus.
+        </p>
+        <p class="para">
+          Chaque course est codifiée et réglementée. La pratique en compétition
+          augmente la rapidité d'exécution, dans l'eau comme sur le sable. C'est ce
+          qui fait la différence le jour où ça compte vraiment.
+        </p>
+        <p class="para">
+          L'encadrement est assuré par des entraîneurs diplômés en sciences et
+          techniques des activités physiques et sportives, avec conseils
+          personnalisés et préparation physique et mentale.
+        </p>
+      </div>
+
+      <aside class="mat">
+        <h3 class="mat__h">Le matériel</h3>
+        <ul>
+          {materiel.map((m) => (
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+              {m}
+            </li>
+          ))}
+        </ul>
+        <p class="mat__t">
+          Trois terrains de jeu : la compétition en mer et en piscine, le sauvetage
+          réel, et la préparation aux épreuves du BNSSA.
+        </p>
+        <a class="mat__lien" href="/formations/bnssa">Découvrir le BNSSA →</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== PÔLES ========== -->
+  <section class="section section--sunk" aria-labelledby="t-poles">
+    <div class="wrap">
+      <p class="eyebrow">Deux façons de pratiquer</p>
+      <h2 class="h-section" id="t-poles">Compétition ou loisir&nbsp;?</h2>
+      <div class="poles">
+        {poles.map((p) => (
+          <article class:list={['pole', `pole--${p.cle}`]}>
+            <div class="pole__img" style={`background-image:url('${p.image}')`} aria-hidden="true"></div>
+            <div class="pole__corps">
+              <h3 class="pole__h">{p.nom}</h3>
+              <p class="pole__acc">{p.accroche}</p>
+              <p class="pole__t">{p.texte}</p>
+              <ul class="pole__l">
+                {p.points.map((x) => (
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+                    {x}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ÉCOLE JEUNESSE ========== -->
+  <section class="section" id="ecole" aria-labelledby="t-ecole">
+    <div class="wrap ecole">
+      <div>
+        <p class="eyebrow">Les Pitchouns Nissart</p>
+        <h2 class="h-section" id="t-ecole">L'école de natation et de sauvetage</h2>
+        <p class="lede">
+          De 4 à 18 ans, les enfants apprennent à nager et à secourir, dans un cadre
+          dynamique, sportif et ludique.
+        </p>
+
+        <div class="parcours">
+          <div class="etape">
+            <span class="etape__age">4 ans</span>
+            <p>Découverte de l'eau et premières techniques, en piscine.</p>
+          </div>
+          <div class="etape">
+            <span class="etape__age">Au fil des années</span>
+            <p>Diplômes progressifs, sauvetage en piscine, lac, rivière et océan. Initiations en mer et exercices sur le sable.</p>
+          </div>
+          <div class="etape">
+            <span class="etape__age">16 ans</span>
+            <p>Possibilité d'intégrer nos équipes sur les postes de secours.</p>
+          </div>
+          <div class="etape etape--fin">
+            <span class="etape__age">17 ans</span>
+            <p>Passage du BNSSA pour devenir nageur-sauveteur.</p>
+          </div>
+        </div>
+
+        <p class="para">
+          Entraide, solidarité, partage, travail en équipe : ce que le sauvetage
+          apprend dépasse largement le bord du bassin.
+        </p>
+      </div>
+
+      <aside class="infos">
+        <h3 class="infos__h">Informations pratiques</h3>
+        <dl>
+          <div><dt>Âges</dt><dd>4 à 18 ans</dd></div>
+          <div><dt>Lieu</dt><dd>Palais des sports Jean Bouin<br />2 rue Jean Allègre, 06300 Nice</dd></div>
+          <div><dt>Licence</dt><dd>Annuelle, de septembre à juin</dd></div>
+          <div><dt>Tarif</dt><dd>Nous consulter</dd></div>
+        </dl>
+        <p class="infos__plus">
+          Les parents qui le souhaitent peuvent accéder aux lignes d'eau pendant
+          le cours de leurs enfants.
+        </p>
+        <a class="btn btn--primaire infos__cta" href="/contact">Demander une place</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== INSCRIPTION ========== -->
+  <section class="section section--navy" id="inscription" aria-labelledby="t-inscription">
+    <div class="wrap wrap--etroit ins">
+      <div>
+        <p class="eyebrow">Rejoindre le club</p>
+        <h2 class="h-section" id="t-inscription">Licence annuelle</h2>
+        <p class="lede">
+          Un cours par semaine, de septembre à juin, encadré par des entraîneurs
+          diplômés. Entraînements au 31 boulevard Impératrice Eugénie à Nice.
+        </p>
+      </div>
+      <div class="ins__actions">
+        <a class="btn btn--primaire" href="/contact">Demander une inscription</a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Teinte océan, cohérente avec la filière aquatique du catalogue. */
+  .tete, .palm, .disc, .poles, .ecole { --accent: var(--ocean); --accent-wash: var(--ocean-wash); }
+
+  .tete { position: relative; background: var(--navy-deep); color: var(--on-navy); overflow: hidden; }
+  .tete__photo { position: absolute; inset: 0; background: url('/img/filiere-aquatique.jpg') center 45%/cover; }
+  .tete__voile {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(97deg, rgba(7,23,38,.96) 0%, rgba(7,23,38,.9) 34%, rgba(9,32,54,.6) 68%, rgba(11,37,64,.42) 100%),
+      linear-gradient(180deg, rgba(7,23,38,.55) 0%, rgba(7,23,38,0) 28%);
+  }
+  @media (max-width: 860px) {
+    .tete__voile { background: linear-gradient(180deg, rgba(7,23,38,.9) 0%, rgba(7,23,38,.94) 60%, rgba(7,23,38,.96) 100%); }
+  }
+  .tete__in { position: relative; z-index: 1; padding-block: clamp(1.5rem,4vw,2.25rem) clamp(4.5rem,10vw,7rem); }
+
+  .fil {
+    display: flex; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem,4vw,2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .badge--eau { background: var(--ocean); color: #fff; }
+  .tete__h1 { font-size: clamp(2.1rem,6vw,3.6rem); font-weight: 800; line-height: 1.03; margin-bottom: 1.1rem; }
+  .tete__t { max-width: 50ch; color: var(--on-navy-text); font-size: clamp(1rem,2.2vw,1.12rem); margin-bottom: 2rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+  .tete__vague { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1; width: 100%; height: auto; }
+  .tete__vague path { fill: var(--ground); }
+
+  /* --- palmarès --- */
+  .palm { padding-block: clamp(3rem,7vw,5rem); }
+  .palm__liste {
+    list-style: none; margin: 2rem 0 0; padding: 0;
+    display: grid; gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%),1fr));
+  }
+  .palm__item {
+    display: flex; gap: .9rem; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 1.1rem 1.2rem;
+  }
+  .palm__ic {
+    flex: none; width: 38px; height: 38px; border-radius: 10px;
+    background: var(--ocean-wash); color: var(--ocean);
+    display: grid; place-items: center;
+  }
+  .palm__ic svg { width: 19px; height: 19px; }
+  .palm__item strong { display: block; font-family: 'Archivo', sans-serif; font-size: 1rem; }
+  .palm__item span { font-size: .88rem; color: var(--ink-soft); }
+  .palm__note { margin-top: 1.2rem; font-size: .9rem; color: var(--ink-mute); }
+
+  /* --- discipline --- */
+  .disc { display: grid; gap: clamp(1.75rem,4vw,3rem); grid-template-columns: minmax(0,7fr) minmax(0,5fr); align-items: start; }
+  @media (max-width: 880px) { .disc { grid-template-columns: 1fr; } }
+  .para { margin-top: 1rem; color: var(--ink-soft); max-width: var(--measure); }
+
+  .mat { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(1.35rem,3vw,1.9rem); }
+  .mat__h { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+  .mat ul { list-style: none; margin: 0 0 1.2rem; padding: 0; display: flex; flex-direction: column; gap: .6rem; }
+  .mat li { display: flex; align-items: center; gap: .6rem; font-size: .95rem; }
+  .mat li svg { width: 16px; height: 16px; color: var(--ocean); flex: none; }
+  .mat__t { font-size: .9rem; color: var(--ink-soft); margin-bottom: 1rem; }
+  .mat__lien { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .92rem; color: var(--ocean); text-decoration: none; }
+  .mat__lien:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* --- pôles --- */
+  .poles { margin-top: 2.5rem; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%),1fr)); }
+  .pole { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; display: flex; flex-direction: column; }
+  .pole__img { height: 190px; background-size: cover; background-position: center; }
+  .pole__corps { padding: clamp(1.35rem,3vw,1.75rem); display: flex; flex-direction: column; flex: 1; }
+  .pole__h { font-size: 1.25rem; font-weight: 800; color: var(--ocean); }
+  .pole--loisirs .pole__h { color: var(--azur); }
+  .pole__acc { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .92rem; margin-bottom: .6rem; }
+  .pole__t { font-size: .93rem; color: var(--ink-soft); margin-bottom: 1.1rem; }
+  .pole__l { list-style: none; margin: auto 0 0; padding: 1.1rem 0 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: .55rem; }
+  .pole__l li { display: flex; gap: .55rem; align-items: flex-start; font-size: .89rem; color: var(--ink-soft); }
+  .pole__l svg { width: 15px; height: 15px; color: var(--ocean); flex: none; margin-top: .18rem; }
+  .pole--loisirs .pole__l svg { color: var(--azur); }
+
+  /* --- école --- */
+  .ecole { display: grid; gap: clamp(1.75rem,4vw,3rem); grid-template-columns: minmax(0,7fr) minmax(0,5fr); align-items: start; }
+  @media (max-width: 880px) { .ecole { grid-template-columns: 1fr; } }
+
+  .parcours { margin-top: 1.75rem; display: flex; flex-direction: column; }
+  .etape { position: relative; padding: 0 0 1.4rem 1.75rem; border-left: 2px solid var(--line); }
+  .etape--fin { border-left-color: transparent; padding-bottom: 0; }
+  .etape::before {
+    content: ''; position: absolute; left: -7px; top: .35rem;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--ocean); border: 3px solid var(--ground);
+  }
+  .etape__age {
+    display: block; font-family: 'Archivo', sans-serif; font-weight: 800;
+    font-size: .95rem; color: var(--ocean); margin-bottom: .2rem;
+  }
+  .etape p { font-size: .93rem; color: var(--ink-soft); }
+
+  .infos { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(1.35rem,3vw,1.9rem); }
+  .infos__h { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.1rem; }
+  .infos dl { margin: 0 0 1.1rem; display: flex; flex-direction: column; gap: .85rem; }
+  .infos dt { font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); }
+  .infos dd { margin: .15rem 0 0; font-size: .95rem; }
+  .infos__plus { font-size: .88rem; color: var(--ink-soft); margin-bottom: 1.2rem; }
+  .infos__cta { width: 100%; justify-content: center; }
+
+  /* --- inscription --- */
+  .ins { display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
+  .ins__actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+</style>

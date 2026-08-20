@@ -304,8 +304,14 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
     border: 0; padding: 0;
     border-radius: var(--r-lg);
     width: min(540px, calc(100vw - 2rem));
+    /* Sans plafond de hauteur, la boîte dépassait l'écran dès deux
+       participants et le bouton de paiement devenait inatteignable. */
+    max-height: min(90vh, 860px);
     background: var(--surface); color: var(--ink);
-    box-shadow: var(--sh-lg); overflow: hidden;
+    box-shadow: var(--sh-lg);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    padding: 0;
   }
   .ins::backdrop { background: rgba(7,23,38,.68); backdrop-filter: blur(2px); }
 
@@ -313,6 +319,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
     display: flex; align-items: center; gap: .8rem;
     padding: 1.1rem 1.3rem;
     background: var(--accent); color: #fff;
+    flex: none;  /* reste visible pendant le défilement */
   }
   .ins__ic { width: 32px; height: 32px; flex: none; display: grid; place-items: center; }
   .ins__ic svg { width: 20px; height: 20px; }
@@ -323,7 +330,14 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
   .ins__x svg { width: 20px; height: 20px; }
 
   .ins [hidden] { display: none !important; }
-  .ins__corps { padding: 1.3rem; min-height: 120px; }
+  .ins__corps {
+    padding: 1.3rem;
+    min-height: 120px;
+    flex: 1 1 auto;
+    overflow-y: auto;           /* c'est ici que ça défile */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
   .ins__session {
     font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem;
     margin-bottom: 1rem; color: var(--ink);
@@ -440,7 +454,14 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
   }
   .ins__erreur a { color: var(--secours); font-weight: 600; }
 
-  .ins__pied { padding: 1rem 1.3rem 1.3rem; border-top: 1px solid var(--line); background: var(--sunk); }
+  /* Le pied reste collé en bas : le bouton de paiement est toujours accessible,
+     quel que soit le nombre de participants saisis. */
+  .ins__pied {
+    padding: 1rem 1.3rem 1.3rem;
+    border-top: 1px solid var(--line);
+    background: var(--sunk);
+    flex: none;
+  }
   .ins__note { font-size: .78rem; color: var(--ink-mute); margin-bottom: .8rem; }
   .ins__valider {
     width: 100%;

@@ -146,8 +146,10 @@ const motifs = [
           autofinancement.
         </p>
         <p class="carte__p">
-          Indiquez-le dans votre message : nous vous accompagnons dans les démarches.
+          Pour une prise en charge, passez par le formulaire dédié : il recueille
+          d'emblée ce qu'il faut pour établir la convention.
         </p>
+        <a class="btn btn--sobre carte__cta" href="/financement">Demander une prise en charge</a>
       </div>
     </aside>
   </div>
@@ -183,11 +185,11 @@ const motifs = [
   .ct__h { font-size: clamp(1.4rem, 3.2vw, 1.8rem); font-weight: 800; margin-bottom: 1.4rem; }
 
   form { display: flex; flex-direction: column; gap: 1rem; }
-  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  @media (max-width: 520px) { .duo { grid-template-columns: 1fr; } }
+  .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 1rem; }
 
   label { display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; font-weight: 600; color: var(--ink-soft); }
   input[type='text'], input[type='email'], input[type='tel'], select, textarea {
+    min-width: 0;  /* sinon la largeur intrinsèque du champ élargit la grille */
     font: inherit; font-size: .97rem; font-weight: 400; color: var(--ink);
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--r-sm); padding: .7rem .85rem; width: 100%;
@@ -215,6 +217,7 @@ const motifs = [
   .carte__h--clair { color: #fff; }
   .carte__p { font-size: .92rem; color: var(--ink-soft); margin-bottom: .7rem; }
   .carte__p:last-child { margin-bottom: 0; }
+  .carte__cta { margin-top: .8rem; font-size: .92rem; padding: .7rem 1.2rem; }
 
   .ligne {
     display: flex; gap: .85rem; align-items: center;

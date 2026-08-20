@@ -81,6 +81,9 @@ html {
 
 body {
   margin: 0;
+  /* Filet de sécurité : un élément trop large ne doit jamais faire défiler
+     la page de côté. Les grilles sont bornées par ailleurs. */
+  overflow-x: hidden;
   background: var(--ground);
   color: var(--ink);
   font-family: 'Public Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
