@@ -1,0 +1,396 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { filAriane } from '../lib/schema';
+
+/**
+ * École de natation et de sauvetage — enfants de 4 à 18 ans.
+ *
+ * Public différent du reste du site : ici le visiteur est un parent, pas un
+ * stagiaire ni un organisateur. Il ne cherche pas un diplôme, il cherche une
+ * activité pour son enfant — et il compare avec le club de natation d'à côté.
+ *
+ * L'argument qui départage n'est donc pas sportif mais éducatif : ici l'enfant
+ * apprend à nager ET à porter secours, et il peut en faire quelque chose à
+ * seize ans. Contenu repris de la page du site historique.
+ */
+
+const ages = [
+  {
+    tranche: 'Dès 4 ans',
+    titre: 'Découvrir l’eau',
+    texte: 'Aisance aquatique et premières techniques, dans un cadre ludique et progressif.',
+  },
+  {
+    tranche: 'Enfants et préados',
+    titre: 'Apprendre à sauver',
+    texte: 'Bouée tube, filin, palmes, paddleboard : les techniques du sauvetage avec du matériel adapté à leur âge.',
+  },
+  {
+    tranche: 'Dès 16 ans',
+    titre: 'Rejoindre les postes de secours',
+    texte: 'Les diplômes passés au fil des années ouvrent l’accès aux dispositifs de secours de l’association.',
+  },
+  {
+    tranche: 'Dès 17 ans',
+    titre: 'Passer le BNSSA',
+    texte: 'Pour aller vers les missions de sauveteur en mer et la surveillance des plages.',
+  },
+];
+
+const milieux = [
+  { nom: 'Piscine', texte: 'Le cœur de l’entraînement, chaque semaine.' },
+  { nom: 'Mer', texte: 'Initiations organisées quand la saison le permet, sur le sable et dans l’eau.' },
+  { nom: 'Lac et rivière', texte: 'Parce qu’un sauvetage ne se passe pas toujours en bassin.' },
+];
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Sauvetage sportif', chemin: '/sauvetage-sportif' },
+    { nom: 'École de natation', chemin: '/ecole-de-natation' },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SportsActivityLocation',
+    name: 'École de natation et de sauvetage — Secourisme Pour Tous',
+    description:
+      'École de natation et de sauvetage sportif pour les enfants de 4 à 18 ans, au Palais des sports Jean Bouin à Nice.',
+    parentOrganization: { '@id': 'https://www.secourismepourtous.org/#organisation' },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '2 rue Jean Allègre',
+      postalCode: '06300',
+      addressLocality: 'Nice',
+      addressCountry: 'FR',
+    },
+  },
+];
+---
+
+<Base
+  title="École de natation et de sauvetage à Nice | Dès 4 ans"
+  description="École de natation et de sauvetage sportif pour les enfants de 4 à 18 ans à Nice, piscine Jean Bouin. Apprendre à nager et à porter secours. Licence annuelle."
+  chemin="/ecole-de-natation"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="tete__photo" aria-hidden="true"></div>
+    <div class="tete__voile" aria-hidden="true"></div>
+    <div class="wrap tete__in">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/sauvetage-sportif">Sauvetage sportif</a><i aria-hidden="true">›</i>
+        <b>École de natation</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">De 4 à 18 ans</span>
+        <span class="badge badge--contour">Licence annuelle</span>
+        <span class="badge badge--contour">Piscine Jean Bouin</span>
+      </div>
+      <h1 class="tete__h1">Apprendre à nager,<br />apprendre à sauver</h1>
+      <p class="tete__t">
+        Depuis plusieurs années, le club accueille les enfants de 4 à 18 ans dans
+        son école de natation et de sauvetage sportif. Ils y découvrent la nage
+        et le secourisme ensemble, dans un cadre sportif et ludique.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="#inscription">
+          S’inscrire
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+    <svg class="tete__vague" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,90 L0,44 C240,4 480,0 720,18 C960,36 1200,66 1440,44 L1440,90 Z" />
+    </svg>
+  </header>
+
+  <!-- ========== CE QU'ILS APPRENNENT ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Le principe</p>
+      <h2 class="h-section">Comme les sauveteurs des plages, à leur échelle</h2>
+      <p class="lede">
+        Les enfants sont initiés aux mêmes techniques que les adultes, avec du
+        matériel adapté à leur âge : bouée tube, filin, palmes, paddleboard. Ils
+        passent des diplômes progressivement, année après année.
+      </p>
+
+      <div class="etapes">
+        {ages.map((a) => (
+          <article class="etape">
+            <span class="etape__a">{a.tranche}</span>
+            <h3>{a.titre}</h3>
+            <p>{a.texte}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LES MILIEUX ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Où ils s’entraînent</p>
+      <h2 class="h-section">Un sauvetage ne se passe pas toujours en bassin</h2>
+      <div class="milieux">
+        {milieux.map((m) => (
+          <article class="milieu">
+            <h3>{m.nom}</h3>
+            <p>{m.texte}</p>
+          </article>
+        ))}
+      </div>
+      <p class="milieux__n">
+        Des exercices sont menés aussi bien dans l’eau que sur le sable, pour
+        que les gestes tiennent hors du confort de la piscine.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== VALEURS ========== -->
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Ce que ça leur apporte</p>
+      <h2 class="valeurs__h">Un sport qui ne se pratique pas seul</h2>
+      <p class="lede">
+        Le sauvetage associe le loisir et la compétition, mais il enseigne
+        d’abord l’entraide, la solidarité et le partage. Une victime se sort de
+        l’eau à plusieurs : les enfants l’apprennent en le faisant.
+      </p>
+      <p class="lede valeurs__p">
+        Et parce qu’un cours d’enfant est aussi une heure d’attente pour un
+        parent&nbsp;: les parents qui souhaitent nager ont accès aux lignes
+        d’eau pendant le cours de leur enfant.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== PRATIQUE ========== -->
+  <section class="section" id="inscription">
+    <div class="wrap prat">
+      <div>
+        <p class="eyebrow">En pratique</p>
+        <h2 class="h-section">S’inscrire à l’école</h2>
+        <dl class="prat__l">
+          <div>
+            <dt>Âges</dt>
+            <dd>De 4 à 18 ans</dd>
+          </div>
+          <div>
+            <dt>Licence</dt>
+            <dd>Annuelle, de septembre à juin</dd>
+          </div>
+          <div>
+            <dt>Lieu</dt>
+            <dd>
+              Palais des sports Jean Bouin — Piscine Jean Bouin<br />
+              2 rue Jean Allègre, 06300 Nice
+            </dd>
+          </div>
+          <div>
+            <dt>Renseignements</dt>
+            <dd>
+              <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a><br />
+              <a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <form class="fm" name="ecole-natation" method="POST" action="/api/contact"
+            data-netlify="true" netlify-honeypot="bot-field">
+        <h3 class="fm__h">Demander une inscription</h3>
+        <input type="hidden" name="form-name" value="ecole-natation" />
+        <input type="hidden" name="motif" value="École de natation et de sauvetage" />
+        <p class="miel"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+
+        <div class="duo">
+          <label>Prénom du parent *<input type="text" name="prenom" autocomplete="given-name" required /></label>
+          <label>Nom *<input type="text" name="nom" autocomplete="family-name" required /></label>
+        </div>
+        <div class="duo">
+          <label>E-mail *<input type="email" name="email" autocomplete="email" required /></label>
+          <label>Téléphone<input type="tel" name="telephone" autocomplete="tel" /></label>
+        </div>
+        <div class="duo">
+          <label>Prénom de l’enfant *<input type="text" name="enfant_prenom" required /></label>
+          <label>Âge de l’enfant *<input type="text" name="enfant_age" required placeholder="ex. 7 ans" /></label>
+        </div>
+
+        <label>Sait-il déjà nager&nbsp;? *
+          <select name="niveau" required>
+            <option value="">Choisissez…</option>
+            <option value="Ne sait pas nager">Pas encore</option>
+            <option value="Débutant">Il se débrouille</option>
+            <option value="Sait nager">Il nage bien</option>
+            <option value="Déjà en club">Il vient d’un autre club</option>
+          </select>
+        </label>
+
+        <label>Votre message
+          <textarea name="message" rows="4" placeholder="Vos questions, vos disponibilités…"></textarea>
+        </label>
+
+        <label class="case">
+          <input type="checkbox" name="consentement" required />
+          <span>
+            J’accepte que ces informations soient utilisées pour traiter ma demande.
+            <a href="/politique-de-confidentialite">En savoir plus</a>
+          </span>
+        </label>
+
+        <button type="submit" class="btn btn--primaire fm__envoi">
+          Envoyer ma demande
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========== SUITE ========== -->
+  <section class="section section--sunk">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Après l’école</p>
+      <h2 class="h-section">Ce que ça leur ouvre</h2>
+      <div class="suites">
+        <a class="suite" href="/sauvetage-sportif">
+          <strong>Le sauvetage sportif en compétition</strong>
+          <span>Le club, ses entraînements et ses athlètes titrés.</span>
+        </a>
+        <a class="suite" href="/formations/bnssa">
+          <strong>Le BNSSA, dès 17 ans</strong>
+          <span>Le diplôme qui ouvre la surveillance des plages et des piscines.</span>
+        </a>
+        <a class="suite" href="/secouriste-actif">
+          <strong>Les postes de secours, dès 16 ans</strong>
+          <span>Rejoindre les équipes de l’association sur le terrain.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete { position: relative; background: var(--navy-deep); color: var(--on-navy); overflow: hidden; }
+  .tete__photo {
+    position: absolute; inset: 0;
+    background: url('/img/sauvetage-bassin.jpg') center 45% / cover;
+  }
+  .tete__voile {
+    position: absolute; inset: 0;
+    background: linear-gradient(97deg, rgba(7,23,38,.95) 0%, rgba(7,23,38,.88) 34%, rgba(9,32,54,.55) 68%, rgba(11,37,64,.36) 100%);
+  }
+  @media (max-width: 820px) {
+    .tete__voile { background: linear-gradient(180deg, rgba(7,23,38,.85) 0%, rgba(7,23,38,.92) 60%, rgba(7,23,38,.96) 100%); }
+  }
+  .tete__in { position: relative; z-index: 1; padding-block: clamp(1.5rem,4vw,2.25rem) clamp(4rem,9vw,6rem); }
+
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem,3vw,2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(2rem,5.5vw,3.4rem); font-weight: 800; line-height: 1.05; margin-bottom: 1.1rem; }
+  .tete__t { max-width: 54ch; color: var(--on-navy-text); font-size: clamp(1rem,2.2vw,1.12rem); margin-bottom: 2rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+  .tete__vague { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1; width: 100%; height: auto; }
+  .tete__vague path { fill: var(--ground); }
+
+  .etapes {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  }
+  .etape {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 4px solid var(--ocean, #0e7490);
+    border-radius: var(--r-lg); padding: clamp(1.25rem,3vw,1.6rem);
+  }
+  .etape__a {
+    display: inline-block; margin-bottom: .6rem;
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ocean, #0e7490);
+  }
+  .etape h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .35rem; }
+  .etape p { font-size: .92rem; color: var(--ink-soft); }
+
+  .milieux {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  }
+  .milieu {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.25rem 1.4rem;
+  }
+  .milieu h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: .3rem; }
+  .milieu p { font-size: .91rem; color: var(--ink-soft); }
+  .milieux__n { margin-top: 1.25rem; font-size: .92rem; color: var(--ink-mute); max-width: 72ch; }
+
+  .valeurs__h { font-size: clamp(1.5rem,3.5vw,2.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .valeurs__p { margin-top: 1rem; }
+
+  .prat {
+    display: grid; gap: clamp(1.75rem, 4vw, 3rem);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+  @media (max-width: 900px) { .prat { grid-template-columns: 1fr; } }
+
+  .prat__l { margin: 1.75rem 0 0; display: flex; flex-direction: column; gap: .9rem; }
+  .prat__l > div { padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+  .prat__l > div:last-child { border-bottom: 0; padding-bottom: 0; }
+  .prat__l dt {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .3rem;
+  }
+  .prat__l dd { margin: 0; font-size: .95rem; }
+  .prat__l a { color: var(--azur); }
+
+  .fm {
+    display: flex; flex-direction: column; gap: 1rem;
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.35rem, 3vw, 1.85rem);
+  }
+  .fm__h { font-size: 1.15rem; font-weight: 700; }
+  .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px,100%),1fr)); gap: 1rem; }
+  .fm label { display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; font-weight: 600; color: var(--ink-soft); }
+  .fm input[type='text'], .fm input[type='email'], .fm input[type='tel'], .fm select, .fm textarea {
+    min-width: 0; font: inherit; font-size: .96rem; font-weight: 400; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm); padding: .68rem .85rem; width: 100%;
+  }
+  .fm input:focus, .fm select:focus, .fm textarea:focus {
+    outline: 2px solid var(--azur); outline-offset: 1px; border-color: transparent;
+  }
+  .fm textarea { resize: vertical; }
+  .fm .case { flex-direction: row; align-items: flex-start; gap: .6rem; font-weight: 400; font-size: .86rem; }
+  .fm .case input { width: 17px; height: 17px; margin-top: .18rem; flex: none; accent-color: var(--secours); }
+  .fm .case a { color: var(--azur); }
+  .miel { position: absolute; left: -9999px; }
+  .fm__envoi { align-self: flex-start; margin-top: .3rem; }
+
+  .suites {
+    margin-top: 2rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  }
+  .suite {
+    display: flex; flex-direction: column; gap: .3rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.15rem 1.3rem;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s;
+  }
+  .suite:hover { border-color: var(--secours); }
+  .suite strong { font-family: 'Archivo', sans-serif; font-size: .98rem; font-weight: 700; }
+  .suite span { font-size: .87rem; color: var(--ink-mute); }
+</style>

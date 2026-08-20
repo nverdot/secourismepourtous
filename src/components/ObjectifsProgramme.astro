@@ -47,7 +47,28 @@ const sigles = formations
   .filter((x) => x.slug !== f.slug)
   .sort((a, b) => b.sigle.length - a.sigle.length);
 
+/** Destinations qui ne sont pas des formations. */
+const AILLEURS: { motif: RegExp; href: string; mot: RegExp }[] = [
+  {
+    motif: /poste[s]? de secours|nos équipes/i,
+    href: '/secouriste-actif',
+    mot: /nos équipes de postes de secours|postes de secours|nos équipes/i,
+  },
+];
+
 function lienSuite(texte: string) {
+  const hors = AILLEURS.find((a) => a.motif.test(texte));
+  if (hors) {
+    const m = texte.match(hors.mot)!;
+    const i = m.index!;
+    return {
+      avant: texte.slice(0, i),
+      sigle: m[0],
+      apres: texte.slice(i + m[0].length),
+      href: hors.href,
+      suspendue: false,
+    };
+  }
   const cible = sigles.find((x) =>
     new RegExp(`\\b${x.sigle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(texte)
   );
@@ -69,39 +90,6 @@ const v = niveauPse ? volume(niveauPse) : null;
 
 <section class="section" aria-label="Contenu de la formation">
   <div class="wrap op">
-    <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
-         de les publier ; les répéter ailleurs ferait doublon. -->
-    <div class="mods">
-      <div class="op__tete">
-        <span class="op__ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
-          </svg>
-        </span>
-        <h2 class="op__h">Comment ça se passe</h2>
-      </div>
-
-      <dl class="mods__l">
-        {modalites.map((l) => (
-          <div class="mods__i">
-            <dt>
-              <span class="mods__ic" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                  <path d={PICTOS[l.icone]} />
-                </svg>
-              </span>
-              {l.cle}
-            </dt>
-            <dd>
-              {l.valeur}
-              {l.note && <span class="mods__n">{l.note}</span>}
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-    </div>
-
     <!-- Objectifs -->
     <div class="buts-col">
       <div class="op__tete">
@@ -132,33 +120,39 @@ const v = niveauPse ? volume(niveauPse) : null;
         ))}
       </div>
 
-      {f.suites.length > 0 && (
-        <div class="apres">
-          <h3>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" />
-            </svg>
-            Et après&nbsp;?
-          </h3>
-          <ul>
-            {f.suites.map((s) => {
-              const l = lienSuite(s);
-              return (
-                <li>
-                  <span class="apres__puce" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-                  </span>
-                  <span>
-                    {l && !l.suspendue
-                      ? <>{l.avant}<a class="apres__lien" href={l.href}>{l.sigle}</a>{l.apres}</>
-                      : s}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+    </div>
+
+    <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
+         de les publier ; les répéter ailleurs ferait doublon. -->
+    <div class="mods">
+      <div class="op__tete">
+        <span class="op__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+          </svg>
+        </span>
+        <h2 class="op__h">Comment ça se passe</h2>
+      </div>
+
+      <dl class="mods__l">
+        {modalites.map((l) => (
+          <div class="mods__i">
+            <dt>
+              <span class="mods__ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={PICTOS[l.icone]} />
+                </svg>
+              </span>
+              {l.cle}
+            </dt>
+            <dd>
+              {l.valeur}
+              {l.note && <span class="mods__n">{l.note}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
     </div>
 
     <!-- Programme -->
@@ -229,6 +223,36 @@ const v = niveauPse ? volume(niveauPse) : null;
       )}
     </div>
   </div>
+
+  {f.suites.length > 0 && (
+    <div class="wrap">
+      <div class="apres">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+          Et après&nbsp;?
+        </h3>
+        <ul>
+          {f.suites.map((s) => {
+            const l = lienSuite(s);
+            return (
+              <li>
+                <span class="apres__puce" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+                <span>
+                  {l && !l.suspendue
+                    ? <>{l.avant}<a class="apres__lien" href={l.href}>{l.sigle}</a>{l.apres}</>
+                    : s}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  )}
 </section>
 
 <style>
@@ -243,8 +267,8 @@ const v = niveauPse ? volume(niveauPse) : null;
   }
   /* Placement explicite : le placement automatique aurait mis les modalités
      dans la colonne du programme. */
-  .op > .mods { grid-column: 1; grid-row: 1; }
-  .op > .buts-col { grid-column: 1; grid-row: 2; }
+  .op > .buts-col { grid-column: 1; grid-row: 1; }
+  .op > .mods { grid-column: 1; grid-row: 2; }
   .op > #programme { grid-column: 2; grid-row: 1 / span 2; }
   @media (max-width: 880px) {
     .op { grid-template-columns: 1fr; grid-template-rows: none; }
@@ -376,11 +400,11 @@ const v = niveauPse ? volume(niveauPse) : null;
     letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
   }
   .mods__ic {
-    flex: none; width: 26px; height: 26px; border-radius: 8px;
-    background: var(--azur-wash); color: var(--azur);
+    flex: none; width: 26px; height: 26px;
+    color: var(--secours);
     display: grid; place-items: center;
   }
-  .mods__ic svg { width: 15px; height: 15px; }
+  .mods__ic svg { width: 26px; height: 26px; }
   .mods__i dd { padding-left: calc(26px + .45rem); }
   .mods__i dd { margin: 0; font-size: .9rem; color: var(--ink); }
   .mods__n { display: block; margin-top: .2rem; font-size: .83rem; color: var(--ink-mute); }
@@ -392,4 +416,12 @@ const v = niveauPse ? volume(niveauPse) : null;
     text-decoration-thickness: 2px;
   }
   .apres__lien:hover { text-decoration-color: currentColor; }
+
+  /* « Et après » occupe toute la largeur, en deux colonnes : ce sont des
+     portes de sortie, elles méritent d'être vues plutôt que tassées dans
+     une colonne. */
+  .apres ul {
+    display: grid; gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  }
 </style>

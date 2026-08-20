@@ -119,6 +119,9 @@ const actuel = Astro.url.pathname;
         </div>
       </details>
       {liens.filter((l) => l.href !== '/formations').map((l) => <a href={l.href}>{l.texte}</a>)}
+      {/* Le bouton d'en-tête disparaît en mode compact : il doit se retrouver
+          ici, sinon l'appel à l'engagement n'existe plus sur mobile. */}
+      <a href="/secouriste-actif" class="btn btn--primaire nav-mobile__cta">S'engager</a>
       <a href={`tel:${asso.contact.telephoneLien}`} class="nav-mobile__tel">{asso.contact.telephone}</a>
     </nav>
   </div>
@@ -307,6 +310,11 @@ const actuel = Astro.url.pathname;
       border-bottom: 1px solid var(--line);
     }
     .nav-mobile a:last-child { border-bottom: 0; }
+    .nav-mobile__cta {
+      border-bottom: 0 !important;
+      margin-top: .9rem; justify-content: center;
+      color: #fff !important; text-decoration: none;
+    }
     .nav-mobile__tel { color: var(--secours) !important; }
 
     /* --- sous-menu des filières --- */

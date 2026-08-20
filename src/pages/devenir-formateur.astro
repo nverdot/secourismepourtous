@@ -1,0 +1,322 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { filAriane } from '../lib/schema';
+
+/**
+ * « Devenir formateur » — recrutement de l'équipe pédagogique.
+ *
+ * Public restreint mais précieux : des personnes déjà diplômées, souvent
+ * repérées ailleurs, qui cherchent une association où transmettre. La page ne
+ * cherche donc pas à convaincre du bien-fondé du secourisme — son lecteur en
+ * est déjà convaincu — mais à montrer dans quelle équipe il entrerait.
+ *
+ * Elle assume aussi la seconde porte : celui qui n'a pas encore le diplôme mais
+ * veut l'obtenir. C'est ce que dit la page du site historique, et c'est la voie
+ * par laquelle passent la plupart.
+ */
+
+const profils = [
+  {
+    titre: 'Formateur PSC',
+    texte: 'Vous animez les formations grand public : le PSC et sa formation continue.',
+  },
+  {
+    titre: 'Formateur PS',
+    texte: 'Vous formez les futurs secouristes équipiers et chefs d’équipe, en PSE1 et PSE2.',
+  },
+  {
+    titre: 'Formateur SST',
+    texte: 'Vous intervenez en entreprise, sur le sauvetage secourisme du travail.',
+  },
+  {
+    titre: 'Initiateur GQS',
+    texte: 'Vous sensibilisez le grand public aux gestes qui sauvent, sur des formats courts.',
+  },
+  {
+    titre: 'Formateur de formateurs',
+    texte: 'Vous encadrez les PAE et faites progresser l’équipe pédagogique elle-même.',
+  },
+];
+
+const raisons = [
+  {
+    titre: 'Une équipe pédagogique constituée',
+    texte:
+      'Vous rejoignez dix-sept formateurs, dont six formateurs de formateurs. Vous n’animez pas seul, et vous n’êtes jamais le seul à décider d’un contenu.',
+    icone: 'equipe',
+  },
+  {
+    titre: 'Du terrain derrière la salle',
+    texte:
+      'L’association tient plus de 270 dispositifs de secours par an. Vos exemples de formation viennent de ce que l’équipe a vécu le week-end précédent.',
+    icone: 'terrain',
+  },
+  {
+    titre: 'Un cadre certifié',
+    texte:
+      'Organisme certifié Qualiopi, affilié à la FFSS et agréé sécurité civile : les référentiels, les supports et les procédures sont en place.',
+    icone: 'qualite',
+  },
+  {
+    titre: 'Vous choisissez vos sessions',
+    texte:
+      'Comme pour les postes de secours, vous vous positionnez selon vos disponibilités. Aucun volume imposé.',
+    icone: 'agenda',
+  },
+];
+
+const CHEMINS: Record<string, string> = {
+  equipe: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  terrain: 'M3 20h18M5 20V9l7-5 7 5v11M10 20v-5h4v5',
+  qualite: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9',
+  agenda: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+};
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Devenir formateur', chemin: '/devenir-formateur' },
+  ]),
+];
+---
+
+<Base
+  title="Devenir formateur en secourisme à Nice | Secourisme Pour Tous"
+  description="Rejoignez l’équipe pédagogique de Secourisme Pour Tous à Nice : formateurs PSC, PS, SST et initiateurs GQS. Vous n’avez pas encore le diplôme ? Nous vous accompagnons."
+  chemin="/devenir-formateur"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Devenir formateur</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">Équipe pédagogique</span>
+        <span class="badge badge--contour">Organisme certifié Qualiopi</span>
+      </div>
+      <h1 class="tete__h1">Transmettre les gestes<br />qui sauvent</h1>
+      <p class="tete__t">
+        Vous souhaitez transmettre votre savoir et votre passion des premiers
+        secours, auprès du grand public ou de stagiaires PSE1 et PSE2&nbsp;?
+        Rejoignez notre équipe pédagogique.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="#candidater">
+          Nous rejoindre
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--fantome" href="/qui-sommes-nous">Voir l’équipe</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== PROFILS ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Qui nous cherchons</p>
+      <h2 class="h-section">Quel que soit votre diplôme</h2>
+      <p class="lede">
+        Notre équipe réunit des initiateurs GQS, des formateurs PSC, PS et SST,
+        ainsi que des formateurs de formateurs. Si vous en faites partie, il y a
+        de la place.
+      </p>
+      <div class="profils">
+        {profils.map((p) => (
+          <article class="profil">
+            <h3>{p.titre}</h3>
+            <p>{p.texte}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="sans">
+        <span class="sans__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+        </span>
+        <div>
+          <strong>Vous n’avez pas encore le diplôme de formateur&nbsp;?</strong>
+          <p>
+            C’est la voie par laquelle passent la plupart. Dites-nous où vous en
+            êtes&nbsp;: nous vous accompagnons vers le PAE, la qualification qui
+            vous permettra d’encadrer.
+          </p>
+          <a class="btn btn--sobre sans__cta" href="/formations/pae-f-psc">Découvrir le PAE F PSC</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== POURQUOI ICI ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Ce que vous y trouverez</p>
+      <h2 class="h-section">Pourquoi chez nous</h2>
+      <div class="raisons">
+        {raisons.map((r) => (
+          <article class="raison">
+            <span class="raison__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d={CHEMINS[r.icone]} />
+              </svg>
+            </span>
+            <h3>{r.titre}</h3>
+            <p>{r.texte}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CANDIDATURE ========== -->
+  <section class="section" id="candidater" aria-labelledby="t-cand">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Nous écrire</p>
+      <h2 class="h-section" id="t-cand">S’informer ou nous rejoindre</h2>
+      <p class="lede">
+        Deux lignes suffisent pour commencer. Nous répondons sous 48 heures
+        ouvrées.
+      </p>
+
+      <form class="fm" name="formateur" method="POST" action="/api/contact"
+            data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="formateur" />
+        <input type="hidden" name="motif" value="Devenir formateur" />
+        <p class="miel"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+
+        <div class="duo">
+          <label>Prénom *<input type="text" name="prenom" autocomplete="given-name" required /></label>
+          <label>Nom *<input type="text" name="nom" autocomplete="family-name" required /></label>
+        </div>
+        <div class="duo">
+          <label>E-mail *<input type="email" name="email" autocomplete="email" required /></label>
+          <label>Téléphone<input type="tel" name="telephone" autocomplete="tel" /></label>
+        </div>
+
+        <label>Où en êtes-vous&nbsp;? *
+          <select name="niveau" required>
+            <option value="">Choisissez…</option>
+            <option value="Formateur PSC">Je suis formateur PSC</option>
+            <option value="Formateur PS">Je suis formateur PS (PSE1/PSE2)</option>
+            <option value="Formateur SST">Je suis formateur SST</option>
+            <option value="Initiateur GQS">Je suis initiateur GQS</option>
+            <option value="Formateur de formateurs">Je suis formateur de formateurs</option>
+            <option value="Sans diplôme de formateur">Je n’ai pas encore le diplôme et je souhaite l’obtenir</option>
+          </select>
+        </label>
+
+        <label>Votre message
+          <textarea name="message" rows="5"
+            placeholder="Votre parcours, vos disponibilités, ce que vous aimeriez animer…"></textarea>
+        </label>
+
+        <label class="case">
+          <input type="checkbox" name="consentement" required />
+          <span>
+            J’accepte que mes informations soient utilisées pour traiter ma candidature.
+            <a href="/politique-de-confidentialite">En savoir plus</a>
+          </span>
+        </label>
+
+        <button type="submit" class="btn btn--primaire fm__envoi">
+          Envoyer ma candidature
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </button>
+      </form>
+
+      <p class="fm__direct">
+        Vous préférez appeler&nbsp;?
+        <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+        — ou écrire à <a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 3.75rem);
+  }
+  .fil {
+    display: flex; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.2rem); font-weight: 800; line-height: 1.05; margin-bottom: 1rem; }
+  .tete__t { max-width: 56ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.1rem); margin-bottom: 2rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+
+  .profils {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  }
+  .profil {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 4px solid var(--secours);
+    border-radius: var(--r-lg); padding: 1.2rem 1.4rem;
+  }
+  .profil h3 { font-size: 1rem; font-weight: 700; margin-bottom: .3rem; }
+  .profil p { font-size: .9rem; color: var(--ink-soft); }
+
+  .sans {
+    margin-top: 1.75rem; display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--azur-wash); border: 1px solid var(--azur);
+    border-radius: var(--r-lg); padding: 1.35rem 1.5rem;
+  }
+  .sans__ic {
+    flex: none; width: 42px; height: 42px; border-radius: 12px;
+    background: var(--azur); color: #fff; display: grid; place-items: center;
+  }
+  .sans__ic svg { width: 21px; height: 21px; }
+  .sans strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; display: block; margin-bottom: .35rem; }
+  .sans p { font-size: .93rem; color: var(--ink-soft); max-width: 68ch; }
+  .sans__cta { margin-top: .9rem; font-size: .9rem; padding: .65rem 1.1rem; }
+  @media (max-width: 620px) { .sans { flex-direction: column; } }
+
+  .raisons {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .raison {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
+  }
+  .raison__ic {
+    display: grid; place-items: center;
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--secours); color: #fff; margin-bottom: .85rem;
+  }
+  .raison__ic svg { width: 21px; height: 21px; }
+  .raison h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: .35rem; }
+  .raison p { font-size: .91rem; color: var(--ink-soft); }
+
+  .fm { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px,100%),1fr)); gap: 1rem; }
+  .fm label { display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; font-weight: 600; color: var(--ink-soft); }
+  .fm input[type='text'], .fm input[type='email'], .fm input[type='tel'], .fm select, .fm textarea {
+    min-width: 0; font: inherit; font-size: .97rem; font-weight: 400; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm); padding: .7rem .85rem; width: 100%;
+  }
+  .fm input:focus, .fm select:focus, .fm textarea:focus {
+    outline: 2px solid var(--azur); outline-offset: 1px; border-color: transparent;
+  }
+  .fm textarea { resize: vertical; }
+  .fm .case { flex-direction: row; align-items: flex-start; gap: .6rem; font-weight: 400; font-size: .86rem; }
+  .fm .case input { width: 17px; height: 17px; margin-top: .18rem; flex: none; accent-color: var(--secours); }
+  .fm .case a { color: var(--azur); }
+  .miel { position: absolute; left: -9999px; }
+  .fm__envoi { align-self: flex-start; margin-top: .3rem; }
+  .fm__direct { margin-top: 1.5rem; font-size: .9rem; color: var(--ink-mute); }
+  .fm__direct a { color: var(--azur); }
+</style>
