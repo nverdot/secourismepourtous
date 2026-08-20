@@ -36,6 +36,10 @@ const actuel = Astro.url.pathname;
       </span>
     </a>
 
+    <img class="entete__ffss" src="/img/logo-ffss.png"
+         alt="Association agréée par la Fédération Française de Sauvetage et de Secourisme"
+         width="40" height="44" />
+
     <nav class="nav" aria-label="Navigation principale">
       {liens.map((l) => (
         <a
@@ -128,6 +132,14 @@ const actuel = Astro.url.pathname;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
+
+  /* Séparé de la marque par un filet : c'est un agrément, pas un co-logo. */
+  .entete__ffss {
+    height: 40px; width: auto; flex: none;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--line);
+  }
+  @media (max-width: 480px) { .entete__ffss { display: none; } }
 
   .nav { display: flex; gap: 0.35rem; margin-left: auto; }
   .nav__lien {

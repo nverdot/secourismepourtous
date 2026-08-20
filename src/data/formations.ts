@@ -134,7 +134,7 @@ export const filieres: Record<Filiere, InfoFiliere> = {
     contenu: 'SST, maintien des compétences MAC SST, intervention dans vos locaux.',
     couleur: 'navy',
     icone: 'mallette',
-    // TODO photo à fournir : formation SST en salle ou en entreprise.
+    image: '/img/sst.jpg',
   },
 };
 
@@ -386,7 +386,7 @@ export const formations: Formation[] = [
       { titre: 'Prévention des risques', texte: 'Contribuer à la démarche de prévention de son établissement.' },
     ],
     suites: ['Maintien et actualisation des compétences (MAC SST) tous les 24 mois'],
-    image: '/img/secours-mer.jpg',
+    image: '/img/sst.jpg',
     wixEvent: 'SST',
     seo: {
       title: 'Formation SST à Nice | Sauveteur Secouriste du Travail',
