@@ -55,6 +55,14 @@ export interface Formation {
   objectifs: Objectif[];
   modules: Module[];
   suites: string[];
+  /** Remplace les modalités par défaut de l'association, au cas par cas. */
+  modalites?: Partial<{
+    pedagogie: string;
+    evaluation: string;
+    delaiAcces: string;
+    effectif: string;
+    lieu: string;
+  }>;
 
   /** Photo de fond du hero. Sans elle, le hero retombe sur son dégradé. */
   image?: string;

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import InfosPratiques from '../../components/InfosPratiques.astro';
 import ProgrammePse from '../../components/ProgrammePse.astro';
 import Terrain from '../../components/Terrain.astro';
 import { coursFormation, filAriane } from '../../lib/schema';
@@ -115,6 +116,12 @@ const balisages = [
 
   {sessions.length > 0 && <PopupDates sessions={sessions} sigle={f.sigle} />}
   {sessions.length > 0 && <ModuleInscription />}
+
+  <section class="section">
+    <div class="wrap">
+      <InfosPratiques formation={f} />
+    </div>
+  </section>
 
   <section class="section section--sunk">
     <div class="wrap">

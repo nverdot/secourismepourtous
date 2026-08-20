@@ -1,0 +1,146 @@
+---
+import { asso } from '../data/association';
+import type { Formation } from '../data/formations';
+
+/**
+ * Informations pratiques exigées par Qualiopi (indicateur 1).
+ *
+ * Le référentiel national qualité demande une information « accessible au
+ * public » et « détaillée » pour chaque prestation : prérequis, objectifs,
+ * durée, modalités et délais d'accès, tarifs, contacts, méthodes mobilisées,
+ * modalités d'évaluation et accessibilité aux personnes handicapées.
+ *
+ * Ces éléments existaient sur le site, mais dispersés — le tarif dans le hero,
+ * l'accessibilité en pied de page, l'évaluation nulle part. Un auditeur, comme
+ * un financeur, cherche un endroit unique où tout est écrit. C'est ce bloc.
+ *
+ * Les valeurs viennent de l'association (asso.modalites), qu'une formation peut
+ * remplacer au cas par cas. Rien n'est écrit en dur ici : le jour où le délai
+ * d'accès change, il change partout.
+ */
+
+interface Props {
+  formation: Formation;
+}
+const { formation: f } = Astro.props;
+
+const m = { ...asso.modalites, ...(f.modalites ?? {}) };
+
+const lignes = [
+  {
+    cle: 'Public et prérequis',
+    valeur: f.prerequis,
+    note: f.prerequisNote,
+  },
+  {
+    cle: 'Durée',
+    valeur: f.duree,
+    note: f.dureeNote,
+  },
+  {
+    cle: 'Tarif',
+    valeur: f.tarif,
+    note: f.tarifNote,
+  },
+  {
+    cle: 'Effectif',
+    valeur: m.effectif,
+  },
+  {
+    cle: 'Lieu',
+    valeur: m.lieu,
+  },
+  {
+    cle: 'Délai d’accès',
+    valeur: m.delaiAcces,
+  },
+  {
+    cle: 'Méthodes mobilisées',
+    valeur: m.pedagogie,
+  },
+  {
+    cle: 'Modalités d’évaluation',
+    valeur: f.certifiante ? m.evaluation : m.evaluation,
+    note: f.certificationNote,
+  },
+  {
+    cle: 'Validation',
+    valeur: f.certification,
+  },
+  ...(f.suites.length
+    ? [{ cle: 'Suites de parcours', valeur: f.suites.join('. ') + '.' }]
+    : []),
+  {
+    cle: 'Accessibilité',
+    valeur: asso.accessibilite,
+    note: `Référente handicap joignable à ${asso.contact.email}.`,
+  },
+  {
+    cle: 'Contact',
+    valeur: `${asso.contact.telephone} — ${asso.contact.email}`,
+    note: 'Réponse sous 48 heures ouvrées.',
+  },
+];
+---
+
+<section class="ip" aria-labelledby="t-ip">
+  <p class="eyebrow">Informations pratiques</p>
+  <h2 class="h-section" id="t-ip">Tout ce qu’il faut savoir avant de s’inscrire</h2>
+  <p class="lede">
+    Les informations que nous publions pour chaque formation, au titre de notre
+    certification Qualiopi.
+  </p>
+
+  <dl class="ip__l">
+    {lignes.map((l) => (
+      <div class="ip__i">
+        <dt>{l.cle}</dt>
+        <dd>
+          {l.valeur}
+          {l.note && <span class="ip__n">{l.note}</span>}
+        </dd>
+      </div>
+    ))}
+  </dl>
+
+  <p class="ip__pied">
+    <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener">
+      Consulter notre certificat Qualiopi
+    </a>
+    <span aria-hidden="true">·</span>
+    <a href="/documents/livret-accueil-stagiaire.pdf" target="_blank" rel="noopener">
+      Livret d’accueil du stagiaire
+    </a>
+    <span aria-hidden="true">·</span>
+    <a href="/cgv">Conditions générales de vente</a>
+  </p>
+</section>
+
+<style>
+  .ip { padding-block: 0; }
+
+  .ip__l {
+    margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    overflow: hidden; background: var(--surface);
+  }
+  .ip__i {
+    display: grid; gap: .2rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .ip__i dt {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .ip__i dd { margin: 0; font-size: .94rem; color: var(--ink); }
+  .ip__n { display: block; margin-top: .2rem; font-size: .85rem; color: var(--ink-mute); }
+
+  .ip__pied {
+    display: flex; flex-wrap: wrap; gap: .5rem .7rem; align-items: center;
+    margin-top: 1.25rem; font-size: .88rem; color: var(--ink-mute);
+  }
+  .ip__pied a { color: var(--azur); }
+</style>

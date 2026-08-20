@@ -81,6 +81,29 @@ export const asso = {
     { nom: 'Saint-Laurent-du-Var', logo: '/img/partenaires/saint-laurent-du-var.png' },
   ] as { nom: string; logo?: string }[],
 
+  /**
+   * Informations exigées par Qualiopi, indicateur 1 : l'organisme diffuse une
+   * information accessible au public, détaillée pour chaque prestation.
+   *
+   * Ces valeurs s'appliquent par défaut à toutes les formations ; une formation
+   * peut les remplacer au cas par cas dans formations.ts.
+   *
+   * ⚠️ À FAIRE VALIDER PAR SPT — ce sont des engagements opposables :
+   *   — le délai d'accès (48 h) reflète-t-il votre pratique réelle ?
+   *   — les effectifs minimum et maximum sont-ils les bons ?
+   * Un délai annoncé qui n'est pas tenu est un écart en audit.
+   */
+  modalites: {
+    pedagogie:
+      'Formation en présentiel. Apports théoriques courts, démonstrations par le formateur, puis mise en situation sur mannequin et entre stagiaires. La pratique occupe la majeure partie du temps.',
+    evaluation:
+      'Évaluation continue tout au long de la formation, à partir de mises en situation. Il n’y a pas d’examen final : la certification s’obtient par la validation de chaque compétence du référentiel.',
+    delaiAcces:
+      'Inscription possible jusqu’à 48 heures avant le début de la session, dans la limite des places disponibles.',
+    effectif: 'De 4 à 10 participants par session.',
+    lieu: 'Dans nos locaux à Nice, ou dans vos propres locaux pour un groupe constitué.',
+  },
+
   poles: [
     {
       titre: 'Formation en secourisme',
