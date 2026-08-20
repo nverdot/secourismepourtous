@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { coursFormation, filAriane } from '../../lib/schema';
 import Lieu from '../../components/Lieu.astro';
 import HeroFormation from '../../components/HeroFormation.astro';
 import ObjectifsProgramme from '../../components/ObjectifsProgramme.astro';
@@ -29,9 +30,18 @@ export async function getStaticPaths() {
 
 interface Props { formation: Formation; sessions: any[] }
 const { formation: f, sessions } = Astro.props;
+
+const balisages = [
+  coursFormation(f, sessions),
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Formations', chemin: '/formations' },
+    { nom: f.sigle, chemin: `/formations/${f.slug}` },
+  ]),
+];
 ---
 
-<Base title={f.seo.title} description={f.seo.description} chemin={`/formations/${f.slug}`} filiere={f.filiere}>
+<Base title={f.seo.title} description={f.seo.description} chemin={`/formations/${f.slug}`} filiere={f.filiere} schemas={balisages}>
   <HeroFormation formation={f} nbSessions={sessions.length} />
 
   {f.suspendue && (

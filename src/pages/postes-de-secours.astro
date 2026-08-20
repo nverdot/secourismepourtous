@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { servicePostesDeSecours, filAriane } from '../lib/schema';
 import { asso } from '../data/association';
 import CarrouselDps from '../components/CarrouselDps.astro';
 
@@ -55,6 +56,13 @@ const etapes = [
   title="Poste de secours à Nice | DPS événements dans le 06"
   description="Sécurisez votre événement avec un dispositif prévisionnel de secours à Nice. Secouristes diplômés agréés FFSS, du petit rassemblement au grand public."
   chemin="/postes-de-secours"
+  schemas={[
+    servicePostesDeSecours(),
+    filAriane([
+      { nom: 'Accueil', chemin: '/' },
+      { nom: 'Postes de secours', chemin: '/postes-de-secours' },
+    ]),
+  ]}
 >
   <header class="tete">
     <div class="tete__photo" aria-hidden="true"></div>

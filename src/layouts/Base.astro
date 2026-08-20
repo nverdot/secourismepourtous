@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { asso } from '../data/association';
+import { organisation } from '../lib/schema';
 
 interface Props {
   title: string;
@@ -13,9 +14,11 @@ interface Props {
   filiere?: string;
   /** Retire la page des moteurs : page d'erreur, page technique. */
   noindex?: boolean;
+  /** Balisages propres à la page, ajoutés à la fiche de l'organisation. */
+  schemas?: unknown[];
 }
 
-const { title, description, chemin, filiere, noindex = false } = Astro.props;
+const { title, description, chemin, filiere, noindex = false, schemas = [] } = Astro.props;
 const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.org').href;
 
 /**
@@ -23,25 +26,6 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
  * Absentes du site Wix actuel — c'est ce qui permet d'apparaître dans le
  * panneau de connaissance et les résultats enrichis en recherche locale.
  */
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
-  name: asso.nom,
-  foundingDate: String(asso.fondation),
-  founder: { '@type': 'Person', name: asso.fondateur },
-  url: 'https://www.secourismepourtous.org',
-  email: asso.contact.email,
-  telephone: asso.contact.telephoneLien,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: asso.contact.adresse,
-    postalCode: asso.contact.codePostal,
-    addressLocality: asso.contact.ville,
-    addressRegion: asso.contact.departement,
-    addressCountry: 'FR',
-  },
-  areaServed: { '@type': 'AdministrativeArea', name: 'Alpes-Maritimes' },
-};
 ---
 
 <!doctype html>
@@ -76,7 +60,10 @@ const schema = {
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&display=swap"
     />
 
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(organisation())} />
+    {schemas.map((sc) => (
+      <script type="application/ld+json" set:html={JSON.stringify(sc)} />
+    ))}
   </head>
 
   <body class={filiere ? `filiere-${filiere}` : undefined}>
