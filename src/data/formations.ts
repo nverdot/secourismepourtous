@@ -42,6 +42,12 @@ export interface Formation {
   certificationNote?: string;
   tarif: string;
   tarifNote?: string;
+  /**
+   * Billets Wix à ne pas proposer sur cette page, par fragment de nom.
+   * L'événement PSE1 vend aussi le forfait « PSE1 + PSE2 » : le montrer sur la
+   * page du PSE1 seul brouille le tarif annoncé juste au-dessus.
+   */
+  billetsMasques?: string[];
   /** Tarif applicable en financement CPF, quand il diffère du tarif direct. */
   tarifCpf?: string;
   aValider?: boolean;
@@ -237,6 +243,7 @@ export const formations: Formation[] = [
   {
     slug: 'pse-1',
     sigle: 'PSE1',
+    billetsMasques: ['PSE1 + PSE2'],
     intitule: 'Premiers Secours en Équipe niveau 1',
     filiere: 'operationnelle',
     certifiante: true,

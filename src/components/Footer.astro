@@ -2,6 +2,11 @@
 import { asso } from '../data/association';
 import { formations } from '../data/formations';
 
+// Les recyclages sont nombreux et ne concernent que d'anciens stagiaires :
+// ils passent derrière un dépliant pour alléger le pied de page.
+const principales = formations.filter((f) => !f.estRecyclage);
+const recyclages = formations.filter((f) => f.estRecyclage);
+
 const annee = 2026;
 ---
 
@@ -27,10 +32,28 @@ const annee = 2026;
 
     <div class="pied__col">
       <h2 class="pied__titre">Formations</h2>
+      <!--
+        Seize formations d'affilée rendaient le pied de page interminable.
+        On montre les formations initiales, les recyclages tiennent derrière
+        un dépliant natif : sans JavaScript, et tous les liens restent dans le
+        HTML livré, donc toujours lisibles par les moteurs de recherche.
+      -->
       <ul>
-        {formations.map((f) => (
+        {principales.map((f) => (
           <li><a href={`/formations/${f.slug}`}>{f.sigle} — {f.intitule}</a></li>
         ))}
+      </ul>
+      {recyclages.length > 0 && (
+        <details class="pied__plus">
+          <summary>Recyclages et formations continues ({recyclages.length})</summary>
+          <ul>
+            {recyclages.map((f) => (
+              <li><a href={`/formations/${f.slug}`}>{f.sigle} — {f.intitule}</a></li>
+            ))}
+          </ul>
+        </details>
+      )}
+      <ul class="pied__tout">
         <li><a href="/formations">Tout le catalogue</a></li>
       </ul>
     </div>
@@ -147,4 +170,19 @@ const annee = 2026;
   .pied__legal { display: flex; flex-wrap: wrap; gap: 1.25rem; }
   .pied__legal a { color: var(--on-navy-soft); text-decoration: none; }
   .pied__legal a:hover { color: #fff; }
+
+  .pied__plus { margin-top: .55rem; }
+  .pied__plus summary {
+    cursor: pointer; list-style: none;
+    font-size: .85rem; font-weight: 600; color: var(--on-navy-soft);
+    padding: .3rem 0; display: flex; align-items: center; gap: .4rem;
+  }
+  .pied__plus summary::-webkit-details-marker { display: none; }
+  .pied__plus summary::before {
+    content: '+'; font-weight: 700; width: 1em; display: inline-block;
+  }
+  .pied__plus[open] summary::before { content: '−'; }
+  .pied__plus summary:hover { color: #fff; }
+  .pied__plus ul { margin-top: .4rem; }
+  .pied__tout { margin-top: .55rem; }
 </style>

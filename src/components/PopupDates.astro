@@ -5,12 +5,16 @@ import {
   periode, estWeekEnd, formatHeure,
 } from '../lib/wix';
 import { asso } from '../data/association';
+import { formations } from '../data/formations';
 
 interface Props {
   sessions: Session[];
   sigle: string;
 }
 const { sessions, sigle } = Astro.props;
+
+// Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
+const masques = formations.find((f) => f.sigle === sigle)?.billetsMasques ?? [];
 
 // Les onglets de mois sont calculés au build : pas de tri côté visiteur.
 const mois = [...new Map(sessions.map((s) => [cleMois(s.debut), s.debut])).entries()]
@@ -63,6 +67,8 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
         <li data-mois={cleMois(s.debut)}>
           <button type="button" class="pdate" data-inscription
                   data-event-id={s.id}
+                  data-champs={JSON.stringify(s.champs ?? [])}
+                  data-masquer={JSON.stringify(masques)}
                   data-url={s.urlInscription ?? ''}
                   data-libelle={`${sigle} — ${periode(s)}`}>
             <span class="pdate__cal">

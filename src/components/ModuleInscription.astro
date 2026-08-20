@@ -19,7 +19,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
 
 // Repère de version : permet de savoir, depuis la console du navigateur, si la
 // page affichée est bien la dernière déployée ou une copie en cache.
-const VERSION = '2026-08-20-b';
+const VERSION = '2026-08-20-c';
 ---
 
 <dialog class="ins" id="pop-inscription" aria-labelledby="ins-titre" data-client={CLIENT_ID} data-version={VERSION}>
@@ -111,7 +111,7 @@ const VERSION = '2026-08-20-b';
           <label>E-mail *<input type="email" data-c="email" autocomplete="email" value="${v.email}" required></label>
           <label>Téléphone *<input type="tel" data-c="tel" autocomplete="tel" value="${v.tel}" required></label>
         </fieldset>`;
-      }).join('') + `
+      }).join('') + champsHtml() + `
         <label class="frm__com">Un commentaire ?<textarea id="f-com" rows="2"></textarea></label>
         <p class="frm__rgpd">
           Ces informations servent uniquement à l'inscription et à l'émission des
@@ -119,6 +119,40 @@ const VERSION = '2026-08-20-b';
           participant : merci de renseigner des coordonnées distinctes.
         </p>`;
       form.hidden = false;
+    }
+
+/**
+     * Questions ajoutées à l'événement dans Wix (accessibilité, etc.).
+     * Elles sont rendues telles que Wix les déclare : ajouter une question dans
+     * le tableau de bord suffit à la voir apparaître ici au prochain build,
+     * sans toucher au code.
+     */
+    function champsHtml() {
+      if (!champs.length) return '';
+      return champs.map((c, i) => {
+        const id = `f-x${i}`;
+        const etoile = c.obligatoire ? ' *' : '';
+        if (c.genre === 'LISTE') {
+          return `
+          <label class="frm__sup">${c.libelle}${etoile}
+            <select id="${id}" data-x="${c.nom}"${c.obligatoire ? ' required' : ''}>
+              <option value="">${c.obligatoire ? 'Choisissez…' : 'Sans réponse'}</option>
+              ${c.options.map((o) => `<option value="${o}">${o}</option>`).join('')}
+            </select>
+          </label>`;
+        }
+        const champ = c.genre === 'PARAGRAPHE'
+          ? `<textarea id="${id}" data-x="${c.nom}" rows="2"${c.obligatoire ? ' required' : ''}></textarea>`
+          : `<input type="text" id="${id}" data-x="${c.nom}"${c.obligatoire ? ' required' : ''}>`;
+        return `<label class="frm__sup">${c.libelle}${etoile}${champ}</label>`;
+      }).join('');
+    }
+
+    /** Réponses aux questions Wix, les vides écartées. */
+    function reponsesSup() {
+      return [...form.querySelectorAll('[data-x]')]
+        .map((e) => ({ inputName: e.dataset.x, value: (e.value ?? '').trim() }))
+        .filter((r) => r.value !== '');
     }
 
     /** Lit les participants saisis, ou renvoie le premier champ fautif. */
@@ -144,6 +178,8 @@ const VERSION = '2026-08-20-b';
     }
 
     let choix = [];        // [{ ticketDefinitionId, quantity }]
+    let champs = [];       // questions déclarées dans Wix pour cette session
+    let masques = [];      // billets à ne pas proposer sur cette page
     let eventCourant = null;
     let secours = null;    // lien vers la page Wix, si l'API échoue
 
@@ -169,6 +205,8 @@ const VERSION = '2026-08-20-b';
     async function ouvrir(bouton) {
       eventCourant = bouton.dataset.eventId;
       secours = bouton.dataset.url || null;
+      try { champs = JSON.parse(bouton.dataset.champs || '[]'); } catch { champs = []; }
+      try { masques = JSON.parse(bouton.dataset.masquer || '[]'); } catch { masques = []; }
       libelle.textContent = bouton.dataset.libelle || '';
       choix = [];
       zone.hidden = true; zone.innerHTML = ''; form.hidden = true; form.innerHTML = '';
@@ -179,7 +217,12 @@ const VERSION = '2026-08-20-b';
 
       try {
         const r = await client.orders.listAvailableTickets({ eventId: eventCourant, limit: 10 });
-        const defs = r.definitions || [];
+        // Un même événement peut vendre un forfait qui déborde de cette
+        // formation (PSE1 + PSE2 sur la page du PSE1) : on ne garde que ce qui
+        // correspond au tarif annoncé sur la page.
+        const defs = (r.definitions || []).filter(
+          (d) => !masques.some((m) => (d.name || '').includes(m))
+        );
         if (!defs.length) return afficheErreur("Aucune place n'est disponible en ligne pour cette session.");
 
         zone.innerHTML = defs.map((d) => {
@@ -246,6 +289,11 @@ const VERSION = '2026-08-20-b';
       // On vérifie tous les participants avant de bloquer des places pour rien.
       const lecture = lireParticipants();
       if (lecture.erreur) { lecture.cible.focus(); return afficheErreur(lecture.erreur); }
+      const manquant = [...form.querySelectorAll('[data-x][required]')].find((e) => !(e.value ?? '').trim());
+      if (manquant) {
+        manquant.focus();
+        return afficheErreur('Merci de répondre à toutes les questions obligatoires.');
+      }
       const commentaire = (document.getElementById('f-com')?.value ?? '').trim();
       err.hidden = true;
       valider.disabled = true;
@@ -265,13 +313,17 @@ const VERSION = '2026-08-20-b';
               // « firstName » et « lastName » séparément, pas « name ».
               // Le commentaire n'est joint que s'il est rempli : vide, l'API le
               // refuse (« document.content.pages has size 0 »).
+              // Wix rejette la commande entière dès qu'un champ est envoyé
+              // vide (« INVALID_FORM_RESPONSE ») : on n'envoie donc que ce qui
+              // est réellement renseigné.
               inputValues: [
                 { inputName: 'firstName', value: g.prenom },
                 { inputName: 'lastName', value: g.nom },
                 { inputName: 'email', value: g.email },
                 { inputName: 'phone', value: g.tel },
-                ...(commentaire ? [{ inputName: 'comment', value: commentaire }] : []),
-              ],
+                { inputName: 'comment', value: commentaire },
+                ...reponsesSup(),
+              ].filter((c) => String(c.value ?? '').trim() !== ''),
             },
           })),
         });
@@ -447,6 +499,22 @@ const VERSION = '2026-08-20-b';
   .frm textarea { resize: vertical; min-height: 62px; }
 
   .frm__com { margin-top: .1rem; }
+
+  /* Questions propres à l'événement, déclarées dans Wix. */
+  .frm__sup {
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .84rem; font-weight: 600; color: var(--ink-soft);
+    margin-top: .9rem;
+  }
+  .frm__sup select, .frm__sup input, .frm__sup textarea {
+    min-width: 0; font: inherit; font-size: .95rem; font-weight: 400; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm); padding: .62rem .8rem; width: 100%;
+  }
+  .frm__sup textarea { resize: vertical; }
+  .frm__sup select:focus, .frm__sup input:focus, .frm__sup textarea:focus {
+    outline: 2px solid var(--azur); outline-offset: 1px; border-color: transparent;
+  }
   .frm__rgpd {
     font-family: 'Public Sans', sans-serif;
     font-size: .78rem; font-weight: 400; letter-spacing: 0; text-transform: none;

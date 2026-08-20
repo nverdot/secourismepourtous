@@ -2,12 +2,16 @@
 import type { Session } from '../lib/wix';
 import { formatJour, formatNumero, formatMois, formatAnnee, formatHeure } from '../lib/wix';
 import { asso } from '../data/association';
+import { formations } from '../data/formations';
 
 interface Props {
   sessions: Session[];
   sigle: string;
 }
 const { sessions, sigle } = Astro.props;
+
+// Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
+const masques = formations.find((f) => f.sigle === sigle)?.billetsMasques ?? [];
 
 // Au-delà de 12 dates la liste devient illisible ; le lien vers l'agenda prend le relais.
 const visibles = sessions.slice(0, 12);
@@ -33,6 +37,8 @@ const reste = sessions.length - visibles.length;
             <li>
               <button type="button" class="sess" data-inscription
                       data-event-id={s.id}
+                  data-champs={JSON.stringify(s.champs ?? [])}
+                  data-masquer={JSON.stringify(masques)}
                       data-url={s.urlInscription ?? ''}
                       data-libelle={`${sigle} — ${formatJour(s.debut)} ${formatNumero(s.debut)} ${formatMois(s.debut)} ${formatAnnee(s.debut)}`}>
                 <span class="sess__date">

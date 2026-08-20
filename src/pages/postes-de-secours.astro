@@ -17,6 +17,31 @@ const typesEvenements = [
   { titre: 'Événements culturels', texte: 'Expositions, spectacles, tournages et manifestations de plein air.' },
 ];
 
+/**
+ * Images du terrain. Les libellés décrivent le type de dispositif, jamais les
+ * personnes : ce sont des bénévoles, la page parle de leur mission.
+ */
+const terrain = [
+  {
+    video: '/video/dps-beach-volley.mp4',
+    affiche: '/img/dps/beach-volley.jpg',
+    titre: 'Tournoi de beach-volley',
+    texte: 'Surveillance du terrain et du public jusqu’à la fin des matchs.',
+  },
+  {
+    video: '/video/dps-nice-massena.mp4',
+    affiche: '/img/dps/nice-massena.jpg',
+    titre: 'Épreuve cycliste, place Masséna',
+    texte: 'Équipe en déplacement sur un événement de grande affluence, à Nice.',
+  },
+  {
+    video: '/video/dps-beach-volley-installation.mp4',
+    affiche: '/img/dps/beach-volley-installation.jpg',
+    titre: 'Mise en place du poste',
+    texte: 'Arrivée sur site et installation avant l’ouverture au public.',
+  },
+];
+
 const etapes = [
   { n: 1, titre: 'Vous nous décrivez votre événement', texte: 'Nature, lieu, dates, horaires et nombre de participants attendus.' },
   { n: 2, titre: 'Nous évaluons le dispositif', texte: "Le référentiel national fixe le nombre de secouristes et de moyens selon l'affluence et les risques." },
@@ -51,7 +76,7 @@ const etapes = [
         rassemblement à la manifestation de grande ampleur.
       </p>
       <div class="tete__actions">
-        <a class="btn btn--primaire" href="/contact">
+        <a class="btn btn--primaire" href="/contact?motif=dps">
           Demander un devis
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
@@ -104,6 +129,36 @@ const etapes = [
     </div>
   </section>
 
+  <!-- ========== TERRAIN ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Sur le terrain</p>
+      <h2 class="h-section">Nos équipes en dispositif</h2>
+      <p class="lede">
+        Quelques images prises lors de dispositifs récents dans les Alpes-Maritimes.
+      </p>
+      <div class="terrain">
+        {terrain.map((t) => (
+          <figure class="clip">
+            <video
+              src={t.video}
+              poster={t.affiche}
+              muted
+              loop
+              playsinline
+              preload="none"
+              aria-label={t.titre}
+            ></video>
+            <figcaption>
+              <strong>{t.titre}</strong>
+              <span>{t.texte}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- ========== DEMARCHE ========== -->
   <section class="section section--sunk">
     <div class="wrap">
@@ -134,7 +189,7 @@ const etapes = [
         </p>
       </div>
       <div class="appel__actions">
-        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--primaire" href="/contact?motif=dps">Demander un devis</a>
         <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
           {asso.contact.telephone}
@@ -142,6 +197,30 @@ const etapes = [
       </div>
     </div>
   </section>
+
+  <script>
+    /**
+     * Les clips ne se lancent qu'une fois visibles, et seulement si la personne
+     * n'a pas demandé à limiter les animations. Ils restent muets : un son qui
+     * démarre seul sur une page est une agression.
+     */
+    const clips = [...document.querySelectorAll('.clip video')];
+    const sobre = matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (sobre.matches) {
+      clips.forEach((v) => { v.controls = true; v.preload = 'metadata'; });
+    } else if ('IntersectionObserver' in window) {
+      const oeil = new IntersectionObserver((entrees) => {
+        for (const e of entrees) {
+          if (e.isIntersecting) e.target.play().catch(() => { e.target.controls = true; });
+          else e.target.pause();
+        }
+      }, { threshold: 0.35 });
+      clips.forEach((v) => oeil.observe(v));
+    } else {
+      clips.forEach((v) => { v.controls = true; });
+    }
+  </script>
 </Base>
 
 <style>
@@ -205,6 +284,21 @@ const etapes = [
   }
   .etape h3 { font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
   .etape p { font-size: .91rem; color: var(--ink-soft); }
+
+  /* Les clips sont filmés au téléphone : format portrait assumé. */
+  .terrain {
+    margin-top: 2.5rem; display: grid; gap: clamp(.8rem, 2vw, 1.15rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+  }
+  .clip { margin: 0; }
+  .clip video {
+    display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover;
+    background: var(--sunk);
+    border-radius: var(--r-lg); border: 1px solid var(--line);
+  }
+  .clip figcaption { display: flex; flex-direction: column; gap: .15rem; margin-top: .7rem; }
+  .clip figcaption strong { font-size: .96rem; font-weight: 700; }
+  .clip figcaption span { font-size: .87rem; color: var(--ink-mute); }
 
   .appel { display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
   .appel__h { font-size: clamp(1.5rem,3.5vw,2rem); font-weight: 800; margin-bottom: .6rem; }

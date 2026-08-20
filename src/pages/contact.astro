@@ -63,7 +63,7 @@ const motifs = [
         </div>
 
         <label>Votre demande *
-          <select name="motif" required>
+          <select name="motif" id="motif" required>
             <option value="">Choisissez…</option>
             {motifs.map((m) => <option value={m}>{m}</option>)}
           </select>
@@ -153,6 +153,20 @@ const motifs = [
       </div>
     </aside>
   </div>
+
+  <script>
+    // Arriver depuis « Demander un devis » doit poser la question déjà remplie :
+    // le visiteur a déjà dit ce qu'il voulait, le lui redemander est une friction.
+    const RACCOURCIS = {
+      dps: 'Demander un poste de secours (DPS)',
+      formation: "M'inscrire à une formation",
+      entreprise: 'Former les salariés de mon entreprise',
+    };
+    const cle = new URLSearchParams(location.search).get('motif');
+    const choix = RACCOURCIS[cle];
+    const champ = document.getElementById('motif');
+    if (choix && champ) champ.value = choix;
+  </script>
 </Base>
 
 <style>

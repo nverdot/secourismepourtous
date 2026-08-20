@@ -30,7 +30,34 @@ export interface Session {
   urlInscription: string | null;
   /** Titre de l'événement Wix, tel que renseigné dans le tableau de bord. */
   source: string;
+  /**
+   * Vrai quand Wix n'accepte plus de réservation : session pleine ou fermée.
+   * À vérifier explicitement — `registration.status` reste à « OPEN_TICKETS »
+   * même lorsque toutes les places sont vendues, et la réservation échoue alors
+   * au dernier moment, après que le visiteur a tout saisi.
+   */
+  complet: boolean;
+  /**
+   * Questions propres à l'événement, ajoutées dans Wix au-delà des champs
+   * standards (nom, e-mail, téléphone, commentaire) : la question sur le
+   * handicap, par exemple. Le module d'inscription les affiche telles quelles,
+   * ce qui évite de figer dans le code une liste qui vit dans le tableau de bord.
+   */
+  champs: ChampFormulaire[];
 }
+
+export interface ChampFormulaire {
+  /** Identifiant attendu par Wix, du type « custom-c7e7f3cf… ». */
+  nom: string;
+  libelle: string;
+  /** LISTE pour un choix parmi des options, TEXTE sinon. */
+  genre: 'LISTE' | 'TEXTE' | 'PARAGRAPHE';
+  options: string[];
+  obligatoire: boolean;
+}
+
+/** Champs présents sur tous les événements : le module les gère déjà. */
+const CHAMPS_STANDARDS = new Set(['firstName', 'lastName', 'email', 'phone', 'comment']);
 
 /** Clé de regroupement par mois, ex. « 2026-09 ». */
 export const cleMois = (d: Date) =>
@@ -74,9 +101,52 @@ function depuisCache(): Session[] {
       lieu: e.lieu ?? null,
       urlInscription: e.url ?? null,
       source: e.titre,
+      complet: false,
+      champs: [],
     }))
     .filter((s) => s.debut > maintenant)
     .sort((a, b) => a.debut.getTime() - b.debut.getTime());
+}
+
+const FORM_API = (id: string) => `https://www.wixapis.com/events/v1/events/${id}/form`;
+const BILLETS_API = 'https://www.wixapis.com/events/v1/events/ticketdefinitions/query';
+
+/**
+ * Complète chaque session par deux informations que la requête principale ne
+ * donne pas : les places encore vendables et les questions propres à
+ * l'événement. Un appel par session, au build uniquement.
+ *
+ * Toute défaillance est silencieuse et laisse la session dans son état par
+ * défaut (ouverte, sans question supplémentaire) : mieux vaut un site complet
+ * qu'un build interrompu parce qu'une session sur quarante n'a pas répondu.
+ */
+async function enrichir(sessions: Session[], cle: string, site: string) {
+  const entetes = { Authorization: cle, 'wix-site-id': site, 'Content-Type': 'application/json' };
+
+  // Par paquets, pour ne pas ouvrir quarante connexions d'un coup.
+  const PAQUET = 6;
+  for (let i = 0; i < sessions.length; i += PAQUET) {
+    await Promise.all(sessions.slice(i, i + PAQUET).map(async (s) => {
+      try {
+        const r = await fetch(FORM_API(s.id), { headers: entetes });
+        if (!r.ok) return;
+        const d = await r.json();
+        for (const c of d?.form?.controls ?? []) {
+          for (const e of c?.inputs ?? []) {
+            if (CHAMPS_STANDARDS.has(e?.name)) continue;
+            s.champs.push({
+              nom: e.name,
+              libelle: e.label ?? c.label ?? '',
+              genre: c.type === 'DROPDOWN' || (e.options ?? []).length ? 'LISTE'
+                   : c.type === 'TEXTAREA' ? 'PARAGRAPHE' : 'TEXTE',
+              options: e.options ?? [],
+              obligatoire: Boolean(e.mandatory),
+            });
+          }
+        }
+      } catch { /* session laissée telle quelle */ }
+    }));
+  }
 }
 
 /** Récupère toutes les sessions à venir, tous types de formation confondus. */
@@ -112,7 +182,7 @@ export async function sessionsAVenir(): Promise<Session[]> {
     }
 
     const data = await reponse.json();
-    return (data.events ?? [])
+    const sessions: Session[] = (data.events ?? [])
       .map((e: any): Session | null => {
         const brut = e?.dateAndTimeSettings?.startDate;
         if (!brut) return null;
@@ -133,10 +203,15 @@ export async function sessionsAVenir(): Promise<Session[]> {
             ? e.eventPageUrl.base + e.eventPageUrl.path
             : null,
           source: e.title ?? '',
+          complet: false,
+          champs: [],
         };
       })
       .filter((s: Session | null): s is Session => s !== null)
       .sort((a: Session, b: Session) => a.debut.getTime() - b.debut.getTime());
+
+    await enrichir(sessions, cle, site);
+    return sessions;
   } catch (err) {
     console.warn('[wix] appel impossible, site construit sans les dates :', err);
     return [];
