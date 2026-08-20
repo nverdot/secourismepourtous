@@ -1,0 +1,381 @@
+---
+/**
+ * Module d'inscription — le visiteur choisit ses places sans quitter le site.
+ *
+ * Parcours :
+ *   1. clic sur une date        → cette boîte s'ouvre
+ *   2. billets chargés          → checkout.listAvailableTickets (côté navigateur)
+ *   3. choix du nombre de places
+ *   4. réservation              → orders.createReservation (bloque les places)
+ *   5. paiement                 → redirection vers le checkout Wix
+ *
+ * Le paiement reste chez Wix : c'est imposé par l'API, et c'est souhaitable —
+ * aucune donnée bancaire ne transite par ce site.
+ *
+ * Le Client ID est public par conception (jeton visiteur anonyme, droits en
+ * lecture et réservation seulement). Rien de sensible n'est exposé ici.
+ */
+const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92b3-33f9527fec21';
+---
+
+<dialog class="ins" id="pop-inscription" aria-labelledby="ins-titre" data-client={CLIENT_ID}>
+  <header class="ins__tete">
+    <span class="ins__ic" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M19 8v6M22 11h-6" />
+      </svg>
+    </span>
+    <h2 id="ins-titre">Inscription</h2>
+    <form method="dialog"><button class="ins__x" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+    </button></form>
+  </header>
+
+  <div class="ins__corps">
+    <p class="ins__session" id="ins-session"></p>
+
+    <div class="ins__etat" id="ins-chargement">
+      <span class="ins__spin" aria-hidden="true"></span>
+      Chargement des places disponibles…
+    </div>
+
+    <div id="ins-billets" hidden></div>
+
+    <!-- Un bloc de coordonnées par place réservée : Wix attend un
+         participant identifié pour chacune (tableau `guests`). -->
+    <div class="frm" id="ins-form" hidden></div>
+
+    <p class="ins__erreur" id="ins-erreur" hidden></p>
+  </div>
+
+  <footer class="ins__pied">
+    <p class="ins__note">Paiement sécurisé — vous serez redirigé vers notre plateforme de règlement.</p>
+    <button class="ins__valider" id="ins-valider" disabled>
+      Continuer vers le paiement
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+    </button>
+  </footer>
+</dialog>
+
+<script>
+  // Import statique : Vite empaquette le SDK avec la page. Le chargement depuis
+  // un CDN externe échouait silencieusement et la popup restait en « chargement ».
+  import { createClient, OAuthStrategy } from '@wix/sdk';
+  import * as ev from '@wix/events';
+
+  (() => {
+    const pop = document.getElementById('pop-inscription');
+    if (!pop) return;
+    const CLIENT_ID = pop.dataset.client;
+
+    const client = createClient({
+      modules: ev,
+      auth: OAuthStrategy({ clientId: CLIENT_ID }),
+    });
+
+    const zone = document.getElementById('ins-billets');
+    const charge = document.getElementById('ins-chargement');
+    const err = document.getElementById('ins-erreur');
+    const valider = document.getElementById('ins-valider');
+    const libelle = document.getElementById('ins-session');
+    const form = document.getElementById('ins-form');
+
+    /** Redessine un bloc de coordonnées par place, en conservant la saisie. */
+    function majFormulaire() {
+      const n = choix.reduce((somme, c) => somme + c.quantity, 0);
+      if (n === 0) { form.hidden = true; form.innerHTML = ''; return; }
+
+      const dejaSaisi = [...form.querySelectorAll('.part')].map((b) => ({
+        prenom: b.querySelector('[data-c=prenom]').value,
+        nom: b.querySelector('[data-c=nom]').value,
+        email: b.querySelector('[data-c=email]').value,
+        tel: b.querySelector('[data-c=tel]').value,
+      }));
+
+      form.innerHTML = Array.from({ length: n }, (_, i) => {
+        const v = dejaSaisi[i] || { prenom: '', nom: '', email: '', tel: '' };
+        return `
+        <fieldset class="part" data-i="${i}">
+          <legend>${n > 1 ? `Participant ${i + 1}` : 'Vos coordonnées'}</legend>
+          <div class="frm__duo">
+            <label>Prénom *<input type="text" data-c="prenom" autocomplete="given-name" value="${v.prenom}" required></label>
+            <label>Nom *<input type="text" data-c="nom" autocomplete="family-name" value="${v.nom}" required></label>
+          </div>
+          <label>E-mail *<input type="email" data-c="email" autocomplete="email" value="${v.email}" required></label>
+          <label>Téléphone<input type="tel" data-c="tel" autocomplete="tel" value="${v.tel}"></label>
+        </fieldset>`;
+      }).join('') + `
+        <label class="frm__com">Un commentaire ?<textarea id="f-com" rows="2"></textarea></label>
+        <p class="frm__rgpd">
+          Ces informations servent uniquement à l'inscription et à l'émission des
+          attestations de formation. Une attestation est établie au nom de chaque
+          participant : merci de renseigner des coordonnées distinctes.
+        </p>`;
+      form.hidden = false;
+    }
+
+    /** Lit les participants saisis, ou renvoie le premier champ fautif. */
+    function lireParticipants() {
+      const blocs = [...form.querySelectorAll('.part')];
+      const guests = [];
+      for (const b of blocs) {
+        const g = {};
+        for (const cle of ['prenom', 'nom', 'email', 'tel']) {
+          g[cle] = b.querySelector(`[data-c=${cle}]`).value.trim();
+        }
+        const i = Number(b.dataset.i) + 1;
+        if (!g.prenom) return { erreur: `Prénom du participant ${i} manquant.`, cible: b.querySelector('[data-c=prenom]') };
+        if (!g.nom)    return { erreur: `Nom du participant ${i} manquant.`, cible: b.querySelector('[data-c=nom]') };
+        const mail = b.querySelector('[data-c=email]');
+        if (!g.email || !mail.checkValidity()) return { erreur: `E-mail du participant ${i} invalide.`, cible: mail };
+        guests.push(g);
+      }
+      return { guests };
+    }
+
+    let choix = [];        // [{ ticketDefinitionId, quantity }]
+    let eventCourant = null;
+    let secours = null;    // lien vers la page Wix, si l'API échoue
+
+    const euro = (v, c) =>
+      new Intl.NumberFormat('fr-FR', { style: 'currency', currency: c || 'EUR' }).format(Number(v));
+
+    function majTotal() {
+      const total = choix.reduce((s, c) => s + c.quantity * c.prix, 0);
+      const n = choix.reduce((s, c) => s + c.quantity, 0);
+      valider.disabled = n === 0;
+      valider.firstChild.textContent = n === 0
+        ? 'Choisissez au moins une place '
+        : `Payer ${euro(total, choix[0]?.devise)} — ${n} place${n > 1 ? 's' : ''} `;
+    }
+
+    function afficheErreur(message) {
+      charge.hidden = true;
+      err.hidden = false;
+      err.innerHTML = message +
+        (secours ? ` <a href="${secours}" target="_blank" rel="noopener">Poursuivre sur notre page d'inscription</a>.` : '');
+    }
+
+    async function ouvrir(bouton) {
+      eventCourant = bouton.dataset.eventId;
+      secours = bouton.dataset.url || null;
+      libelle.textContent = bouton.dataset.libelle || '';
+      choix = [];
+      zone.hidden = true; zone.innerHTML = ''; form.hidden = true; form.innerHTML = '';
+      err.hidden = true; charge.hidden = false;
+      valider.disabled = true;
+      valider.firstChild.textContent = 'Continuer vers le paiement ';
+      pop.showModal();
+
+      try {
+        const r = await client.orders.listAvailableTickets({ eventId: eventCourant, limit: 10 });
+        const defs = r.definitions || [];
+        if (!defs.length) return afficheErreur("Aucune place n'est disponible en ligne pour cette session.");
+
+        zone.innerHTML = defs.map((d) => {
+          const max = Math.min(d.limitPerCheckout || 10, 10);
+          return `
+          <div class="bil" data-id="${d._id}" data-prix="${d.price?.value ?? 0}" data-devise="${d.price?.currency ?? 'EUR'}">
+            <div class="bil__txt">
+              <strong>${d.name}</strong>
+              ${d.description ? `<span>${d.description.trim()}</span>` : ''}
+              <em>${d.free ? 'Gratuit' : euro(d.price?.value, d.price?.currency)}</em>
+            </div>
+            <div class="bil__qte">
+              <button type="button" class="bil__b" data-pas="-1" aria-label="Retirer une place">−</button>
+              <output>0</output>
+              <button type="button" class="bil__b" data-pas="1" aria-label="Ajouter une place" data-max="${max}">+</button>
+            </div>
+          </div>`;
+        }).join('');
+
+        charge.hidden = true; zone.hidden = false;
+
+        zone.querySelectorAll('.bil__b').forEach((b) =>
+          b.addEventListener('click', () => {
+            const ligne = b.closest('.bil');
+            const out = ligne.querySelector('output');
+            const max = Number(ligne.querySelector('[data-pas="1"]').dataset.max);
+            let q = Number(out.textContent) + Number(b.dataset.pas);
+            q = Math.max(0, Math.min(max, q));
+            out.textContent = String(q);
+            const id = ligne.dataset.id;
+            choix = choix.filter((c) => c.ticketDefinitionId !== id);
+            if (q > 0) choix.push({
+              ticketDefinitionId: id, quantity: q,
+              prix: Number(ligne.dataset.prix), devise: ligne.dataset.devise,
+            });
+            majTotal();
+            majFormulaire();
+          })
+        );
+      } catch (e) {
+        console.warn('[inscription]', e);
+        afficheErreur("Le chargement des places a échoué.");
+      }
+    }
+
+    valider.addEventListener('click', async () => {
+      if (!choix.length) return;
+      // On vérifie tous les participants avant de bloquer des places pour rien.
+      const lecture = lireParticipants();
+      if (lecture.erreur) { lecture.cible.focus(); return afficheErreur(lecture.erreur); }
+      err.hidden = true;
+      valider.disabled = true;
+      valider.firstChild.textContent = 'Réservation en cours… ';
+      try {
+        // 1) on bloque les places (la réservation expire si le paiement traîne)
+        const resa = await client.orders.createReservation(eventCourant, {
+          ticketQuantities: choix.map(({ ticketDefinitionId, quantity }) => ({ ticketDefinitionId, quantity })),
+        });
+        // 2) Wix exige au moins un participant identifié avant d'encaisser.
+        //    Les noms des champs viennent du formulaire de l'événement.
+        const ck = await client.orders.checkout(eventCourant, {
+          reservationId: resa._id ?? resa.id,
+          guests: lecture.guests.map((g) => ({
+            form: {
+              inputValues: [
+                { inputName: 'name', value: '', values: [g.prenom, g.nom] },
+                { inputName: 'email', value: g.email },
+                { inputName: 'phone', value: g.tel },
+                { inputName: 'comment', value: (document.getElementById('f-com')?.value ?? '').trim() },
+              ],
+            },
+          })),
+        });
+        const url = ck?.order?.checkoutUrl ?? ck?.checkoutUrl ?? secours;
+        if (url) window.location.href = url;
+        else afficheErreur("La page de paiement n'a pas pu être ouverte.");
+      } catch (e) {
+        console.warn('[réservation]', e);
+        afficheErreur("La réservation n'a pas abouti. Les places sont peut-être épuisées.");
+        valider.disabled = false;
+      }
+    });
+
+    document.querySelectorAll('[data-inscription]').forEach((b) =>
+      b.addEventListener('click', (e) => { e.preventDefault(); ouvrir(b); })
+    );
+    pop.addEventListener('click', (e) => { if (e.target === pop) pop.close(); });
+  })();
+</script>
+
+<style>
+  .ins {
+    border: 0; padding: 0;
+    border-radius: var(--r-lg);
+    width: min(540px, calc(100vw - 2rem));
+    background: var(--surface); color: var(--ink);
+    box-shadow: var(--sh-lg); overflow: hidden;
+  }
+  .ins::backdrop { background: rgba(7,23,38,.68); backdrop-filter: blur(2px); }
+
+  .ins__tete {
+    display: flex; align-items: center; gap: .8rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--accent); color: #fff;
+  }
+  .ins__ic { width: 32px; height: 32px; flex: none; display: grid; place-items: center; }
+  .ins__ic svg { width: 20px; height: 20px; }
+  .ins__tete h2 { font-size: 1.1rem; font-weight: 700; flex: 1; }
+  .ins__tete form { margin: 0; }
+  .ins__x { border: 0; background: none; color: #fff; cursor: pointer; padding: .2rem; line-height: 0; opacity: .85; }
+  .ins__x:hover { opacity: 1; }
+  .ins__x svg { width: 20px; height: 20px; }
+
+  .ins__corps { padding: 1.3rem; min-height: 120px; }
+  .ins__session {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem;
+    margin-bottom: 1rem; color: var(--ink);
+  }
+
+  .ins__etat { display: flex; align-items: center; gap: .7rem; color: var(--ink-mute); font-size: .92rem; }
+  .ins__spin {
+    width: 17px; height: 17px; flex: none;
+    border: 2px solid var(--line); border-top-color: var(--accent);
+    border-radius: 50%; animation: tourne .7s linear infinite;
+  }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .ins__spin { animation-duration: 2s; } }
+
+  .bil {
+    display: flex; align-items: center; gap: 1rem;
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: 1rem 1.15rem; background: var(--sunk);
+  }
+  .bil + .bil { margin-top: .6rem; }
+  .bil__txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .bil__txt strong { font-family: 'Archivo', sans-serif; font-size: .98rem; }
+  .bil__txt span { font-size: .82rem; color: var(--ink-mute); }
+  .bil__txt em {
+    font-style: normal; font-family: 'Archivo', sans-serif; font-weight: 700;
+    color: var(--accent); margin-top: .25rem;
+  }
+
+  .bil__qte { display: flex; align-items: center; gap: .35rem; flex: none; }
+  .bil__b {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface);
+    font-size: 1.05rem; font-weight: 700; color: var(--ink);
+    cursor: pointer; line-height: 1;
+  }
+  .bil__b:hover { border-color: var(--accent); color: var(--accent); }
+  .bil__qte output {
+    min-width: 30px; text-align: center;
+    font-family: 'Archivo', sans-serif; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .frm { margin-top: 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
+  .part {
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: .9rem 1rem 1rem; margin: 0;
+    display: flex; flex-direction: column; gap: .6rem;
+    background: var(--surface);
+  }
+  .frm__com { display: flex; flex-direction: column; gap: .25rem; font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+  .frm legend, .part legend {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--ink-mute);
+    padding: 0; margin-bottom: .3rem;
+  }
+  .frm__duo { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+  @media (max-width: 460px) { .frm__duo { grid-template-columns: 1fr; } }
+  .frm label {
+    display: flex; flex-direction: column; gap: .25rem;
+    font-size: .82rem; color: var(--ink-soft); font-weight: 600;
+  }
+  .frm input, .frm textarea {
+    font: inherit; font-size: .95rem; font-weight: 400;
+    color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--r-sm);
+    padding: .6rem .75rem; width: 100%;
+  }
+  .frm input:focus, .frm textarea:focus {
+    outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent;
+  }
+  .frm textarea { resize: vertical; }
+  .frm__rgpd { font-size: .76rem; color: var(--ink-mute); margin-top: .2rem; }
+
+  .ins__erreur {
+    background: var(--secours-wash); color: var(--ink-soft);
+    border-left: 3px solid var(--secours);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    padding: .8rem 1rem; font-size: .9rem;
+  }
+  .ins__erreur a { color: var(--secours); font-weight: 600; }
+
+  .ins__pied { padding: 1rem 1.3rem 1.3rem; border-top: 1px solid var(--line); background: var(--sunk); }
+  .ins__note { font-size: .78rem; color: var(--ink-mute); margin-bottom: .8rem; }
+  .ins__valider {
+    width: 100%;
+    display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem;
+    background: var(--accent); color: #fff; border: 0;
+    border-radius: var(--r-pill); padding: .95rem 1.5rem; cursor: pointer;
+    transition: filter .15s ease;
+  }
+  .ins__valider:hover:not(:disabled) { filter: brightness(1.1); }
+  .ins__valider:disabled { background: var(--ink-mute); cursor: not-allowed; }
+  .ins__valider svg { width: 17px; height: 17px; }
+</style>

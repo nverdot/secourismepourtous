@@ -1,0 +1,130 @@
+---
+import { temoignagesDe, satisfaction } from '../data/temoignages';
+
+interface Props { slug: string; sigle: string }
+const { slug, sigle } = Astro.props;
+const avis = temoignagesDe(slug);
+---
+
+<section class="preuve" aria-labelledby="t-avis">
+  <div class="wrap">
+    <div class="preuve__tete">
+      <div>
+        <p class="eyebrow">Ils l'ont suivie</p>
+        <h2 class="h-section" id="t-avis">Ce que disent nos stagiaires</h2>
+        <p class="lede">
+          Retours recueillis auprès des {satisfaction.reponses} stagiaires ayant répondu
+          à notre questionnaire de satisfaction en {satisfaction.annee}.
+        </p>
+      </div>
+
+      <!-- Le chiffre est calculé sur l'intégralité des réponses, pas sur les
+           seuls avis affichés : c'est ce qui le rend défendable. -->
+      <div class="preuve__note">
+        <span class="preuve__chiffre">{satisfaction.tauxSatisfaits} %</span>
+        <span class="preuve__label">de stagiaires satisfaits<br />ou très satisfaits</span>
+      </div>
+    </div>
+
+    <ul class="avis">
+      {avis.map((a) => (
+        <li class="avis__item">
+          <blockquote>
+            <svg class="avis__guillemet" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M7.5 5C5 5 3 7 3 9.5S5 14 7.5 14c.3 0 .6 0 .9-.1-.6 2-2.2 3.4-4.4 3.9v1.6c4.4-.6 7.5-4.2 7.5-9.2C11.5 7 9.9 5 7.5 5zm10 0C15 5 13 7 13 9.5s2 4.5 4.5 4.5c.3 0 .6 0 .9-.1-.6 2-2.2 3.4-4.4 3.9v1.6c4.4-.6 7.5-4.2 7.5-9.2C21.5 7 19.9 5 17.5 5z" />
+            </svg>
+            <p>{a.texte}</p>
+            <footer><cite>{a.auteur}</cite><span>Stagiaire {sigle}</span></footer>
+          </blockquote>
+        </li>
+      ))}
+    </ul>
+
+    <p class="preuve__source">
+      Source : questionnaires de satisfaction {satisfaction.annee}, recueillis à l'issue
+      de chaque session dans le cadre de notre certification Qualiopi.
+    </p>
+  </div>
+</section>
+
+<style>
+    .preuve {
+    background: var(--sunk);
+    /* Un peu moins que la section standard, sans coller à la suivante. */
+    padding-block: clamp(3rem, 7.5vw, 5.5rem) clamp(2.75rem, 6.5vw, 4.5rem);
+  }
+
+  .preuve__tete {
+    display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem;
+    align-items: flex-end; justify-content: space-between;
+    margin-bottom: 2.25rem;
+  }
+
+  .preuve__note {
+    display: flex; align-items: center; gap: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1rem 1.4rem;
+    box-shadow: var(--sh-sm);
+    flex: none;
+  }
+  .preuve__chiffre {
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    font-weight: 800; line-height: 1;
+    color: var(--sage);
+    font-variant-numeric: tabular-nums;
+  }
+  .preuve__label { font-size: 0.86rem; color: var(--ink-soft); line-height: 1.35; }
+
+  .avis {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  }
+  .avis__item { display: flex; }
+
+  blockquote {
+    position: relative;
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1.5rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column;
+    width: 100%;
+  }
+  .avis__guillemet {
+    width: 26px; height: 26px;
+    color: var(--accent);
+    opacity: 0.28;
+    margin-bottom: 0.6rem;
+  }
+  blockquote p {
+    font-size: 0.98rem;
+    color: var(--ink);
+    line-height: 1.6;
+    margin-bottom: 1.15rem;
+  }
+  blockquote footer {
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    display: flex; flex-direction: column;
+  }
+  blockquote cite {
+    font-style: normal;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700; font-size: 0.92rem;
+    color: var(--ink);
+  }
+  blockquote footer span { font-size: 0.82rem; color: var(--ink-mute); }
+
+  .preuve__source {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--ink-mute);
+    max-width: var(--measure);
+  }
+</style>

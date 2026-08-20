@@ -1,0 +1,243 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+---
+
+<Base
+  title="Qui sommes-nous | Association FFSS de secourisme à Nice"
+  description="Secourisme Pour Tous, association agréée FFSS et certifiée Qualiopi à Nice depuis 2008 : formations, postes de secours et sauvetage sportif dans le 06."
+  chemin="/qui-sommes-nous"
+>
+  <header class="tete">
+    <div class="tete__photo" aria-hidden="true"></div>
+    <div class="tete__voile" aria-hidden="true"></div>
+    <div class="wrap tete__in">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Qui sommes-nous</b>
+      </nav>
+      <p class="eyebrow tete__eyebrow">Depuis {asso.fondation} sur la Côte d'Azur</p>
+      <h1 class="tete__h1">Une association, quatre engagements</h1>
+      <p class="tete__t">
+        Fondée par {asso.fondateur}, Secourisme Pour Tous promeut le secourisme et le
+        sauvetage sportif auprès du grand public, des enfants comme des adultes.
+      </p>
+    </div>
+  </header>
+
+  <!-- ========== CHIFFRES ========== -->
+  <section class="wrap chiffres" aria-label="L'association en chiffres">
+    <div class="chiffres__grille">
+      {asso.chiffres.map((c) => (
+        <div class="chiffre">
+          <span class="chiffre__v">{c.valeur}<i>{c.suffixe}</i></span>
+          <span class="chiffre__l">{c.label}</span>
+          <span class="chiffre__d">{c.detail}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ========== HISTOIRE ========== -->
+  <section class="section">
+    <div class="wrap histoire">
+      <div>
+        <p class="eyebrow">Notre histoire</p>
+        <h2 class="h-section">Le secourisme, pour tout le monde</h2>
+        <p class="lede">
+          Depuis {asso.fondation}, nous partons d'une conviction simple : les gestes qui
+          sauvent ne doivent pas rester l'affaire des professionnels. Un enfant de dix ans
+          peut apprendre à alerter les secours. Un salarié peut prendre en charge un
+          collègue avant l'arrivée du SAMU. Un nageur-sauveteur peut faire la différence
+          sur une plage un après-midi d'août.
+        </p>
+        <p class="para">
+          Cette conviction nous a menés bien au-delà de la salle de formation : nos équipes
+          sécurisent les manifestations sportives et culturelles de toute la Côte d'Azur,
+          notre club forme des athlètes de sauvetage sportif jusqu'au plus haut niveau, et
+          notre école accueille les plus jeunes.
+        </p>
+        <ul class="valeurs">
+          {asso.valeurs.map((v) => <li>{v}</li>)}
+        </ul>
+      </div>
+
+      <aside class="agrements">
+        <h3 class="agrements__h">Nos agréments</h3>
+        <div class="agrements__logos">
+          <img src="/img/logo-ffss.png" alt="Logo de la Fédération Française de Sauvetage et de Secourisme" width="120" height="132" loading="lazy" />
+          <img src="/img/qualiopi.png" alt="Certification Qualiopi — actions de formation" width="180" height="110" loading="lazy" />
+        </div>
+        <ul class="agrements__l">
+          {asso.agrements.map((a) => (
+            <li><strong>{a.nom}</strong><span>{a.detail}</span></li>
+          ))}
+        </ul>
+        <p class="agrements__note">
+          La certification qualité a été délivrée au titre de la catégorie
+          <strong> actions de formation</strong>.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== POLES ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Nos activités</p>
+      <h2 class="h-section">Quatre pôles, une même exigence</h2>
+      <div class="poles">
+        {asso.poles.map((p) => (
+          <a class="pole" href={p.lien}>
+            <h3>{p.titre}</h3>
+            <p>{p.texte}</p>
+            <span class="pole__f" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ACCESSIBILITE ========== -->
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit acc">
+      <span class="acc__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+      </span>
+      <div>
+        <h2 class="acc__h">Accessibilité et inclusion</h2>
+        <p class="lede">{asso.accessibilite}</p>
+        <a class="btn btn--fantome acc__btn" href="/contact">Nous exposer votre situation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PARTENAIRES ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Ils nous font confiance</p>
+      <h2 class="h-section">Nos partenaires</h2>
+      <ul class="partenaires">
+        {asso.partenaires.map((p) => (
+          <li class="partenaire">
+            {p.logo
+              ? <img src={p.logo} alt={p.nom} loading="lazy" />
+              : <span class="partenaire__nom">{p.nom}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete { position: relative; background: var(--navy-deep); color: var(--on-navy); overflow: hidden; }
+  .tete__photo {
+    position: absolute; inset: 0;
+    background: url('/img/equipe.jpg') center/cover;
+  }
+  .tete__voile {
+    position: absolute; inset: 0;
+    background: linear-gradient(97deg, rgba(7,23,38,.96) 0%, rgba(7,23,38,.9) 38%, rgba(9,32,54,.6) 72%, rgba(11,37,64,.45) 100%);
+  }
+  .tete__in { position: relative; z-index: 1; padding-block: clamp(1.5rem,4vw,2.25rem) clamp(3rem,7vw,5rem); }
+  .fil {
+    display: flex; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem,4vw,2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__eyebrow { color: var(--on-navy-soft) !important; }
+  .tete__h1 { font-size: clamp(2.1rem,6vw,3.4rem); font-weight: 800; margin-block: .5rem .85rem; }
+  .tete__t { max-width: 54ch; color: var(--on-navy-text); font-size: clamp(1rem,2.2vw,1.12rem); }
+
+  .chiffres { position: relative; z-index: 2; margin-top: clamp(-3.5rem,-5vw,-2rem); }
+  .chiffres__grille { display: grid; gap: clamp(.7rem,1.6vw,1rem); grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); }
+  .chiffre {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: clamp(1.25rem,2.8vw,1.6rem); box-shadow: var(--sh-md);
+    display: flex; flex-direction: column; gap: .15rem;
+  }
+  .chiffre__v {
+    font-family: 'Archivo', sans-serif; font-size: clamp(2.1rem,5vw,2.75rem);
+    font-weight: 800; line-height: 1; color: var(--azur); font-variant-numeric: tabular-nums;
+  }
+  .chiffre__v i { font-style: normal; color: var(--secours); }
+  .chiffre__l { font-weight: 600; margin-top: .35rem; }
+  .chiffre__d { font-size: .85rem; color: var(--ink-mute); }
+
+  .histoire { display: grid; gap: clamp(1.75rem,4vw,3rem); grid-template-columns: minmax(0,7fr) minmax(0,5fr); align-items: start; }
+  @media (max-width: 880px) { .histoire { grid-template-columns: 1fr; } }
+  .para { margin-top: 1rem; color: var(--ink-soft); max-width: var(--measure); }
+
+  .valeurs { list-style: none; margin: 1.75rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .valeurs li {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .82rem;
+    letter-spacing: .04em; text-transform: uppercase;
+    background: var(--azur-wash); color: var(--azur);
+    border-radius: var(--r-pill); padding: .45rem 1rem;
+  }
+
+  .agrements { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(1.35rem,3vw,1.9rem); }
+  .agrements__h { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.1rem; }
+  .agrements__logos {
+    display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center;
+    background: #fff; border-radius: var(--r-md); padding: 1.1rem; margin-bottom: 1.25rem;
+  }
+  .agrements__logos img { width: auto; height: 68px; object-fit: contain; }
+  .agrements__l { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: .7rem; }
+  .agrements__l li { display: flex; flex-direction: column; }
+  .agrements__l strong { font-weight: 700; }
+  .agrements__l span { font-size: .88rem; color: var(--ink-mute); }
+  .agrements__note { font-size: .82rem; color: var(--ink-mute); }
+
+  .poles { margin-top: 2.5rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); }
+  .pole {
+    position: relative; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.35rem,3vw,1.75rem);
+    text-decoration: none; color: inherit;
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .pole:hover { transform: translateY(-3px); box-shadow: var(--sh-md); border-color: var(--azur); }
+  .pole h3 { font-size: 1.08rem; font-weight: 700; margin-bottom: .45rem; padding-right: 2rem; }
+  .pole p { font-size: .92rem; color: var(--ink-soft); }
+  .pole__f { position: absolute; top: clamp(1.35rem,3vw,1.75rem); right: clamp(1.35rem,3vw,1.75rem); width: 22px; height: 22px; color: var(--secours); }
+  .pole__f svg { width: 100%; height: 100%; }
+
+  .acc { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .acc__ic { flex: none; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.1); color: #fff; display: grid; place-items: center; }
+  .acc__ic svg { width: 22px; height: 22px; }
+  .acc__h { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
+  .acc__btn { margin-top: 1.25rem; }
+  @media (max-width: 620px) { .acc { flex-direction: column; } }
+
+  .partenaires {
+    margin-top: 2rem; padding: 0; list-style: none;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-items: center;
+  }
+  .partenaire {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 1.1rem 1.25rem;
+    display: grid; place-items: center; min-height: 96px;
+  }
+  .partenaire img {
+    max-width: 100%; max-height: 58px; width: auto; height: auto;
+    object-fit: contain;
+    /* Les logos partenaires ont des fonds et des couleurs très différents.
+       Une légère désaturation au repos les fait cohabiter sans les dénaturer. */
+    filter: saturate(0.85);
+    transition: filter 0.18s ease, transform 0.18s ease;
+  }
+  .partenaire:hover img { filter: saturate(1); transform: scale(1.04); }
+  .partenaire__nom {
+    font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 0.9rem;
+    color: var(--ink-soft); text-align: center;
+  }
+</style>

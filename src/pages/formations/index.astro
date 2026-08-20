@@ -1,0 +1,135 @@
+---
+import Base from '../../layouts/Base.astro';
+import { formations, filieres, type Filiere } from '../../data/formations';
+import { sessionsAVenir, sessionsDe } from '../../lib/wix';
+import CartesFilieres from '../../components/CartesFilieres.astro';
+
+const toutes = await sessionsAVenir();
+
+const ordre: Filiere[] = ['citoyenne', 'operationnelle', 'aquatique', 'entreprise', 'pedagogique'];
+const groupes = ordre
+  .map((cle) => ({
+    cle,
+    ...filieres[cle],
+    items: formations
+      .filter((f) => f.filiere === cle)
+      .map((f) => ({ f, nb: sessionsDe(toutes, f.wixEvent).length })),
+  }))
+  .filter((g) => g.items.length > 0);
+---
+
+<Base
+  title="Formations secourisme à Nice | PSC, PSE, BNSSA, SST"
+  description="Toutes nos formations secourisme à Nice et dans le 06 : PSC, PSE1, PSE2, BNSSA, SST et formations de formateur. Organisme certifié Qualiopi, agréé FFSS."
+  chemin="/formations"
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Formations</b>
+      </nav>
+      <h1 class="tete__h1">Nos formations</h1>
+      <p class="tete__t">
+        Cinq filières, du grand public au professionnel. Toutes nos formations sont
+        dispensées par des formateurs diplômés, dans le cadre de notre certification
+        Qualiopi et de notre agrément FFSS.
+      </p>
+    </div>
+  </header>
+
+  <CartesFilieres />
+
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 4rem);
+  }
+  .fil {
+    display: flex; gap: 0.5rem; align-items: center;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.11em; text-transform: uppercase;
+    color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: 0.45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .tete__h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 800; margin-bottom: 0.85rem; }
+  .tete__t { max-width: 60ch; color: var(--on-navy-text); }
+
+  .groupe { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .groupe:last-child { margin-bottom: 0; }
+  .groupe__tete { margin-bottom: 1.5rem; }
+  .groupe__h {
+    font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--line);
+    margin-bottom: 0.6rem;
+  }
+  .groupe__t { color: var(--ink-soft); font-size: 0.95rem; }
+
+  .cartes {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  .carte {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  }
+  .carte:hover { transform: translateY(-3px); box-shadow: var(--sh-md); border-color: var(--azur); }
+  .carte__lien {
+    display: flex; flex-direction: column; height: 100%;
+    padding: clamp(1.35rem, 3vw, 1.65rem);
+    text-decoration: none; color: inherit;
+  }
+
+  .carte__haut { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .carte__sigle {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.75rem; font-weight: 800;
+    letter-spacing: -0.03em; color: var(--navy);
+  }
+  .carte__dispo {
+    margin-left: auto;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.04em;
+    background: var(--sage-wash); color: var(--sage);
+    border-radius: var(--r-pill);
+    padding: 0.25rem 0.7rem;
+  }
+
+  .carte__h { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .carte__r { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 1.1rem; }
+
+  .carte__meta {
+    margin: 0 0 1.15rem;
+    display: grid; gap: 0.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .carte__meta > div { display: flex; justify-content: space-between; gap: 1rem; }
+  .carte__meta dt { font-size: 0.82rem; color: var(--ink-mute); }
+  .carte__meta dd { margin: 0; font-size: 0.86rem; font-weight: 600; text-align: right; }
+  .carte__tarif { color: var(--secours); }
+
+  .carte__cta {
+    margin-top: auto;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    color: var(--secours);
+  }
+  .carte__cta svg { width: 16px; height: 16px; }
+  .carte:hover .carte__cta { text-decoration: underline; text-underline-offset: 3px; }
+</style>

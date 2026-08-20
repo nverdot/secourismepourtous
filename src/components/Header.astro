@@ -1,0 +1,208 @@
+---
+import { asso } from '../data/association';
+
+const liens = [
+  { href: '/formations', texte: 'Formations' },
+  { href: '/postes-de-secours', texte: 'Postes de secours' },
+  { href: '/sauvetage-sportif', texte: 'Sauvetage sportif' },
+  { href: '/qui-sommes-nous', texte: 'Qui sommes-nous' },
+  { href: '/contact', texte: 'Contact' },
+];
+
+const actuel = Astro.url.pathname;
+---
+
+<header class="entete">
+  <!-- Bandeau de contact : le téléphone accessible en un geste, y compris
+       depuis un mobile en situation d'urgence ou de demande de devis. -->
+  <div class="entete__bandeau">
+    <div class="wrap entete__bandeau-in">
+      <span>Association agréée FFSS · Certifiée Qualiopi · Nice et Alpes-Maritimes</span>
+      <a href={`tel:${asso.contact.telephoneLien}`} class="entete__tel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+        {asso.contact.telephone}
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap entete__barre">
+    <a href="/" class="marque" aria-label={`${asso.nom} — accueil`}>
+      <img class="marque__logo" src="/img/logo-spt.png" alt="" width="44" height="52" />
+      <span class="marque__mots">
+        <strong>Secourisme</strong>
+        <em>Pour Tous</em>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale">
+      {liens.map((l) => (
+        <a
+          href={l.href}
+          class:list={['nav__lien', { 'est-actif': actuel === l.href || actuel.startsWith(l.href + '/') }]}
+          aria-current={actuel === l.href ? 'page' : undefined}
+        >
+          {l.texte}
+        </a>
+      ))}
+    </nav>
+
+    <a href="/formations" class="btn btn--primaire entete__cta">S'inscrire</a>
+
+    <!-- Ouverture du menu en mobile, sans JavaScript : une case à cocher
+         masquée pilote l'affichage. Le site reste fonctionnel si le script
+         d'un tiers échoue. -->
+    <input type="checkbox" id="menu-mobile" class="vh entete__bascule" />
+    <label for="menu-mobile" class="entete__burger" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </label>
+    <nav class="nav-mobile" aria-label="Navigation mobile">
+      {liens.map((l) => <a href={l.href}>{l.texte}</a>)}
+      <a href={`tel:${asso.contact.telephoneLien}`} class="nav-mobile__tel">{asso.contact.telephone}</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .entete__bandeau {
+    background: var(--navy-deep);
+    color: var(--on-navy-soft);
+    font-size: 0.78rem;
+  }
+  .entete__bandeau-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.5rem;
+  }
+  .entete__bandeau-in > span { min-width: 0; }
+  .entete__tel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .entete__tel:hover { color: var(--secours-hi); }
+
+  .entete__barre {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 0.9rem;
+  }
+
+  .marque {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--ink);
+    flex: none;
+  }
+  .marque__logo { width: auto; height: 46px; object-fit: contain; flex: none; }
+  .marque__mots {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Archivo', sans-serif;
+    line-height: 1.05;
+  }
+  .marque__mots strong { font-size: 1.02rem; font-weight: 800; letter-spacing: -0.02em; }
+  .marque__mots em {
+    font-style: normal;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--secours);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nav { display: flex; gap: 0.35rem; margin-left: auto; }
+  .nav__lien {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--r-sm);
+    white-space: nowrap;
+  }
+  .nav__lien:hover { background: var(--sunk); color: var(--ink); }
+  .nav__lien.est-actif { color: var(--secours); }
+
+  .entete__cta { padding: 0.65rem 1.3rem; font-size: 0.92rem; flex: none; }
+
+  /* --- mobile --- */
+  .entete__burger { display: none; }
+  .nav-mobile { display: none; }
+
+  @media (max-width: 1000px) {
+    .nav, .entete__cta { display: none; }
+
+    .entete__burger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      margin-left: auto;
+      width: 42px; height: 42px;
+      padding: 0 9px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      background: var(--sunk);
+    }
+    .entete__burger span {
+      display: block;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .entete__bascule:focus-visible + .entete__burger { outline: 3px solid var(--azur); outline-offset: 2px; }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      order: 10;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+      margin-top: 0.75rem;
+    }
+    .entete__bascule:checked ~ .nav-mobile { display: flex; }
+    .entete__bascule:checked + .entete__burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .entete__bascule:checked + .entete__burger span:nth-child(2) { opacity: 0; }
+    .entete__bascule:checked + .entete__burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-mobile a {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 0.85rem 0.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-mobile a:last-child { border-bottom: 0; }
+    .nav-mobile__tel { color: var(--secours) !important; }
+
+    .entete__barre { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 620px) {
+    .entete__bandeau-in > span { display: none; }
+    .entete__bandeau-in { justify-content: flex-end; }
+  }
+</style>

@@ -1,0 +1,267 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { formations, filieres, type Filiere } from '../data/formations';
+import { sessionsAVenir } from '../lib/wix';
+import CartesFilieres from '../components/CartesFilieres.astro';
+
+const sessions = await sessionsAVenir();
+const prochaines = sessions.slice(0, 3);
+
+const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as Filiere[])
+  .map((f) => ({ cle: f, ...filieres[f], items: formations.filter((x) => x.filiere === f) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<Base
+  title="Formation secourisme à Nice | Secourisme Pour Tous"
+  description="Association agréée FFSS et certifiée Qualiopi à Nice depuis 2008 : formations PSC, PSE1, PSE2, BNSSA, SST, postes de secours et sauvetage sportif dans le 06."
+  chemin="/"
+>
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero__photo" aria-hidden="true"></div>
+    <div class="hero__voile" aria-hidden="true"></div>
+    <div class="wrap hero__in">
+      <div class="hero__texte">
+        <div class="hero__badges">
+          <span class="badge badge--qualiopi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+            Certifié Qualiopi
+          </span>
+          <span class="badge badge--contour">Agréée FFSS</span>
+          <span class="badge badge--contour">Depuis {asso.fondation}</span>
+        </div>
+
+        <h1 class="hero__h1">
+          Apprendre les gestes<br />qui sauvent, à Nice
+        </h1>
+        <p class="hero__accroche">
+          Association de secourisme et de sauvetage sportif sur la Côte d'Azur depuis
+          {asso.fondation}. Nous formons plus de 800 personnes par an et sécurisons
+          270 événements dans les Alpes-Maritimes.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--primaire" href="/formations">
+            Découvrir nos formations
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+          <a class="btn btn--fantome" href="/postes-de-secours">Demander un poste de secours</a>
+        </div>
+      </div>
+    </div>
+
+    <svg class="hero__vague" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,90 L0,44 C240,4 480,0 720,18 C960,36 1200,66 1440,44 L1440,90 Z" />
+    </svg>
+  </header>
+
+  <!-- ============ CHIFFRES ============ -->
+  <section class="wrap chiffres" aria-label="L'association en chiffres">
+    <div class="chiffres__grille">
+      {asso.chiffres.map((c) => (
+        <div class="chiffre">
+          <span class="chiffre__v">{c.valeur}<i>{c.suffixe}</i></span>
+          <span class="chiffre__l">{c.label}</span>
+          <span class="chiffre__d">{c.detail}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <CartesFilieres />
+
+  <!-- ============ POLES ============ -->
+  <section class="section section--sunk" aria-labelledby="t-poles">
+    <div class="wrap">
+      <p class="eyebrow">Nos activités</p>
+      <h2 class="h-section" id="t-poles">Bien plus qu'un organisme de formation</h2>
+      <div class="poles">
+        {asso.poles.map((p) => (
+          <a class="pole" href={p.lien}>
+            <h3>{p.titre}</h3>
+            <p>{p.texte}</p>
+            <span class="pole__fleche" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTENAIRES ============ -->
+  <section class="section" aria-labelledby="t-partenaires">
+    <div class="wrap">
+      <p class="eyebrow">Ils nous font confiance</p>
+      <h2 class="h-section" id="t-partenaires">Nos partenaires</h2>
+      <ul class="partenaires">
+        {asso.partenaires.map((p) => (
+          <li class="partenaire">
+            {p.logo
+              ? <img src={p.logo} alt={p.nom} loading="lazy" />
+              : <span class="partenaire__nom">{p.nom}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- hero --- */
+  .hero {
+    position: relative;
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 46%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    overflow: hidden;
+  }
+  /* Le sauveteur se tient dans le tiers gauche de la photo. On décale le
+     cadrage pour qu'il apparaisse à droite du texte, pas dessous. */
+  .hero__photo {
+    position: absolute; inset: 0;
+    background: url('/img/secours-mer.jpg') 22% center / cover;
+  }
+  .hero__voile {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(96deg,
+        rgba(7,23,38,.97) 0%, rgba(7,23,38,.93) 30%,
+        rgba(7,23,38,.72) 52%, rgba(9,32,54,.44) 74%, rgba(11,37,64,.34) 100%),
+      linear-gradient(180deg, rgba(7,23,38,.5) 0%, rgba(7,23,38,0) 30%);
+  }
+  @media (max-width: 860px) {
+    /* En étroit, le texte recouvre la photo : voile plein et cadrage recentré. */
+    .hero__photo { background-position: 34% center; }
+    .hero__voile {
+      background: linear-gradient(180deg, rgba(7,23,38,.90) 0%, rgba(7,23,38,.93) 55%, rgba(7,23,38,.96) 100%);
+    }
+  }
+  .hero__in {
+    position: relative; z-index: 1;
+    padding-block: clamp(3.5rem, 9vw, 6.5rem) clamp(5rem, 11vw, 8rem);
+  }
+  .hero__texte { max-width: 44ch; }
+  .hero__badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .hero__h1 {
+    font-size: clamp(2.4rem, 7vw, 4.2rem);
+    font-weight: 800; line-height: 1.02;
+    margin-bottom: 1.25rem;
+  }
+  .hero__accroche {
+    font-size: clamp(1.02rem, 2.3vw, 1.18rem);
+    color: var(--on-navy-text);
+    margin-bottom: 2.25rem;
+  }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+  .hero__vague { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1; width: 100%; height: auto; }
+  .hero__vague path { fill: var(--ground); }
+
+  /* --- chiffres --- */
+  .chiffres { position: relative; z-index: 2; margin-top: clamp(-4rem, -6vw, -2.5rem); }
+  .chiffres__grille {
+    display: grid; gap: clamp(0.7rem, 1.6vw, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .chiffre {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: clamp(1.25rem, 2.8vw, 1.6rem);
+    box-shadow: var(--sh-md);
+    display: flex; flex-direction: column; gap: 0.15rem;
+  }
+  .chiffre__v {
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(2.1rem, 5vw, 2.75rem);
+    font-weight: 800; line-height: 1;
+    color: var(--azur);
+    font-variant-numeric: tabular-nums;
+  }
+  .chiffre__v i { font-style: normal; color: var(--secours); }
+  .chiffre__l { font-weight: 600; margin-top: 0.35rem; }
+  .chiffre__d { font-size: 0.85rem; color: var(--ink-mute); }
+
+  /* --- filières --- */
+  .filieres {
+    margin-top: 2.5rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .filiere {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: clamp(1.35rem, 3vw, 1.75rem);
+  }
+  .filiere__h { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .filiere__t { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 1.1rem; }
+  .filiere__l { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  .filiere__l a {
+    display: flex; align-items: baseline; gap: 0.6rem;
+    text-decoration: none; color: var(--ink);
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--r-sm);
+    background: var(--sunk);
+    transition: background-color 0.15s ease;
+  }
+  .filiere__l a:hover { background: var(--azur-wash); }
+  .filiere__l strong { font-family: 'Archivo', sans-serif; font-weight: 800; flex: none; }
+  .filiere__l span { font-size: 0.86rem; color: var(--ink-mute); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .filiere__l em {
+    margin-left: auto; flex: none;
+    font-style: normal; font-family: 'Archivo', sans-serif;
+    font-weight: 700; font-size: 0.88rem; color: var(--secours);
+  }
+
+  /* --- pôles --- */
+  .poles {
+    margin-top: 2.5rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  .pole {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: clamp(1.35rem, 3vw, 1.75rem);
+    text-decoration: none; color: inherit;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  }
+  .pole:hover { transform: translateY(-3px); box-shadow: var(--sh-md); border-color: var(--azur); }
+  .pole h3 { font-size: 1.08rem; font-weight: 700; margin-bottom: 0.45rem; padding-right: 2rem; }
+  .pole p { font-size: 0.92rem; color: var(--ink-soft); }
+  .pole__fleche {
+    position: absolute; top: clamp(1.35rem, 3vw, 1.75rem); right: clamp(1.35rem, 3vw, 1.75rem);
+    width: 22px; height: 22px; color: var(--secours);
+  }
+  .pole__fleche svg { width: 100%; height: 100%; }
+
+  /* --- partenaires --- */
+  .partenaires {
+    margin-top: 2rem; padding: 0; list-style: none;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-items: center;
+  }
+  .partenaire {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 1.1rem 1.25rem;
+    display: grid; place-items: center; min-height: 96px;
+  }
+  .partenaire img {
+    max-width: 100%; max-height: 58px; width: auto; height: auto;
+    object-fit: contain;
+    /* Les logos partenaires ont des fonds et des couleurs très différents.
+       Une légère désaturation au repos les fait cohabiter sans les dénaturer. */
+    filter: saturate(0.85);
+    transition: filter 0.18s ease, transform 0.18s ease;
+  }
+  .partenaire:hover img { filter: saturate(1); transform: scale(1.04); }
+  .partenaire__nom {
+    font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 0.9rem;
+    color: var(--ink-soft); text-align: center;
+  }
+</style>

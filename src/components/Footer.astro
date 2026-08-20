@@ -1,0 +1,147 @@
+---
+import { asso } from '../data/association';
+import { formations } from '../data/formations';
+
+const annee = 2026;
+---
+
+<footer class="pied">
+  <div class="wrap pied__grille">
+    <div class="pied__col pied__col--marque">
+      <span class="pied__marque">
+        <strong>Secourisme</strong> <em>Pour Tous</em>
+      </span>
+      <p class="pied__texte">
+        Association agréée FFSS et certifiée Qualiopi, implantée sur la Côte d'Azur
+        depuis {asso.fondation}. Formation, postes de secours et sauvetage sportif.
+      </p>
+      <div class="pied__agrements">
+        <img src="/img/logo-ffss.png" alt="Association agréée FFSS" width="72" height="79" loading="lazy" />
+        <img src="/img/qualiopi.png" alt="Certifié Qualiopi — actions de formation" width="130" height="80" loading="lazy" />
+      </div>
+      <p class="pied__qualiopi">
+        La certification qualité a été délivrée au titre de la catégorie
+        <strong>actions de formation</strong>.
+      </p>
+    </div>
+
+    <div class="pied__col">
+      <h2 class="pied__titre">Formations</h2>
+      <ul>
+        {formations.map((f) => (
+          <li><a href={`/formations/${f.slug}`}>{f.sigle} — {f.intitule}</a></li>
+        ))}
+        <li><a href="/formations">Tout le catalogue</a></li>
+      </ul>
+    </div>
+
+    <div class="pied__col">
+      <h2 class="pied__titre">L'association</h2>
+      <ul>
+        <li><a href="/qui-sommes-nous">Qui sommes-nous</a></li>
+        <li><a href="/postes-de-secours">Postes de secours</a></li>
+        <li><a href="/sauvetage-sportif">Sauvetage sportif</a></li>
+        <li><a href="/contact">Nous contacter</a></li>
+      </ul>
+    </div>
+
+    <div class="pied__col">
+      <h2 class="pied__titre">Contact</h2>
+      <address class="pied__adresse">
+        {asso.contact.adresse}<br />
+        {asso.contact.codePostal} {asso.contact.ville}
+      </address>
+      <ul>
+        <li><a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a></li>
+        <li><a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap pied__bas">
+    <span>© {annee} {asso.nom} — Tous droits réservés</span>
+    <span class="pied__legal">
+      <a href="/mentions-legales">Mentions légales</a>
+      <a href="/politique-de-confidentialite">Politique de confidentialité</a>
+      <a href="/cgv">CGV</a>
+    </span>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    background: var(--navy-deep);
+    color: var(--on-navy-soft);
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+    font-size: 0.92rem;
+  }
+
+  .pied__grille {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    padding-bottom: 2.5rem;
+  }
+  @media (max-width: 900px) { .pied__grille { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .pied__grille { grid-template-columns: 1fr; } }
+
+  .pied__marque {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.15rem;
+    color: #fff;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .pied__marque strong { font-weight: 800; letter-spacing: -0.02em; }
+  .pied__marque em {
+    font-style: normal;
+    color: var(--secours-hi);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+  }
+
+  .pied__texte { max-width: 42ch; margin-bottom: 1.1rem; }
+
+  /* Fond blanc obligatoire : les deux logos officiels sont conçus pour
+     s'afficher sur blanc et deviennent illisibles sur le bleu nuit. */
+  .pied__agrements {
+    display: flex; flex-wrap: wrap; gap: 1.1rem; align-items: center;
+    background: #fff; border-radius: var(--r-md);
+    padding: 0.9rem 1.1rem; margin-bottom: 0.7rem;
+    width: fit-content;
+  }
+  .pied__agrements img { height: 54px; width: auto; object-fit: contain; }
+  .pied__qualiopi { font-size: 0.76rem; color: var(--on-navy-soft); max-width: 38ch; }
+  .pied__qualiopi strong { color: #fff; }
+
+  .pied__titre {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 0.9rem;
+  }
+
+  .pied__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  .pied__col a { color: var(--on-navy-soft); text-decoration: none; }
+  .pied__col a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+  .pied__adresse { font-style: normal; margin-bottom: 0.75rem; }
+
+  .pied__bas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.82rem;
+  }
+  .pied__legal { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .pied__legal a { color: var(--on-navy-soft); text-decoration: none; }
+  .pied__legal a:hover { color: #fff; }
+</style>

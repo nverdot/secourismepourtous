@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import cgv from '../data/cgv.json';
+
+/**
+ * Conditions générales de vente.
+ *
+ * Le contenu est repris intégralement du document de référence de
+ * l'association (CGV_SecourismePourTous_2025.docx), sans réécriture : un texte
+ * contractuel engage juridiquement, il n'appartient pas au site de le
+ * reformuler. Seule la mise en forme est ajoutée.
+ *
+ * Pour mettre à jour : modifier src/data/cgv.json, régénéré depuis le .docx.
+ */
+
+const { entete, articles } = cgv as {
+  entete: string[];
+  articles: { titre: string; contenu: { type: string; texte: string }[] }[];
+};
+
+// Ancre lisible pour le sommaire : « ARTICLE 1 BIS – … » → « article-1-bis »
+const ancre = (t: string) =>
+  t.split('–')[0].trim().toLowerCase().normalize('NFD')
+    .replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<Base
+  title="Conditions générales de vente | Secourisme Pour Tous"
+  description="CGV de Secourisme Pour Tous, organisme de formation certifié Qualiopi à Nice : inscription, tarifs, règlement, annulation, évaluation et données personnelles."
+  chemin="/cgv"
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>CGV</b>
+      </nav>
+      <h1 class="tete__h1">Conditions générales de vente</h1>
+      <p class="tete__t">
+        {asso.nom} — {asso.contact.adresse}, {asso.contact.codePostal} {asso.contact.ville}
+      </p>
+      {entete.map((e) => <p class="tete__note">{e.replace('ℹ️', '').trim()}</p>)}
+    </div>
+  </header>
+
+  <div class="wrap cgv">
+    <!-- Sommaire : 14 articles, on ne fait pas défiler à l'aveugle. -->
+    <nav class="somm" aria-label="Sommaire">
+      <p class="somm__t">Sommaire</p>
+      <ol>
+        {articles.map((a) => (
+          <li><a href={`#${ancre(a.titre)}`}>{a.titre.replace(/^ARTICLE\s+/i, '')}</a></li>
+        ))}
+      </ol>
+    </nav>
+
+    <article class="corps">
+      {articles.map((a) => (
+        <section class="art" id={ancre(a.titre)}>
+          <h2 class="art__h">{a.titre}</h2>
+          {a.contenu.map((b) =>
+            b.type === 'sous' ? <h3 class="art__sous">{b.texte}</h3>
+            : b.type === 'note' ? <p class="art__note">{b.texte}</p>
+            : b.type === 'item' ? <p class="art__item">{b.texte}</p>
+            : <p class="art__p">{b.texte}</p>
+          )}
+        </section>
+      ))}
+
+      <p class="maj">
+        Document de référence de l'association, version 2025.
+        Pour toute question : <a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a>
+        ou <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>.
+      </p>
+    </article>
+  </div>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 3.5rem);
+  }
+  .fil {
+    display: flex; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 800; margin-bottom: .7rem; }
+  .tete__t { color: var(--on-navy-text); }
+  .tete__note {
+    margin-top: .85rem; font-size: .88rem; color: #fff;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+    border-radius: var(--r-md); padding: .7rem 1rem; max-width: 62ch;
+  }
+
+  .cgv {
+    display: grid; gap: clamp(1.75rem, 4vw, 3rem);
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+  @media (max-width: 900px) { .cgv { grid-template-columns: 1fr; } }
+
+  .somm {
+    position: sticky; top: 130px;
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.25rem 1.35rem;
+  }
+  @media (max-width: 900px) { .somm { position: static; } }
+  .somm__t {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .85rem;
+  }
+  .somm ol { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .45rem; }
+  .somm li { font-size: .85rem; }
+  .somm a { color: var(--ink-soft); text-decoration: none; }
+  .somm a:hover { color: var(--secours); text-decoration: underline; text-underline-offset: 3px; }
+
+  .corps { max-width: 74ch; }
+  .art { margin-bottom: 2.5rem; scroll-margin-top: 130px; }
+  .art:last-of-type { margin-bottom: 1.5rem; }
+  .art__h {
+    font-size: clamp(1.15rem, 2.6vw, 1.4rem); font-weight: 800;
+    padding-bottom: .6rem; margin-bottom: 1rem;
+    border-bottom: 2px solid var(--line);
+  }
+  .art__sous {
+    font-size: 1rem; font-weight: 700; color: var(--navy);
+    margin-top: 1.4rem; margin-bottom: .5rem;
+  }
+  .art__p { margin-bottom: .85rem; color: var(--ink-soft); font-size: .95rem; }
+  .art__item {
+    margin-bottom: .5rem; color: var(--ink-soft); font-size: .95rem;
+    padding-left: 1.1rem; position: relative;
+  }
+  .art__item::before {
+    content: ''; position: absolute; left: 0; top: .62em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--secours);
+  }
+  .art__note {
+    background: var(--azur-wash);
+    border-left: 3px solid var(--azur);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    padding: .8rem 1rem; margin-block: 1rem;
+    font-size: .9rem; color: var(--ink-soft);
+  }
+
+  .maj {
+    margin-top: 2rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: .88rem; color: var(--ink-mute);
+  }
+</style>

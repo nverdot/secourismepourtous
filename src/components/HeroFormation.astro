@@ -1,0 +1,223 @@
+---
+import type { Formation } from '../data/formations';
+import { filieres } from '../data/formations';
+
+interface Props {
+  formation: Formation;
+  nbSessions: number;
+}
+const { formation: f, nbSessions } = Astro.props;
+
+const faits = [
+  { label: 'Durée', valeur: f.duree, note: f.dureeNote, ton: 'azur', icone: 'horloge' },
+  { label: 'Prérequis', valeur: f.prerequis, note: f.prerequisNote, ton: 'sage', icone: 'personne' },
+  { label: 'Certification', valeur: f.certification, note: f.certificationNote, ton: 'gold', icone: 'medaille' },
+  { label: 'Tarif', valeur: f.tarif, note: f.tarifNote, ton: 'secours', icone: 'euro' },
+];
+---
+
+<header class:list={['hero', { 'hero--photo': !!f.image }]}>
+  {f.image && <div class="hero__photo" style={`background-image:url('${f.image}')`} aria-hidden="true"></div>}
+  <div class="hero__voile" aria-hidden="true"></div>
+  <svg class="hero__ecg" viewBox="0 0 1200 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,120 L200,120 L220,72 L238,158 L256,44 L274,120 L470,120 L495,120 L510,72 L528,158 L546,44 L564,120 L760,120 L785,120 L800,72 L818,158 L836,44 L854,120 L1050,120 L1075,120 L1090,72 L1108,158 L1126,44 L1144,120 L1200,120" />
+  </svg>
+
+  <div class="wrap hero__in">
+    <nav class="fil" aria-label="Fil d'ariane">
+      <a href="/">Accueil</a><i aria-hidden="true">›</i>
+      <a href="/formations">Formations</a><i aria-hidden="true">›</i>
+      <span>{filieres[f.filiere].nom}</span><i aria-hidden="true">›</i>
+      <b>{f.sigle}</b>
+    </nav>
+
+    <div class="hero__badges">
+      <span class="badge badge--qualiopi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+        Certifié Qualiopi
+      </span>
+      {f.certifiante && <span class="badge badge--secours">Formation certifiante</span>}
+      <span class="badge badge--contour">Association agréée FFSS</span>
+    </div>
+
+    <h1 class="hero__sigle">{f.sigle}</h1>
+    <p class="hero__intitule">{f.intitule}</p>
+    <p class="hero__accroche">{f.accroche}</p>
+
+    <div class="hero__actions">
+      <a class="btn btn--primaire" href="#sessions" data-ouvre-dates>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" />
+        </svg>
+        <span class="btn__pile">
+          Voir les dates &amp; s'inscrire
+          {nbSessions > 0 && <small>{nbSessions} session{nbSessions > 1 ? 's' : ''} programmée{nbSessions > 1 ? 's' : ''}</small>}
+        </span>
+      </a>
+      <a class="btn btn--fantome" href="#programme">Voir le programme</a>
+    </div>
+  </div>
+
+  <svg class="hero__vague" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,90 L0,44 C240,4 480,0 720,18 C960,36 1200,66 1440,44 L1440,90 Z" />
+  </svg>
+</header>
+
+<section class="wrap faits" aria-label="Informations clés">
+  <div class="faits__grille">
+    {faits.map((x) => (
+      <div class="fait">
+        <span class:list={['fait__ic', `ton-${x.ton}`]}>
+          {x.icone === 'horloge' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>}
+          {x.icone === 'personne' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="m17 11 2 2 4-4" /></svg>}
+          {x.icone === 'medaille' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>}
+          {x.icone === 'euro' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.5 5.5a7.5 7.5 0 1 0 0 13" /><path d="M3.5 10.5h10M3.5 14h8" /></svg>}
+        </span>
+        <span class="fait__label">{x.label}</span>
+        <span class="fait__valeur">{x.valeur}</span>
+        {x.note && <span class="fait__note">{x.note}</span>}
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 46%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero__photo {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center 42%;
+  }
+  .hero__voile {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 90% at 78% 8%, rgba(27, 111, 168, 0.4) 0%, rgba(27, 111, 168, 0) 58%);
+  }
+  /* Avec une photo, le voile doit garantir la lisibilité du texte blanc :
+     dense à gauche sous le texte, transparent à droite sur l'image. */
+  .hero--photo .hero__voile {
+    background:
+      linear-gradient(97deg,
+        rgba(7,23,38,.96) 0%, rgba(7,23,38,.92) 32%,
+        rgba(7,23,38,.70) 56%, rgba(9,32,54,.42) 80%, rgba(11,37,64,.34) 100%),
+      linear-gradient(180deg, rgba(7,23,38,.55) 0%, rgba(7,23,38,0) 28%);
+  }
+  @media (max-width: 860px) {
+    /* En étroit le texte passe par-dessus l'image : voile uniforme et dense. */
+    .hero--photo .hero__voile {
+      background: linear-gradient(180deg, rgba(7,23,38,.90) 0%, rgba(7,23,38,.93) 55%, rgba(7,23,38,.96) 100%);
+    }
+  }
+  .hero__ecg {
+    position: absolute;
+    inset: auto 0 20% 0;
+    width: 100%;
+    height: 190px;
+    opacity: 0.11;
+    pointer-events: none;
+  }
+  .hero__ecg path { fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .hero__in {
+    position: relative;
+    z-index: 1;
+    padding-block: clamp(1.5rem, 4vw, 2.5rem) clamp(5rem, 11vw, 8rem);
+  }
+
+  .fil {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem, 5vw, 2.75rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  .fil i { opacity: 0.45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .hero__badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.15rem; }
+
+  .hero__sigle {
+    font-size: clamp(3rem, 11vw, 6.2rem);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.1rem;
+  }
+  .hero__intitule {
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(1.3rem, 4vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--on-navy-soft);
+    margin-bottom: 1.4rem;
+  }
+  .hero__accroche {
+    max-width: 48ch;
+    font-size: clamp(1rem, 2.2vw, 1.1rem);
+    color: var(--on-navy-text);
+    margin-bottom: 2.25rem;
+  }
+
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+
+  .hero__vague { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1; width: 100%; height: auto; }
+  .hero__vague path { fill: var(--ground); }
+
+  /* --- cartes clés, en chevauchement --- */
+  .faits { position: relative; z-index: 2; margin-top: clamp(-4.5rem, -7vw, -3rem); }
+  .faits__grille {
+    display: grid;
+    gap: clamp(0.7rem, 1.6vw, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+  .fait {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: clamp(1.15rem, 2.6vw, 1.5rem);
+    box-shadow: var(--sh-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .fait__ic {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    margin-bottom: 0.3rem;
+  }
+  .fait__ic svg { width: 22px; height: 22px; }
+  .ton-azur { background: var(--azur-wash); color: var(--azur); }
+  .ton-sage { background: var(--sage-wash); color: var(--sage); }
+  .ton-gold { background: var(--gold-wash); color: var(--gold); }
+  .ton-secours { background: var(--accent-wash); color: var(--accent); }
+
+  .fait__label {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .fait__valeur {
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(1.35rem, 3vw, 1.7rem);
+    font-weight: 700; line-height: 1.1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .fait__note { font-size: 0.86rem; color: var(--ink-soft); }
+</style>

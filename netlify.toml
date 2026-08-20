@@ -1,0 +1,26 @@
+# Déploiement Netlify — Secourisme Pour Tous
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Les dates de formation sont figées au build : sans en-tête de cache court,
+# un visiteur pourrait voir un planning périmé après une régénération.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Les fichiers versionnés par Astro peuvent être mis en cache durablement.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

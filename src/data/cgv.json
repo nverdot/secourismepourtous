@@ -1,0 +1,521 @@
+{
+ "entete": [
+  "ℹ️  Organisme certifié Qualiopi – Certification valide pour les « Actions de formation »"
+ ],
+ "articles": [
+  {
+   "titre": "ARTICLE 1 – OBJET ET CHAMP D'APPLICATION",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "1.1 Parties"
+    },
+    {
+     "type": "p",
+     "texte": "Les présentes conditions générales de vente (les « CGV ») ont pour objet de définir les conditions dans lesquelles l'Association Secourisme pour Tous (ci-après « l'Organisme de formation »), organisme de formation certifié Qualiopi, consent au responsable de l'inscription, acheteur professionnel, et/ou participant à la formation (dénommé individuellement ou collectivement le « Client ») qui l'accepte, une formation issue de son offre de formations (la « Formation »). Le Client et l'Organisme de formation sont respectivement individuellement la « Partie » ou collectivement les « Parties »."
+    },
+    {
+     "type": "p",
+     "texte": "Les présentes CGV sont complétées par le Règlement Intérieur de Formation, disponible sur le site internet www.secourismepourtous.org."
+    },
+    {
+     "type": "p",
+     "texte": "Toute commande implique l'acceptation sans réserve par le Client des présentes CGV. Sauf dérogation formelle et expresse de l'Organisme de formation, ces conditions prévalent sur tout autre document du Client, et notamment sur toutes conditions générales d'achat."
+    },
+    {
+     "type": "sous",
+     "texte": "1.2 Locaux ou à distance"
+    },
+    {
+     "type": "p",
+     "texte": "Ces CGV concernent les formations présentielles, incluant ou non des modules digitaux effectués à distance. Elles s'appliquent aux formations proposées au catalogue et sur le site internet de l'Organisme de formation (« Formations inter ») ainsi qu'aux formations organisées à la demande du Client (« Formations intra »)."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 1 BIS – INFORMATIONS PRÉCONTRACTUELLES (Indicateur 1 Qualiopi)",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "Conformément aux exigences du référentiel national qualité (Qualiopi) et aux articles L. 6353-1 et suivants du Code du travail, l'Organisme de formation met à disposition du Client, avant toute inscription, les informations suivantes :"
+    },
+    {
+     "type": "p",
+     "texte": "Les objectifs, le programme détaillé, la durée et les modalités pédagogiques de chaque formation figurent dans le catalogue disponible sur www.secourismepourtous.org."
+    },
+    {
+     "type": "p",
+     "texte": "Les certifications visées et les taux de réussite sont indiqués sur chaque fiche formation (catalogue et site internet)."
+    },
+    {
+     "type": "p",
+     "texte": "Les tarifs sont indiqués sur le site internet et communiqués sur simple demande à secourismepourtous@gmail.com."
+    },
+    {
+     "type": "p",
+     "texte": "Les délais d'accès indicatifs : entre 2 et 8 semaines selon la formation et le calendrier en vigueur (consultable sur www.secourismepourtous.org)."
+    },
+    {
+     "type": "p",
+     "texte": "Les pré-requis d'entrée en formation sont précisés sur chaque fiche formation."
+    },
+    {
+     "type": "p",
+     "texte": "Les modalités d'évaluation des acquis sont décrites dans le programme de chaque formation."
+    },
+    {
+     "type": "p",
+     "texte": "Les financements mobilisables : CPF (Mon Compte Formation), OPCO, Pôle Emploi, autofinancement. Des renseignements complémentaires sont disponibles sur simple demande."
+    },
+    {
+     "type": "p",
+     "texte": "L'accessibilité aux personnes en situation de handicap : contacter notre référente handicap à secourismepourtous@gmail.com."
+    },
+    {
+     "type": "p",
+     "texte": "Les indicateurs de satisfaction et de résultats sont publiés sur le site internet."
+    },
+    {
+     "type": "note",
+     "texte": "Ces informations peuvent être mises à jour à tout moment. La version en vigueur est celle disponible sur www.secourismepourtous.org à la date de l'inscription."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 2 – MODALITÉS D'INSCRIPTION",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "2.1 Formations inter"
+    },
+    {
+     "type": "p",
+     "texte": "La demande d'inscription à une Formation inter doit être faite par le Client par l'un des moyens suivants :"
+    },
+    {
+     "type": "item",
+     "texte": "Une inscription en ligne sur le site www.secourismepourtous.org (paiement en ligne possible)."
+    },
+    {
+     "type": "item",
+     "texte": "L'envoi d'un e-mail à secourismepourtous@gmail.com indiquant les coordonnées du Client, les dates, l'intitulé de la Formation et le nombre de participants."
+    },
+    {
+     "type": "item",
+     "texte": "L'envoi d'un dossier d'inscription complété et signé par mail ou courrier."
+    },
+    {
+     "type": "p",
+     "texte": "Pour toute inscription, un accusé de réception est adressé au Client dans les 48 heures suivant la réception, accompagné d'une convention de formation. L'accusé de réception ne vaut pas confirmation de la tenue de la Formation."
+    },
+    {
+     "type": "p",
+     "texte": "Le Client devra retourner un exemplaire signé de la convention de formation à l'Organisme de formation."
+    },
+    {
+     "type": "p",
+     "texte": "Les effectifs minimum et maximum par formation sont fixés par les arrêtés du Ministère de l'Intérieur (formations secourisme) ou du Ministère du Travail (formations SST). L'Organisme de formation s'engage à respecter ces ratios. Si l'effectif est inférieur au minimum requis, la formation pourra être annulée et le Client en sera informé au plus tard 72 heures avant la date prévue."
+    },
+    {
+     "type": "p",
+     "texte": "Au plus tard 72 heures ouvrées avant la Formation, le Client reçoit une convocation précisant les horaires exacts et le lieu. Le lieu de formation indiqué sur les supports de communication n'est pas contractuel ; l'Organisme de formation peut convoquer les participants dans un autre lieu du même secteur géographique."
+    },
+    {
+     "type": "p",
+     "texte": "Dans un délai maximal de 10 jours ouvrés suivant la Formation, l'Organisme de formation adresse la facture et l'attestation de fin de formation."
+    },
+    {
+     "type": "sous",
+     "texte": "2.2 Formations intra"
+    },
+    {
+     "type": "p",
+     "texte": "Toute demande intra donne lieu à une proposition pédagogique et financière. L'acceptation formelle doit parvenir à l'Organisme de formation au moins 18 jours ouvrés avant la première session. À l'issue, l'Organisme adresse au Client : facture, copie de la liste d'émargement et évaluations."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 3 – DÉLAI DE RÉTRACTATION",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "À compter de la date de signature du contrat ou de la convention de formation professionnelle, le Client dispose d'un délai de dix (10) jours ouvrables pour se rétracter, par lettre ou par e-mail (cachet de la poste ou date d'envoi faisant foi). Dans ce cas, aucune somme ne peut être exigée au Client."
+    },
+    {
+     "type": "note",
+     "texte": "Ce droit de rétractation s'applique aux particuliers (consommateurs) conformément aux articles L. 221-18 et suivants du Code de la consommation. Pour les professionnels (entreprises, associations), les conditions d'annulation de l'article 7 s'appliquent."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 4 – MODALITÉS DE FORMATION",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "L'Organisme de formation est libre d'utiliser les méthodes et outils pédagogiques de son choix, conformément à son catalogue et aux référentiels nationaux applicables (FFSS, INRS…)."
+    },
+    {
+     "type": "p",
+     "texte": "Les formations présentielles peuvent se dérouler dans les locaux de l'Organisme ou dans un site extérieur. Les Formations intra peuvent être assurées dans les locaux du Client ; ce dernier doit mettre à disposition a minima un ordinateur, un vidéoprojecteur et un paperboard. Le Client contactera l'Organisme de formation pour connaître le matériel spécifique à prévoir."
+    },
+    {
+     "type": "p",
+     "texte": "Les participants sont tenus de respecter le Règlement Intérieur de Formation (disponible sur www.secourismepourtous.org) ainsi que, le cas échéant, le règlement de l'établissement d'accueil."
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme de formation se réserve le droit d'exclure, sans indemnité, tout participant dont le comportement gênerait le bon déroulement de la formation ou manquerait gravement au Règlement Intérieur."
+    },
+    {
+     "type": "p",
+     "texte": "Les documents pédagogiques remis lors de la formation constituent un support d'accompagnement et ne sauraient être considérés comme des manuels pratiques ou des documents officiels réglementaires."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 5 – TARIFS ET CONDITIONS DE RÈGLEMENT",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "5.1 Tarifs"
+    },
+    {
+     "type": "p",
+     "texte": "Les prix sont indiqués en euros TTC. Tout stage ou cycle commencé est dû dans sa totalité."
+    },
+    {
+     "type": "sous",
+     "texte": "5.1.1 Formations inter"
+    },
+    {
+     "type": "p",
+     "texte": "Les prix sont indiqués sur le site www.secourismepourtous.org et communiqués sur simple demande par e-mail. Les remises et offres commerciales ne sont pas cumulables."
+    },
+    {
+     "type": "sous",
+     "texte": "5.1.2 Formations intra"
+    },
+    {
+     "type": "p",
+     "texte": "Les prix sont précisés dans la proposition commerciale adressée au Client. Les frais liés aux outils, supports pédagogiques, locations de salle, déplacements et hébergements des formateurs sont facturés en sus."
+    },
+    {
+     "type": "sous",
+     "texte": "5.2 Conditions de règlement"
+    },
+    {
+     "type": "sous",
+     "texte": "5.2.1 Facturation"
+    },
+    {
+     "type": "p",
+     "texte": "Les factures sont payables à réception (ou selon l'échéancier convenu), sans escompte, par virement bancaire ou espèces."
+    },
+    {
+     "type": "p",
+     "texte": "En cas de retard de paiement, des pénalités égales à trois fois le taux d'intérêt légal en vigueur seront exigibles de plein droit, sans rappel préalable, ainsi qu'une indemnité forfaitaire pour frais de recouvrement de 40 €."
+    },
+    {
+     "type": "p",
+     "texte": "En cas d'absence ou de retard de règlement, l'Organisme de formation se réserve le droit de suspendre ou refuser toute nouvelle commande jusqu'à apurement du compte."
+    },
+    {
+     "type": "sous",
+     "texte": "5.2.2 Prise en charge par un organisme financeur (OPCO, CPF…)"
+    },
+    {
+     "type": "p",
+     "texte": "Il appartient au Client :"
+    },
+    {
+     "type": "item",
+     "texte": "de solliciter la prise en charge avant le début de la Formation et d'en assurer la bonne fin ;"
+    },
+    {
+     "type": "item",
+     "texte": "de l'indiquer explicitement lors de l'inscription en précisant les coordonnées de l'organisme financeur ;"
+    },
+    {
+     "type": "item",
+     "texte": "de transmettre l'accord de prise en charge avant la date de Formation ;"
+    },
+    {
+     "type": "item",
+     "texte": "de s'assurer du bon paiement par l'organisme désigné."
+    },
+    {
+     "type": "p",
+     "texte": "Si l'Organisme de formation n'a pas reçu la prise en charge au 1er jour de la Formation, le Client sera facturé de l'intégralité du prix. Si la prise en charge est partielle, le reliquat sera dû par le Client au premier jour de la Formation. En cas de non-paiement par l'organisme financeur, le Client reste redevable de l'intégralité du prix."
+    },
+    {
+     "type": "note",
+     "texte": "Financements mobilisables : CPF (Mon Compte Formation – www.moncompteformation.gouv.fr), OPCO de votre branche, Pôle Emploi, Plan de développement des compétences de l'employeur, autofinancement. Renseignements sur simple demande à secourismepourtous@gmail.com."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 6 – ANNULATION, MODIFICATION OU REPORT PAR L'ORGANISME",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "L'Organisme de formation se réserve le droit d'annuler ou de reporter une Formation (notamment si l'effectif est pédagogiquement insuffisant) et d'en informer le Client au plus tard 7 jours calendaires avant la date prévue. L'Organisme de formation n'est tenu à aucune indemnité d'aucune sorte."
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme se réserve le droit de remplacer un formateur défaillant par une personne aux compétences équivalentes ou s'engage à reporter la Formation dans les meilleurs délais."
+    },
+    {
+     "type": "p",
+     "texte": "En cas d'annulation sans report ni session ultérieure, l'Organisme procède au remboursement intégral du prix. Si l'annulation intervient à moins de 10 jours de la Formation sans report possible, l'Organisme s'engage à rembourser en sus, sur présentation de justificatifs, les frais de transport que le Client n'aurait pu se faire rembourser."
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme peut annuler une Formation pour cas de force majeure (tels que définis par le Code civil, ainsi que les grèves des réseaux de transport nationaux) et s'engage à organiser une nouvelle session dans les meilleurs délais."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 7 – ANNULATION, REPORT OU REMPLACEMENT PAR LE CLIENT",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "7.1 Formations inter"
+    },
+    {
+     "type": "p",
+     "texte": "Le Client peut demander l'annulation ou le report de sa participation sans frais si la demande écrite parvient à l'Organisme au moins 15 jours ouvrés avant la date de la Formation."
+    },
+    {
+     "type": "p",
+     "texte": "En cas d'annulation après le 21e jour ouvré précédant la Formation, l'intégralité du prix est due."
+    },
+    {
+     "type": "p",
+     "texte": "En cas d'absence, retard, participation partielle, abandon ou cessation anticipée sans motif de force majeure, l'intégralité du prix est due."
+    },
+    {
+     "type": "p",
+     "texte": "En cas d'absence pour raison de santé justifiée par un certificat médical, le participant pourra reporter son inscription sur la prochaine session programmée. À défaut, l'intégralité du prix reste due."
+    },
+    {
+     "type": "p",
+     "texte": "Sauf cycles déjà commencés, le Client peut demander le remplacement du participant sans frais jusqu'à la veille de la Formation, par demande écrite comportant les noms et coordonnées du remplaçant. Il appartient au Client de vérifier l'adéquation du profil du remplaçant avec les pré-requis de la Formation."
+    },
+    {
+     "type": "sous",
+     "texte": "7.2 Formations intra"
+    },
+    {
+     "type": "p",
+     "texte": "Le Client peut demander l'annulation ou le report d'une Formation intra. Les conditions financières sont les suivantes :"
+    },
+    {
+     "type": "item",
+     "texte": "Au moins 21 jours ouvrés avant la date : seuls les frais engagés au titre de la préparation (préparation pédagogique, location de salle, déplacements, hébergement) sont facturés."
+    },
+    {
+     "type": "item",
+     "texte": "Entre 20 et 10 jours ouvrés avant : 50 % du prix de la Formation, plus les frais engagés."
+    },
+    {
+     "type": "item",
+     "texte": "Moins de 10 jours ouvrés avant : 100 % du prix de la Formation, plus les frais engagés."
+    },
+    {
+     "type": "p",
+     "texte": "Ces frais ne sont pas imputables à la contribution financière obligatoire de formation."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 8 – MODALITÉS D'ÉVALUATION ET CERTIFICATION",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "Conformément aux exigences Qualiopi (critère 6), les modalités d'évaluation des acquis sont précisées dans le programme de chaque Formation. Elles peuvent comprendre : évaluations formatives tout au long de la formation, mise en situation pratique, évaluation sommative en fin de formation et, selon la formation, passage devant un jury externe (Ministère de l'Intérieur, préfecture)."
+    },
+    {
+     "type": "p",
+     "texte": "L'obtention de la certification est soumise aux conditions définies par le certificateur (Ministère de l'Intérieur ou Ministère du Travail selon la Formation). En cas d'échec à la certification, le Client ne peut prétendre à un remboursement de la formation, celle-ci ayant été dispensée dans son intégralité."
+    },
+    {
+     "type": "p",
+     "texte": "En cas de réussite, le diplôme ou certificat est délivré par l'organisme certificateur compétent. Une attestation de fin de formation est délivrée dans tous les cas par Secourisme pour Tous."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 9 – PROPRIÉTÉ INTELLECTUELLE ET DROITS D'AUTEUR",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "Les supports papiers ou numériques remis lors des Formations sont la propriété de l'Organisme de formation et ne peuvent être reproduits, partiellement ou totalement, sans accord express écrit. L'ensemble des contenus est protégé par le droit d'auteur."
+    },
+    {
+     "type": "p",
+     "texte": "Le Client s'engage à ne pas faire directement ou indirectement concurrence à l'Organisme de formation en cédant ou en communiquant ces documents à des tiers."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 10 – RÉCLAMATIONS ET MÉDIATION",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "10.1 Réclamations"
+    },
+    {
+     "type": "p",
+     "texte": "Toute réclamation relative aux présentes CGV ou à une Formation doit être adressée par écrit à :"
+    },
+    {
+     "type": "p",
+     "texte": "Secourisme pour Tous – 31 boulevard Impératrice Eugénie – 06200 NICE"
+    },
+    {
+     "type": "p",
+     "texte": "E-mail : secourismepourtous@gmail.com"
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme accuse réception dans un délai de 5 jours ouvrés et apporte une réponse motivée dans un délai maximal de 30 jours ouvrés."
+    },
+    {
+     "type": "sous",
+     "texte": "10.2 Médiation"
+    },
+    {
+     "type": "p",
+     "texte": "Conformément aux articles L. 616-1 et R. 616-1 du Code de la consommation, en cas de litige non résolu avec l'Organisme de formation, le Client consommateur (particulier) peut recourir gratuitement à un médiateur de la consommation. Les coordonnées du médiateur compétent sont communiquées sur simple demande."
+    },
+    {
+     "type": "note",
+     "texte": "Pour les litiges entre professionnels, la compétence exclusive est attribuée au tribunal de commerce de Nice (article 12.9 ci-dessous)."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 11 – RESPONSABILITÉ",
+   "contenu": [
+    {
+     "type": "p",
+     "texte": "Le Client est seul responsable de la consultation et du choix de la Formation. La responsabilité de l'Organisme de formation ne peut être engagée qu'en cas de faute ou de négligence prouvée et sera limitée aux préjudices directs subis par le Client, à l'exclusion de tout préjudice indirect. En tout état de cause, la responsabilité totale de l'Organisme ne pourra excéder le montant payé par le Client au titre de la Formation concernée."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 12 – DONNÉES PERSONNELLES",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "12.1 Respect de la vie privée"
+    },
+    {
+     "type": "p",
+     "texte": "Secourisme pour Tous s'engage à traiter les données à caractère personnel conformément au Règlement Européen 2016/679 (RGPD) et à la loi n° 78-17 du 6 janvier 1978 modifiée. Les données collectées dans le cadre de l'inscription et de la Formation sont utilisées exclusivement à des fins de gestion administrative, pédagogique et réglementaire."
+    },
+    {
+     "type": "sous",
+     "texte": "12.2 Droits des personnes"
+    },
+    {
+     "type": "p",
+     "texte": "Toute personne dispose des droits d'accès, de rectification, d'effacement, de portabilité, de limitation et d'opposition au traitement de ses données, en écrivant à secourismepourtous@gmail.com."
+    },
+    {
+     "type": "sous",
+     "texte": "12.3 Transmission des données"
+    },
+    {
+     "type": "p",
+     "texte": "Lorsque le Client transmet des données de participants, il agit en qualité de Responsable de traitement. L'Organisme de formation intervient comme sous-traitant et s'engage à traiter ces données conformément aux instructions documentées du Client et aux Dispositions applicables. Les données sont hébergées au sein de l'Espace Économique Européen."
+    }
+   ]
+  },
+  {
+   "titre": "ARTICLE 13 – DISPOSITIONS DIVERSES",
+   "contenu": [
+    {
+     "type": "sous",
+     "texte": "13.1 Nullité de clause"
+    },
+    {
+     "type": "p",
+     "texte": "Si l'une des clauses des présentes CGV était déclarée nulle, elle serait réputée non écrite sans entraîner la nullité de l'ensemble des CGV."
+    },
+    {
+     "type": "sous",
+     "texte": "13.2 Interprétation"
+    },
+    {
+     "type": "p",
+     "texte": "Le fait de ne pas revendiquer l'application d'une disposition des CGV ne saurait valoir renonciation à son application."
+    },
+    {
+     "type": "sous",
+     "texte": "13.3 Confidentialité"
+    },
+    {
+     "type": "p",
+     "texte": "Le Client s'engage à considérer comme strictement confidentiel tout document, donnée ou information dont il aurait connaissance dans le cadre de la Formation."
+    },
+    {
+     "type": "sous",
+     "texte": "13.4 Sous-traitance"
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme de formation est autorisé à sous-traiter tout ou partie des prestations tout en demeurant seul responsable à l'égard du Client."
+    },
+    {
+     "type": "sous",
+     "texte": "13.5 Communication"
+    },
+    {
+     "type": "p",
+     "texte": "L'Organisme de formation est autorisé à utiliser le nom et/ou les marques du Client comme référence commerciale, dans un but marketing et/ou publicitaire, sans autorisation préalable."
+    },
+    {
+     "type": "sous",
+     "texte": "13.6 Indépendance"
+    },
+    {
+     "type": "p",
+     "texte": "Les Parties exercent leurs activités de manière indépendante, sans lien de subordination entre elles."
+    },
+    {
+     "type": "sous",
+     "texte": "13.7 Délai d'action"
+    },
+    {
+     "type": "p",
+     "texte": "Le Client ne pourra intenter aucune action, quelle qu'en soit la nature, plus d'un an après la survenance de son fait générateur."
+    },
+    {
+     "type": "sous",
+     "texte": "13.8 Droit applicable et juridiction compétente"
+    },
+    {
+     "type": "p",
+     "texte": "Les présentes CGV sont régies par le droit français."
+    },
+    {
+     "type": "p",
+     "texte": "Pour tout litige entre professionnels : compétence exclusive du tribunal de commerce de Nice."
+    },
+    {
+     "type": "p",
+     "texte": "Pour tout litige impliquant un consommateur (particulier) : juridiction compétente conformément aux articles R. 631-3 et R. 632-1 du Code de la consommation (tribunal du domicile du consommateur ou lieu de la prestation), après tentative de médiation obligatoire."
+    },
+    {
+     "type": "note",
+     "texte": "Modification par rapport à la version précédente : la clause de compétence exclusive du tribunal de commerce de Paris a été remplacée par le tribunal de commerce de Nice (siège de l'association) et adaptée pour les consommateurs, conformément aux règles d'ordre public de protection du consommateur."
+    },
+    {
+     "type": "p",
+     "texte": "VERSION 2025 – Secourisme pour Tous"
+    }
+   ]
+  }
+ ]
+}

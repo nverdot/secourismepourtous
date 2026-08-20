@@ -1,0 +1,283 @@
+---
+import { filieres, formations, type Filiere } from '../data/formations';
+
+/**
+ * Orientation par filière sur la page d'accueil.
+ *
+ * On ne déroule pas le catalogue : on demande au visiteur où il se situe.
+ * « Je veux devenir secouriste » l'oriente mieux que « PSE1, PSE2 » — il se
+ * reconnaît dans une phrase, pas dans un sigle qu'il ne connaît pas encore.
+ *
+ * Le clic ouvre une boîte de dialogue listant les formations de la filière,
+ * avec le choix entre formation initiale et recyclage. C'est la question que
+ * se pose réellement quelqu'un qui a déjà un diplôme à maintenir.
+ */
+
+// Ordre voulu : deux cartes, deux cartes, puis le monitorat sur toute la largeur.
+// La filière pédagogique ferme la marche : elle ne concerne que ceux qui ont
+// déjà un diplôme, donc une minorité des visiteurs.
+const ordre: Filiere[] = ['citoyenne', 'operationnelle', 'aquatique', 'entreprise', 'pedagogique'];
+
+const cartes = ordre.map((cle) => ({
+  cle,
+  ...filieres[cle],
+  items: formations.filter((f) => f.filiere === cle && !f.estRecyclage),
+}));
+---
+
+<section class="section" aria-labelledby="t-filieres">
+  <div class="wrap">
+    <div class="filieres__tete">
+      <p class="eyebrow">Nos formations</p>
+      <h2 class="h-section" id="t-filieres">Où vous situez-vous&nbsp;?</h2>
+      <p class="lede">Choisissez la situation qui vous correspond, on vous montre le reste.</p>
+    </div>
+
+    <div class="cartes">
+      {cartes.map((c) => (
+        <article class:list={['cf', `cf--${c.couleur}`, { 'cf--large': c.cle === 'pedagogique' }]}>
+          <div class="cf__visuel">
+            {c.image
+              ? <img src={c.image} alt="" loading="lazy" />
+              : <span class="cf__degrade" aria-hidden="true"></span>}
+          </div>
+
+          <div class="cf__corps">
+            <span class="cf__ic" aria-hidden="true">
+              {c.icone === 'coeur' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>}
+              {c.icone === 'ambulance' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10H6M8 8v4M2 8a2 2 0 0 1 2-2h10v11H2zM14 9h4l4 4v4h-8z" /><circle cx="7" cy="19" r="2" /><circle cx="17" cy="19" r="2" /></svg>}
+              {c.icone === 'nage' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c1.5 0 2-1 3.5-1s2 1 3.5 1 2-1 3.5-1 2 1 3.5 1 2-1 3.5-1M2 13c1.5 0 2-1 3.5-1s2 1 3.5 1 2-1 3.5-1 2 1 3.5 1 2-1 3.5-1" /><circle cx="16" cy="6" r="2" /></svg>}
+              {c.icone === 'pedagogie' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>}
+              {c.icone === 'mallette' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>}
+            </span>
+
+            <h3 class="cf__titre">{c.titre}</h3>
+            <p class="cf__filiere">{c.nom}</p>
+            <p class="cf__jesuis"><strong>{c.jeSuis}</strong> — {c.contenu}</p>
+
+            <button type="button" class="cf__btn" data-filiere={c.cle}>
+              Détails et inscription
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </button>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Une boîte de dialogue par filière : le contenu est généré au build,
+     aucun assemblage côté navigateur. -->
+{cartes.map((c) => (
+  <dialog class:list={['fdlg', `fdlg--${c.couleur}`]} id={`fdlg-${c.cle}`} aria-labelledby={`fdlg-t-${c.cle}`}>
+    <header class="fdlg__tete">
+      <span class="fdlg__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>
+      </span>
+      <h2 id={`fdlg-t-${c.cle}`}>{c.nom}</h2>
+      <form method="dialog">
+        <button class="fdlg__x" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </form>
+    </header>
+
+    <div class="fdlg__corps">
+      <p class="fdlg__accroche">{c.jeSuis}</p>
+      <p class="fdlg__texte">{c.texte}</p>
+
+      {c.items.length > 0 ? (
+        <div class="fdlg__grille">
+          {c.items.map((f) => (
+            <article class="fitem">
+              <h3>{f.sigle} <span>{f.intitule}</span></h3>
+              <p>{f.resume}</p>
+              <div class="fitem__actions">
+                <a class="fitem__b fitem__b--plein" href={`/formations/${f.slug}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                  Formation initiale
+                </a>
+                <a class="fitem__b fitem__b--creux" href={f.recyclage ? `/formations/${f.recyclage}` : '/contact'}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8" /><path d="M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16" /><path d="M3 21v-5h5" /></svg>
+                  Recyclage
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="fdlg__vide">
+          <p>
+            Les formations de cette filière ne sont pas encore détaillées sur le site.
+            Contactez-nous, nous vous renseignons sur les prochaines sessions.
+          </p>
+          <a class="fitem__b fitem__b--plein" href="/contact">Nous contacter</a>
+        </div>
+      )}
+    </div>
+
+    <footer class="fdlg__pied">
+      <form method="dialog"><button class="fdlg__fermer">Fermer</button></form>
+    </footer>
+  </dialog>
+))}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.cf__btn').forEach((b) => {
+    b.addEventListener('click', () => {
+      const d = document.getElementById(`fdlg-${b.dataset.filiere}`) as HTMLDialogElement | null;
+      d?.showModal();
+    });
+  });
+  // Clic sur le fond : ferme, comme attendu d'une modale.
+  document.querySelectorAll<HTMLDialogElement>('.fdlg').forEach((d) => {
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  });
+</script>
+
+<style>
+  .filieres__tete { margin-bottom: 2.5rem; }
+
+  .cartes {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 900px) { .cartes { grid-template-columns: 1fr; } }
+  /* La filière entreprise s'adresse à une cible distincte : elle occupe
+     toute la largeur pour ne pas être lue comme une cinquième roue. */
+  .cf--large { grid-column: 1 / -1; }
+
+  .cf {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .cf:hover { transform: translateY(-3px); box-shadow: var(--sh-md); }
+  @media (max-width: 560px) { .cf { grid-template-columns: 1fr; } }
+
+  .cf__visuel { position: relative; background: var(--sunk); min-height: 210px; }
+  @media (max-width: 560px) { .cf__visuel { min-height: 150px; } }
+  .cf__visuel img { width: 100%; height: 100%; object-fit: cover; }
+  .cf__degrade { position: absolute; inset: 0; background: linear-gradient(158deg, var(--navy-lift), var(--navy-deep)); }
+
+  .cf__corps { padding: clamp(1.25rem, 3vw, 1.75rem); display: flex; flex-direction: column; }
+
+  .cf__ic {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: grid; place-items: center; margin-bottom: .9rem;
+    color: #fff;
+  }
+  .cf__ic svg { width: 23px; height: 23px; }
+
+  .cf__titre { font-size: 1.32rem; font-weight: 800; letter-spacing: -.02em; }
+  .cf__filiere { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .88rem; color: var(--ink); margin-bottom: .7rem; }
+  .cf__jesuis { font-size: .93rem; color: var(--ink-soft); margin-bottom: 1.4rem; max-width: 52ch; }
+  .cf__jesuis strong { color: var(--ink); }
+
+  .cf__btn {
+    margin-top: auto; align-self: flex-start;
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem;
+    color: #fff; border: 0; border-radius: var(--r-pill);
+    padding: .8rem 1.5rem; cursor: pointer;
+    transition: filter .16s ease, transform .16s ease;
+  }
+  .cf__btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .cf__btn svg { width: 16px; height: 16px; }
+
+  /* --- teintes par filière, toutes issues de la palette du site --- */
+  .cf--azur    .cf__ic, .cf--azur    .cf__btn { background: var(--azur); }
+  .cf--secours .cf__ic, .cf--secours .cf__btn { background: var(--secours); }
+  .cf--ocean   .cf__ic, .cf--ocean   .cf__btn { background: #0E7C86; }
+  .cf--ocre    .cf__ic, .cf--ocre    .cf__btn { background: #A9741B; }
+  .cf--navy    .cf__ic, .cf--navy    .cf__btn { background: var(--navy); }
+
+  .cf--azur    .cf__titre { color: var(--azur); }
+  .cf--secours .cf__titre { color: var(--secours); }
+  .cf--ocean   .cf__titre { color: #0E7C86; }
+  .cf--ocre    .cf__titre { color: #A9741B; }
+  .cf--navy    .cf__titre { color: var(--navy); }
+
+  /* ================= boîte de dialogue ================= */
+  .fdlg {
+    border: 0; padding: 0;
+    border-radius: var(--r-lg);
+    width: min(720px, calc(100vw - 2rem));
+    max-height: min(86vh, 880px);
+    background: var(--surface); color: var(--ink);
+    box-shadow: var(--sh-lg); overflow: hidden;
+  }
+  .fdlg::backdrop { background: rgba(7,23,38,.66); backdrop-filter: blur(2px); }
+
+  .fdlg__tete { display: flex; align-items: center; gap: .8rem; padding: 1rem 1.2rem; color: #fff; }
+  .fdlg--azur    .fdlg__tete { background: var(--azur); }
+  .fdlg--secours .fdlg__tete { background: var(--secours); }
+  .fdlg--ocean   .fdlg__tete { background: #0E7C86; }
+  .fdlg--ocre    .fdlg__tete { background: #A9741B; }
+  .fdlg--navy    .fdlg__tete { background: var(--navy); }
+
+  .fdlg__ic { width: 30px; height: 30px; flex: none; display: grid; place-items: center; }
+  .fdlg__ic svg { width: 20px; height: 20px; }
+  .fdlg__tete h2 { font-size: 1.1rem; font-weight: 700; flex: 1; }
+  .fdlg__tete form { margin: 0; }
+  .fdlg__x { border: 0; background: none; color: #fff; cursor: pointer; padding: .25rem; line-height: 0; opacity: .85; }
+  .fdlg__x:hover { opacity: 1; }
+  .fdlg__x svg { width: 20px; height: 20px; }
+
+  .fdlg__corps { padding: 1.4rem; overflow-y: auto; max-height: calc(86vh - 9rem); }
+  .fdlg__accroche { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: .35rem; }
+  .fdlg--azur    .fdlg__accroche { color: var(--azur); }
+  .fdlg--secours .fdlg__accroche { color: var(--secours); }
+  .fdlg--ocean   .fdlg__accroche { color: #0E7C86; }
+  .fdlg--ocre    .fdlg__accroche { color: #A9741B; }
+  .fdlg--navy    .fdlg__accroche { color: var(--navy); }
+  .fdlg__texte { color: var(--ink-soft); font-size: .93rem; margin-bottom: 1.4rem; }
+
+  .fdlg__grille { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .fitem { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-md); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; }
+  .fitem h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .3rem; }
+  .fitem h3 span { display: block; font-size: .82rem; font-weight: 500; color: var(--ink-mute); }
+  .fitem p { font-size: .88rem; color: var(--ink-soft); margin-bottom: 1rem; }
+  .fitem__actions { margin-top: auto; display: flex; flex-direction: column; gap: .45rem; }
+
+  .fitem__b {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .88rem;
+    text-decoration: none; border-radius: var(--r-pill);
+    padding: .6rem 1rem; border: 1px solid transparent;
+    transition: filter .15s ease;
+  }
+  .fitem__b svg { width: 15px; height: 15px; }
+  .fitem__b--plein { color: #fff; }
+  .fitem__b--plein:hover { filter: brightness(1.1); }
+  .fitem__b--creux { background: var(--surface); }
+
+  .fdlg--azur    .fitem__b--plein { background: var(--azur); }
+  .fdlg--secours .fitem__b--plein { background: var(--secours); }
+  .fdlg--ocean   .fitem__b--plein { background: #0E7C86; }
+  .fdlg--ocre    .fitem__b--plein { background: #A9741B; }
+  .fdlg--navy    .fitem__b--plein { background: var(--navy); }
+
+  .fdlg--azur    .fitem__b--creux { color: var(--azur);   border-color: var(--azur); }
+  .fdlg--secours .fitem__b--creux { color: var(--secours); border-color: var(--secours); }
+  .fdlg--ocean   .fitem__b--creux { color: #0E7C86;       border-color: #0E7C86; }
+  .fdlg--ocre    .fitem__b--creux { color: #A9741B;       border-color: #A9741B; }
+  .fdlg--navy    .fitem__b--creux { color: var(--navy);   border-color: var(--navy); }
+
+  .fdlg__vide { text-align: center; padding: 1rem 0 .5rem; }
+  .fdlg__vide p { color: var(--ink-soft); font-size: .93rem; margin-bottom: 1.1rem; max-width: 48ch; margin-inline: auto; }
+
+  .fdlg__pied { display: flex; justify-content: flex-end; padding: .9rem 1.4rem; border-top: 1px solid var(--line); background: var(--sunk); }
+  .fdlg__pied form { margin: 0; }
+  .fdlg__fermer {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .88rem;
+    background: var(--ink-mute); color: #fff; border: 0;
+    border-radius: var(--r-pill); padding: .55rem 1.35rem; cursor: pointer;
+  }
+  .fdlg__fermer:hover { background: var(--ink-soft); }
+</style>

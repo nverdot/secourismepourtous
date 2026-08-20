@@ -1,0 +1,170 @@
+---
+import type { Session } from '../lib/wix';
+import { formatJour, formatNumero, formatMois, formatAnnee, formatHeure } from '../lib/wix';
+import { asso } from '../data/association';
+
+interface Props {
+  sessions: Session[];
+  sigle: string;
+}
+const { sessions, sigle } = Astro.props;
+
+// Au-delà de 12 dates la liste devient illisible ; le lien vers l'agenda prend le relais.
+const visibles = sessions.slice(0, 12);
+const reste = sessions.length - visibles.length;
+---
+
+<section class="sessions" id="sessions" aria-labelledby="t-sessions">
+  <div class="wrap">
+    <div class="sessions__tete">
+      <div>
+        <p class="eyebrow">Inscriptions ouvertes</p>
+        <h2 class="h-section" id="t-sessions">Prochaines sessions {sigle}</h2>
+      </div>
+      <p class="sessions__lieu">
+        {asso.contact.adresse}, {asso.contact.ville}
+      </p>
+    </div>
+
+    {visibles.length > 0 ? (
+      <>
+        <ul class="sessions__grille">
+          {visibles.map((s) => (
+            <li>
+              <a class="sess" href={s.urlInscription ?? '/contact'} target={s.urlInscription ? '_blank' : undefined} rel={s.urlInscription ? 'noopener' : undefined}>
+                <span class="sess__date">
+                  <span class="sess__num">{formatNumero(s.debut)}</span>
+                  <span class="sess__mois">{formatMois(s.debut)}</span>
+                </span>
+                <span class="sess__info">
+                  <strong>{formatJour(s.debut)}</strong>
+                  <span>{formatHeure(s.debut)} · {formatAnnee(s.debut)}</span>
+                  {s.lieu && <span class="sess__lieu">{s.lieu}</span>}
+                </span>
+                <span class="sess__cta" aria-hidden="true">S'inscrire</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        {reste > 0 && (
+          <p class="sessions__reste">
+            {reste} autre{reste > 1 ? 's' : ''} session{reste > 1 ? 's' : ''} programmée{reste > 1 ? 's' : ''} —
+            <a href="/contact">nous consulter</a>
+          </p>
+        )}
+      </>
+    ) : (
+      <div class="sessions__vide">
+        <p>
+          Aucune date n'est publiée pour le moment. Contactez-nous : nous
+          programmons régulièrement de nouvelles sessions et pouvons organiser
+          une formation sur mesure pour votre groupe ou votre entreprise.
+        </p>
+        <a class="btn btn--primaire" href="/contact">Nous contacter</a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  /* Fond blanc : la section précédente (témoignages) est déjà en gris clair.
+   Deux gris qui se suivent effacent la séparation et gonflent l'espace perçu. */
+  .sessions { background: var(--surface); padding-block: clamp(3rem, 7.5vw, 5.5rem); }
+
+  .sessions__tete {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+  }
+  .sessions__lieu { font-size: 0.9rem; color: var(--ink-mute); }
+
+  .sessions__grille {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+    grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  }
+
+  .sess {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 1rem 1.15rem;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .sess:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--sh-sm);
+  }
+
+  .sess__date {
+    flex: none;
+    width: 56px;
+    text-align: center;
+    border-right: 1px solid var(--line);
+    padding-right: 0.9rem;
+  }
+  .sess__num {
+    display: block;
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .sess__mois {
+    display: block;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .sess__info { min-width: 0; display: flex; flex-direction: column; }
+  .sess__info strong { font-size: 0.95rem; font-weight: 600; text-transform: capitalize; }
+  .sess__info span { font-size: 0.82rem; color: var(--ink-mute); }
+  .sess__lieu {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sess__cta {
+    margin-left: auto;
+    flex: none;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  .sess:hover .sess__cta { text-decoration: underline; text-underline-offset: 3px; }
+
+  .sessions__reste { margin-top: 1rem; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .sessions__vide {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sessions__vide p { max-width: 52ch; color: var(--ink-soft); }
+</style>

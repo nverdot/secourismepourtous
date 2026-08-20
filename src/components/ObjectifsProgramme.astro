@@ -1,0 +1,173 @@
+---
+import type { Formation } from '../data/formations';
+
+interface Props { formation: Formation }
+const { formation: f } = Astro.props;
+---
+
+<section class="section" aria-label="Contenu de la formation">
+  <div class="wrap op">
+    <!-- Objectifs -->
+    <div>
+      <div class="op__tete">
+        <span class="op__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" />
+          </svg>
+        </span>
+        <h2 class="op__h">Objectifs visés</h2>
+      </div>
+
+      <div class="buts">
+        {f.objectifs.map((o) => (
+          <article class="but">
+            <span class="but__ic">
+              {o.icone === 'bouclier' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></svg>}
+              {o.icone === 'urgence' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 3-8 8 10 10 8-8z" /><path d="M8 8h.01M12 12h.01M16 16h.01" /></svg>}
+              {o.icone === 'coeur' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>}
+              {o.icone === 'equipe' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
+              {o.icone === 'eau' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s5.5 5.4 5.5 9.3a5.5 5.5 0 1 1-11 0c0-3.9 5.5-9.3 5.5-9.3z" /></svg>}
+              {o.icone === 'pedagogie' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>}
+            </span>
+            <div>
+              <h3>{o.titre}</h3>
+              <p>{o.texte}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {f.suites.length > 0 && (
+        <div class="apres">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
+            Et après&nbsp;?
+          </h3>
+          <ul>
+            {f.suites.map((s) => (
+              <li>
+                <span class="apres__puce" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+
+    <!-- Programme -->
+    <div id="programme">
+      <div class="op__tete">
+        <span class="op__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+          </svg>
+        </span>
+        <h2 class="op__h">Programme détaillé</h2>
+      </div>
+
+      <div class="prog">
+        {f.modules.map((m, i) => (
+          <details class="mod" name={`prog-${f.slug}`} open={i === 0}>
+            <summary>
+              <span class="mod__n">{i + 1}</span>
+              <span class="mod__t">{m.titre}</span>
+              <svg class="mod__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+            </summary>
+            <div class="mod__corps"><p>{m.texte}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .op {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+  @media (max-width: 880px) { .op { grid-template-columns: 1fr; } }
+
+  .op__tete { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+  .op__ic {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    flex: none;
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
+  .op__ic svg { width: 21px; height: 21px; }
+  .op__h { font-size: clamp(1.5rem, 3.4vw, 1.95rem); font-weight: 700; }
+
+  .buts { display: flex; flex-direction: column; gap: 0.7rem; }
+  .but {
+    display: flex; gap: 0.95rem; align-items: flex-start;
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 1.05rem 1.2rem;
+  }
+  .but__ic { flex: none; width: 26px; height: 26px; color: var(--accent); margin-top: 0.15rem; }
+  .but__ic svg { width: 100%; height: 100%; }
+  .but h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 0.15rem; }
+  .but p { font-size: 0.93rem; color: var(--ink-soft); }
+
+  .apres {
+    margin-top: 1.1rem;
+    background: var(--navy);
+    color: var(--on-navy);
+    border-radius: var(--r-lg);
+    padding: clamp(1.3rem, 3vw, 1.7rem);
+  }
+  .apres h3 { display: flex; align-items: center; gap: 0.6rem; font-size: 1.12rem; font-weight: 700; margin-bottom: 1rem; }
+  .apres h3 svg { width: 20px; height: 20px; color: var(--secours-hi); flex: none; }
+  .apres ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.85rem; }
+  .apres li { display: flex; gap: 0.8rem; align-items: center; font-size: 0.94rem; color: var(--on-navy-text); }
+  .apres__puce {
+    flex: none; width: 30px; height: 30px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.1);
+    display: grid; place-items: center;
+  }
+  .apres__puce svg { width: 15px; height: 15px; color: #fff; }
+
+  .prog { display: flex; flex-direction: column; gap: 0.6rem; }
+  .mod {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .mod[open] { box-shadow: var(--sh-sm); border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
+  .mod summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 0.95rem;
+    padding: 1rem 1.2rem;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700; font-size: 1.02rem;
+  }
+  .mod summary::-webkit-details-marker { display: none; }
+  .mod__n {
+    flex: none; width: 30px; height: 30px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent); color: #fff;
+    font-size: 0.85rem; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .mod__t { flex: 1; }
+  .mod__chev { flex: none; width: 18px; height: 18px; color: var(--ink-mute); transition: transform 0.2s ease; }
+  .mod[open] .mod__chev { transform: rotate(180deg); }
+  .mod__corps { padding: 0 1.2rem 1.15rem calc(1.2rem + 30px + 0.95rem); }
+  .mod__corps p { color: var(--ink-soft); font-size: 0.94rem; max-width: var(--measure); }
+  @media (max-width: 520px) { .mod__corps { padding-left: 1.2rem; } }
+</style>

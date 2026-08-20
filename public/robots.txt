@@ -1,0 +1,5 @@
+# Secourisme Pour Tous
+User-agent: *
+Allow: /
+
+Sitemap: https://www.secourismepourtous.org/sitemap-index.xml
