@@ -31,6 +31,10 @@ const cartes = ordre.map((cle) => ({
       <p class="eyebrow">Nos formations</p>
       <h2 class="h-section" id="t-filieres">Quelle formation est faite pour vous&nbsp;?</h2>
       <p class="lede">Partez de ce que vous voulez faire : la filière et le parcours suivent.</p>
+      <p class="filieres__aide">
+        Vous hésitez entre les deux formations les plus demandées&nbsp;?
+        <a href="/psc-ou-pse1">PSC ou PSE1&nbsp;: lequel choisir</a>
+      </p>
     </div>
 
     <div class="cartes">
@@ -310,4 +314,12 @@ const cartes = ordre.map((cle) => ({
     border-radius: var(--r-pill); padding: .55rem 1.35rem; cursor: pointer;
   }
   .fdlg__fermer:hover { background: var(--ink-soft); }
+
+  .filieres__aide {
+    margin-top: .9rem; font-size: .92rem; color: var(--ink-mute);
+  }
+  .filieres__aide a {
+    color: var(--secours); font-weight: 600;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
 </style>

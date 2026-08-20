@@ -75,7 +75,7 @@ const balisages = [
       leur dit avant qu'ils ne s'inscrivent, pas après. */}
   {['psc', 'pse-1'].includes(f.slug) && (
     <section class="section">
-      <div class="wrap">
+      <div class="wrap oblig__duo">
         <a class="oblig" href={`/metiers/${f.slug}`}>
           <span class="oblig__ic" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M9 15h6M9 11h6" /></svg>
@@ -83,6 +83,17 @@ const balisages = [
           <span class="oblig__txt">
             <strong>Le {f.sigle} est-il obligatoire dans votre métier&nbsp;?</strong>
             <span>La liste des professions et des diplômes concernés, avec les textes de référence.</span>
+          </span>
+          <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+
+        <a class="oblig oblig--choix" href="/psc-ou-pse1">
+          <span class="oblig__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6H6M18 12H6M18 18H6" /><path d="M3 6h.01M3 12h.01M3 18h.01" /></svg>
+          </span>
+          <span class="oblig__txt">
+            <strong>{f.slug === 'psc' ? 'PSC ou PSE1' : 'PSE1 ou PSC'}&nbsp;: lequel choisir&nbsp;?</strong>
+            <span>Durée, tarif, contenu, débouchés : le comparatif, et cinq situations qui tranchent.</span>
           </span>
           <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
@@ -168,6 +179,16 @@ const balisages = [
   .acc__h { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
   .acc__btn { margin-top: 1.25rem; }
   @media (max-width: 620px) { .accessibilite { flex-direction: column; } }
+
+  .oblig__duo {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  }
+  .oblig--choix {
+    background: var(--sunk); border-color: var(--line);
+  }
+  .oblig--choix .oblig__ic { background: var(--secours); }
+  .oblig--choix .oblig__f { color: var(--secours); }
 
   .oblig {
     display: flex; align-items: center; gap: 1rem;
