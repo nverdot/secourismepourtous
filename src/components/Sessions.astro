@@ -79,7 +79,7 @@ const reste = sessions.length - visibles.length;
 <style>
   /* Fond blanc : la section précédente (témoignages) est déjà en gris clair.
    Deux gris qui se suivent effacent la séparation et gonflent l'espace perçu. */
-  .sessions { background: var(--surface); padding-block: clamp(3rem, 7.5vw, 5.5rem); }
+  .sessions { background: var(--surface); padding-block: var(--section-haut) var(--section); }
 
   .sessions__tete {
     display: flex;

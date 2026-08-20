@@ -57,6 +57,16 @@
 
   /* --- rythme --- */
   --pad: clamp(1.25rem, 4vw, 3rem);
+  /*
+   * Rythme vertical des sections, dissocié haut et bas.
+   *
+   * Un même écart en haut et en bas paraît juste sur une maquette isolée, mais
+   * pas dans un enchaînement : le bas d'une section et le haut de la suivante
+   * s'additionnent, et le titre suivant se retrouve trop loin. Le haut est donc
+   * nettement plus court — assez pour détacher la section de ce qui précède,
+   * pas assez pour créer un trou.
+   */
+  --section-haut: clamp(2.25rem, 5.5vw, 4.25rem);
   --section: clamp(3.5rem, 9vw, 6.5rem);
   --measure: 65ch;
 }
@@ -116,7 +126,7 @@ summary:focus-visible {
 .wrap { width: min(1180px, 100%); margin-inline: auto; padding-inline: var(--pad); }
 .wrap--etroit { width: min(880px, 100%); }
 
-.section { padding-block: var(--section); }
+.section { padding-block: var(--section-haut) var(--section); }
 .section--sunk { background: var(--sunk); }
 .section--navy { background: var(--navy-deep); color: var(--on-navy); }
 
