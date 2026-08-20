@@ -129,36 +129,6 @@ const etapes = [
     </div>
   </section>
 
-  <!-- ========== TERRAIN ========== -->
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Sur le terrain</p>
-      <h2 class="h-section">Nos équipes en dispositif</h2>
-      <p class="lede">
-        Quelques images prises lors de dispositifs récents dans les Alpes-Maritimes.
-      </p>
-      <div class="terrain">
-        {terrain.map((t) => (
-          <figure class="clip">
-            <video
-              src={t.video}
-              poster={t.affiche}
-              muted
-              loop
-              playsinline
-              preload="none"
-              aria-label={t.titre}
-            ></video>
-            <figcaption>
-              <strong>{t.titre}</strong>
-              <span>{t.texte}</span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- ========== DEMARCHE ========== -->
   <section class="section section--sunk">
     <div class="wrap">
@@ -178,8 +148,56 @@ const etapes = [
     </div>
   </section>
 
+  <!-- ========== TERRAIN ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Sur le terrain</p>
+      <h2 class="h-section">Nos équipes en dispositif</h2>
+      <p class="lede">
+        Quelques images prises lors de dispositifs récents dans les Alpes-Maritimes.
+      </p>
+      <figure class="tete-photo">
+        <img
+          src="/img/dps/tour-de-france-massena.jpg"
+          alt="Trois secouristes de Secourisme Pour Tous en tenue FFSS, de dos derrière les barrières, face au passage des coureuses place Masséna à Nice."
+          width="1800" height="3200" loading="lazy" decoding="async"
+        />
+        <figcaption>Tour de France Femmes 2026 — place Masséna, Nice.</figcaption>
+      </figure>
+
+      <div class="terrain">
+        {terrain.map((t) => (
+          <figure class="clip">
+            <video
+              src={t.video}
+              poster={t.affiche}
+              muted
+              loop
+              playsinline
+              preload="none"
+              aria-label={t.titre}
+            ></video>
+            <figcaption>
+              <strong>{t.titre}</strong>
+              <span>{t.texte}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <figure class="planche">
+        <img
+          src="/img/dps/tour-de-france-poste.jpg"
+          alt="Quatre vues du poste de secours du Tour de France Femmes 2026 à Nice : chefs de poste, préparation du matériel, sacs d'intervention et tente du poste de secours."
+          width="1152" height="2048" loading="lazy" decoding="async"
+        />
+        <figcaption>Montage du poste, préparation du matériel et prise de consignes.</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <!-- ========== APPEL ========== -->
-  <section class="section section--navy">
+  <section class="section section--appel">
     <div class="wrap wrap--etroit appel">
       <div>
         <h2 class="appel__h">Un événement à sécuriser&nbsp;?</h2>
@@ -284,6 +302,24 @@ const etapes = [
   }
   .etape h3 { font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
   .etape p { font-size: .91rem; color: var(--ink-soft); }
+
+  /* Photo d'ouverture : cadrage large, le sujet est en bas de l'image. */
+  .tete-photo { margin: 2.5rem 0 0; }
+  .tete-photo img {
+    display: block; width: 100%; height: auto;
+    max-height: 460px; object-fit: cover; object-position: center 72%;
+    border-radius: var(--r-lg); border: 1px solid var(--line);
+  }
+  .tete-photo figcaption,
+  .planche figcaption {
+    margin-top: .6rem; font-size: .87rem; color: var(--ink-mute);
+  }
+
+  .planche { margin: clamp(1rem, 2.5vw, 1.5rem) 0 0; }
+  .planche img {
+    display: block; width: 100%; max-width: 520px; height: auto;
+    border-radius: var(--r-lg); border: 1px solid var(--line);
+  }
 
   /* Les clips sont filmés au téléphone : format portrait assumé. */
   .terrain {

@@ -29,13 +29,31 @@ const groupes = ordre
       <nav class="fil" aria-label="Fil d'ariane">
         <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Formations</b>
       </nav>
-      <h1 class="tete__h1">Nos formations</h1>
-      <p class="tete__t">
-        Cinq filières, du grand public au professionnel. Toutes nos formations sont
-        dispensées par des formateurs diplômés, dans le cadre de notre certification
-        Qualiopi et de notre agrément FFSS.
-      </p>
-    </div>
+      <div class="tete__grille">
+        <div>
+          <h1 class="tete__h1">Nos formations</h1>
+          <p class="tete__t">
+            Cinq filières, du grand public au professionnel. Toutes nos formations sont
+            dispensées par des formateurs diplômés, dans le cadre de notre certification
+            Qualiopi et de notre agrément FFSS.
+          </p>
+        </div>
+
+        <!-- Le catalogue complet, à portée de clic pour qui veut tout comparer
+             hors ligne ou le transmettre à un employeur. -->
+        <a class="cata" href="/documents/catalogue-formations.pdf" target="_blank" rel="noopener">
+          <span class="cata__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
+            </svg>
+          </span>
+          <span class="cata__txt">
+            <strong>Télécharger notre catalogue</strong>
+            <em>Toutes les formations, durées et tarifs — PDF</em>
+          </span>
+        </a>
+      </div>
   </header>
 
   <CartesFilieres />
@@ -67,6 +85,30 @@ const groupes = ordre
 
   .tete__h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 800; margin-bottom: 0.85rem; }
   .tete__t { max-width: 60ch; color: var(--on-navy-text); }
+
+  .tete__grille {
+    display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+    grid-template-columns: minmax(0, 1fr) minmax(min(300px, 100%), 22rem);
+    align-items: center;
+  }
+  @media (max-width: 900px) { .tete__grille { grid-template-columns: 1fr; } }
+
+  .cata {
+    display: flex; align-items: center; gap: .9rem;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
+    border-radius: var(--r-lg); padding: 1.05rem 1.2rem;
+    color: #fff; text-decoration: none;
+    transition: background-color .15s, border-color .15s;
+  }
+  .cata:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.4); }
+  .cata__ic {
+    flex: none; width: 42px; height: 42px; border-radius: 12px;
+    background: var(--secours); color: #fff; display: grid; place-items: center;
+  }
+  .cata__ic svg { width: 21px; height: 21px; }
+  .cata__txt { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .cata__txt strong { font-family: 'Archivo', sans-serif; font-size: .98rem; font-weight: 700; }
+  .cata__txt em { font-style: normal; font-size: .82rem; color: var(--on-navy-soft); }
 
   .groupe { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
   .groupe:last-child { margin-bottom: 0; }

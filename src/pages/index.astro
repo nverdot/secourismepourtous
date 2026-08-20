@@ -21,6 +21,10 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
   <!-- ============ HERO ============ -->
   <header class="hero">
     <div class="hero__photo" aria-hidden="true"></div>
+    <video
+      class="hero__video" aria-hidden="true" tabindex="-1"
+      muted loop playsinline preload="none" poster="/img/hero-club.jpg"
+    ><source src="/video/hero-club.mp4" type="video/mp4" /></video>
     <div class="hero__voile" aria-hidden="true"></div>
     <div class="wrap hero__in">
       <div class="hero__texte">
@@ -107,6 +111,27 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
       </ul>
     </div>
   </section>
+
+  <script>
+    /**
+     * La boucle de fond n'est chargée que si les conditions s'y prêtent :
+     * mouvement non restreint, connexion correcte et mode économie de données
+     * inactif. Sinon la photo suffit — une vidéo de fond ne vaut jamais un
+     * hero qui met trois secondes à s'afficher sur un téléphone en 4G.
+     */
+    const fond = document.querySelector('.hero__video');
+    const sobre = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reseau = navigator.connection || {};
+    const menage = reseau.saveData || /^([23]g|slow-2g)$/.test(reseau.effectiveType || '');
+
+    if (fond && !sobre && !menage) {
+      fond.preload = 'auto';
+      fond.load();
+      fond.play()
+        .then(() => fond.setAttribute('data-actif', ''))
+        .catch(() => { /* lecture refusée : la photo reste */ });
+    }
+  </script>
 </Base>
 
 <style>
@@ -123,6 +148,19 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
     position: absolute; inset: 0;
     background: url('/img/secours-mer.jpg') 22% center / cover;
   }
+  /*
+   * La vidéo double la photo : elle n'apparaît qu'une fois lancée, et la photo
+   * assure seule le rendu si la lecture n'a pas lieu. Aucune image ne manque
+   * jamais derrière le texte.
+   */
+  .hero__video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    opacity: 0; transition: opacity 1.1s ease;
+  }
+  .hero__video[data-actif] { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .hero__video { display: none; } }
+
   .hero__voile {
     position: absolute; inset: 0;
     background:

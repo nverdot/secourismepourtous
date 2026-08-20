@@ -298,6 +298,7 @@ export const formations: Formation[] = [
   {
     slug: 'pse-2',
     sigle: 'PSE2',
+    billetsMasques: ['PSE1 + PSE2'],
     intitule: 'Premiers Secours en Équipe niveau 2',
     filiere: 'operationnelle',
     certifiante: true,
