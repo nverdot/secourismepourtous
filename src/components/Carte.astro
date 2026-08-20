@@ -1,0 +1,96 @@
+---
+import { asso } from '../data/association';
+
+/**
+ * Plan d'accès.
+ *
+ * La carte Google dépose des traceurs dès son chargement. On ne l'insère donc
+ * qu'après un clic explicite : tant que le visiteur ne demande rien, la page
+ * n'appelle aucun serveur tiers. L'adresse, l'itinéraire et le téléphone
+ * restent accessibles sans jamais charger la carte — elle est un confort, pas
+ * le seul moyen de nous trouver.
+ */
+
+const LAT = 43.6936024;
+const LON = 7.231182;
+const ADRESSE = `${asso.contact.adresse}, ${asso.contact.codePostal} ${asso.contact.ville}`;
+
+const ITINERAIRE = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADRESSE)}`;
+const FICHE = 'https://maps.app.goo.gl/yjoC7qbZCdGSKyXeA';
+const INTEGRATION = `https://www.google.com/maps?q=${LAT},${LON}&z=16&hl=fr&output=embed`;
+---
+
+<section class="plan" aria-labelledby="t-plan">
+  <h2 class="plan__h" id="t-plan">Nous trouver</h2>
+
+  <div class="plan__cadre" data-carte data-src={INTEGRATION}>
+    <div class="plan__attente">
+      <span class="plan__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+      </span>
+      <p class="plan__adresse">{ADRESSE}</p>
+      <p class="plan__avis">
+        La carte est fournie par Google&nbsp;: l’afficher dépose des traceurs sur
+        votre appareil.
+      </p>
+      <button type="button" class="btn btn--sobre" data-afficher>Afficher la carte</button>
+    </div>
+  </div>
+
+  <div class="plan__liens">
+    <a class="btn btn--primaire" href={ITINERAIRE} target="_blank" rel="noopener">
+      Calculer mon itinéraire
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+    </a>
+    <a class="btn btn--fantome-sombre" href={FICHE} target="_blank" rel="noopener">
+      Voir la fiche Google
+    </a>
+  </div>
+</section>
+
+<style>
+  .plan__h { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+
+  .plan__cadre {
+    position: relative; overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg);
+  }
+  @media (max-width: 620px) { .plan__cadre { aspect-ratio: 4 / 3; } }
+
+  .plan__cadre :global(iframe) {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+  }
+
+  .plan__attente {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: .6rem; text-align: center; padding: 1.5rem;
+  }
+  .plan__ic {
+    width: 44px; height: 44px; border-radius: 13px;
+    background: var(--azur-wash); color: var(--azur);
+    display: grid; place-items: center;
+  }
+  .plan__ic svg { width: 22px; height: 22px; }
+  .plan__adresse { font-weight: 600; }
+  .plan__avis { font-size: .84rem; color: var(--ink-mute); max-width: 34ch; }
+
+  .plan__liens { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+  .plan__liens .btn { font-size: .92rem; padding: .7rem 1.15rem; }
+</style>
+
+<script>
+  for (const cadre of document.querySelectorAll('[data-carte]')) {
+    const bouton = cadre.querySelector('[data-afficher]');
+    bouton?.addEventListener('click', () => {
+      const cadreIframe = document.createElement('iframe');
+      cadreIframe.src = cadre.dataset.src;
+      cadreIframe.loading = 'lazy';
+      cadreIframe.referrerPolicy = 'no-referrer-when-downgrade';
+      cadreIframe.title = 'Plan d’accès à Secourisme Pour Tous, à Nice';
+      cadre.querySelector('.plan__attente')?.remove();
+      cadre.append(cadreIframe);
+    });
+  }
+</script>

@@ -65,7 +65,10 @@ import { asso } from '../data/association';
         <h3 class="agrements__h">Nos agréments</h3>
         <div class="agrements__logos">
           <img src="/img/logo-ffss.png" alt="Logo de la Fédération Française de Sauvetage et de Secourisme" width="120" height="120" loading="lazy" />
-          <img src="/img/qualiopi.png" alt="Certification Qualiopi — actions de formation" width="180" height="110" loading="lazy" />
+          <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener"
+             title="Consulter notre certificat Qualiopi">
+            <img src="/img/qualiopi.png" alt="Certification Qualiopi — actions de formation" width="180" height="110" loading="lazy" />
+          </a>
         </div>
         <ul class="agrements__l">
           {asso.agrements.map((a) => (
@@ -75,6 +78,8 @@ import { asso } from '../data/association';
         <p class="agrements__note">
           La certification qualité a été délivrée au titre de la catégorie
           <strong> actions de formation</strong>.
+          Certificat n° QUA009665, valide jusqu'au 29 novembre 2027 —
+          <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener">le consulter</a>.
         </p>
       </aside>
     </div>

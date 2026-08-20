@@ -26,7 +26,7 @@ export const asso = {
   agrements: [
     { nom: 'Affiliée FFSS', detail: 'Fédération Française de Sauvetage et de Secourisme' },
     { nom: 'Agréée sécurité civile', detail: 'Agrément de sécurité civile pour les dispositifs prévisionnels de secours' },
-    { nom: 'Certifiée Qualiopi', detail: 'Actions de formation' },
+    { nom: 'Certifiée Qualiopi', detail: 'Actions de formation — certificat QUA009665, valide jusqu’au 29/11/2027' },
   ],
 
   /** Ce qu'AMS n'a pas : des chiffres réels. Leurs compteurs affichent zéro. */
@@ -50,7 +50,7 @@ export const asso = {
     { nom: 'Antibes Juan-les-Pins', logo: '/img/partenaires/antibes.png' },
     { nom: 'Mermonts Organisation', logo: '/img/partenaires/mermonts.png' },
     { nom: 'No Finish Line Nice', logo: '/img/partenaires/no-finish-line.png' },
-    { nom: 'Saint-Laurent-du-Var' },
+    { nom: 'Saint-Laurent-du-Var', logo: '/img/partenaires/saint-laurent-du-var.png' },
   ] as { nom: string; logo?: string }[],
 
   poles: [

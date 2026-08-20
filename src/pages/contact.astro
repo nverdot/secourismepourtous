@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { asso } from '../data/association';
 import { formations } from '../data/formations';
+import Carte from '../components/Carte.astro';
 
 /**
  * Page contact.
@@ -128,6 +129,10 @@ const motifs = [
             <span>{asso.contact.codePostal} {asso.contact.ville}</span>
           </span>
         </div>
+      </div>
+
+      <div class="carte">
+        <Carte />
       </div>
 
       <div class="carte carte--sombre">
