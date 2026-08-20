@@ -221,12 +221,18 @@ const actuel = Astro.url.pathname;
     .entete__ffss { height: 34px; padding-left: .55rem; }
   }
 
-  .nav { display: flex; gap: 0.2rem; margin-left: auto; min-width: 0; }
-  /* Entre 1180 et 1400 px, la barre est juste : on resserre plutôt que
-     de laisser le bouton déborder. */
-  @media (max-width: 1400px) {
-    .nav__lien { padding-inline: 0.5rem; }
-    .entete__cta { padding-inline: 1.1rem; }
+  .nav {
+    display: flex; gap: 0.15rem; margin-left: auto; min-width: 0;
+    /* Le menu cède avant le bouton : c'est lui qui doit se resserrer. */
+    flex-shrink: 1;
+  }
+  /* Séparation garantie entre la dernière entrée et le bouton, quelle que
+     soit la largeur : sans elle, les deux se touchent visuellement. */
+  .entete__cta { margin-left: 1.25rem; flex: none; }
+
+  @media (max-width: 1440px) {
+    .nav__lien { padding-inline: 0.45rem; }
+    .entete__cta { padding-inline: 1.1rem; margin-left: 1rem; }
   }
   .nav__lien {
     font-family: 'Archivo', sans-serif;
