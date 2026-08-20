@@ -194,6 +194,22 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
 
         charge.hidden = true; zone.hidden = false;
 
+        // Pré-sélection d'une place sur le premier billet : sans elle, la boîte
+        // s'ouvre sur un écran qui semble vide et l'on ne devine pas qu'il faut
+        // cliquer sur « + » pour faire apparaître la suite.
+        const premier = zone.querySelector('.bil');
+        if (premier) {
+          premier.querySelector('output').textContent = '1';
+          choix = [{
+            ticketDefinitionId: premier.dataset.id,
+            quantity: 1,
+            prix: Number(premier.dataset.prix),
+            devise: premier.dataset.devise,
+          }];
+          majTotal();
+          majFormulaire();
+        }
+
         zone.querySelectorAll('.bil__b').forEach((b) =>
           b.addEventListener('click', () => {
             const ligne = b.closest('.bil');
