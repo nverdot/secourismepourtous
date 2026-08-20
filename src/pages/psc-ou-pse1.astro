@@ -1,0 +1,390 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import Terrain from '../components/Terrain.astro';
+import { asso } from '../data/association';
+import { parSlug } from '../data/formations';
+import { faqFormations } from '../data/faq';
+import { volume } from '../data/programme-pse';
+import { sessionsAVenir, sessionsDe } from '../lib/wix';
+import { filAriane, questionsFrequentes } from '../lib/schema';
+
+/**
+ * « PSC ou PSE1 : lequel choisir ? »
+ *
+ * Une vraie question, que personne ne traite clairement dans le département,
+ * et qui se pose à un moment précis : le visiteur sait qu'il veut se former,
+ * il ne sait pas à quoi. Le catalogue ne l'aide pas — il présente des
+ * formations, pas un choix.
+ *
+ * La page tranche donc au lieu de décrire : elle part de ce que la personne
+ * veut faire, pas de ce que les diplômes contiennent. Et elle assume de
+ * renvoyer vers le PSC dans la majorité des cas, parce que c'est vrai.
+ */
+
+const psc = parSlug('psc')!;
+const pse1 = parSlug('pse-1')!;
+
+const toutes = await sessionsAVenir();
+const sessionsPsc = sessionsDe(toutes, psc.wixEvent);
+const sessionsPse1 = sessionsDe(toutes, pse1.wixEvent);
+
+const vPse1 = volume('pse1');
+
+const comparaison = [
+  {
+    critere: 'Ce que vous apprenez',
+    psc: 'Les gestes qui sauvent, seul, avec vos mains et ce que vous avez sous la main.',
+    pse1: 'Le secours en équipe, avec du matériel : oxygène, aspirateur de mucosités, immobilisation, relevage.',
+  },
+  {
+    critere: 'Pour qui',
+    psc: 'Tout le monde. Un parent, un enseignant, un collègue, un voisin.',
+    pse1: 'Celles et ceux qui veulent intervenir en équipe, sur des postes de secours ou dans un cadre professionnel.',
+  },
+  {
+    critere: 'Durée',
+    psc: psc.duree + (psc.dureeNote ? ` — ${psc.dureeNote}` : ''),
+    pse1: pse1.duree + (pse1.dureeNote ? ` — ${pse1.dureeNote}` : ''),
+  },
+  {
+    critere: 'Âge minimum',
+    psc: psc.prerequis,
+    pse1: pse1.prerequis,
+  },
+  {
+    critere: 'Tarif',
+    psc: psc.tarif + (psc.tarifNote ? ` — ${psc.tarifNote.toLowerCase()}` : ''),
+    pse1: pse1.tarif + (pse1.tarifNote ? ` — ${pse1.tarifNote.toLowerCase()}` : ''),
+  },
+  {
+    critere: 'Après la formation',
+    psc: 'Aucune obligation. Une remise à niveau reste conseillée : les gestes s’oublient.',
+    pse1: 'Une formation continue chaque année pour rester opérationnel en poste de secours.',
+  },
+  {
+    critere: 'Ce que ça vous ouvre',
+    psc: 'La capacité d’agir au quotidien, et l’attestation demandée par plusieurs métiers.',
+    pse1: 'Les postes de secours, le BNSSA, le métier de maître-nageur, le bénévolat en sécurité civile.',
+  },
+];
+
+const casConcrets = [
+  {
+    profil: 'Vous venez d’avoir un enfant',
+    reponse: 'psc',
+    texte: 'Étouffement, chute, brûlure, convulsion : ce qui vous fait peur relève des gestes de base. Une journée suffit.',
+  },
+  {
+    profil: 'Votre concours ou votre diplôme l’exige',
+    reponse: 'psc',
+    texte: 'Professeur des écoles, assistant maternel, éducateur sportif, agent de sécurité : c’est le PSC qui est demandé.',
+  },
+  {
+    profil: 'Vous voulez tenir des postes de secours',
+    reponse: 'pse1',
+    texte: 'Festivals, épreuves sportives, feux d’artifice : le PSE1 est le diplôme d’entrée, et il est obligatoire.',
+  },
+  {
+    profil: 'Vous visez le BNSSA ou le métier de maître-nageur',
+    reponse: 'pse1',
+    texte: 'Le PSE1 est exigé pour se présenter au BNSSA, et pour entrer en formation de maître-nageur.',
+  },
+  {
+    profil: 'Vous hésitez encore',
+    reponse: 'psc',
+    texte: 'Commencez par le PSC. Il ne se perd jamais, il coûte une journée, et il vous dira si le secourisme vous parle.',
+  },
+];
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Formations', chemin: '/formations' },
+    { nom: 'PSC ou PSE1', chemin: '/psc-ou-pse1' },
+  ]),
+  questionsFrequentes([
+    {
+      question: 'Faut-il passer le PSC avant le PSE1 ?',
+      reponse:
+        'Non. Le PSE1 n’exige pas le PSC : il est accessible directement dès 16 ans. Beaucoup commencent néanmoins par le PSC, pour découvrir le secourisme sur une journée avant de s’engager sur cinq.',
+    },
+    {
+      question: 'Le PSE1 remplace-t-il le PSC ?',
+      reponse:
+        'Le PSE1 couvre tout ce que couvre le PSC, et bien davantage. Mais il impose une formation continue annuelle, ce que le PSC ne demande pas. Pour un usage strictement personnel, le PSC suffit.',
+    },
+    {
+      question: 'Quel diplôme mon employeur va-t-il me demander ?',
+      reponse:
+        'Dans l’immense majorité des cas, le PSC — ou le SST s’il s’agit d’une obligation liée au poste de travail. Le PSE1 n’est demandé que pour les métiers du secours et du sauvetage aquatique.',
+    },
+    ...faqFormations.slice(0, 3),
+  ]),
+];
+---
+
+<Base
+  title="PSC ou PSE1 : quelle formation choisir ? | Nice"
+  description="PSC ou PSE1 : durée, tarif, contenu, débouchés. Le comparatif honnête pour choisir sa formation de secourisme à Nice, selon ce que vous voulez faire."
+  chemin="/psc-ou-pse1"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/formations">Formations</a><i aria-hidden="true">›</i>
+        <b>PSC ou PSE1</b>
+      </nav>
+      <h1 class="tete__h1">PSC ou PSE1&nbsp;:<br />lequel choisir&nbsp;?</h1>
+      <p class="tete__t">
+        Les deux enseignent à porter secours, mais ils ne répondent pas à la
+        même question. L’un vous rend capable d’agir seul, l’autre vous fait
+        entrer dans une équipe. Voici comment trancher.
+      </p>
+    </div>
+  </header>
+
+  <!-- ========== LA RÉPONSE COURTE ========== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="court">
+        <div class="court__c court__c--psc">
+          <p class="court__e">Dans la plupart des cas</p>
+          <h2>Le PSC</h2>
+          <p class="court__x">
+            Si vous voulez savoir réagir pour vos proches, ou si un concours
+            vous le demande. {psc.duree.toLowerCase()}, {psc.tarif}, dès
+            {' '}{psc.prerequis.replace('Dès ', '')}, sans aucun prérequis.
+          </p>
+          <a class="btn btn--primaire" href="/formations/psc">
+            Voir le PSC
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+          <p class="court__n">{sessionsPsc.length} sessions programmées</p>
+        </div>
+
+        <div class="court__c court__c--pse">
+          <p class="court__e">Si vous voulez intervenir en équipe</p>
+          <h2>Le PSE1</h2>
+          <p class="court__x">
+            Si vous visez les postes de secours, le BNSSA ou un métier du
+            sauvetage. {pse1.duree.toLowerCase()}, {pse1.tarif}, dès
+            {' '}{pse1.prerequis.replace('Dès ', '')}.
+          </p>
+          <a class="btn btn--sobre" href="/formations/pse-1">
+            Voir le PSE1
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+          <p class="court__n">{sessionsPse1.length} sessions programmées</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CAS CONCRETS ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Votre situation</p>
+      <h2 class="h-section">Reconnaissez-vous votre cas&nbsp;?</h2>
+      <div class="cas">
+        {casConcrets.map((c) => (
+          <article class={`ca ca--${c.reponse}`}>
+            <h3>{c.profil}</h3>
+            <p>{c.texte}</p>
+            <p class="ca__r">
+              <span>{c.reponse === 'psc' ? 'PSC' : 'PSE1'}</span>
+            </p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMPARATIF ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Point par point</p>
+      <h2 class="h-section">Ce qui les sépare vraiment</h2>
+
+      <div class="tab">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="vh">Critère</span></th>
+              <th scope="col">PSC</th>
+              <th scope="col">PSE1</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparaison.map((c) => (
+              <tr>
+                <th scope="row">{c.critere}</th>
+                <td>{c.psc}</td>
+                <td>{c.pse1}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note">
+        Le PSE1 couvre {vPse1.chapitres} chapitres du référentiel national,
+        {' '}{vPse1.sujets} sujets et {vPse1.techniques} techniques pratiquées.
+        Le PSC en couvre l’essentiel vital, sur une journée.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== TERRAIN ========== -->
+  <section class="section section--navy">
+    <div class="wrap"><Terrain sombre /></div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Faq
+        titre="Ce qu’on nous demande avant de choisir"
+        questions={[
+          {
+            question: 'Faut-il passer le PSC avant le PSE1 ?',
+            reponse:
+              'Non. Le PSE1 n’exige pas le PSC : il est accessible directement dès 16 ans. Beaucoup commencent néanmoins par le PSC, pour découvrir le secourisme sur une journée avant de s’engager sur cinq.',
+          },
+          {
+            question: 'Le PSE1 remplace-t-il le PSC ?',
+            reponse:
+              'Le PSE1 couvre tout ce que couvre le PSC, et bien davantage. Mais il impose une formation continue annuelle, ce que le PSC ne demande pas. Pour un usage strictement personnel, le PSC suffit.',
+          },
+          {
+            question: 'Quel diplôme mon employeur va-t-il me demander ?',
+            reponse:
+              'Dans l’immense majorité des cas, le PSC — ou le SST s’il s’agit d’une obligation liée au poste de travail. Le PSE1 n’est demandé que pour les métiers du secours et du sauvetage aquatique.',
+          },
+          ...faqFormations.slice(0, 3),
+        ]}
+      />
+    </div>
+  </section>
+
+  <!-- ========== APPEL ========== -->
+  <section class="section section--appel">
+    <div class="wrap wrap--etroit appel">
+      <div>
+        <h2 class="appel__h">Toujours indécis&nbsp;?</h2>
+        <p class="lede">
+          Dites-nous en deux phrases ce que vous voulez pouvoir faire. Nous vous
+          dirons lequel des deux vous correspond — quitte à vous répondre qu’aucun
+          des deux n’est nécessaire.
+        </p>
+      </div>
+      <div class="appel__actions">
+        <a class="btn btn--primaire" href="/contact?motif=formation">Nous écrire</a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; line-height: 1.05; margin-bottom: .8rem; }
+  .tete__t { max-width: 60ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  /* --- la réponse courte, avant tout le reste --- */
+  .court {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .court__c {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 5px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.4rem, 3vw, 1.9rem);
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .court__c--psc { border-top-color: var(--secours); }
+  .court__c--pse { border-top-color: var(--azur); }
+  .court__e {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .court__c h2 { font-size: clamp(1.6rem, 3.6vw, 2.1rem); font-weight: 800; }
+  .court__x { font-size: .95rem; color: var(--ink-soft); }
+  .court__c .btn { align-self: flex-start; margin-top: .4rem; }
+  .court__n { font-size: .84rem; color: var(--ink-mute); }
+
+  /* --- cas concrets --- */
+  .cas {
+    margin-top: 2rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+  }
+  .ca {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.2rem 1.4rem;
+    display: flex; flex-direction: column; gap: .45rem;
+  }
+  .ca--psc { border-left-color: var(--secours); }
+  .ca--pse1 { border-left-color: var(--azur); }
+  .ca h3 { font-size: 1rem; font-weight: 700; }
+  .ca p { font-size: .91rem; color: var(--ink-soft); }
+  .ca__r { margin-top: auto; padding-top: .3rem; }
+  .ca__r span {
+    display: inline-block;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    border-radius: var(--r-pill); padding: .22rem .75rem; color: #fff;
+  }
+  .ca--psc .ca__r span { background: var(--secours); }
+  .ca--pse1 .ca__r span { background: var(--azur); }
+
+  /* --- comparatif --- */
+  .tab { margin-top: 2rem; overflow-x: auto; }
+  .tab table {
+    border-collapse: collapse; width: 100%; min-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .tab th, .tab td {
+    text-align: left; vertical-align: top;
+    padding: .9rem 1.1rem; border-bottom: 1px solid var(--line);
+    font-size: .92rem;
+  }
+  .tab thead th {
+    font-family: 'Archivo', sans-serif; font-size: .8rem; font-weight: 800;
+    letter-spacing: .04em; background: var(--sunk); border-bottom-width: 2px;
+  }
+  .tab thead th:nth-child(2) { color: var(--secours); }
+  .tab thead th:nth-child(3) { color: var(--azur); }
+  .tab tbody th {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
+    width: 20%;
+  }
+  .tab td { color: var(--ink-soft); }
+
+  .note {
+    margin-top: 1.25rem; font-size: .88rem; color: var(--ink-mute); max-width: 78ch;
+  }
+
+  .appel { display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
+  .appel__h { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800; margin-bottom: .6rem; }
+  .appel__actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+</style>

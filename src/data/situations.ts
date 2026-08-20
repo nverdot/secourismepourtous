@@ -115,6 +115,120 @@ export const situations: Situation[] = [
   },
 
   {
+    slug: 'etouffement-nourrisson',
+    titre: 'Un bébé s’étouffe : que faire ?',
+    court: 'Étouffement du nourrisson',
+    accroche:
+      'Chez un nourrisson, les gestes ne sont pas ceux de l’adulte. Comprimer le ventre d’un bébé peut le blesser gravement : c’est la poitrine qu’on comprime, et jamais avant d’avoir essayé les claques dans le dos.',
+    pourQui:
+      'Un nourrisson, au sens du secourisme, est un enfant qui tient sur votre avant-bras. Purée, morceau de pain, petit jouet, pile bouton : les causes sont banales et l’étouffement est brutal.',
+    reconnaitre: [
+      'Le bébé ne peut plus tousser, crier ni émettre de son.',
+      'Il garde la bouche ouverte, s’agite, puis devient rapidement bleu.',
+      'S’il tousse ou pleure encore, l’obstruction est partielle : n’intervenez pas, laissez-le tousser et demandez un avis médical.',
+    ],
+    faire: [
+      {
+        titre: 'Installez-le sur votre avant-bras',
+        texte:
+          'Placez l’avant-bras contre son dos, la main soutenant sa tête, puis posez cet avant-bras sur votre cuisse. La tête doit être plus basse que le reste du corps.',
+      },
+      {
+        titre: 'Une à cinq claques dans le dos',
+        texte:
+          'Entre les omoplates. On s’arrête dès que le corps étranger est expulsé — inutile d’aller jusqu’à cinq si le bébé respire de nouveau.',
+      },
+      {
+        titre: 'Si c’est inefficace : compressions thoraciques',
+        texte:
+          'Retournez le bébé face vers le ciel, tête toujours plus basse que le corps, et réalisez une à cinq compressions sur la poitrine. Jamais sur le ventre : chez un nourrisson, les compressions abdominales sont proscrites.',
+      },
+      {
+        titre: 'Alternez jusqu’à l’expulsion',
+        texte:
+          'Claques dans le dos, puis compressions thoraciques, tant que l’obstruction persiste et que le bébé reste conscient.',
+      },
+      {
+        titre: 'Alertez',
+        texte:
+          'Faites alerter le 15 dès le début, ou appelez dès que le corps étranger est expulsé. Un avis médical s’impose même après une désobstruction réussie.',
+      },
+    ],
+    pieges: [
+      'Faire la manœuvre de l’adulte — compressions sur le ventre — sur un nourrisson.',
+      'Mettre les doigts dans sa bouche pour tenter d’attraper l’objet.',
+      'Le secouer, ou le tenir par les pieds la tête en bas.',
+      'Intervenir alors qu’il tousse encore : la toux est plus efficace que vous.',
+    ],
+    numero: '15',
+    enFormation:
+      'La prise sur l’avant-bras, la force à mettre sur un corps de quelques kilos, l’enchaînement claques–compressions : cela se travaille sur mannequin nourrisson, et c’est très différent de ce qu’on imagine.',
+    fiche: { ref: '02FT04', nom: 'Désobstruction par compressions thoraciques chez le nourrisson', maj: 'décembre 2022' },
+    seo: {
+      title: 'Bébé qui s’étouffe : que faire ? | Gestes qui sauvent',
+      description:
+        'Étouffement du nourrisson : claques dans le dos, compressions thoraciques — jamais abdominales. La conduite à tenir officielle, d’après le référentiel PSC 2024.',
+    },
+  },
+
+  {
+    slug: 'arret-cardiaque-enfant',
+    titre: 'Arrêt cardiaque chez un enfant ou un bébé : que faire ?',
+    court: 'Arrêt cardiaque de l’enfant',
+    accroche:
+      'Chez l’enfant, l’arrêt cardiaque vient presque toujours d’un manque d’oxygène, pas du cœur. C’est pourquoi la réanimation commence par cinq insufflations, avant toute compression — l’inverse de l’adulte.',
+    pourQui:
+      'Noyade, étouffement, accident : les causes sont souvent respiratoires. Le témoin est presque toujours un parent, et l’enchaînement correct change tout.',
+    reconnaitre: [
+      'L’enfant ne répond pas et ne réagit pas quand on lui parle ou qu’on le stimule.',
+      'Il ne respire pas, ou sa respiration est anormale — bruyante, par à-coups.',
+      'Ne perdez pas de temps à chercher un pouls : l’absence de respiration normale suffit.',
+    ],
+    faire: [
+      {
+        titre: 'Faites alerter et chercher un défibrillateur',
+        texte:
+          'Le 15, ou le 112. Si vous êtes seul, criez pour attirer de l’aide avant de commencer.',
+      },
+      {
+        titre: 'Cinq insufflations pour commencer',
+        texte:
+          'C’est la différence essentielle avec l’adulte : chez l’enfant et le nourrisson, la réanimation débute par cinq insufflations, avant toute compression.',
+      },
+      {
+        titre: 'Puis 15 compressions pour 2 insufflations',
+        texte:
+          'Ce rythme remplace le 30 pour 2 de l’adulte. Les compressions se font au rythme de 100 à 120 par minute.',
+      },
+      {
+        titre: 'Utilisez le défibrillateur dès qu’il arrive',
+        texte:
+          'Il s’emploie aussi sur un enfant. Allumez-le et suivez ses instructions vocales : il analyse seul et ne choque que si c’est nécessaire.',
+      },
+      {
+        titre: 'Ne vous arrêtez pas',
+        texte:
+          'Continuez jusqu’au relais par les secours, ou jusqu’à ce que l’enfant retrouve une respiration normale.',
+      },
+    ],
+    pieges: [
+      'Appliquer le schéma de l’adulte : commencer par les compressions, et enchaîner 30 pour 2.',
+      'Renoncer par peur de faire mal. Sans réanimation, l’issue est certaine.',
+      'Attendre les secours sans rien faire.',
+      'Croire qu’un défibrillateur est interdit sur un enfant.',
+    ],
+    numero: '15',
+    enFormation:
+      'Les insufflations chez un nourrisson, la profondeur des compressions sur un thorax d’enfant, l’enchaînement 15 pour 2 : tout se répète sur mannequins pédiatriques, jusqu’à ce que le rythme devienne automatique.',
+    fiche: { ref: '02PR04', nom: 'Arrêt cardiaque', maj: 'décembre 2023' },
+    seo: {
+      title: 'Arrêt cardiaque d’un enfant ou d’un bébé : que faire ?',
+      description:
+        'Réanimation pédiatrique : 5 insufflations initiales puis 15 compressions pour 2 insufflations. Ce qui change par rapport à l’adulte. D’après le référentiel PSC 2024.',
+    },
+  },
+
+  {
     slug: 'saignement-abondant',
     titre: 'Une plaie qui saigne beaucoup : que faire ?',
     court: 'Saignement abondant',
