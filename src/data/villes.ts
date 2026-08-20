@@ -45,8 +45,28 @@ export const villes: Ville[] = [
       'Notre ville. Des rassemblements de plusieurs dizaines de milliers de personnes sur la Promenade des Anglais aux concerts du Théâtre de Verdure, nous y couvrons toute la gamme des affluences.',
     references: [
       {
-        nom: 'Feux d’artifice',
-        texte: 'Dispositifs sur le front de mer, avec des foules denses et une évacuation contrainte par le littoral.',
+        nom: 'UTMB',
+        texte: 'Course de trail : coureurs dispersés sur un long parcours, souvent hors des accès routiers, avec des points de contrôle à couvrir séparément.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Ironman',
+        texte: 'Triathlon longue distance : natation en mer, vélo puis course à pied, soit trois environnements et trois dispositifs enchaînés dans la même journée.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Tour de France Hommes',
+        texte: 'Épreuve cycliste sur circuit urbain : postes fixes le long du parcours et équipes mobiles derrière les barrières.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Tour de France Femmes',
+        texte: 'Même exigence sur la ville, avec des zones de départ et d’arrivée très denses en public.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Spectacle de drones',
+        texte: 'Rassemblement nocturne massif sur le front de mer : faible visibilité, flux serrés et évacuation contrainte par le littoral.',
         genre: 'festif',
       },
       {
@@ -55,14 +75,19 @@ export const villes: Ville[] = [
         genre: 'culturel',
       },
       {
+        nom: 'Concerts aux Arènes de Cimiez',
+        texte: 'Site en gradins à l’écart du centre : accès des secours et brancardage à anticiper dès la conception du dispositif.',
+        genre: 'culturel',
+      },
+      {
         nom: 'Marché de Noël',
         texte: 'Plusieurs semaines de présence, par temps froid, avec un public familial et de nombreux enfants.',
         genre: 'populaire',
       },
       {
-        nom: 'Tour de France',
-        texte: 'Épreuve cycliste sur circuit urbain : postes fixes le long du parcours et équipes mobiles.',
-        genre: 'sportif',
+        nom: 'Commémorations',
+        texte: 'Cérémonies officielles : public souvent âgé, station debout prolongée, coordination avec les services de l’État.',
+        genre: 'populaire',
       },
     ],
     alentours: ['Villefranche-sur-Mer', 'Saint-Jean-Cap-Ferrat', 'Beaulieu-sur-Mer', 'La Trinité'],
@@ -74,17 +99,32 @@ export const villes: Ville[] = [
     article: 'à Antibes et Juan-les-Pins',
     codePostal: '06600',
     contexte:
-      'Une commune à deux visages pour le secours : les salles couvertes du sport professionnel d’un côté, les scènes de plein air de la saison estivale de l’autre.',
+      'Une commune à deux visages pour le secours : les salles couvertes de l’Azur Arena d’un côté, les scènes et les plages de la saison estivale de l’autre.',
     references: [
       {
-        nom: 'Matchs des Sharks',
-        texte: 'Basket professionnel à l’Azur Arena : public en gradins, gestion des flux à l’entrée comme à la sortie.',
+        nom: 'Azur Arena',
+        texte: 'Rencontres et spectacles en salle : public en gradins, gestion des flux à l’entrée comme à la sortie.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Mondial Foot Volley',
+        texte: 'Compétition sur sable en plein air : chaleur, exposition prolongée et prise en charge des sportifs comme du public.',
         genre: 'sportif',
       },
       {
         nom: 'Festival de jazz',
         texte: 'Concerts en plein air à Juan-les-Pins, sur plusieurs soirées consécutives.',
         genre: 'culturel',
+      },
+      {
+        nom: 'L’Humour à la Plage',
+        texte: 'Spectacles en bord de mer : site ouvert, public nombreux et accès des secours à préserver.',
+        genre: 'culturel',
+      },
+      {
+        nom: 'Village de Noël',
+        texte: 'Présence sur la durée, par temps froid, avec un public familial.',
+        genre: 'populaire',
       },
       {
         nom: 'Feux d’artifice',
@@ -147,5 +187,12 @@ export const villes: Ville[] = [
     distanceMinutes: 35,
   },
 ];
+
+/** Trois références au plus, le reste compté : Google coupe vers 160 signes. */
+export const resumeReferences = (v: Ville, max = 3) => {
+  const noms = v.references.map((r) => r.nom);
+  if (noms.length <= max) return noms.join(' · ');
+  return `${noms.slice(0, max).join(' · ')} et ${noms.length - max} autres`;
+};
 
 export const parVille = (slug: string) => villes.find((v) => v.slug === slug);

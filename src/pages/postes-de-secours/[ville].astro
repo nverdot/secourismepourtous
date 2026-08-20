@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
 import { asso } from '../../data/association';
-import { villes, type Ville } from '../../data/villes';
+import { villes, resumeReferences, type Ville } from '../../data/villes';
 import { faqDps } from '../../data/faq';
 import { filAriane, questionsFrequentes } from '../../lib/schema';
 
@@ -28,9 +28,12 @@ const { v } = Astro.props;
 const autres = villes.filter((x) => x.slug !== v.slug);
 
 const titre = `Poste de secours ${v.article} | DPS événements`;
-const description =
-  `Dispositif prévisionnel de secours ${v.article} : secouristes diplômés pour vos événements. ` +
-  `${v.references.map((r) => r.nom).join(', ')}. Devis gratuit, association affiliée FFSS.`;
+// Google coupe la description vers 160 signes : on cite deux références et on
+// s'arrête, plutôt que de finir sur une phrase tronquée.
+const description = (
+  `Poste de secours ${v.article} : équipes de secouristes diplômés FFSS. ` +
+  `${v.references.slice(0, 2).map((r) => r.nom).join(', ')}. Devis gratuit, réponse rapide.`
+).slice(0, 158);
 
 const balisages = [
   filAriane([
@@ -182,7 +185,7 @@ const ICONES = {
         {autres.map((a) => (
           <a class="ville" href={`/postes-de-secours/${a.slug}`}>
             <strong>{a.nom}</strong>
-            <span>{a.references.map((r) => r.nom).join(' · ')}</span>
+            <span>{resumeReferences(a)}</span>
           </a>
         ))}
         <a class="ville ville--tout" href="/postes-de-secours">
