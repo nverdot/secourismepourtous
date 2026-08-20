@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Lieu from '../components/Lieu.astro';
 import { asso } from '../data/association';
 ---
 
@@ -78,7 +79,8 @@ import { asso } from '../data/association';
         <p class="agrements__note">
           La certification qualité a été délivrée au titre de la catégorie
           <strong> actions de formation</strong>.
-          Certificat n° QUA009665, valide jusqu'au 29 novembre 2027 —
+          Association déclarée sous le n° RNA {asso.identifiants.rna}.
+          Certificat Qualiopi n° QUA009665, valide jusqu'au 29 novembre 2027 —
           <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener">le consulter</a>.
         </p>
       </aside>
@@ -105,6 +107,15 @@ import { asso } from '../data/association';
   </section>
 
   <!-- ========== ACCESSIBILITE ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Lieu
+        titre="Où nous trouver"
+        intro="Nos bureaux et nos salles de formation sont au même endroit, dans l'ouest de Nice."
+      />
+    </div>
+  </section>
+
   <!-- ========== ÉQUIPE ========== -->
   <section class="section" aria-labelledby="t-equipe">
     <div class="wrap">

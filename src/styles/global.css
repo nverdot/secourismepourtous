@@ -218,6 +218,10 @@ summary:focus-visible {
 }
 .badge--qualiopi { background: #fff; color: var(--navy); }
 .badge--qualiopi svg { color: var(--accent); width: 14px; height: 14px; }
+/* Le badge est un lien vers le certificat : il doit réagir comme tel. */
+a.badge--qualiopi { text-decoration: none; transition: box-shadow .15s, transform .15s; }
+a.badge--qualiopi:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.35); }
+a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset: 2px; }
 .badge--secours { background: var(--accent); color: #fff; }
 .badge--contour {
   background: rgba(255, 255, 255, 0.12);

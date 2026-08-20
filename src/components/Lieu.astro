@@ -1,0 +1,134 @@
+---
+import { asso } from '../data/association';
+import Carte from './Carte.astro';
+
+/**
+ * Bloc « où ça se passe » : adresse, point GPS, accès et plan.
+ *
+ * Deux usages, une seule source : sur une page de formation il répond à
+ * « où est-ce que je vais le jour J », sur la page association à « comment
+ * vous joindre ». Le contenu est identique, seul le titre change — dupliquer
+ * l'adresse dans deux composants serait le meilleur moyen d'en oublier un le
+ * jour d'un déménagement.
+ */
+
+interface Props {
+  titre?: string;
+  intro?: string;
+  /** Sur fond sombre, on inverse les couleurs du bloc. */
+  sombre?: boolean;
+}
+const {
+  titre = 'Lieu de formation',
+  intro = 'Nos formations se déroulent dans nos locaux, à Nice.',
+  sombre = false,
+} = Astro.props;
+
+const { adresse, codePostal, ville, latitude, longitude } = asso.contact;
+
+// Coordonnées en degrés-minutes-secondes : c'est la forme qu'attendent la
+// plupart des GPS de voiture, qui n'acceptent pas le format décimal.
+const dms = (v: number, axes: [string, string]) => {
+  const signe = v >= 0 ? axes[0] : axes[1];
+  const abs = Math.abs(v);
+  const d = Math.floor(abs);
+  const m = Math.floor((abs - d) * 60);
+  const s = ((abs - d - m / 60) * 3600).toFixed(1);
+  return `${d}° ${m}′ ${s}″ ${signe}`;
+};
+
+const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
+---
+
+<section class:list={['lieu', { 'lieu--sombre': sombre }]} aria-labelledby="t-lieu">
+  <div class="lieu__texte">
+    <p class="eyebrow">Accès</p>
+    <h2 class="h-section" id="t-lieu">{titre}</h2>
+    <p class="lede">{intro}</p>
+
+    <dl class="lieu__l">
+      <div>
+        <dt>Adresse</dt>
+        <dd>{adresse}<br />{codePostal} {ville}</dd>
+      </div>
+      <div>
+        <dt>Coordonnées GPS</dt>
+        <dd>
+          <span class="lieu__gps">{latitude.toFixed(6)}, {longitude.toFixed(6)}</span>
+          <span class="lieu__dms">{dms(latitude, ['N', 'S'])} · {dms(longitude, ['E', 'O'])}</span>
+        </dd>
+      </div>
+      {asso.acces.length > 0 && (
+        <div>
+          <dt>Transports</dt>
+          <dd>
+            <ul class="lieu__t">
+              {asso.acces.map((a) => (
+                <li>
+                  <span class="lieu__ligne">{a.mode} {a.ligne}</span>
+                  arrêt {a.arret}
+                  {a.minutes && <span class="lieu__min"> · {a.minutes} min à pied</span>}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      )}
+      <div>
+        <dt>En transports en commun</dt>
+        <dd>
+          <a href={PLANIFICATEUR} target="_blank" rel="noopener">
+            Calculer mon trajet sur Lignes d’Azur
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="lieu__carte">
+    <Carte />
+  </div>
+</section>
+
+<style>
+  .lieu {
+    display: grid; gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+  }
+  @media (max-width: 900px) { .lieu { grid-template-columns: 1fr; } }
+
+  .lieu__l { margin: 1.75rem 0 0; display: flex; flex-direction: column; gap: .9rem; }
+  .lieu__l > div { padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+  .lieu__l > div:last-child { border-bottom: 0; padding-bottom: 0; }
+  .lieu__l dt {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .3rem;
+  }
+  .lieu__l dd { margin: 0; font-size: .95rem; }
+  .lieu__l a { color: var(--azur); }
+
+  .lieu__gps {
+    display: block; font-variant-numeric: tabular-nums;
+    font-family: 'Archivo', sans-serif; font-weight: 600;
+  }
+  .lieu__dms { display: block; font-size: .83rem; color: var(--ink-mute); margin-top: .15rem; }
+
+  .lieu__t { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+  .lieu__ligne {
+    display: inline-block; margin-right: .4rem;
+    background: var(--azur); color: #fff;
+    font-family: 'Archivo', sans-serif; font-size: .78rem; font-weight: 700;
+    border-radius: 5px; padding: .1rem .45rem;
+  }
+  .lieu__min { color: var(--ink-mute); }
+
+  /* Variante sur fond bleu : le bloc doit rester lisible. */
+  .lieu--sombre .lieu__l > div { border-color: rgba(255,255,255,.16); }
+  .lieu--sombre .lieu__l dt { color: var(--on-navy-soft); }
+  .lieu--sombre .lieu__l dd { color: var(--on-navy-text); }
+  .lieu--sombre .lieu__gps { color: #fff; }
+  .lieu--sombre .lieu__dms { color: var(--on-navy-soft); }
+  .lieu--sombre .lieu__l a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+</style>

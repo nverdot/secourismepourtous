@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Lieu from '../../components/Lieu.astro';
 import HeroFormation from '../../components/HeroFormation.astro';
 import ObjectifsProgramme from '../../components/ObjectifsProgramme.astro';
 import Sessions from '../../components/Sessions.astro';
@@ -65,6 +66,15 @@ const { formation: f, sessions } = Astro.props;
 
   {sessions.length > 0 && <PopupDates sessions={sessions} sigle={f.sigle} />}
   {sessions.length > 0 && <ModuleInscription />}
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Lieu
+        titre={`Où se déroule le ${f.sigle}`}
+        intro="Sauf mention contraire sur votre convocation, la formation a lieu dans nos locaux."
+      />
+    </div>
+  </section>
 
   <section class="section section--navy">
     <div class="wrap wrap--etroit accessibilite">

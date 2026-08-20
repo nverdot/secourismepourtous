@@ -13,6 +13,18 @@ export const asso = {
   fondation: 2008,
   fondateur: 'Martial Rinaudo',
 
+  /**
+   * Identifiants officiels.
+   *
+   * Le RNA (Répertoire National des Associations) identifie l'association
+   * elle-même. Il ne se confond pas avec le numéro de déclaration d'activité
+   * de l'organisme de formation, délivré par la DREETS au format 11 chiffres :
+   * si SPT en possède un, il a sa place ici aussi.
+   */
+  identifiants: {
+    rna: 'W061000773',
+  },
+
   contact: {
     telephone: '06 65 23 12 72',
     telephoneLien: '+33665231272',
@@ -21,7 +33,23 @@ export const asso = {
     codePostal: '06200',
     ville: 'Nice',
     departement: 'Alpes-Maritimes',
+    /** Coordonnées du siège, relevées sur la fiche Google du 20 août 2026. */
+    latitude: 43.6936024,
+    longitude: 7.231182,
   },
+
+  /**
+   * Desserte en transports en commun.
+   *
+   * ⚠️ À COMPLÉTER PAR SPT : lignes et arrêts exacts desservant le 31 boulevard
+   * Impératrice Eugénie. Rien n'est inventé ici — un numéro de ligne faux
+   * envoie un stagiaire au mauvais endroit le matin de sa formation. Tant que
+   * la liste est vide, la page n'affiche que le calculateur d'itinéraire
+   * Lignes d'Azur, qui est toujours juste.
+   *
+   * Format attendu : { mode: 'Bus' | 'Tram', ligne: '12', arret: 'Nom', minutes: 3 }
+   */
+  acces: [] as { mode: string; ligne: string; arret: string; minutes?: number }[],
 
   agrements: [
     { nom: 'Affiliée FFSS', detail: 'Fédération Française de Sauvetage et de Secourisme' },
