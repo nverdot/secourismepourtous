@@ -226,6 +226,10 @@ export const situations: Situation[] = [
     enFormation:
       'La position latérale de sécurité est le geste le plus mal fait par ceux qui l’ont seulement vue en vidéo. On la répète jusqu’à ce qu’elle soit stable, y compris sur une personne plus lourde que soi.',
     fiche: { ref: '02PR03', nom: 'Perte de connaissance', maj: 'décembre 2023' },
+    image: {
+      fichier: '/img/gestes/perte-de-connaissance.jpg',
+      alt: 'Dans un salon, une femme téléphone aux secours en gardant une main sur l’épaule d’un homme inconscient qu’elle a installé sur le côté.',
+    },
     seo: {
       title: 'Personne inconsciente qui respire : que faire ? | Gestes qui sauvent',
       description:
