@@ -20,6 +20,7 @@ const motifs = [
   'Demander un poste de secours (DPS)',
   'Former les salariés de mon entreprise',
   'Organiser une session sur mesure',
+  'Devenir secouriste actif (bénévole)',
   'Rejoindre l’association',
   'Autre demande',
 ];
@@ -161,6 +162,7 @@ const motifs = [
       dps: 'Demander un poste de secours (DPS)',
       formation: "M'inscrire à une formation",
       entreprise: 'Former les salariés de mon entreprise',
+      benevole: 'Devenir secouriste actif (bénévole)',
     };
     const cle = new URLSearchParams(location.search).get('motif');
     const choix = RACCOURCIS[cle];

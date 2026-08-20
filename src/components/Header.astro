@@ -1,5 +1,21 @@
 ---
 import { asso } from '../data/association';
+import { filieres, formations } from '../data/formations';
+
+/**
+ * Raccourcis du menu mobile : une entrée par filière, avec le sigle des
+ * formations qu'elle contient. Le visiteur qui cherche « PSE1 » n'a plus à
+ * ouvrir la page catalogue puis à chercher dedans.
+ */
+const raccourcis = Object.entries(filieres).map(([cle, f]) => ({
+  cle,
+  nom: f.titre,
+  couleur: f.couleur,
+  icone: f.icone,
+  sigles: formations
+    .filter((x) => x.filiere === cle && !x.estRecyclage)
+    .map((x) => x.sigle),
+}));
 
 const liens = [
   { href: '/formations', texte: 'Formations' },
@@ -62,7 +78,33 @@ const actuel = Astro.url.pathname;
       <span></span><span></span><span></span>
     </label>
     <nav class="nav-mobile" aria-label="Navigation mobile">
-      {liens.map((l) => <a href={l.href}>{l.texte}</a>)}
+      <!-- « Formations » se déplie sur les cinq filières : c'est l'entrée la
+           plus demandée, et la seule qui cache un catalogue derrière elle. -->
+      <details class="sm">
+        <summary>
+          Formations
+          <svg class="sm__fleche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </summary>
+        <div class="sm__liste">
+          {raccourcis.map((r) => (
+            <a class={`sm__lien sm__lien--${r.couleur}`} href={`/formations#${r.cle}`}>
+              <span class="sm__ic" aria-hidden="true">
+                {r.icone === 'coeur' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>}
+                {r.icone === 'ambulance' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7.5A1.5 1.5 0 0 1 3.5 6h9A1.5 1.5 0 0 1 14 7.5V17H2z" /><path d="M14 10h3.6a2 2 0 0 1 1.6.8l2.2 2.9a2 2 0 0 1 .4 1.2V17h-8z" /><path d="M6 9.5v4M4 11.5h4" /><circle cx="7.5" cy="18.5" r="1.8" /><circle cx="17.5" cy="18.5" r="1.8" /><path d="M9.3 18.5h6.4" /></svg>}
+                {r.icone === 'nage' && <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="8.2" cy="7.4" r="2.3" /><path d="M12.1 10.4a1.35 1.35 0 0 1-.15-1.9l3.05-3.4a1.35 1.35 0 1 1 2.01 1.8l-3.05 3.4a1.35 1.35 0 0 1-1.86.1z" /><path d="M3.1 13.5a1.3 1.3 0 0 1 .5-1.77l2.62-1.5a4.2 4.2 0 0 1 4.32.06l4.3 2.7a1.3 1.3 0 0 1-1.38 2.2l-4.3-2.7a1.6 1.6 0 0 0-1.65-.02l-2.62 1.5a1.3 1.3 0 0 1-1.79-.47z" /><path d="M2 17.5c1.5 0 2.05-1.05 3.55-1.05S7.6 17.5 9.1 17.5s2.05-1.05 3.55-1.05 2.05 1.05 3.55 1.05 2.05-1.05 3.3-1.05v2.3c-1.25 0-1.8 1.05-3.3 1.05s-2.05-1.05-3.55-1.05-2.05 1.05-3.55 1.05-2.05-1.05-3.55-1.05S3.5 19.8 2 19.8z" /></svg>}
+                {r.icone === 'pedagogie' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>}
+                {r.icone === 'mallette' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>}
+              </span>
+              <span class="sm__txt">
+                <strong>{r.nom}</strong>
+                <em>{r.sigles.join(' · ')}</em>
+              </span>
+            </a>
+          ))}
+          <a class="sm__tout" href="/formations">Voir tout le catalogue</a>
+        </div>
+      </details>
+      {liens.filter((l) => l.href !== '/formations').map((l) => <a href={l.href}>{l.texte}</a>)}
       <a href={`tel:${asso.contact.telephoneLien}`} class="nav-mobile__tel">{asso.contact.telephone}</a>
     </nav>
   </div>
@@ -135,11 +177,18 @@ const actuel = Astro.url.pathname;
 
   /* Séparé de la marque par un filet : c'est un agrément, pas un co-logo. */
   .entete__ffss {
-    height: 40px; width: auto; flex: none;
-    padding-left: 0.9rem;
+    height: 52px; width: auto; flex: none;
+    padding-left: 1rem;
     border-left: 1px solid var(--line);
   }
-  @media (max-width: 480px) { .entete__ffss { display: none; } }
+  /* L'agrément fait partie de l'identité : il reste visible sur mobile,
+     simplement réduit et sans le filet qui mangerait la largeur. */
+  @media (max-width: 480px) {
+    .entete__ffss { height: 30px; padding-left: .6rem; }
+  }
+  @media (max-width: 360px) {
+    .entete__ffss { height: 26px; padding-left: .45rem; }
+  }
 
   .nav { display: flex; gap: 0.35rem; margin-left: auto; }
   .nav__lien {
@@ -209,6 +258,44 @@ const actuel = Astro.url.pathname;
     }
     .nav-mobile a:last-child { border-bottom: 0; }
     .nav-mobile__tel { color: var(--secours) !important; }
+
+    /* --- sous-menu des filières --- */
+    .sm { border-bottom: 1px solid var(--line); }
+    .sm summary {
+      display: flex; align-items: center; justify-content: space-between;
+      list-style: none; cursor: pointer;
+      font-family: 'Archivo', sans-serif; font-weight: 600; color: var(--ink);
+      padding: 0.85rem 0.25rem;
+    }
+    .sm summary::-webkit-details-marker { display: none; }
+    .sm__fleche { width: 18px; height: 18px; transition: transform .18s; color: var(--ink-mute); }
+    .sm[open] .sm__fleche { transform: rotate(180deg); }
+
+    .sm__liste { display: flex; flex-direction: column; gap: .4rem; padding: 0 0 .85rem; }
+    .sm__lien {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .6rem .7rem !important; border-bottom: 0 !important;
+      background: var(--sunk); border-radius: var(--r-sm);
+    }
+    .sm__ic {
+      flex: none; width: 34px; height: 34px; border-radius: 10px;
+      display: grid; place-items: center; color: #fff;
+    }
+    .sm__ic svg { width: 18px; height: 18px; }
+    .sm__lien--azur .sm__ic { background: var(--azur); }
+    .sm__lien--secours .sm__ic { background: var(--secours); }
+    .sm__lien--ocean .sm__ic { background: var(--ocean, #0e7490); }
+    .sm__lien--ocre .sm__ic { background: var(--gold); }
+    .sm__lien--navy .sm__ic { background: var(--navy); }
+    .sm__txt { display: flex; flex-direction: column; gap: .05rem; min-width: 0; }
+    .sm__txt strong { font-size: .92rem; font-weight: 700; }
+    .sm__txt em {
+      font-style: normal; font-size: .78rem; font-weight: 400; color: var(--ink-mute);
+    }
+    .sm__tout {
+      padding: .6rem .7rem !important; border-bottom: 0 !important;
+      font-size: .88rem; color: var(--azur) !important;
+    }
 
     .entete__barre { flex-wrap: wrap; }
   }
