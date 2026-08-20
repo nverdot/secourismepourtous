@@ -164,6 +164,10 @@ export const situations: Situation[] = [
     enFormation:
       'La prise sur l’avant-bras, la force à mettre sur un corps de quelques kilos, l’enchaînement claques–compressions : cela se travaille sur mannequin nourrisson, et c’est très différent de ce qu’on imagine.',
     fiche: { ref: '02FT04', nom: 'Désobstruction par compressions thoraciques chez le nourrisson', maj: 'décembre 2022' },
+    image: {
+      fichier: '/img/gestes/etouffement-nourrisson.jpg',
+      alt: 'Mannequin de formation nourrisson manipulé par un formateur ganté, à côté d’un livret « Gestes qui sauvent » et d’une trousse de secours.',
+    },
     seo: {
       title: 'Bébé qui s’étouffe : que faire ? | Gestes qui sauvent',
       description:
