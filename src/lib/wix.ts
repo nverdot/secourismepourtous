@@ -30,6 +30,8 @@ export interface Session {
   urlInscription: string | null;
   /** Titre de l'événement Wix, tel que renseigné dans le tableau de bord. */
   source: string;
+  /** Identifiant d'URL de l'événement chez Wix, exigé pour ouvrir le paiement. */
+  slug: string;
   /**
    * Vrai quand Wix n'accepte plus de réservation : session pleine ou fermée.
    * À vérifier explicitement — `registration.status` reste à « OPEN_TICKETS »
@@ -101,6 +103,7 @@ function depuisCache(): Session[] {
       lieu: e.lieu ?? null,
       urlInscription: e.url ?? null,
       source: e.titre,
+      slug: e.slug ?? '',
       complet: false,
       champs: [],
     }))
@@ -108,8 +111,10 @@ function depuisCache(): Session[] {
     .sort((a, b) => a.debut.getTime() - b.debut.getTime());
 }
 
+/** Identifiant public du client Wix (visiteur anonyme) : il est prévu pour être exposé. */
+const CLIENT_PUBLIC = '22902884-dd06-4ac4-92b3-33f9527fec21';
+
 const FORM_API = (id: string) => `https://www.wixapis.com/events/v1/events/${id}/form`;
-const BILLETS_API = 'https://www.wixapis.com/events/v1/events/ticketdefinitions/query';
 
 /**
  * Complète chaque session par deux informations que la requête principale ne
@@ -120,6 +125,36 @@ const BILLETS_API = 'https://www.wixapis.com/events/v1/events/ticketdefinitions/
  * défaut (ouverte, sans question supplémentaire) : mieux vaut un site complet
  * qu'un build interrompu parce qu'une session sur quarante n'a pas répondu.
  */
+/**
+ * Nombre de places encore réservables, ou null si l'information est
+ * indisponible. On interroge la billetterie avec le même jeton anonyme que le
+ * navigateur : c'est la seule source qui reflète l'état réel des ventes.
+ */
+let clientVisiteur: any = null;
+
+async function clientBilletterie() {
+  if (clientVisiteur) return clientVisiteur;
+  const { createClient, OAuthStrategy } = await import('@wix/sdk');
+  const ev = await import('@wix/events');
+  clientVisiteur = createClient({
+    modules: { orders: ev.orders },
+    auth: OAuthStrategy({ clientId: CLIENT_PUBLIC }),
+  });
+  return clientVisiteur;
+}
+
+async function placesRestantes(eventId: string): Promise<number | null> {
+  try {
+    const client = await clientBilletterie();
+    const r = await client.orders.listAvailableTickets({ eventId, limit: 20 });
+    const defs = r.definitions ?? [];
+    if (!defs.length) return 0;
+    return defs.reduce((n: number, d: any) => n + Number(d?.limitPerCheckout ?? 0), 0);
+  } catch {
+    return null;
+  }
+}
+
 async function enrichir(sessions: Session[], cle: string, site: string) {
   const entetes = { Authorization: cle, 'wix-site-id': site, 'Content-Type': 'application/json' };
 
@@ -144,6 +179,12 @@ async function enrichir(sessions: Session[], cle: string, site: string) {
             });
           }
         }
+        // Places réellement vendables, vues comme le voit un visiteur. Wix
+        // laisse « registration.status » à OPEN_TICKETS même quand tout est
+        // vendu : sans cette vérification, le visiteur remplit tout le
+        // formulaire pour se voir refuser au moment de payer.
+        const dispo = await placesRestantes(s.id);
+        if (dispo !== null) s.complet = dispo === 0;
       } catch { /* session laissée telle quelle */ }
     }));
   }
@@ -203,6 +244,7 @@ export async function sessionsAVenir(): Promise<Session[]> {
             ? e.eventPageUrl.base + e.eventPageUrl.path
             : null,
           source: e.title ?? '',
+          slug: e.slug ?? '',
           complet: false,
           champs: [],
         };

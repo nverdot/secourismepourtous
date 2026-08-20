@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@wix/events": "^1.0.851",
+    "@wix/redirects": "^1.0.125",
     "@wix/sdk": "^1.21.16",
     "astro": "^5.6.1"
   }

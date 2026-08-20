@@ -67,6 +67,7 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
         <li data-mois={cleMois(s.debut)}>
           <button type="button" class="pdate" data-inscription
                   data-event-id={s.id}
+                  data-slug={s.slug}
                   data-champs={JSON.stringify(s.champs ?? [])}
                   data-masquer={JSON.stringify(masques)}
                   data-url={s.urlInscription ?? ''}

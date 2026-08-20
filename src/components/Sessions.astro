@@ -37,6 +37,7 @@ const reste = sessions.length - visibles.length;
             <li>
               <button type="button" class="sess" data-inscription
                       data-event-id={s.id}
+                  data-slug={s.slug}
                   data-champs={JSON.stringify(s.champs ?? [])}
                   data-masquer={JSON.stringify(masques)}
                       data-url={s.urlInscription ?? ''}
