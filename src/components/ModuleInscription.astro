@@ -97,7 +97,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
         return `
         <fieldset class="part" data-i="${i}">
           <legend>
-            ${n > 1 ? `<span class="part__n">${i + 1}</span>Participant ${i + 1}` : `<span class="part__n">1</span>Vos coordonnées`}
+            ${n > 1 ? `<span class="part__n">${i + 1}</span><span>Participant ${i + 1}</span>` : `<span class="part__n">1</span><span>Vos coordonnées</span>`}
           </legend>
           <div class="frm__duo">
             <label>Prénom *<input type="text" data-c="prenom" autocomplete="given-name" value="${v.prenom}" required></label>
@@ -298,7 +298,8 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
   })();
 </script>
 
-<style>
+<style is:global>
+  /* Volontairement global : voir la note du script. */
   .ins {
     border: 0; padding: 0;
     border-radius: var(--r-lg);
@@ -321,6 +322,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
   .ins__x:hover { opacity: 1; }
   .ins__x svg { width: 20px; height: 20px; }
 
+  .ins [hidden] { display: none !important; }
   .ins__corps { padding: 1.3rem; min-height: 120px; }
   .ins__session {
     font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem;
@@ -343,11 +345,12 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
   }
   .bil + .bil { margin-top: .6rem; }
   .bil__txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
-  .bil__txt strong { font-family: 'Archivo', sans-serif; font-size: .98rem; }
-  .bil__txt span { font-size: .82rem; color: var(--ink-mute); }
+  .bil__txt strong { display: block; font-family: 'Archivo', sans-serif; font-size: .98rem; }
+  .bil__txt span { display: block; font-size: .82rem; color: var(--ink-mute); }
   .bil__txt em {
-    font-style: normal; font-family: 'Archivo', sans-serif; font-weight: 700;
-    color: var(--accent); margin-top: .25rem;
+    display: block; font-style: normal;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1.05rem;
+    color: var(--accent); margin-top: .3rem;
   }
 
   .bil__qte { display: flex; align-items: center; gap: .35rem; flex: none; }
