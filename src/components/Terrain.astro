@@ -1,0 +1,126 @@
+---
+import { asso } from '../data/association';
+
+/**
+ * Ce qui distingue l'association d'un organisme de formation.
+ *
+ * L'argument n'est pas décoratif : il est vérifiable. Les mêmes personnes
+ * tiennent les postes de secours et animent les formations. Un stagiaire qui
+ * apprend l'immobilisation l'apprend de quelqu'un qui l'a pratiquée le week-end
+ * précédent, sur une vraie victime, dans un vrai dispositif.
+ *
+ * On l'énonce donc en positif, chiffres à l'appui, sans jamais nommer ni viser
+ * un concurrent : une comparaison sur son propre site se retourne toujours
+ * contre celui qui la fait, et elle vieillit mal.
+ *
+ * Les chiffres proviennent de src/data/association.ts — jamais recopiés ici,
+ * pour qu'ils restent vrais partout le jour où ils changent.
+ */
+
+interface Props {
+  /** Sur fond clair par défaut ; `sombre` pour un fond bleu. */
+  sombre?: boolean;
+  titre?: string;
+}
+const {
+  sombre = false,
+  titre = 'Nos formateurs sont des secouristes en activité',
+} = Astro.props;
+
+const dispositifs = asso.chiffres.find((c) => c.label.includes('dispositifs'));
+const secouristes = asso.chiffres.find((c) => c.label.includes('secouristes'));
+
+const preuves = [
+  {
+    titre: 'Ils enseignent ce qu’ils pratiquent',
+    texte:
+      'Nos formateurs tiennent les postes de secours entre deux sessions. Les gestes qu’ils vous montrent, ils les ont faits — pas lus.',
+    icone: 'main',
+  },
+  {
+    titre: `${dispositifs?.valeur ?? '270'}${dispositifs?.suffixe ?? '+'} dispositifs par an`,
+    texte:
+      'UTMB, Ironman, Tour de France, concerts, marchés de Noël : le terrain alimente en permanence nos exemples de formation.',
+    icone: 'terrain',
+  },
+  {
+    titre: 'Une association, pas un centre de formation',
+    texte:
+      `Créée en ${asso.fondation}, agréée sécurité civile, elle porte secours d’abord. La formation prolonge cette mission, elle ne la remplace pas.`,
+    icone: 'coeur',
+  },
+  {
+    titre: `${secouristes?.valeur ?? '70'}${secouristes?.suffixe ?? '+'} secouristes dans nos rangs`,
+    texte:
+      'Vous formez avec l’équipe que vous pouvez rejoindre ensuite. Beaucoup de nos bénévoles ont commencé comme stagiaires.',
+    icone: 'equipe',
+  },
+];
+
+const CHEMINS = {
+  main: 'M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15',
+  terrain: 'M3 20h18M5 20V9l7-5 7 5v11M10 20v-5h4v5',
+  coeur: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z',
+  equipe: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+};
+---
+
+<section class:list={['ter', { 'ter--sombre': sombre }]} aria-labelledby="t-ter">
+  <p class="eyebrow">Ce qui nous distingue</p>
+  <h2 class="h-section" id="t-ter">{titre}</h2>
+  <p class="lede">
+    Nous sommes une association de secours qui forme, pas un organisme de
+    formation qui parle de secours. La nuance se voit dès la première mise en
+    situation.
+  </p>
+
+  <div class="ter__l">
+    {preuves.map((p) => (
+      <article class="pr">
+        <span class="pr__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d={CHEMINS[p.icone]} />
+          </svg>
+        </span>
+        <h3>{p.titre}</h3>
+        <p>{p.texte}</p>
+      </article>
+    ))}
+  </div>
+
+  <div class="ter__liens">
+    <a class="btn btn--sobre" href="/postes-de-secours">Voir nos dispositifs de secours</a>
+    <a class="btn btn--sobre" href="/qui-sommes-nous">Rencontrer l’équipe</a>
+  </div>
+</section>
+
+<style>
+  .ter { padding-block: clamp(2rem, 5vw, 3rem); }
+
+  .ter__l {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .pr {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
+  }
+  .pr__ic {
+    display: grid; place-items: center;
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--secours); color: #fff; margin-bottom: .85rem;
+  }
+  .pr__ic svg { width: 21px; height: 21px; }
+  .pr h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: .4rem; }
+  .pr p { font-size: .92rem; color: var(--ink-soft); }
+
+  .ter__liens { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.75rem; }
+  .ter__liens .btn { font-size: .92rem; padding: .7rem 1.15rem; }
+
+  /* Sur fond bleu, les cartes s'inversent. */
+  .ter--sombre .pr {
+    background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16);
+  }
+  .ter--sombre .pr h3 { color: #fff; }
+  .ter--sombre .pr p { color: var(--on-navy-text); }
+</style>

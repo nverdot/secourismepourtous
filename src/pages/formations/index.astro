@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Terrain from '../../components/Terrain.astro';
 import Faq from '../../components/Faq.astro';
 import { faqFormations } from '../../data/faq';
 import { questionsFrequentes } from '../../lib/schema';
@@ -70,6 +71,10 @@ const groupes = ordre
   </header>
 
   <CartesFilieres />
+
+  <section class="section section--sunk">
+    <div class="wrap"><Terrain /></div>
+  </section>
 
   <Indicateurs />
 

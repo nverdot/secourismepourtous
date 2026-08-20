@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Terrain from '../../components/Terrain.astro';
 import { coursFormation, filAriane } from '../../lib/schema';
 import Lieu from '../../components/Lieu.astro';
 import HeroFormation from '../../components/HeroFormation.astro';
@@ -68,6 +69,14 @@ const balisages = [
 
   <section class="section">
     <div class="wrap"><Documents /></div>
+  </section>
+
+  <!-- Fond bleu : les témoignages qui suivent sont déjà sur gris, et ce bloc
+       porte l'identité de l'association — il mérite d'être appuyé. -->
+  <section class="section section--navy">
+    <div class="wrap">
+      <Terrain titre={`Qui vous formera au ${f.sigle}`} sombre />
+    </div>
   </section>
 
   <Temoignages slug={f.slug} sigle={f.sigle} />
