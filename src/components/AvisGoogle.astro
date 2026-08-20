@@ -1,0 +1,92 @@
+---
+import { avisGoogle } from '../lib/avis-google';
+
+/**
+ * Avis Google.
+ *
+ * Les données sont lues au build (voir src/lib/avis-google.ts) : aucun script
+ * Google ne tourne chez le visiteur. Sans clé d'API, le bloc ne s'affiche pas
+ * du tout — les témoignages Qualiopi restent le socle de la preuve sociale.
+ */
+const fiche = await avisGoogle();
+
+const etoiles = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+---
+
+{fiche && (
+  <section class="avg" aria-labelledby="t-avg">
+    <div class="wrap">
+      <div class="avg__tete">
+        <div>
+          <p class="eyebrow">Avis Google</p>
+          <h2 class="h-section" id="t-avg">Ce qu’on dit de nous</h2>
+        </div>
+        <a class="avg__note" href={fiche.lienFiche} target="_blank" rel="noopener">
+          <span class="avg__chiffre">{fiche.note.toFixed(1).replace('.', ',')}</span>
+          <span class="avg__etoiles" aria-hidden="true">{etoiles(fiche.note)}</span>
+          <span class="avg__total">{fiche.total} avis sur Google</span>
+        </a>
+      </div>
+
+      <ul class="avg__l">
+        {fiche.avis.map((a) => (
+          <li class="avg__c">
+            <p class="avg__e" aria-label={`Note : ${a.note} sur 5`}>{etoiles(a.note)}</p>
+            <blockquote>{a.texte}</blockquote>
+            <p class="avg__a">
+              <strong>{a.auteur}</strong>
+              {a.quand && <span> · {a.quand}</span>}
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <p class="avg__pied">
+        Avis publiés sur Google, repris tels quels.
+        <a href={fiche.lienEcrire} target="_blank" rel="noopener">Laisser un avis</a>
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .avg { padding-block: clamp(2.5rem, 6vw, 4rem); }
+
+  .avg__tete {
+    display: flex; flex-wrap: wrap; gap: 1.25rem;
+    align-items: flex-end; justify-content: space-between;
+  }
+  .avg__note {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .1rem;
+    text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: .9rem 1.2rem;
+  }
+  .avg__note:hover { border-color: var(--secours); }
+  .avg__chiffre {
+    font-family: 'Archivo', sans-serif; font-size: 2rem; font-weight: 800;
+    line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .avg__etoiles { color: #f0a500; letter-spacing: .1em; font-size: 1rem; }
+  .avg__total { font-size: .82rem; color: var(--ink-mute); }
+
+  .avg__l {
+    list-style: none; margin: 2.5rem 0 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  }
+  .avg__c {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
+    display: flex; flex-direction: column; gap: .7rem;
+  }
+  .avg__e { color: #f0a500; letter-spacing: .1em; font-size: .95rem; }
+  .avg__c blockquote {
+    margin: 0; font-size: .94rem; color: var(--ink-soft); line-height: 1.65;
+  }
+  .avg__a { font-size: .86rem; color: var(--ink-mute); margin-top: auto; }
+  .avg__a strong { color: var(--ink); font-weight: 600; }
+
+  .avg__pied { margin-top: 1.5rem; font-size: .86rem; color: var(--ink-mute); }
+  .avg__pied a { color: var(--azur); margin-left: .4rem; }
+</style>

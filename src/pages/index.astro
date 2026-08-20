@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import AvisGoogle from '../components/AvisGoogle.astro';
 import { asso } from '../data/association';
 import { formations, filieres, type Filiere } from '../data/formations';
 import { sessionsAVenir } from '../lib/wix';
@@ -98,6 +99,8 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
       </div>
     </div>
   </section>
+
+  <AvisGoogle />
 
   <!-- ============ PARTENAIRES ============ -->
   <section class="section" aria-labelledby="t-partenaires">
