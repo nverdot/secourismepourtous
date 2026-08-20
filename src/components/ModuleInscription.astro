@@ -102,7 +102,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
             <label>Nom *<input type="text" data-c="nom" autocomplete="family-name" value="${v.nom}" required></label>
           </div>
           <label>E-mail *<input type="email" data-c="email" autocomplete="email" value="${v.email}" required></label>
-          <label>Téléphone<input type="tel" data-c="tel" autocomplete="tel" value="${v.tel}"></label>
+          <label>Téléphone *<input type="tel" data-c="tel" autocomplete="tel" value="${v.tel}" required></label>
         </fieldset>`;
       }).join('') + `
         <label class="frm__com">Un commentaire ?<textarea id="f-com" rows="2"></textarea></label>
@@ -128,6 +128,9 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
         if (!g.nom)    return { erreur: `Nom du participant ${i} manquant.`, cible: b.querySelector('[data-c=nom]') };
         const mail = b.querySelector('[data-c=email]');
         if (!g.email || !mail.checkValidity()) return { erreur: `E-mail du participant ${i} invalide.`, cible: mail };
+        // Wix refuse la commande sans téléphone : le champ est marqué obligatoire
+        // dans le formulaire de l'événement.
+        if (!g.tel) return { erreur: `Téléphone du participant ${i} manquant.`, cible: b.querySelector('[data-c=tel]') };
         guests.push(g);
       }
       return { guests };
@@ -234,8 +237,11 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
           reservationId: resa._id ?? resa.id,
           guests: lecture.guests.map((g) => ({
             form: {
+              // Wix attend le nom de chaque champ, pas celui du groupe :
+              // « firstName » et « lastName » séparément, pas « name ».
               inputValues: [
-                { inputName: 'name', value: '', values: [g.prenom, g.nom] },
+                { inputName: 'firstName', value: g.prenom },
+                { inputName: 'lastName', value: g.nom },
                 { inputName: 'email', value: g.email },
                 { inputName: 'phone', value: g.tel },
                 { inputName: 'comment', value: (document.getElementById('f-com')?.value ?? '').trim() },
@@ -243,7 +249,18 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
             },
           })),
         });
-        const url = ck?.order?.checkoutUrl ?? ck?.checkoutUrl ?? secours;
+        // L'URL de règlement n'est pas toujours au même endroit selon le type
+        // de commande : on la cherche dans la réponse avant de se rabattre
+        // sur la page Wix de l'événement.
+        const trouveUrl = (o, p = 0) => {
+          if (!o || p > 4) return null;
+          for (const v of Object.values(o)) {
+            if (typeof v === 'string' && /^https?:\/\//.test(v)) return v;
+            if (v && typeof v === 'object') { const r = trouveUrl(v, p + 1); if (r) return r; }
+          }
+          return null;
+        };
+        const url = ck?.order?.checkoutUrl ?? ck?.checkoutUrl ?? trouveUrl(ck) ?? secours;
         if (url) window.location.href = url;
         else afficheErreur("La page de paiement n'a pas pu être ouverte.");
       } catch (e) {
