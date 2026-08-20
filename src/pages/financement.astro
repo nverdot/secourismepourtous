@@ -229,7 +229,10 @@ const departements = [
           <div class="choix choix--duo">
             <label class="choix__o">
               <input type="radio" name="handicap" value="Non concerné(e)" />
-              <span><strong>Non, je ne suis pas concerné(e)</strong></span>
+              <span>
+                <strong>Non, je ne suis pas concerné(e)</strong>
+                <em>Aucun aménagement nécessaire</em>
+              </span>
             </label>
             <label class="choix__o">
               <input type="radio" name="handicap" value="Oui, en situation de handicap" />
@@ -375,17 +378,37 @@ const departements = [
   .choix--duo { grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr)); }
   .choix--duo .choix__o input { accent-color: var(--gold); }
   .choix--duo .choix__o:hover { border-color: var(--gold); }
-  .choix__o {
+  /* « .fm label » est plus spécifique que « .choix__o » : sans ce préfixe, les
+     réponses héritaient des petites capitales réservées aux intitulés. */
+  .fm .choix__o {
     flex-direction: row !important; align-items: flex-start; gap: .7rem;
     background: var(--sunk); border: 1px solid var(--line);
-    border-radius: var(--r-sm); padding: .8rem .95rem;
+    border-radius: var(--r-sm); padding: .85rem 1rem;
+    font-family: 'Public Sans', sans-serif; font-weight: 400;
     text-transform: none; letter-spacing: 0; cursor: pointer;
+    transition: border-color .15s, background-color .15s;
   }
-  .choix__o:hover { border-color: var(--secours); }
-  .choix__o input { width: 17px; height: 17px; flex: none; margin-top: .15rem; accent-color: var(--secours); }
-  .choix__o span { display: flex; flex-direction: column; }
-  .choix__o strong { font-family: 'Archivo', sans-serif; font-size: .95rem; color: var(--ink); }
-  .choix__o em { font-style: normal; font-size: .82rem; font-weight: 400; color: var(--ink-mute); }
+  .fm .choix__o:hover { border-color: var(--secours); }
+  .fm .choix__o:focus-within { border-color: var(--azur); }
+  .fm .choix__o input { width: 17px; height: 17px; flex: none; margin-top: .2rem; accent-color: var(--secours); }
+  .fm .choix__o span { display: flex; flex-direction: column; gap: .12rem; }
+  .fm .choix__o strong {
+    font-family: 'Archivo', sans-serif; font-size: .95rem; font-weight: 700;
+    letter-spacing: 0; text-transform: none; color: var(--ink);
+  }
+  .fm .choix__o em {
+    font-style: normal; font-size: .83rem; font-weight: 400;
+    letter-spacing: 0; text-transform: none; color: var(--ink-mute);
+  }
+  /* La réponse retenue se lit d'un coup d'œil. */
+  .fm .choix__o:has(input:checked) {
+    background: var(--surface); border-color: var(--secours);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--secours) 15%, transparent);
+  }
+  .fm .choix--duo .choix__o:has(input:checked) {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 20%, transparent);
+  }
 
   .case {
     flex-direction: row !important; align-items: flex-start; gap: .65rem;
