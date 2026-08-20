@@ -89,8 +89,11 @@ const cartes = ordre.map((cle) => ({
       {c.items.length > 0 ? (
         <div class="fdlg__grille">
           {c.items.map((f) => (
-            <article class="fitem">
-              <h3>{f.sigle} <span>{f.intitule}</span></h3>
+            <article class:list={['fitem', { 'fitem--off': !!f.suspendue }]}>
+              <h3>
+                {f.sigle} <span>{f.intitule}</span>
+                {f.suspendue && <em class="fitem__off">Indisponible</em>}
+              </h3>
               <p>{f.resume}</p>
               <div class="fitem__actions">
                 <a class="fitem__b fitem__b--plein" href={`/formations/${f.slug}`}>
@@ -242,6 +245,14 @@ const cartes = ordre.map((cle) => ({
   .fitem { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-md); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; }
   .fitem h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .3rem; }
   .fitem h3 span { display: block; font-size: .82rem; font-weight: 500; color: var(--ink-mute); }
+  .fitem--off { opacity: .72; }
+  .fitem__off {
+    display: inline-block; margin-top: .3rem;
+    font-style: normal; font-size: .68rem; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase;
+    background: var(--gold-wash); color: var(--gold);
+    border-radius: var(--r-pill); padding: .15rem .55rem;
+  }
   .fitem p { font-size: .88rem; color: var(--ink-soft); margin-bottom: 1rem; }
   .fitem__actions { margin-top: auto; display: flex; flex-direction: column; gap: .45rem; }
 

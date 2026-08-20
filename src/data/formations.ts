@@ -66,6 +66,13 @@ export interface Formation {
   /** true pour les formations continues elles-mêmes, exclues des cartes filière. */
   estRecyclage?: boolean;
 
+  /**
+   * Formation temporairement suspendue. La page reste en ligne — retirer une
+   * URL référencée coûte plus cher que de l'annoter — mais les sessions et
+   * l'inscription sont masquées, et un bandeau l'annonce.
+   */
+  suspendue?: { raison: string };
+
   seo: { title: string; description: string };
 }
 
@@ -350,6 +357,7 @@ export const formations: Formation[] = [
     ],
     suites: ['Formation continue BNSSA tous les 5 ans', 'Le BSB pour les accueils collectifs de mineurs'],
     image: '/img/filiere-aquatique.jpg',
+    suspendue: { raison: "Le BNSSA n'est pas proposé actuellement. Nous ouvrirons prochainement la formation SSA (Surveillant Sauveteur Aquatique) : contactez-nous pour être prévenu de l'ouverture des inscriptions." },
     wixEvent: 'BNSSA',
     recyclage: 'fc-bnssa',
     seo: {
@@ -551,6 +559,7 @@ export const formations: Formation[] = [
     ],
     suites: ['Le BSB pour encadrer en accueil collectif de mineurs'],
     image: '/img/sauvetage-bassin.jpg',
+    suspendue: { raison: "Le recyclage BNSSA n'est pas proposé actuellement. Contactez-nous pour connaître les prochaines sessions." },
     wixEvent: 'FC BNSSA - Recyclage',
     seo: {
       title: 'Recyclage BNSSA à Nice | Formation continue',
