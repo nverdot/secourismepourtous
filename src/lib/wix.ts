@@ -1,22 +1,23 @@
 /**
- * Lecture des sessions de formation depuis Wix Events & Tickets.
+ * Sessions de formation.
  *
- * Les formations de SPT ne sont PAS dans Wix Bookings (qui ne contient que le
- * DPS) : elles sont gérées comme des événements en billetterie. C'est donc
- * l'API Events qu'on interroge.
+ * Les formations de SPT ne sont pas dans Wix Bookings (qui ne contient que le
+ * DPS) : elles sont gérées comme des événements en billetterie.
  *
- * Le site étant généré en statique, cet appel a lieu au BUILD, pas chez le
- * visiteur : les dates sont figées dans le HTML livré. Concrètement, il faut
- * relancer un build quand le planning change (voir README).
- * Aucune clé n'est exposée côté navigateur.
+ * Ce module ne parle PAS à Wix. Il lit l'instantané versionné dans le dépôt,
+ * régénéré par `node scripts/rafraichir-sessions.mjs` — depuis un poste de
+ * travail, ou par l'action GitHub nocturne qui détient la clé en secret de
+ * dépôt.
  *
- * CONFIGURATION
- *   WIX_API_KEY  clé API du compte Wix (Paramètres > Clés API)
- *   WIX_SITE_ID  c76f219b-29ee-4805-aae5-8f78da0f719f
+ * Pourquoi : tant que la lecture se faisait pendant la construction du site,
+ * l'hébergeur devait détenir la clé d'administration Wix. Un réglage manqué
+ * chez l'hébergeur faisait alors retomber le site sur des données périmées,
+ * silencieusement — les dates s'affichaient, mais sans les identifiants
+ * nécessaires au paiement. Le build ne peut plus mentir : ce qui est dans le
+ * dépôt est ce qui est publié.
  *
- * Sans ces variables, le module renvoie une liste vide et le site se construit
- * quand même : les pages affichent alors une invitation à nous contacter,
- * plutôt qu'un plantage du build.
+ * Conséquence à connaître : modifier le planning dans Wix ne change rien au
+ * site tant que l'instantané n'a pas été régénéré.
  */
 
 export interface Session {
@@ -85,17 +86,33 @@ export const estWeekEnd = (d: Date) => d.getDay() === 0 || d.getDay() === 6;
 const API = 'https://www.wixapis.com/events/v3/events/query';
 
 /**
- * Instantané des sessions réelles, pris le 20 août 2026 sur le site Wix.
- * Sert uniquement à faire tourner la maquette avant la création de la clé API :
- * ces dates se périment. Dès que WIX_API_KEY est renseignée, l'appel réel prend
- * le dessus et ce fichier n'est plus lu.
+ * Instantané des sessions, régénéré par scripts/rafraichir-sessions.mjs.
+ * C'est la SEULE source de dates du site : il n'y a plus de chemin parallèle
+ * qui pourrait diverger.
  */
 import cache from '../data/sessions-cache.json';
 
-function depuisCache(): Session[] {
+/** Identifiant public du client Wix (visiteur anonyme) : il est prévu pour être exposé. */
+const CLIENT_PUBLIC = '22902884-dd06-4ac4-92b3-33f9527fec21';
+
+/**
+ * Sessions à venir, lues dans l'instantané versionné du dépôt.
+ *
+ * Le site n'appelle plus Wix pendant sa construction. L'instantané
+ * (src/data/sessions-cache.json) est régénéré par
+ * `node scripts/rafraichir-sessions.mjs`, exécuté depuis un poste de travail ou
+ * par l'action GitHub nocturne.
+ *
+ * Ce choix vient d'un incident : tant que la lecture se faisait au build,
+ * l'hébergeur devait détenir la clé d'administration Wix, et un réglage manqué
+ * faisait retomber le site sur des données périmées — sans le moindre signal.
+ * Désormais le build ne peut plus mentir : ce qui est dans le dépôt est ce qui
+ * est publié, et rafraîchir les dates est un geste explicite.
+ */
+export function sessionsAVenir(): Promise<Session[]> {
   const maintenant = new Date();
-  return (cache as any[])
-    .map((e) => ({
+  const sessions = (cache as any[])
+    .map((e): Session => ({
       id: e.id,
       titre: e.titre,
       debut: new Date(e.debut),
@@ -104,185 +121,14 @@ function depuisCache(): Session[] {
       urlInscription: e.url ?? null,
       source: e.titre,
       slug: e.slug ?? '',
-      complet: false,
-      champs: [],
+      complet: Boolean(e.complet),
+      champs: e.champs ?? [],
     }))
     .filter((s) => s.debut > maintenant)
     .sort((a, b) => a.debut.getTime() - b.debut.getTime());
+  return Promise.resolve(sessions);
 }
 
-/** Identifiant public du client Wix (visiteur anonyme) : il est prévu pour être exposé. */
-const CLIENT_PUBLIC = '22902884-dd06-4ac4-92b3-33f9527fec21';
-
-const FORM_API = (id: string) => `https://www.wixapis.com/events/v1/events/${id}/form`;
-
-/**
- * Complète chaque session par deux informations que la requête principale ne
- * donne pas : les places encore vendables et les questions propres à
- * l'événement. Un appel par session, au build uniquement.
- *
- * Toute défaillance est silencieuse et laisse la session dans son état par
- * défaut (ouverte, sans question supplémentaire) : mieux vaut un site complet
- * qu'un build interrompu parce qu'une session sur quarante n'a pas répondu.
- */
-/**
- * Nombre de places encore réservables, ou null si l'information est
- * indisponible. On interroge la billetterie avec le même jeton anonyme que le
- * navigateur : c'est la seule source qui reflète l'état réel des ventes.
- */
-let clientVisiteur: any = null;
-
-async function clientBilletterie() {
-  if (clientVisiteur) return clientVisiteur;
-  const { createClient, OAuthStrategy } = await import('@wix/sdk');
-  const ev = await import('@wix/events');
-  clientVisiteur = createClient({
-    modules: { orders: ev.orders },
-    auth: OAuthStrategy({ clientId: CLIENT_PUBLIC }),
-  });
-  return clientVisiteur;
-}
-
-async function placesRestantes(eventId: string): Promise<number | null> {
-  try {
-    const client = await clientBilletterie();
-    const r = await client.orders.listAvailableTickets({ eventId, limit: 20 });
-    const defs = r.definitions ?? [];
-    if (!defs.length) return 0;
-    return defs.reduce((n: number, d: any) => n + Number(d?.limitPerCheckout ?? 0), 0);
-  } catch {
-    return null;
-  }
-}
-
-async function enrichir(sessions: Session[], cle: string, site: string) {
-  const entetes = { Authorization: cle, 'wix-site-id': site, 'Content-Type': 'application/json' };
-
-  // Par paquets, pour ne pas ouvrir quarante connexions d'un coup.
-  const PAQUET = 6;
-  for (let i = 0; i < sessions.length; i += PAQUET) {
-    await Promise.all(sessions.slice(i, i + PAQUET).map(async (s) => {
-      try {
-        const r = await fetch(FORM_API(s.id), { headers: entetes });
-        if (!r.ok) return;
-        const d = await r.json();
-        for (const c of d?.form?.controls ?? []) {
-          for (const e of c?.inputs ?? []) {
-            if (CHAMPS_STANDARDS.has(e?.name)) continue;
-            s.champs.push({
-              nom: e.name,
-              libelle: e.label ?? c.label ?? '',
-              genre: c.type === 'DROPDOWN' || (e.options ?? []).length ? 'LISTE'
-                   : c.type === 'TEXTAREA' ? 'PARAGRAPHE' : 'TEXTE',
-              options: e.options ?? [],
-              obligatoire: Boolean(e.mandatory),
-            });
-          }
-        }
-        // Places réellement vendables, vues comme le voit un visiteur. Wix
-        // laisse « registration.status » à OPEN_TICKETS même quand tout est
-        // vendu : sans cette vérification, le visiteur remplit tout le
-        // formulaire pour se voir refuser au moment de payer.
-        const dispo = await placesRestantes(s.id);
-        if (dispo !== null) s.complet = dispo === 0;
-      } catch { /* session laissée telle quelle */ }
-    }));
-  }
-}
-
-/**
- * Résultat mémorisé pour la durée du build.
- *
- * Chaque page qui affiche des dates appelait l'API : avec l'enrichissement
- * (un formulaire et une disponibilité par session), cela multipliait des
- * centaines d'appels et faisait exploser la durée du build. Le planning ne
- * change pas entre deux pages d'un même build : une lecture suffit.
- */
-let enCache: Promise<Session[]> | null = null;
-
-/** Récupère toutes les sessions à venir, tous types de formation confondus. */
-export function sessionsAVenir(): Promise<Session[]> {
-  if (!enCache) enCache = lisSessions();
-  return enCache;
-}
-
-async function lisSessions(): Promise<Session[]> {
-  const cle = import.meta.env.WIX_API_KEY;
-  const site = import.meta.env.WIX_SITE_ID;
-
-  if (!cle || !site) {
-    console.warn('[wix] pas de clé API — repli sur le cache local des sessions.');
-    return depuisCache();
-  }
-
-  try {
-    const reponse = await fetch(API, {
-      method: 'POST',
-      headers: {
-        Authorization: cle,
-        'wix-site-id': site,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: {
-          filter: { status: { $eq: 'UPCOMING' } },
-          sort: [{ fieldName: 'dateAndTimeSettings.startDate', order: 'ASC' }],
-          paging: { limit: 100 },
-        },
-      }),
-    });
-
-    if (!reponse.ok) {
-      console.warn(`[wix] réponse ${reponse.status} — site construit sans les dates.`);
-      return [];
-    }
-
-    const data = await reponse.json();
-    const sessions: Session[] = (data.events ?? [])
-      .map((e: any): Session | null => {
-        const brut = e?.dateAndTimeSettings?.startDate;
-        if (!brut) return null;
-        const debut = new Date(brut);
-        if (Number.isNaN(debut.getTime())) return null;
-        const brutFin = e?.dateAndTimeSettings?.endDate;
-        const fin = brutFin ? new Date(brutFin) : null;
-        return {
-          id: e.id,
-          titre: e.title ?? '',
-          debut,
-          fin: fin && !Number.isNaN(fin.getTime()) ? fin : null,
-          lieu: e?.location?.name ?? null,
-          // Wix renvoie l'URL en deux morceaux : `base` est la racine du site
-          // et `path` la page de l'événement. Utiliser `base` seul renvoie le
-          // visiteur sur l'accueil au lieu du formulaire d'inscription.
-          urlInscription: e?.eventPageUrl?.base && e?.eventPageUrl?.path
-            ? e.eventPageUrl.base + e.eventPageUrl.path
-            : null,
-          source: e.title ?? '',
-          slug: e.slug ?? '',
-          complet: false,
-          champs: [],
-        };
-      })
-      .filter((s: Session | null): s is Session => s !== null)
-      .sort((a: Session, b: Session) => a.debut.getTime() - b.debut.getTime());
-
-    await enrichir(sessions, cle, site);
-    return sessions;
-  } catch (err) {
-    console.warn('[wix] appel impossible, site construit sans les dates :', err);
-    return [];
-  }
-}
-
-/**
- * Rattache les sessions à une formation.
- *
- * Les titres côté Wix ne sont pas normalisés (« PSE1 - Formation »,
- * « FC BNSSA - Recyclage »…), d'où une comparaison sur une forme simplifiée.
- * Le préfixe « FC » est significatif : sans cette distinction, les sessions de
- * recyclage se retrouveraient sur la page de la formation initiale.
- */
 export function sessionsDe(toutes: Session[], titreWix: string): Session[] {
   const norm = (s: string) =>
     s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();

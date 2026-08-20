@@ -1,37 +1,66 @@
-# Régénération programmée du site.
+# Régénération quotidienne de l'instantané des sessions.
 #
-# Les dates de formation sont lues chez Wix au moment du build : sans
-# régénération, un planning modifié dans Wix n'apparaîtrait jamais en ligne.
-# Ce déclencheur appelle le « build hook » Netlify, qui relance la construction.
+# Le site ne parle pas à Wix : il lit src/data/sessions-cache.json, versionné
+# dans ce dépôt. Cette action régénère ce fichier chaque nuit et le committe.
+# Le commit déclenche à son tour la reconstruction chez l'hébergeur, quel qu'il
+# soit — aucun secret n'est nécessaire de son côté.
 #
 # CONFIGURATION (une seule fois) :
-#   1. Netlify > Site configuration > Build & deploy > Build hooks
-#      > Add build hook > nom « rafraichir-dates » > copier l'URL
-#   2. GitHub > ce dépôt > Settings > Secrets and variables > Actions
-#      > New repository secret
-#      > nom : NETLIFY_BUILD_HOOK   valeur : l'URL copiée
+#   GitHub > ce dépôt > Settings > Secrets and variables > Actions
+#     > New repository secret
+#       nom : WIX_API_KEY   valeur : la clé API Wix (elle reste ici, chiffrée)
+#       nom : WIX_SITE_ID   valeur : c76f219b-29ee-4805-aae5-8f78da0f719f
 
 name: Rafraîchir les dates de formation
 
 on:
   schedule:
-    # Tous les jours à 5h00 UTC, soit 7h00 à Paris en été.
-    # Le planning du jour est ainsi à jour avant l'ouverture.
+    # Tous les jours à 5h00 UTC, soit 7h00 à Paris en été :
+    # le planning du jour est à jour avant l'ouverture.
     - cron: '0 5 * * *'
   # Permet aussi de déclencher à la main depuis l'onglet Actions,
   # juste après avoir ajouté une session dans Wix.
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  rebuild:
+  rafraichir:
     runs-on: ubuntu-latest
     steps:
-      - name: Déclencher la reconstruction Netlify
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Lire les sessions chez Wix
+        env:
+          WIX_API_KEY: ${{ secrets.WIX_API_KEY }}
+          WIX_SITE_ID: ${{ secrets.WIX_SITE_ID }}
         run: |
-          if [ -z "${{ secrets.NETLIFY_BUILD_HOOK }}" ]; then
-            echo "::error::Le secret NETLIFY_BUILD_HOOK n'est pas configuré."
+          if [ -z "$WIX_API_KEY" ]; then
+            echo "::error::Le secret WIX_API_KEY n'est pas configuré."
             exit 1
           fi
-          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d '{}' "${{ secrets.NETLIFY_BUILD_HOOK }}")
-          echo "Netlify a répondu : HTTP $code"
-          [ "$code" = "200" ] || [ "$code" = "204" ]
+          node scripts/rafraichir-sessions.mjs
+
+      - name: Vérifier que le site se construit avec ces données
+        run: npm run build
+
+      - name: Committer si le planning a changé
+        run: |
+          if git diff --quiet -- src/data/sessions-cache.json; then
+            echo "Aucun changement de planning."
+            exit 0
+          fi
+          git config user.name  "Rafraîchissement automatique"
+          git config user.email "actions@github.com"
+          git add src/data/sessions-cache.json
+          git commit -m "Dates: rafraîchissement automatique du planning"
+          git push

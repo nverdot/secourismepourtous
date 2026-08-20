@@ -1,38 +1,794 @@
 [
-{"id":"af01291b","titre":"PSC - Formation","debut":"2026-09-06T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"125a1fee","titre":"FC BNSSA - Recyclage","debut":"2026-09-08T18:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"acd85a7a","titre":"BNSSA","debut":"2026-09-08T18:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"47bd88ab","titre":"PSE1 - Formation","debut":"2026-09-19T06:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"e41ff76e","titre":"PSC - Formation","debut":"2026-09-26T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"0e863ce8","titre":"PSC - Formation","debut":"2026-10-04T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"96d45598","titre":"FC PSE1 - Formation","debut":"2026-10-10T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"eee576e2","titre":"PSE2 - Formation","debut":"2026-10-10T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"b62e575f","titre":"FC PSE2 - Formation","debut":"2026-10-17T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"6b4344e2","titre":"PSE1 - Formation","debut":"2026-10-19T06:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"d1dbeeb7","titre":"PSC - Formation","debut":"2026-10-24T07:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"43d31a6b","titre":"PSE1 - Formation","debut":"2026-11-07T07:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"36a81a16","titre":"FC BNSSA - Recyclage","debut":"2026-11-17T19:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"af52f442","titre":"BNSSA","debut":"2026-11-17T19:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"2791ce85","titre":"FC PSE1 - Formation","debut":"2026-11-21T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"eb7be6d8","titre":"FC PSE2 - Formation","debut":"2026-11-21T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"6b20717a","titre":"PSE1 - Formation","debut":"2026-11-28T08:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"046370de","titre":"PSE2 - Formation","debut":"2026-12-12T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"e4d057f8","titre":"FC PSE1 - Formation","debut":"2026-12-12T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"d246de95","titre":"FC PSE2 - Formation","debut":"2026-12-19T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"56dea5b6","titre":"FC PSE2 - Formation","debut":"2027-01-09T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"92723e3f","titre":"FC PSE1 - Formation","debut":"2027-01-09T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"a24a104c","titre":"PSC - Formation","debut":"2027-01-16T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"2bb12cab","titre":"FC BNSSA - Recyclage","debut":"2027-01-19T19:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"3c533b4b","titre":"BNSSA","debut":"2027-01-19T19:30:00Z","lieu":"Piscine Jean Médecin"},
-{"id":"af6d1819","titre":"PSE1 - Formation","debut":"2027-01-23T07:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"59f37c49","titre":"FC PSE1 - Formation","debut":"2027-02-06T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"f397d783","titre":"PSC - Formation","debut":"2027-02-07T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"7310cfa3","titre":"PSE2 - Formation","debut":"2027-02-13T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"a84e5475","titre":"FC PSE2 - Formation","debut":"2027-02-13T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"85f851a9","titre":"PSC - Formation","debut":"2027-02-20T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"4fd59a90","titre":"PSE1 - Formation","debut":"2027-02-22T07:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"d37ab72b","titre":"PSC - Formation","debut":"2027-03-06T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"66840a80","titre":"FC PSE2 - Formation","debut":"2027-03-20T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"89cba4fb","titre":"FC PSE1 - Formation","debut":"2027-03-20T08:00:00Z","lieu":"31 Boulevard Impératrice Eugénie"},
-{"id":"e4b0ae49","titre":"PSE1 - Formation","debut":"2027-03-27T07:30:00Z","lieu":"31 Boulevard Impératrice Eugénie"}
+  {
+    "id": "af01291b-0151-446d-87bd-94766d8f8956",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-21",
+    "debut": "2026-09-06T07:00:00Z",
+    "fin": "2026-09-06T15:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-21",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-e187b3df8226db37",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "125a1fee-8006-423f-806d-4cf686413563",
+    "titre": "FC BNSSA - Recyclage",
+    "slug": "fc-bnssa-recyclage",
+    "debut": "2026-09-08T18:30:00Z",
+    "fin": "2026-11-12T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/fc-bnssa-recyclage",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-8295a4c4095bf27f",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "acd85a7a-2380-45c4-855f-0332906a41a3",
+    "titre": "BNSSA",
+    "slug": "bnssa",
+    "debut": "2026-09-08T18:30:00Z",
+    "fin": "2026-11-12T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/bnssa",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-20a8b475b099d0db",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "47bd88ab-fcea-4441-bc9c-58502e84c716",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-20",
+    "debut": "2026-09-19T06:30:00Z",
+    "fin": "2026-09-27T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-20",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-5a7efa43e581f4e7",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "e41ff76e-38f6-4268-8bed-e0bfaf5c12d6",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-22",
+    "debut": "2026-09-26T07:00:00Z",
+    "fin": "2026-09-26T15:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-22",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-34900572742beac4",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "0e863ce8-3960-43a2-a271-571ae584aaa6",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-23",
+    "debut": "2026-10-04T07:00:00Z",
+    "fin": "2026-10-04T15:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-23",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-50af34299949036c",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "96d45598-a16d-4dd2-abb8-ebc3c8e52add",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-23",
+    "debut": "2026-10-10T07:00:00Z",
+    "fin": "2026-10-10T15:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-23",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-65e2be58655add0e",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "eee576e2-d428-49a5-8c42-1fe6396a8b08",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-14",
+    "debut": "2026-10-10T07:00:00Z",
+    "fin": "2026-10-11T15:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse2-formation-14",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-c06fb1316c427242",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "b62e575f-598f-4b23-8167-e1f1594c3e89",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-19",
+    "debut": "2026-10-17T07:00:00Z",
+    "fin": "2026-10-17T15:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-19",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-0a877822ffec855b",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "6b4344e2-d561-4ebf-a7b8-add7263b4c18",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-21",
+    "debut": "2026-10-19T06:30:00Z",
+    "fin": "2026-10-22T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-21",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-601edcf154e8951e",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "d1dbeeb7-20fc-4a6d-ab9b-69a35c901025",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-24",
+    "debut": "2026-10-24T07:00:00Z",
+    "fin": "2026-10-24T15:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-24",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-22e23c935703b1ca",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "43d31a6b-6702-4787-b029-03bfc0a951f2",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-22",
+    "debut": "2026-11-07T07:30:00Z",
+    "fin": "2026-11-08T17:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-22",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-969aa02fe39ee338",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "36a81a16-14a4-469b-b239-4b0be00dae69",
+    "titre": "FC BNSSA - Recyclage",
+    "slug": "fc-bnssa-recyclage-2",
+    "debut": "2026-11-17T19:30:00Z",
+    "fin": "2027-01-14T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/fc-bnssa-recyclage-2",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7fef3fca1e0938af",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "af52f442-d74c-4f17-8452-31b41765f4ab",
+    "titre": "BNSSA",
+    "slug": "bnssa-2",
+    "debut": "2026-11-17T19:30:00Z",
+    "fin": "2027-01-14T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/bnssa-2",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-81bf4f9721a9c0a9",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "eb7be6d8-dc03-47ba-a975-212bf0f17a03",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-20",
+    "debut": "2026-11-21T08:00:00Z",
+    "fin": "2026-11-21T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-20",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-34beb5478acf4f67",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "2791ce85-d666-4afc-85ee-3a3e71f33d5b",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-24",
+    "debut": "2026-11-21T08:00:00Z",
+    "fin": "2026-11-21T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-24",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-d923668b3bac9ca8",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "6b20717a-0df8-4d90-8bab-a89cce63b1a3",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-23",
+    "debut": "2026-11-28T08:30:00Z",
+    "fin": "2026-11-29T17:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-23",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-d923ba23007aadf1",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "046370de-354f-49eb-8d92-5267ce07a9f8",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-15",
+    "debut": "2026-12-12T08:00:00Z",
+    "fin": "2026-12-13T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse2-formation-15",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-4d0c2789b5e5c402",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "e4d057f8-e8a7-4041-b794-bbe46c3b5f7b",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-25",
+    "debut": "2026-12-12T08:00:00Z",
+    "fin": "2026-12-12T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-25",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-4b47e48cfd95b95c",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "d246de95-b8eb-4116-8d93-31f8726f5c09",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-21",
+    "debut": "2026-12-19T08:00:00Z",
+    "fin": "2026-12-19T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-21",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-4ca4125e805f1df6",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-26",
+    "debut": "2027-01-09T08:00:00Z",
+    "fin": "2027-01-09T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7892ed38993536b8",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "56dea5b6-dc4c-4584-a2f9-d127da5793fe",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-22",
+    "debut": "2027-01-09T08:00:00Z",
+    "fin": "2027-01-09T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-22",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-ceffd922ff194831",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "a24a104c-64b0-48a8-aea5-b3ecab90cbab",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-25",
+    "debut": "2027-01-16T08:00:00Z",
+    "fin": "2027-01-16T16:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-25",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-2585a3cdecd63fe0",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "2bb12cab-2ff0-4c90-9a18-5999566c0482",
+    "titre": "FC BNSSA - Recyclage",
+    "slug": "fc-bnssa-recyclage-3",
+    "debut": "2027-01-19T19:30:00Z",
+    "fin": "2027-03-18T20:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/fc-bnssa-recyclage-3",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-0a6b9cc08e1a031e",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "3c533b4b-4d14-4314-ac88-c13e6cc3d4d7",
+    "titre": "BNSSA",
+    "slug": "bnssa-3",
+    "debut": "2027-01-19T19:30:00Z",
+    "fin": "2027-03-18T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://www.secourismepourtous.org/event-details/bnssa-3",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-150e03b373e8ac49",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "af6d1819-4d5a-41fc-8deb-5ccd3dbdc28c",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-24",
+    "debut": "2027-01-23T07:30:00Z",
+    "fin": "2027-01-24T15:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-24",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-51c8c674a6607ff6",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "59f37c49-92fe-46db-acab-9a700f9f3f88",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-27",
+    "debut": "2027-02-06T08:00:00Z",
+    "fin": "2027-02-06T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-27",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-bd1bb2cc9c0ccc5e",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "f397d783-5f4c-4e9f-9c0e-6d5acd7db396",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-26",
+    "debut": "2027-02-07T08:00:00Z",
+    "fin": "2027-02-07T16:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-2223b8a2adaa9079",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "7310cfa3-0125-481b-ab8e-00b34b9dbc3c",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-16",
+    "debut": "2027-02-13T08:00:00Z",
+    "fin": "2027-02-14T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse2-formation-16",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-07484b161b233bfb",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "a84e5475-2163-4efb-b1fd-e4df0c985989",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-23",
+    "debut": "2027-02-13T08:00:00Z",
+    "fin": "2027-02-13T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-23",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-347c940b0024d6fd",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "85f851a9-1a39-44ce-9002-0045b5bb5469",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-27",
+    "debut": "2027-02-20T08:00:00Z",
+    "fin": "2027-02-20T16:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-27",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-bf5b0e6eab618bac",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "4fd59a90-d846-4db9-aba3-e7826961cd82",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-25",
+    "debut": "2027-02-22T07:30:00Z",
+    "fin": "2027-02-25T17:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-25",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-a867ff22d556f987",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "d37ab72b-fb57-484e-8c80-7ce04786d3b1",
+    "titre": "PSC - Formation",
+    "slug": "psc-formation-28",
+    "debut": "2027-03-06T08:00:00Z",
+    "fin": "2027-03-06T16:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/psc-formation-28",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-f22fa01dd8b064d3",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-28",
+    "debut": "2027-03-20T08:00:00Z",
+    "fin": "2027-03-20T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse1-formation-28",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7ea84cebde0ee3a4",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "66840a80-bbe4-40fd-b80f-76700be0f5bb",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-24",
+    "debut": "2027-03-20T08:00:00Z",
+    "fin": "2027-03-20T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/fc-pse2-formation-24",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-34001b554b4f8bcf",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "e4b0ae49-5039-4e72-ad74-e39c643b63b6",
+    "titre": "PSE1 - Formation",
+    "slug": "pse1-formation-26",
+    "debut": "2027-03-27T07:30:00Z",
+    "fin": "2027-03-28T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://www.secourismepourtous.org/event-details/pse1-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-150552d203ec94ba",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  }
 ]
