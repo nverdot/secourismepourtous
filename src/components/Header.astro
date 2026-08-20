@@ -221,18 +221,25 @@ const actuel = Astro.url.pathname;
     .entete__ffss { height: 34px; padding-left: .55rem; }
   }
 
+  /*
+   * Le menu se place à gauche, contre les logos, et c'est le bouton qui est
+   * repoussé à droite. Auparavant le menu était collé à droite (margin-left:
+   * auto) : en se resserrant, ses entrées débordaient de sa propre boîte et
+   * la zone de survol de la dernière passait sous le bouton.
+   */
   .nav {
-    display: flex; gap: 0.15rem; margin-left: auto; min-width: 0;
-    /* Le menu cède avant le bouton : c'est lui qui doit se resserrer. */
-    flex-shrink: 1;
+    display: flex; gap: 0.15rem; flex-wrap: nowrap;
+    margin-left: 1.25rem; margin-right: auto;
+    min-width: 0; flex-shrink: 0;
   }
-  /* Séparation garantie entre la dernière entrée et le bouton, quelle que
-     soit la largeur : sans elle, les deux se touchent visuellement. */
-  .entete__cta { margin-left: 1.25rem; flex: none; }
+  .nav__lien { white-space: nowrap; }
+  /* Séparation garantie, quelle que soit la largeur. */
+  .entete__cta { margin-left: 1.5rem; flex: none; }
 
   @media (max-width: 1440px) {
+    .nav { margin-left: 0.9rem; }
     .nav__lien { padding-inline: 0.45rem; }
-    .entete__cta { padding-inline: 1.1rem; margin-left: 1rem; }
+    .entete__cta { padding-inline: 1.1rem; margin-left: 1.1rem; }
   }
   .nav__lien {
     font-family: 'Archivo', sans-serif;

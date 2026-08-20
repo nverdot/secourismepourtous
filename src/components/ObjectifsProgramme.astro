@@ -5,6 +5,7 @@ interface Props { formation: Formation }
 const { formation: f } = Astro.props;
 
 import { asso } from '../data/association';
+import { formations } from '../data/formations';
 import { chapitresDe, volume, referentielPse } from '../data/programme-pse';
 
 /**
@@ -19,17 +20,47 @@ import { chapitresDe, volume, referentielPse } from '../data/programme-pse';
  */
 const m = { ...asso.modalites, ...(f.modalites ?? {}) };
 const modalites = [
-  { cle: 'Effectif', valeur: m.effectif },
-  { cle: 'Lieu', valeur: m.lieu },
-  { cle: 'Délai d’accès', valeur: m.delaiAcces },
-  { cle: 'Méthodes mobilisées', valeur: m.pedagogie },
-  { cle: 'Modalités d’évaluation', valeur: m.evaluation, note: f.certificationNote },
-  {
-    cle: 'Accessibilité',
-    valeur: asso.accessibilite,
-    note: `Référente handicap joignable à ${asso.contact.email}.`,
-  },
+  { cle: 'Effectif', valeur: m.effectif, icone: 'groupe' },
+  { cle: 'Lieu', valeur: m.lieu, icone: 'lieu' },
+  { cle: 'Délai d’accès', valeur: m.delaiAcces, icone: 'agenda' },
+  { cle: 'Méthodes mobilisées', valeur: m.pedagogie, icone: 'pratique' },
+  { cle: 'Modalités d’évaluation', valeur: m.evaluation, note: f.certificationNote, icone: 'valide' },
 ];
+
+/* Tracés des pictogrammes, à côté de leur clé pour rester lisibles. */
+const PICTOS: Record<string, string> = {
+  groupe: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  lieu: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0zM12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+  agenda: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+  pratique: 'M14.5 2.5a2.12 2.12 0 0 1 3 3L7 16l-4 1 1-4zM12 20h9',
+  valide: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9',
+};
+
+/**
+ * Rend cliquable la formation citée dans une suite de parcours.
+ *
+ * « Poursuivre vers le PSE1 » doit mener au PSE1 : sans lien, on demande au
+ * visiteur de retourner au catalogue chercher lui-même. On repère le sigle le
+ * plus long d'abord, sinon « PSE1 » capterait « FC PSE1 ».
+ */
+const sigles = formations
+  .filter((x) => x.slug !== f.slug)
+  .sort((a, b) => b.sigle.length - a.sigle.length);
+
+function lienSuite(texte: string) {
+  const cible = sigles.find((x) =>
+    new RegExp(`\\b${x.sigle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(texte)
+  );
+  if (!cible) return null;
+  const i = texte.toLowerCase().indexOf(cible.sigle.toLowerCase());
+  return {
+    avant: texte.slice(0, i),
+    sigle: texte.slice(i, i + cible.sigle.length),
+    apres: texte.slice(i + cible.sigle.length),
+    href: `/formations/${cible.slug}`,
+    suspendue: Boolean(cible.suspendue),
+  };
+}
 
 const niveauPse = f.slug === 'pse-1' ? 'pse1' : f.slug === 'pse-2' ? 'pse2' : null;
 const chapitres = niveauPse ? chapitresDe(niveauPse) : [];
@@ -38,6 +69,39 @@ const v = niveauPse ? volume(niveauPse) : null;
 
 <section class="section" aria-label="Contenu de la formation">
   <div class="wrap op">
+    <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
+         de les publier ; les répéter ailleurs ferait doublon. -->
+    <div class="mods">
+      <div class="op__tete">
+        <span class="op__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+          </svg>
+        </span>
+        <h2 class="op__h">Comment ça se passe</h2>
+      </div>
+
+      <dl class="mods__l">
+        {modalites.map((l) => (
+          <div class="mods__i">
+            <dt>
+              <span class="mods__ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={PICTOS[l.icone]} />
+                </svg>
+              </span>
+              {l.cle}
+            </dt>
+            <dd>
+              {l.valeur}
+              {l.note && <span class="mods__n">{l.note}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+    </div>
+
     <!-- Objectifs -->
     <div class="buts-col">
       <div class="op__tete">
@@ -77,50 +141,24 @@ const v = niveauPse ? volume(niveauPse) : null;
             Et après&nbsp;?
           </h3>
           <ul>
-            {f.suites.map((s) => (
-              <li>
-                <span class="apres__puce" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-                </span>
-                <span>{s}</span>
-              </li>
-            ))}
+            {f.suites.map((s) => {
+              const l = lienSuite(s);
+              return (
+                <li>
+                  <span class="apres__puce" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                  </span>
+                  <span>
+                    {l && !l.suspendue
+                      ? <>{l.avant}<a class="apres__lien" href={l.href}>{l.sigle}</a>{l.apres}</>
+                      : s}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
-    </div>
-
-    <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
-         de les publier ; les répéter ailleurs ferait doublon. -->
-    <div class="mods">
-      <div class="op__tete">
-        <span class="op__ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
-          </svg>
-        </span>
-        <h2 class="op__h">Comment ça se passe</h2>
-      </div>
-
-      <dl class="mods__l">
-        {modalites.map((l) => (
-          <div class="mods__i">
-            <dt>{l.cle}</dt>
-            <dd>
-              {l.valeur}
-              {l.note && <span class="mods__n">{l.note}</span>}
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-      <p class="mods__pied">
-        <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener">Certificat Qualiopi</a>
-        <span aria-hidden="true">·</span>
-        <a href="/documents/livret-accueil-stagiaire.pdf" target="_blank" rel="noopener">Livret d’accueil</a>
-        <span aria-hidden="true">·</span>
-        <a href="/cgv">CGV</a>
-      </p>
     </div>
 
     <!-- Programme -->
@@ -205,8 +243,8 @@ const v = niveauPse ? volume(niveauPse) : null;
   }
   /* Placement explicite : le placement automatique aurait mis les modalités
      dans la colonne du programme. */
-  .op > .buts-col { grid-column: 1; grid-row: 1; }
-  .op > .mods { grid-column: 1; grid-row: 2; }
+  .op > .mods { grid-column: 1; grid-row: 1; }
+  .op > .buts-col { grid-column: 1; grid-row: 2; }
   .op > #programme { grid-column: 2; grid-row: 1 / span 2; }
   @media (max-width: 880px) {
     .op { grid-template-columns: 1fr; grid-template-rows: none; }
@@ -333,15 +371,25 @@ const v = niveauPse ? volume(niveauPse) : null;
   }
   .mods__i:last-child { border-bottom: 0; }
   .mods__i dt {
+    display: flex; align-items: center; gap: .45rem;
     font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
   }
+  .mods__ic {
+    flex: none; width: 26px; height: 26px; border-radius: 8px;
+    background: var(--azur-wash); color: var(--azur);
+    display: grid; place-items: center;
+  }
+  .mods__ic svg { width: 15px; height: 15px; }
+  .mods__i dd { padding-left: calc(26px + .45rem); }
   .mods__i dd { margin: 0; font-size: .9rem; color: var(--ink); }
   .mods__n { display: block; margin-top: .2rem; font-size: .83rem; color: var(--ink-mute); }
 
-  .mods__pied {
-    display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center;
-    margin-top: .9rem; font-size: .85rem; color: var(--ink-mute);
+
+  .apres__lien {
+    color: var(--secours); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
   }
-  .mods__pied a { color: var(--azur); }
+  .apres__lien:hover { text-decoration-color: currentColor; }
 </style>
