@@ -166,7 +166,7 @@ export const situations: Situation[] = [
     fiche: { ref: '02FT04', nom: 'Désobstruction par compressions thoraciques chez le nourrisson', maj: 'décembre 2022' },
     image: {
       fichier: '/img/gestes/etouffement-nourrisson.jpg',
-      alt: 'Mannequin de formation nourrisson manipulé par un formateur ganté, à côté d’un livret « Gestes qui sauvent » et d’une trousse de secours.',
+      alt: 'Mannequin de formation nourrisson posé à plat ventre le long de l’avant-bras, tête plus basse que le corps, la main libre levée pour donner une claque entre les omoplates.',
     },
     seo: {
       title: 'Bébé qui s’étouffe : que faire ? | Gestes qui sauvent',
