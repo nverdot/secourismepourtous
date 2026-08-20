@@ -1,0 +1,289 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sessions from '../../components/Sessions.astro';
+import ModuleInscription from '../../components/ModuleInscription.astro';
+import Terrain from '../../components/Terrain.astro';
+import { asso } from '../../data/association';
+import { parSlug } from '../../data/formations';
+import { metiersPsc, metiersPse1, LIBELLE_NATURE, verifieLeTexte, type Metier } from '../../data/metiers';
+import { sessionsAVenir, sessionsDe } from '../../lib/wix';
+import { filAriane } from '../../lib/schema';
+
+/**
+ * « Qui doit avoir le PSC ? », « Qui doit avoir le PSE1 ? »
+ *
+ * Ces pages répondent à une intention de recherche que le catalogue ne capte
+ * pas : quelqu'un qui tape « formation obligatoire moniteur de plongée » ne
+ * sait pas encore qu'il cherche un PSE1, et ne tapera jamais « PSE1 Nice ».
+ *
+ * Elles engagent l'association : voir l'avertissement en tête de
+ * src/data/metiers.ts. La date de vérification est affichée, et chaque ligne
+ * renvoie à son texte de référence — c'est ce qui distingue une page utile
+ * d'une page d'accroche.
+ */
+
+const PAGES = {
+  psc: {
+    slug: 'psc',
+    formation: 'psc',
+    titre: 'Qui doit avoir le PSC ?',
+    h1: 'Les métiers qui exigent le PSC',
+    chapeau:
+      'Enseignement, petite enfance, sport, sécurité : la liste des professions et des diplômes pour lesquels une formation aux premiers secours de niveau PSC est demandée.',
+    metiers: metiersPsc,
+    seo: {
+      title: 'Quels métiers exigent le PSC1 ? | Formation à Nice',
+      description:
+        'Professeur des écoles, assistant maternel, éducateur sportif, agent de sécurité : les métiers qui exigent le PSC (ex-PSC1), avec les textes de référence. Formation à Nice.',
+    },
+  },
+  'pse-1': {
+    slug: 'pse-1',
+    formation: 'pse-1',
+    titre: 'Qui doit avoir le PSE1 ?',
+    h1: 'Les métiers qui exigent le PSE1',
+    chapeau:
+      'Sauvetage aquatique, plongée, postes de secours : la liste des professions et des diplômes pour lesquels le PSE1 est exigé, et à quel moment du parcours.',
+    metiers: metiersPse1,
+    seo: {
+      title: 'Quels métiers exigent le PSE1 ? | Formation à Nice',
+      description:
+        'BNSSA, maître-nageur, moniteur de plongée, équipier secouriste : les métiers qui exigent le PSE1, avec les textes de référence. Formation à Nice, dates en ligne.',
+    },
+  },
+} as const;
+
+export async function getStaticPaths() {
+  return [{ params: { diplome: 'psc' } }, { params: { diplome: 'pse-1' } }];
+}
+
+const { diplome } = Astro.params;
+const page = PAGES[diplome as keyof typeof PAGES];
+const f = parSlug(page.formation)!;
+
+const toutes = await sessionsAVenir();
+const sessions = f.suspendue ? [] : sessionsDe(toutes, f.wixEvent);
+
+// Regroupement par secteur : un moniteur de plongée ne lit pas la ligne du
+// professeur des écoles, il cherche la sienne.
+const secteurs = [...new Set(page.metiers.map((m) => m.secteur))].map((s) => ({
+  nom: s,
+  metiers: page.metiers.filter((m) => m.secteur === s),
+}));
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Formations', chemin: '/formations' },
+    { nom: page.titre, chemin: `/metiers/${page.slug}` },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: page.metiers.map((m: Metier) => ({
+      '@type': 'Question',
+      name: `${m.nom} : le ${f.sigle} est-il obligatoire ?`,
+      acceptedAnswer: { '@type': 'Answer', text: m.exigence },
+    })),
+  },
+];
+
+const autre = diplome === 'psc' ? PAGES['pse-1'] : PAGES.psc;
+---
+
+<Base
+  title={page.seo.title}
+  description={page.seo.description}
+  chemin={`/metiers/${page.slug}`}
+  filiere={f.filiere}
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/formations">Formations</a><i aria-hidden="true">›</i>
+        <b>{page.titre}</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">{f.duree}</span>
+        <span class="badge badge--contour">{f.tarif}</span>
+        <span class="badge badge--contour">{sessions.length} sessions programmées</span>
+      </div>
+      <h1 class="tete__h1">{page.h1}</h1>
+      <p class="tete__t">{page.chapeau}</p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href={`/formations/${f.slug}`}>
+          Découvrir le {f.sigle}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--fantome" href="#dates">Voir les prochaines dates</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== LÉGENDE ========== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cle">
+        <p class="cle__t">Trois situations à ne pas confondre</p>
+        <dl class="cle__l">
+          {Object.entries(LIBELLE_NATURE).map(([n, l]) => (
+            <div class={`cle__i cle__i--${n}`}>
+              <dt>{l.court}</dt>
+              <dd>{l.long}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      {secteurs.map((s) => (
+        <section class="sect">
+          <h2 class="sect__h">{s.nom}</h2>
+          <div class="mets">
+            {s.metiers.map((m) => (
+              <article class={`met met--${m.nature}`}>
+                <div class="met__tete">
+                  <h3>{m.nom}</h3>
+                  <span class="met__n">{LIBELLE_NATURE[m.nature].court}</span>
+                </div>
+                <p class="met__e">{m.exigence}</p>
+                <p class="met__c">{m.contexte}</p>
+                <p class="met__s">
+                  <a href={m.source.url} target="_blank" rel="noopener">{m.source.texte}</a>
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <p class="daté">
+        Textes vérifiés le <strong>{verifieLeTexte}</strong>. La réglementation
+        évolue&nbsp;: en cas de doute sur votre situation, appelez-nous au
+        <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>,
+        nous vérifions avant que vous n’engagiez quoi que ce soit.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== TERRAIN ========== -->
+  <section class="section section--navy">
+    <div class="wrap">
+      <Terrain titre={`Qui vous formera au ${f.sigle}`} sombre />
+    </div>
+  </section>
+
+  <!-- ========== DATES ========== -->
+  <div id="dates">
+    <Sessions sessions={sessions} sigle={f.sigle} />
+  </div>
+  {sessions.length > 0 && <ModuleInscription />}
+
+  <!-- ========== L'AUTRE PAGE ========== -->
+  <section class="section section--sunk">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Ce n’est pas votre cas&nbsp;?</p>
+      <h2 class="h-section">{autre.titre}</h2>
+      <p class="lede">{autre.chapeau}</p>
+      <a class="btn btn--sobre suite" href={`/metiers/${autre.slug}`}>
+        Voir les métiers concernés
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 3.75rem);
+  }
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 800; margin-bottom: .8rem; }
+  .tete__t { max-width: 62ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.1rem); margin-bottom: 2rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+
+  /* --- légende des trois natures d'obligation --- */
+  .cle {
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .cle__t {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: 1rem;
+  }
+  .cle__l {
+    margin: 0; display: grid; gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+  .cle__i dt {
+    display: inline-block; margin-bottom: .3rem;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .05em; text-transform: uppercase;
+    border-radius: var(--r-pill); padding: .22rem .7rem; color: #fff;
+  }
+  .cle__i--exige dt { background: var(--secours); }
+  .cle__i--prerequis dt { background: var(--azur); }
+  .cle__i--demande dt { background: var(--gold); }
+  .cle__i dd { margin: 0; font-size: .88rem; color: var(--ink-soft); }
+
+  .sect { margin-bottom: clamp(2rem, 5vw, 3rem); }
+  .sect__h {
+    font-family: 'Archivo', sans-serif; font-size: 1.15rem; font-weight: 800;
+    padding-bottom: .6rem; margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--line);
+  }
+
+  .mets { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+  .met {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 4px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.5rem);
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .met--exige { border-left-color: var(--secours); }
+  .met--prerequis { border-left-color: var(--azur); }
+  .met--demande { border-left-color: var(--gold); }
+
+  .met__tete { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: baseline; justify-content: space-between; }
+  .met__tete h3 { font-size: 1.05rem; font-weight: 700; }
+  .met__n {
+    flex: none;
+    font-family: 'Archivo', sans-serif; font-size: .66rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    border-radius: var(--r-pill); padding: .2rem .6rem; color: #fff;
+  }
+  .met--exige .met__n { background: var(--secours); }
+  .met--prerequis .met__n { background: var(--azur); }
+  .met--demande .met__n { background: var(--gold); }
+
+  .met__e { font-size: .93rem; color: var(--ink); }
+  .met__c { font-size: .9rem; color: var(--ink-soft); font-style: italic; }
+  .met__s { margin-top: auto; font-size: .8rem; color: var(--ink-mute); }
+  .met__s a { color: var(--azur); }
+
+  .daté {
+    background: var(--azur-wash); border-left: 3px solid var(--azur);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    padding: .9rem 1.1rem; font-size: .9rem; color: var(--ink-soft);
+    max-width: 78ch;
+  }
+  .daté a { color: var(--azur); }
+
+  .suite { margin-top: 1.25rem; }
+</style>

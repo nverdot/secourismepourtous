@@ -72,6 +72,28 @@ const groupes = ordre
 
   <CartesFilieres />
 
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Par métier</p>
+      <h2 class="h-section">Votre profession l’exige-t-elle&nbsp;?</h2>
+      <p class="lede">
+        Enseignement, petite enfance, sport, sauvetage aquatique, plongée&nbsp;:
+        de nombreux diplômes imposent une formation aux premiers secours.
+        Vérifiez si le vôtre en fait partie.
+      </p>
+      <div class="voies">
+        <a class="voie" href="/metiers/psc">
+          <strong>Les métiers qui exigent le PSC</strong>
+          <span>Professeur des écoles, assistant maternel, éducateur sportif, agent de sécurité…</span>
+        </a>
+        <a class="voie" href="/metiers/pse-1">
+          <strong>Les métiers qui exigent le PSE1</strong>
+          <span>BNSSA, maître-nageur, moniteur de plongée, équipier secouriste…</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--sunk">
     <div class="wrap"><Terrain /></div>
   </section>
@@ -236,4 +258,20 @@ const groupes = ordre
   .acc__h { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; }
   .acc__btn { margin-top: 1.25rem; }
   @media (max-width: 620px) { .acc { flex-direction: column; } }
+
+  .voies {
+    margin-top: 2rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .voie {
+    display: flex; flex-direction: column; gap: .35rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 4px solid var(--secours);
+    border-radius: var(--r-lg); padding: 1.25rem 1.4rem;
+    text-decoration: none; color: inherit;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .voie:hover { box-shadow: var(--sh-md); border-color: var(--secours); }
+  .voie strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
+  .voie span { font-size: .89rem; color: var(--ink-mute); }
 </style>

@@ -190,8 +190,23 @@ async function enrichir(sessions: Session[], cle: string, site: string) {
   }
 }
 
+/**
+ * Résultat mémorisé pour la durée du build.
+ *
+ * Chaque page qui affiche des dates appelait l'API : avec l'enrichissement
+ * (un formulaire et une disponibilité par session), cela multipliait des
+ * centaines d'appels et faisait exploser la durée du build. Le planning ne
+ * change pas entre deux pages d'un même build : une lecture suffit.
+ */
+let enCache: Promise<Session[]> | null = null;
+
 /** Récupère toutes les sessions à venir, tous types de formation confondus. */
-export async function sessionsAVenir(): Promise<Session[]> {
+export function sessionsAVenir(): Promise<Session[]> {
+  if (!enCache) enCache = lisSessions();
+  return enCache;
+}
+
+async function lisSessions(): Promise<Session[]> {
   const cle = import.meta.env.WIX_API_KEY;
   const site = import.meta.env.WIX_SITE_ID;
 
