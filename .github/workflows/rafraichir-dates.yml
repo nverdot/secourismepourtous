@@ -1,0 +1,37 @@
+# Régénération programmée du site.
+#
+# Les dates de formation sont lues chez Wix au moment du build : sans
+# régénération, un planning modifié dans Wix n'apparaîtrait jamais en ligne.
+# Ce déclencheur appelle le « build hook » Netlify, qui relance la construction.
+#
+# CONFIGURATION (une seule fois) :
+#   1. Netlify > Site configuration > Build & deploy > Build hooks
+#      > Add build hook > nom « rafraichir-dates » > copier l'URL
+#   2. GitHub > ce dépôt > Settings > Secrets and variables > Actions
+#      > New repository secret
+#      > nom : NETLIFY_BUILD_HOOK   valeur : l'URL copiée
+
+name: Rafraîchir les dates de formation
+
+on:
+  schedule:
+    # Tous les jours à 5h00 UTC, soit 7h00 à Paris en été.
+    # Le planning du jour est ainsi à jour avant l'ouverture.
+    - cron: '0 5 * * *'
+  # Permet aussi de déclencher à la main depuis l'onglet Actions,
+  # juste après avoir ajouté une session dans Wix.
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déclencher la reconstruction Netlify
+        run: |
+          if [ -z "${{ secrets.NETLIFY_BUILD_HOOK }}" ]; then
+            echo "::error::Le secret NETLIFY_BUILD_HOOK n'est pas configuré."
+            exit 1
+          fi
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d '{}' "${{ secrets.NETLIFY_BUILD_HOOK }}")
+          echo "Netlify a répondu : HTTP $code"
+          [ "$code" = "200" ] || [ "$code" = "204" ]
