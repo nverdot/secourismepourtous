@@ -3,6 +3,18 @@ import type { Formation } from '../data/formations';
 
 interface Props { formation: Formation }
 const { formation: f } = Astro.props;
+
+import { chapitresDe, volume, referentielPse } from '../data/programme-pse';
+
+/**
+ * Pour le PSE1 et le PSE2, le programme n'est pas rédigé à la main : il vient
+ * du référentiel national, qui le fixe à l'identique partout en France. On le
+ * présente dans la même section que pour les autres formations — un visiteur
+ * ne doit pas avoir deux programmes à lire.
+ */
+const niveauPse = f.slug === 'pse-1' ? 'pse1' : f.slug === 'pse-2' ? 'pse2' : null;
+const chapitres = niveauPse ? chapitresDe(niveauPse) : [];
+const v = niveauPse ? volume(niveauPse) : null;
 ---
 
 <section class="section" aria-label="Contenu de la formation">
@@ -70,18 +82,61 @@ const { formation: f } = Astro.props;
         <h2 class="op__h">Programme détaillé</h2>
       </div>
 
+      {v && (
+        <p class="op__cadre">
+          Contenu fixé par le référentiel national&nbsp;: {v.chapitres} chapitres,
+          {' '}{v.sujets} sujets et {v.techniques} techniques travaillées en
+          mise en situation.
+        </p>
+      )}
+
       <div class="prog">
-        {f.modules.map((m, i) => (
-          <details class="mod" name={`prog-${f.slug}`} open={i === 0}>
-            <summary>
-              <span class="mod__n">{i + 1}</span>
-              <span class="mod__t">{m.titre}</span>
-              <svg class="mod__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-            </summary>
-            <div class="mod__corps"><p>{m.texte}</p></div>
-          </details>
-        ))}
+        {niveauPse
+          ? chapitres.map((c, i) => (
+              <details class="mod" name={`prog-${f.slug}`} open={i === 0}>
+                <summary>
+                  <span class="mod__n">{i + 1}</span>
+                  <span class="mod__t">{c.nom}</span>
+                  <svg class="mod__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+                </summary>
+                <div class="mod__corps">
+                  <p>{c.enjeu}</p>
+                  {c[niveauPse].length > 0 && (
+                    <ul class="mod__l">
+                      {c[niveauPse].map((x) => <li>{x}</li>)}
+                    </ul>
+                  )}
+                  {niveauPse === 'pse2' && c.pse1.length > 0 && (
+                    <p class="mod__rappel">
+                      <strong>Déjà vu en PSE1&nbsp;:</strong> {c.pse1.join(', ').toLowerCase()}.
+                    </p>
+                  )}
+                  {c.techniques[niveauPse] > 0 && (
+                    <p class="mod__tech">
+                      {c.techniques[niveauPse]} technique{c.techniques[niveauPse] > 1 ? 's' : ''} pratiquée{c.techniques[niveauPse] > 1 ? 's' : ''}
+                    </p>
+                  )}
+                </div>
+              </details>
+            ))
+          : f.modules.map((m, i) => (
+              <details class="mod" name={`prog-${f.slug}`} open={i === 0}>
+                <summary>
+                  <span class="mod__n">{i + 1}</span>
+                  <span class="mod__t">{m.titre}</span>
+                  <svg class="mod__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+                </summary>
+                <div class="mod__corps"><p>{m.texte}</p></div>
+              </details>
+            ))}
       </div>
+
+      {v && (
+        <p class="op__source">
+          Source&nbsp;: {referentielPse.nom}, {referentielPse.edition},
+          {' '}{referentielPse.auteur}.
+        </p>
+      )}
     </div>
   </div>
 </section>
@@ -170,4 +225,35 @@ const { formation: f } = Astro.props;
   .mod__corps { padding: 0 1.2rem 1.15rem calc(1.2rem + 30px + 0.95rem); }
   .mod__corps p { color: var(--ink-soft); font-size: 0.94rem; max-width: var(--measure); }
   @media (max-width: 520px) { .mod__corps { padding-left: 1.2rem; } }
+
+  .op__cadre {
+    margin-bottom: 1rem; font-size: .89rem; color: var(--ink-soft);
+    background: var(--azur-wash); border-left: 3px solid var(--azur);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: .7rem .95rem;
+  }
+  .op__source {
+    margin-top: 1rem; font-size: .8rem; color: var(--ink-mute);
+  }
+  .mod__l {
+    list-style: none; margin: .7rem 0 0; padding: 0;
+    display: grid; gap: .35rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  }
+  .mod__l li {
+    position: relative; padding-left: 1rem;
+    font-size: .89rem; color: var(--ink);
+  }
+  .mod__l li::before {
+    content: ''; position: absolute; left: 0; top: .58em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--azur);
+  }
+  .mod__rappel {
+    margin-top: .8rem; font-size: .84rem; color: var(--ink-mute);
+    padding: .55rem .8rem; background: var(--sunk); border-radius: var(--r-sm);
+  }
+  .mod__tech {
+    margin-top: .7rem;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--secours);
+  }
 </style>

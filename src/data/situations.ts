@@ -42,6 +42,14 @@ export interface Situation {
   /** Ce que la formation apporte en plus de cette page. */
   enFormation: string;
   fiche: { ref: string; nom: string; maj: string };
+  /**
+   * Illustration de la situation. Facultative : sans elle, la page s'affiche
+   * sur un fond uni plutôt que sur une photo, sans rien perdre.
+   *
+   * Elle doit montrer la SITUATION, pas le geste : une photo de compression
+   * thoracique mal cadrée enseignerait un geste faux à qui la regarde vite.
+   */
+  image?: { fichier: string; alt: string };
   seo: { title: string; description: string };
 }
 
@@ -95,6 +103,10 @@ export const situations: Situation[] = [
     enFormation:
       'La différence entre claques dans le dos et compressions, la position à adopter selon qu’il s’agit d’un adulte, d’un enfant ou d’un nourrisson, et la force à mettre : tout cela se travaille sur mannequin, jusqu’à ce que le geste vienne seul.',
     fiche: { ref: '02PR01', nom: 'Obstruction des voies aériennes', maj: 'décembre 2023' },
+    image: {
+      fichier: '/img/gestes/etouffement.jpg',
+      alt: 'Un homme attablé porte la main à sa gorge, la bouche ouverte, tandis qu’un proche se penche vers lui pour l’aider.',
+    },
     seo: {
       title: 'Quelqu’un s’étouffe : que faire ? | Gestes qui sauvent',
       description:

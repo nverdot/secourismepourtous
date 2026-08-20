@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import InfosPratiques from '../../components/InfosPratiques.astro';
-import ProgrammePse from '../../components/ProgrammePse.astro';
 import Terrain from '../../components/Terrain.astro';
 import { coursFormation, filAriane } from '../../lib/schema';
 import Lieu from '../../components/Lieu.astro';
@@ -72,16 +71,6 @@ const balisages = [
   <section class="section">
     <div class="wrap"><Documents /></div>
   </section>
-
-  {/* Le référentiel national fixe le contenu du PSE1 et du PSE2 : on le publie
-      en entier, c'est la pièce que réclament employeurs et financeurs. */}
-  {['pse-1', 'pse-2'].includes(f.slug) && (
-    <section class="section section--sunk">
-      <div class="wrap">
-        <ProgrammePse niveau={f.slug === 'pse-1' ? 'pse1' : 'pse2'} />
-      </div>
-    </section>
-  )}
 
   {/* Certains arrivent ici sans savoir si le diplôme leur est imposé : on le
       leur dit avant qu'ils ne s'inscrivent, pas après. */}
