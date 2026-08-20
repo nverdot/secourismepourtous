@@ -236,7 +236,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSC à Nice | Secourisme Pour Tous',
       description:
-        'Apprenez les gestes qui sauvent avec le PSC à Nice : 7 h en 1 journée, dès 10 ans, sans prérequis, 50 €. Organisme certifié Qualiopi, agréé FFSS.',
+        'Apprenez les gestes qui sauvent avec le PSC à Nice : 7 h en 1 journée, dès 10 ans, sans prérequis, 50 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -291,7 +291,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSE1 à Nice | Secourisme Pour Tous',
       description:
-        'Devenez secouriste équipier avec le PSE1 à Nice. Formation agréée FFSS pour intervenir en équipe sur les postes de secours. Organisme Qualiopi.',
+        'Devenez secouriste équipier avec le PSE1 à Nice. Formation agréée sécurité civile pour intervenir en équipe sur les postes de secours. Organisme Qualiopi.',
     },
   },
 
@@ -332,7 +332,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSE2 à Nice | Secourisme Pour Tous',
       description:
-        'Passez chef d’équipe avec le PSE2 à Nice, accessible après le PSE1. Formation agréée FFSS, organisme certifié Qualiopi. Dates et inscription en ligne.',
+        'Passez chef d’équipe avec le PSE2 à Nice, accessible après le PSE1. Formation agréée sécurité civile, organisme certifié Qualiopi. Dates et inscription en ligne.',
     },
   },
 
@@ -455,7 +455,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSC à Nice | Formation continue',
       description:
-        'Remettez à jour vos gestes de premiers secours avec la formation continue PSC à Nice. Organisme certifié Qualiopi, agréé FFSS. Dates et inscription.',
+        'Remettez à jour vos gestes de premiers secours avec la formation continue PSC à Nice. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile. Dates et inscription.',
     },
   },
 
@@ -533,7 +533,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSE2 à Nice | Formation continue',
       description:
-        'Maintenez vos compétences de chef d’équipe PSE2 à Nice. Formation continue annuelle obligatoire, agréée FFSS et certifiée Qualiopi. Dates en ligne.',
+        'Maintenez vos compétences de chef d’équipe PSE2 à Nice. Formation continue annuelle obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Dates en ligne.',
     },
   },
 
@@ -572,7 +572,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage BNSSA à Nice | Formation continue',
       description:
-        'Recyclez votre BNSSA à Nice pour rester opérationnel. Formation continue obligatoire, agréée FFSS et certifiée Qualiopi. Consultez les dates.',
+        'Recyclez votre BNSSA à Nice pour rester opérationnel. Formation continue obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Consultez les dates.',
     },
   },
 
@@ -613,7 +613,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation BSB à Nice | Surveillant de baignade',
       description:
-        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, agréé FFSS.',
+        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -648,7 +648,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage BSB à Nice | Formation continue',
       description:
-        'Maintenez votre brevet de surveillant de baignade à Nice : 10 h, 240 €. Formation continue agréée FFSS, organisme certifié Qualiopi.',
+        'Maintenez votre brevet de surveillant de baignade à Nice : 10 h, 240 €. Formation continue affiliée FFSS et agréée sécurité civile, organisme certifié Qualiopi.',
     },
   },
 
@@ -690,7 +690,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'PAE FPSC à Nice | Devenir formateur PSC',
       description:
-        'Devenez formateur en premiers secours avec le PAE FPSC à Nice : 50 h, PIC F inclus, 1 000 €. Organisme certifié Qualiopi, agréé FFSS.',
+        'Devenez formateur en premiers secours avec le PAE FPSC à Nice : 50 h, PIC F inclus, 1 000 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -767,7 +767,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'PAE FPS à Nice | Devenir formateur PSE1 et PSE2',
       description:
-        'Devenez formateur en premiers secours en équipe avec le PAE FPS à Nice : 70 h, PIC F inclus, 1 000 €. Certifié Qualiopi, agréé FFSS.',
+        'Devenez formateur en premiers secours en équipe avec le PAE FPS à Nice : 70 h, PIC F inclus, 1 000 €. Certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 

@@ -1,6 +1,18 @@
 ---
 import { photosDps } from '../data/dps-photos';
 
+interface Props {
+  /** Ne montre que les photos de ce cadrage. */
+  orientation: 'paysage' | 'portrait';
+}
+const { orientation } = Astro.props;
+
+// Mêler paysage et portrait dans un même carrousel obligerait à rogner
+// lourdement l'un des deux : on les sépare.
+const photos = photosDps.filter((p) =>
+  orientation === 'paysage' ? p.largeur >= p.hauteur : p.hauteur > p.largeur
+);
+
 /**
  * Carrousel des photos de dispositifs.
  *
@@ -11,10 +23,10 @@ import { photosDps } from '../data/dps-photos';
  */
 ---
 
-{photosDps.length > 0 && (
-  <div class="car" data-carrousel>
+{photos.length > 0 && (
+  <div class:list={["car", `car--${orientation}`]} data-carrousel>
     <div class="car__piste" data-piste tabindex="0" role="group" aria-label="Photos de dispositifs">
-      {photosDps.map((p, i) => (
+      {photos.map((p, i) => (
         <figure class="car__vue">
           <img
             src={p.fichier}
@@ -29,7 +41,7 @@ import { photosDps } from '../data/dps-photos';
       ))}
     </div>
 
-    {photosDps.length > 1 && (
+    {photos.length > 1 && (
       <>
         <button type="button" class="car__fleche car__fleche--prec" data-prec aria-label="Photo précédente">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
@@ -38,7 +50,7 @@ import { photosDps } from '../data/dps-photos';
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
         </button>
         <div class="car__points" data-points aria-hidden="true">
-          {photosDps.map((_, i) => <span class="car__point" data-point={i}></span>)}
+          {photos.map((_, i) => <span class="car__point" data-point={i}></span>)}
         </div>
       </>
     )}
@@ -63,13 +75,16 @@ import { photosDps } from '../data/dps-photos';
   .car__vue { margin: 0; scroll-snap-align: center; }
   .car__vue img {
     display: block; width: 100%; height: auto;
-    /* Les photos sont verticales : on cadre au centre pour garder les
-       secouristes dans l'image quel que soit le format d'écran. */
-    aspect-ratio: 16 / 9; object-fit: cover; object-position: center 55%;
+    object-fit: cover; object-position: center 55%;
     border-radius: var(--r-lg); border: 1px solid var(--line);
   }
+  .car--paysage .car__vue img { aspect-ratio: 16 / 9; }
+  /* Un portrait affiché plein cadre occuperait tout l'écran : on le borne. */
+  .car--portrait .car__vue img { aspect-ratio: 3 / 4; max-height: 620px; }
+  .car--portrait .car__piste { max-width: 520px; margin-inline: auto; }
   @media (max-width: 700px) {
-    .car__vue img { aspect-ratio: 4 / 5; }
+    .car--paysage .car__vue img { aspect-ratio: 4 / 3; }
+    .car--portrait .car__vue img { aspect-ratio: 3 / 4; }
   }
   .car__vue figcaption {
     margin-top: .7rem; font-size: .87rem; color: var(--ink-mute); text-align: center;

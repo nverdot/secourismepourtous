@@ -21,11 +21,25 @@ export interface PhotoDps {
 
 export const photosDps: PhotoDps[] = [
   {
+    fichier: '/img/dps/vpsp-coucher-soleil.jpg',
+    alt: "Deux secouristes de dos, sac d'intervention au dos, marchant le long du véhicule de premiers secours FFSS 06 sur le front de mer au coucher du soleil.",
+    legende: 'Fin de dispositif sur le front de mer',
+    largeur: 1013,
+    hauteur: 1800,
+  },
+  {
     fichier: '/img/dps/tour-de-france-massena.jpg',
     alt: "Trois secouristes de Secourisme Pour Tous en tenue FFSS, de dos derrière les barrières, face au passage des coureuses place Masséna à Nice.",
     legende: 'Tour de France Femmes 2026 — place Masséna, Nice',
     largeur: 1800,
     hauteur: 3200,
+  },
+  {
+    fichier: '/img/dps/chefs-de-poste.jpg',
+    alt: "Un chef de poste et un chef de dispositif, de dos en chasuble jaune FFSS, observant le départ d'une épreuve cycliste place Masséna à Nice.",
+    legende: 'Chef de poste et chef de dispositif — Tour de France Femmes 2026',
+    largeur: 900,
+    hauteur: 1600,
   },
   {
     fichier: '/img/dps/tour-de-france-poste.jpg',

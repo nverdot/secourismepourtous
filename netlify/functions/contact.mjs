@@ -12,6 +12,8 @@
  */
 
 const API = 'https://www.wixapis.com/contacts/v5/contacts';
+const DONNEES = 'https://www.wixapis.com/wix-data/v2/items';
+const COLLECTION = 'DemandesSite';
 
 /** Regroupe les champs du formulaire en un message lisible pour la notification. */
 function resume(d) {
@@ -82,7 +84,53 @@ export default async (req) => {
     return Response.redirect(new URL('/merci', req.url), 303);
   }
 
-  const origine = d.dispositif ? 'Demande de financement' : 'Demande de contact';
+  const origine = d.dispositif ? 'Demande de financement'
+                : d['form-name'] === 'secouriste-actif' ? 'Candidature secouriste actif'
+                : 'Demande de contact';
+
+  /**
+   * Enregistrement dans la collection « Demandes du site ».
+   *
+   * La fiche contact ne retient que l'identité : tout ce que le visiteur a
+   * répondu (financeur, état civil du stagiaire, accessibilité, niveau) vivait
+   * jusqu'ici seulement dans les journaux de cette fonction, donc nulle part de
+   * consultable. La collection le conserve, dans le tableau de bord Wix.
+   */
+  const enregistre = async () => {
+    const bloc = (titre, paires) => {
+      const lignes = paires.filter(([, v]) => v).map(([k, v]) => `${k} : ${v}`);
+      return lignes.length ? lignes.join(' · ') : '';
+    };
+    const item = {
+      typeDemande: origine,
+      prenom, nom, email, telephone: tel,
+      motif: d.motif || '',
+      formation: d.formation || '',
+      niveau: d.niveau || '',
+      participants: d.participants || '',
+      dispositif: d.dispositif || '',
+      handicap: d.handicap || '',
+      financeur: bloc('Financeur', [
+        ['Organisme', d.financeur_nom], ['Représentant', d.financeur_representant],
+        ['Adresse', [d.financeur_adresse, d.financeur_cp, d.financeur_ville].filter(Boolean).join(' ')],
+        ['E-mail', d.financeur_email], ['SIRET', d.financeur_siret],
+      ]),
+      stagiaire: bloc('Stagiaire', [
+        ['Né(e) le', d.stagiaire_naissance],
+        ['à', [d.stagiaire_lieu, d.stagiaire_departement].filter(Boolean).join(', ')],
+        ['Adresse', [d.stagiaire_adresse, d.stagiaire_cp, d.stagiaire_ville].filter(Boolean).join(' ')],
+      ]),
+      message: d.message || '',
+      pageOrigine: d['form-name'] || '',
+      recuLe: new Date().toISOString(),
+    };
+    const r = await fetch(DONNEES, {
+      method: 'POST',
+      headers: { Authorization: cle, 'wix-site-id': site, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataCollectionId: COLLECTION, dataItem: { data: item } }),
+    });
+    if (!r.ok) console.error('[contact] collection Wix', r.status, (await r.text()).slice(0, 250));
+  };
 
   try {
     const r = await fetch(API, {
@@ -106,6 +154,7 @@ export default async (req) => {
       const { contact } = await r.json();
       console.log('[contact] créé', contact?.id, '|', origine, '|', resume(d).replace(/\n/g, ' · '));
     }
+    await enregistre();
   } catch (e) {
     // Une panne de l'API Wix ne doit pas faire perdre la demande : elle reste
     // dans les soumissions Netlify et dans les journaux de cette fonction.
