@@ -3,7 +3,7 @@ import { asso } from '../data/association';
 import Carte from './Carte.astro';
 
 /**
- * Bloc « où ça se passe » : adresse, point GPS, accès et plan.
+ * Bloc « où ça se passe » : adresse, accès et plan.
  *
  * Deux usages, une seule source : sur une page de formation il répond à
  * « où est-ce que je vais le jour J », sur la page association à « comment
@@ -24,20 +24,16 @@ const {
   sombre = false,
 } = Astro.props;
 
-const { adresse, codePostal, ville, latitude, longitude } = asso.contact;
+const { adresse, codePostal, ville } = asso.contact;
 
-// Coordonnées en degrés-minutes-secondes : c'est la forme qu'attendent la
-// plupart des GPS de voiture, qui n'acceptent pas le format décimal.
-const dms = (v: number, axes: [string, string]) => {
-  const signe = v >= 0 ? axes[0] : axes[1];
-  const abs = Math.abs(v);
-  const d = Math.floor(abs);
-  const m = Math.floor((abs - d) * 60);
-  const s = ((abs - d - m / 60) * 3600).toFixed(1);
-  return `${d}° ${m}′ ${s}″ ${signe}`;
-};
+const DESTINATION = encodeURIComponent(`${adresse}, ${codePostal} ${ville}`);
+const EN_TRANSPORTS = `https://www.google.com/maps/dir/?api=1&destination=${DESTINATION}&travelmode=transit`;
 
-const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
+// Le planificateur de Lignes d'Azur est une application Angular : elle ignore
+// tout paramètre d'URL et s'ouvre toujours sur un formulaire vide. On y renvoie
+// quand même, pour le réseau local, en affichant l'adresse à recopier juste à
+// côté — et l'itinéraire Google reste la voie directe, destination déjà remplie.
+const LIGNES_AZUR = 'https://www.lignesdazur.com/fr/itineraires';
 ---
 
 <section class:list={['lieu', { 'lieu--sombre': sombre }]} aria-labelledby="t-lieu">
@@ -50,13 +46,6 @@ const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
       <div>
         <dt>Adresse</dt>
         <dd>{adresse}<br />{codePostal} {ville}</dd>
-      </div>
-      <div>
-        <dt>Coordonnées GPS</dt>
-        <dd>
-          <span class="lieu__gps">{latitude.toFixed(6)}, {longitude.toFixed(6)}</span>
-          <span class="lieu__dms">{dms(latitude, ['N', 'S'])} · {dms(longitude, ['E', 'O'])}</span>
-        </dd>
       </div>
       {asso.acces.length > 0 && (
         <div>
@@ -77,9 +66,14 @@ const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
       <div>
         <dt>En transports en commun</dt>
         <dd>
-          <a href={PLANIFICATEUR} target="_blank" rel="noopener">
-            Calculer mon trajet sur Lignes d’Azur
+          <a href={EN_TRANSPORTS} target="_blank" rel="noopener">
+            Calculer mon trajet — destination déjà renseignée
           </a>
+          <p class="lieu__alt">
+            Ou sur le réseau niçois&nbsp;:
+            <a href={LIGNES_AZUR} target="_blank" rel="noopener">Lignes d’Azur</a>
+            <span> — indiquez «&nbsp;{adresse}&nbsp;» comme arrivée.</span>
+          </p>
         </dd>
       </div>
     </dl>
@@ -109,11 +103,6 @@ const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
   .lieu__l dd { margin: 0; font-size: .95rem; }
   .lieu__l a { color: var(--azur); }
 
-  .lieu__gps {
-    display: block; font-variant-numeric: tabular-nums;
-    font-family: 'Archivo', sans-serif; font-weight: 600;
-  }
-  .lieu__dms { display: block; font-size: .83rem; color: var(--ink-mute); margin-top: .15rem; }
 
   .lieu__t { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
   .lieu__ligne {
@@ -124,11 +113,12 @@ const PLANIFICATEUR = 'https://www.lignesdazur.com/fr/itineraires/6';
   }
   .lieu__min { color: var(--ink-mute); }
 
+  .lieu__alt { margin-top: .45rem; font-size: .85rem; color: var(--ink-mute); }
+  .lieu--sombre .lieu__alt { color: var(--on-navy-soft); }
+
   /* Variante sur fond bleu : le bloc doit rester lisible. */
   .lieu--sombre .lieu__l > div { border-color: rgba(255,255,255,.16); }
   .lieu--sombre .lieu__l dt { color: var(--on-navy-soft); }
   .lieu--sombre .lieu__l dd { color: var(--on-navy-text); }
-  .lieu--sombre .lieu__gps { color: #fff; }
-  .lieu--sombre .lieu__dms { color: var(--on-navy-soft); }
   .lieu--sombre .lieu__l a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 </style>
