@@ -371,7 +371,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation BNSSA à Nice | Secourisme Pour Tous',
       description:
-        'Préparez le BNSSA à Nice et devenez sauveteur aquatique : entraînement, épreuves et secourisme. Agréé FFSS, certifié Qualiopi. Dates et tarifs.',
+        'Préparez le BNSSA à Nice et devenez sauveteur aquatique : entraînement, épreuves et secourisme. Affilié FFSS, certifié Qualiopi. Dates et tarifs.',
     },
   },
 
@@ -494,7 +494,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSE1 à Nice | Formation continue',
       description:
-        'Maintenez vos compétences PSE1 à Nice avec la formation continue annuelle, obligatoire pour rester opérationnel en poste de secours. Agréé FFSS.',
+        'Maintenez vos compétences PSE1 à Nice avec la formation continue annuelle, obligatoire pour rester opérationnel en poste de secours. Affilié FFSS.',
     },
   },
 

@@ -5,7 +5,7 @@ import { asso } from '../data/association';
 
 <Base
   title="Qui sommes-nous | Association FFSS de secourisme à Nice"
-  description="Secourisme Pour Tous, association agréée FFSS et certifiée Qualiopi à Nice depuis 2008 : formations, postes de secours et sauvetage sportif dans le 06."
+  description="Secourisme Pour Tous, association affiliée FFSS, agréée sécurité civile et certifiée Qualiopi à Nice depuis 2008 : formations, postes de secours et sauvetage sportif dans le 06."
   chemin="/qui-sommes-nous"
 >
   <header class="tete">
@@ -100,6 +100,71 @@ import { asso } from '../data/association';
   </section>
 
   <!-- ========== ACCESSIBILITE ========== -->
+  <!-- ========== ÉQUIPE ========== -->
+  <section class="section" aria-labelledby="t-equipe">
+    <div class="wrap">
+      <p class="eyebrow">L'équipe</p>
+      <h2 class="h-section" id="t-equipe">Qui dirige et qui forme</h2>
+      <p class="lede">
+        L'association est gérée par un bureau et un comité directeur. Elle est
+        dirigée par un président et une directrice, épaulés par un responsable
+        formation et un responsable des dispositifs de secours.
+      </p>
+
+      <div class="orga">
+        <figure class="orga__fig">
+          <img
+            src="/img/equipe/organigramme-bureau-2026.jpg"
+            alt="Organigramme du bureau 2026 : Raphaël Radier président, Aurélia Tardivat directrice, Jean-Michel Maillier secrétaire, Alexandra Boudon trésorière, Arthur Mollo pôle DPS, Matteo Chenu pôle piscine, Annabell Perez-Björkman pôle formation."
+            width="1800" height="1273" loading="lazy" decoding="async"
+          />
+          <figcaption>Le bureau, en 2026</figcaption>
+        </figure>
+
+        <div class="orga__liste">
+          <h3>Le bureau</h3>
+          <dl>
+            <div><dt>Président</dt><dd>Raphaël Radier</dd></div>
+            <div><dt>Directrice</dt><dd>Aurélia Tardivat</dd></div>
+            <div><dt>Secrétaire</dt><dd>Jean-Michel Maillier</dd></div>
+            <div><dt>Trésorière</dt><dd>Alexandra Boudon</dd></div>
+            <div><dt>Pôle dispositifs de secours</dt><dd>Arthur Mollo</dd></div>
+            <div><dt>Pôle piscine</dt><dd>Matteo Chenu</dd></div>
+            <div><dt>Pôle formation</dt><dd>Annabell Perez-Björkman</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="orga orga--inverse">
+        <figure class="orga__fig">
+          <img
+            src="/img/equipe/formateurs-2026.jpg"
+            alt="Trombinoscope des formateurs 2026 de Secourisme Pour Tous, formateurs de formateurs et formateurs PSC, PSE et BNSSA."
+            width="1800" height="1273" loading="lazy" decoding="async"
+          />
+          <figcaption>Nos formateurs, en 2026</figcaption>
+        </figure>
+
+        <div class="orga__liste">
+          <h3>Nos formateurs</h3>
+          <p class="orga__intro">
+            Dix-sept formateurs interviennent sur nos sessions, dont six formateurs
+            de formateurs.
+          </p>
+          <p class="orga__grp"><strong>Formateurs de formateurs</strong><br />
+            Annabell Perez-Björkman (responsable) · Guillaume Rizo · Raphaël Radier ·
+            Gilles Plasse · Matteo Chenu · Alexia Pires
+          </p>
+          <p class="orga__grp"><strong>Formateurs PSC et PSE</strong><br />
+            Thibaut Patell · Jean-Michel Maillier · Mathis Abreu · Anthony Del Aguila ·
+            Olivier Graglia · Elliesse Maroudin · Nicolas Verdot · Alexandra Boudon ·
+            Louis Rinaudo · Arthur Mollo · Floriano Pintus · Thibaut Lorenzetti
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--navy">
     <div class="wrap wrap--etroit acc">
       <span class="acc__ic" aria-hidden="true">
@@ -153,6 +218,50 @@ import { asso } from '../data/association';
   .fil i { opacity: .45; font-style: normal; }
   .fil b { color: #fff; font-weight: 600; }
   .tete__eyebrow { color: var(--on-navy-soft) !important; }
+
+  /* --- équipe --- */
+  .orga {
+    margin-top: 2.5rem;
+    display: grid; gap: clamp(1.25rem, 3vw, 2.25rem);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: center;
+  }
+  .orga + .orga { margin-top: clamp(2rem, 4vw, 3rem); }
+  @media (max-width: 860px) { .orga { grid-template-columns: 1fr; } }
+  /* On alterne le sens de lecture pour ne pas répéter deux fois la même page. */
+  @media (min-width: 861px) {
+    .orga--inverse .orga__fig { order: 2; }
+  }
+
+  .orga__fig { margin: 0; }
+  .orga__fig img {
+    display: block; width: 100%; height: auto;
+    background: #fff;
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+  }
+  .orga__fig figcaption {
+    margin-top: .6rem; font-size: .85rem; color: var(--ink-mute);
+  }
+
+  .orga__liste h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: .9rem; }
+  .orga__liste dl { margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .orga__liste dl > div {
+    display: flex; flex-wrap: wrap; gap: .3rem .7rem; align-items: baseline;
+    padding-bottom: .5rem; border-bottom: 1px solid var(--line);
+  }
+  .orga__liste dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
+  .orga__liste dt {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--ink-mute);
+    flex: 1 1 12rem;
+  }
+  .orga__liste dd { margin: 0; font-weight: 600; }
+  .orga__intro { font-size: .93rem; color: var(--ink-soft); margin-bottom: .9rem; }
+  .orga__grp { font-size: .9rem; color: var(--ink-soft); margin-bottom: .8rem; line-height: 1.65; }
+  .orga__grp strong {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--ink-mute);
+  }
   .tete__h1 { font-size: clamp(2.1rem,6vw,3.4rem); font-weight: 800; margin-block: .5rem .85rem; }
   .tete__t { max-width: 54ch; color: var(--on-navy-text); font-size: clamp(1rem,2.2vw,1.12rem); }
 

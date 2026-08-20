@@ -24,8 +24,9 @@ export const asso = {
   },
 
   agrements: [
-    { nom: 'Agréée FFSS', detail: 'Fédération Française de Sauvetage et de Secourisme' },
-    { nom: 'Certifié Qualiopi', detail: 'Actions de formation' },
+    { nom: 'Affiliée FFSS', detail: 'Fédération Française de Sauvetage et de Secourisme' },
+    { nom: 'Agréée sécurité civile', detail: 'Agrément de sécurité civile pour les dispositifs prévisionnels de secours' },
+    { nom: 'Certifiée Qualiopi', detail: 'Actions de formation' },
   ],
 
   /** Ce qu'AMS n'a pas : des chiffres réels. Leurs compteurs affichent zéro. */

@@ -21,6 +21,13 @@ export interface PhotoDps {
 
 export const photosDps: PhotoDps[] = [
   {
+    fichier: '/img/dps/feu-artifice.jpg',
+    alt: "Une équipe de secouristes FFSS alignée face au public pendant un feu d'artifice, à côté du véhicule de premiers secours FFSS 06.",
+    legende: 'Feu d’artifice — surveillance du public',
+    largeur: 2000,
+    hauteur: 1500,
+  },
+  {
     fichier: '/img/dps/vpsp-coucher-soleil.jpg',
     alt: "Deux secouristes de dos, sac d'intervention au dos, marchant le long du véhicule de premiers secours FFSS 06 sur le front de mer au coucher du soleil.",
     legende: 'Fin de dispositif sur le front de mer',
