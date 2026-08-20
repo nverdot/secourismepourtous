@@ -66,11 +66,16 @@ const balisages = [
   <section class="section">
     <div class="wrap">
       <div class="grille">
-        {situations.map((s) => (
+        {situations.map((s, i) => (
           <a class="sit" href={`/gestes-qui-sauvent/${s.slug}`}>
             {s.image && (
+              {/* Les trois premières vignettes sont visibles d'emblée : les
+                  charger en différé laisserait des cadres blancs à l'arrivée. */}
               <img class="sit__img" src={s.image.fichier} alt=""
-                   width="1800" height="1013" loading="lazy" decoding="async" />
+                   width="1800" height="1013"
+                   loading={i < 3 ? 'eager' : 'lazy'}
+                   fetchpriority={i === 0 ? 'high' : undefined}
+                   decoding="async" />
             )}
             <span class="sit__corps">
               <span class="sit__e">{s.court}</span>
