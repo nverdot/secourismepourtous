@@ -1,0 +1,71 @@
+---
+import { indicateursPublies, anneeIndicateurs } from '../data/indicateurs';
+
+/**
+ * Indicateurs de résultats exigés par Qualiopi (indicateur 3).
+ *
+ * Le bloc s'efface entièrement s'il n'y a rien de mesuré à montrer : afficher
+ * un cadre vide serait pire que de ne rien afficher.
+ */
+---
+
+{indicateursPublies.length > 0 && (
+  <section class="ind" aria-labelledby="t-ind">
+    <div class="wrap">
+      <p class="eyebrow">Qualité</p>
+      <h2 class="h-section" id="t-ind">Nos résultats</h2>
+      <p class="lede">
+        Organisme certifié Qualiopi, nous publions les résultats mesurés auprès
+        de nos stagiaires. Chiffres arrêtés sur l’année {anneeIndicateurs}.
+      </p>
+
+      <dl class="ind__grille">
+        {indicateursPublies.map((i) => (
+          <div class="ind__carte">
+            <dt>{i.libelle}</dt>
+            <dd>
+              <span class="ind__v">{i.valeur}<i>{i.unite}</i></span>
+              <span class="ind__p">{i.precision}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="ind__note">
+        Les taux de réussite et d’interruption sont communiqués sur demande, par
+        formation et par session.
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .ind { padding-block: clamp(2.5rem, 6vw, 4rem); }
+
+  .ind__grille {
+    margin: 2.5rem 0 0; display: grid; gap: clamp(.7rem, 1.6vw, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .ind__carte {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .ind__carte dt {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .ind__carte dd { margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .ind__v {
+    font-family: 'Archivo', sans-serif; font-size: clamp(2rem, 4.5vw, 2.6rem);
+    font-weight: 800; line-height: 1; color: var(--azur);
+    font-variant-numeric: tabular-nums;
+  }
+  .ind__v i { font-style: normal; font-size: .55em; color: var(--secours); margin-left: .1em; }
+  .ind__p { font-size: .85rem; color: var(--ink-soft); }
+
+  .ind__note {
+    margin-top: 1.25rem; font-size: .87rem; color: var(--ink-mute);
+    max-width: 68ch;
+  }
+</style>
