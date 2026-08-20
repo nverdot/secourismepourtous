@@ -215,6 +215,9 @@ const cartes = ordre.map((cle) => ({
     background: var(--surface); color: var(--ink);
     box-shadow: var(--sh-lg); overflow: hidden;
   }
+  /* Garde-fou : une boîte fermée ne doit jamais rester dans le flux. */
+  .fdlg:not([open]) { display: none; }
+
   .fdlg::backdrop { background: rgba(7,23,38,.66); backdrop-filter: blur(2px); }
 
   .fdlg__tete { display: flex; align-items: center; gap: .8rem; padding: 1rem 1.2rem; color: #fff; }

@@ -141,6 +141,9 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
     box-shadow: var(--sh-lg);
     overflow: hidden;
   }
+  /* Garde-fou : une boîte fermée ne doit jamais rester dans le flux. */
+  .pop:not([open]) { display: none; }
+
   .pop::backdrop { background: rgba(7, 23, 38, 0.66); backdrop-filter: blur(2px); }
 
   .pop__fermer-form { position: absolute; top: 0; right: 0; margin: 0; }

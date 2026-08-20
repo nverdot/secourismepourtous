@@ -315,9 +315,12 @@ const VERSION = '2026-08-20-b';
     background: var(--surface); color: var(--ink);
     box-shadow: var(--sh-lg);
     overflow: hidden;
-    display: flex; flex-direction: column;
     padding: 0;
   }
+  /* La mise en page interne ne vaut que boîte ouverte : sinon le display
+     écrase le display:none natif du dialog fermé. */
+  .ins[open] { display: flex; flex-direction: column; }
+  .ins:not([open]) { display: none; }
   .ins::backdrop { background: rgba(7,23,38,.68); backdrop-filter: blur(2px); }
 
   .ins__tete {
