@@ -221,7 +221,13 @@ const actuel = Astro.url.pathname;
     .entete__ffss { height: 34px; padding-left: .55rem; }
   }
 
-  .nav { display: flex; gap: 0.35rem; margin-left: auto; }
+  .nav { display: flex; gap: 0.2rem; margin-left: auto; min-width: 0; }
+  /* Entre 1180 et 1400 px, la barre est juste : on resserre plutôt que
+     de laisser le bouton déborder. */
+  @media (max-width: 1400px) {
+    .nav__lien { padding-inline: 0.5rem; }
+    .entete__cta { padding-inline: 1.1rem; }
+  }
   .nav__lien {
     font-family: 'Archivo', sans-serif;
     font-size: 0.92rem;
@@ -241,7 +247,7 @@ const actuel = Astro.url.pathname;
   .entete__burger { display: none; }
   .nav-mobile { display: none; }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1180px) {
     .nav, .entete__cta { display: none; }
 
     .entete__burger {

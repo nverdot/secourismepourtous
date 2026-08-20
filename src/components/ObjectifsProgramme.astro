@@ -4,6 +4,7 @@ import type { Formation } from '../data/formations';
 interface Props { formation: Formation }
 const { formation: f } = Astro.props;
 
+import { asso } from '../data/association';
 import { chapitresDe, volume, referentielPse } from '../data/programme-pse';
 
 /**
@@ -12,6 +13,24 @@ import { chapitresDe, volume, referentielPse } from '../data/programme-pse';
  * présente dans la même section que pour les autres formations — un visiteur
  * ne doit pas avoir deux programmes à lire.
  */
+/**
+ * Modalités exigées par Qualiopi, limitées à ce que la page n'affiche pas déjà :
+ * la durée, le tarif, les prérequis et la validation sont dans l'en-tête.
+ */
+const m = { ...asso.modalites, ...(f.modalites ?? {}) };
+const modalites = [
+  { cle: 'Effectif', valeur: m.effectif },
+  { cle: 'Lieu', valeur: m.lieu },
+  { cle: 'Délai d’accès', valeur: m.delaiAcces },
+  { cle: 'Méthodes mobilisées', valeur: m.pedagogie },
+  { cle: 'Modalités d’évaluation', valeur: m.evaluation, note: f.certificationNote },
+  {
+    cle: 'Accessibilité',
+    valeur: asso.accessibilite,
+    note: `Référente handicap joignable à ${asso.contact.email}.`,
+  },
+];
+
 const niveauPse = f.slug === 'pse-1' ? 'pse1' : f.slug === 'pse-2' ? 'pse2' : null;
 const chapitres = niveauPse ? chapitresDe(niveauPse) : [];
 const v = niveauPse ? volume(niveauPse) : null;
@@ -20,7 +39,7 @@ const v = niveauPse ? volume(niveauPse) : null;
 <section class="section" aria-label="Contenu de la formation">
   <div class="wrap op">
     <!-- Objectifs -->
-    <div>
+    <div class="buts-col">
       <div class="op__tete">
         <span class="op__ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -69,6 +88,39 @@ const v = niveauPse ? volume(niveauPse) : null;
           </ul>
         </div>
       )}
+    </div>
+
+    <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
+         de les publier ; les répéter ailleurs ferait doublon. -->
+    <div class="mods">
+      <div class="op__tete">
+        <span class="op__ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 11l3 3 8-8" /><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+          </svg>
+        </span>
+        <h2 class="op__h">Comment ça se passe</h2>
+      </div>
+
+      <dl class="mods__l">
+        {modalites.map((l) => (
+          <div class="mods__i">
+            <dt>{l.cle}</dt>
+            <dd>
+              {l.valeur}
+              {l.note && <span class="mods__n">{l.note}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="mods__pied">
+        <a href="/documents/certificat-qualiopi.pdf" target="_blank" rel="noopener">Certificat Qualiopi</a>
+        <span aria-hidden="true">·</span>
+        <a href="/documents/livret-accueil-stagiaire.pdf" target="_blank" rel="noopener">Livret d’accueil</a>
+        <span aria-hidden="true">·</span>
+        <a href="/cgv">CGV</a>
+      </p>
     </div>
 
     <!-- Programme -->
@@ -142,13 +194,26 @@ const v = niveauPse ? volume(niveauPse) : null;
 </section>
 
 <style>
+  /* Colonne gauche : objectifs puis modalités, l'un sous l'autre.
+     Colonne droite : le programme, qui court sur les deux rangées. */
   .op {
     display: grid;
     gap: clamp(1.75rem, 4vw, 3rem);
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto auto;
     align-items: start;
   }
-  @media (max-width: 880px) { .op { grid-template-columns: 1fr; } }
+  /* Placement explicite : le placement automatique aurait mis les modalités
+     dans la colonne du programme. */
+  .op > .buts-col { grid-column: 1; grid-row: 1; }
+  .op > .mods { grid-column: 1; grid-row: 2; }
+  .op > #programme { grid-column: 2; grid-row: 1 / span 2; }
+  @media (max-width: 880px) {
+    .op { grid-template-columns: 1fr; grid-template-rows: none; }
+    .op > .buts-col,
+    .op > .mods,
+    .op > #programme { grid-column: 1; grid-row: auto; }
+  }
 
   .op__tete { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
   .op__ic {
@@ -256,4 +321,27 @@ const v = niveauPse ? volume(niveauPse) : null;
     font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
     letter-spacing: .06em; text-transform: uppercase; color: var(--secours);
   }
+
+  .mods__l {
+    margin: 1.25rem 0 0;
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    overflow: hidden; background: var(--surface);
+  }
+  .mods__i {
+    display: grid; gap: .2rem;
+    padding: .85rem 1.1rem; border-bottom: 1px solid var(--line);
+  }
+  .mods__i:last-child { border-bottom: 0; }
+  .mods__i dt {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .mods__i dd { margin: 0; font-size: .9rem; color: var(--ink); }
+  .mods__n { display: block; margin-top: .2rem; font-size: .83rem; color: var(--ink-mute); }
+
+  .mods__pied {
+    display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center;
+    margin-top: .9rem; font-size: .85rem; color: var(--ink-mute);
+  }
+  .mods__pied a { color: var(--azur); }
 </style>
