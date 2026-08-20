@@ -16,9 +16,13 @@
  * lecture et réservation seulement). Rien de sensible n'est exposé ici.
  */
 const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92b3-33f9527fec21';
+
+// Repère de version : permet de savoir, depuis la console du navigateur, si la
+// page affichée est bien la dernière déployée ou une copie en cache.
+const VERSION = '2026-08-20-b';
 ---
 
-<dialog class="ins" id="pop-inscription" aria-labelledby="ins-titre" data-client={CLIENT_ID}>
+<dialog class="ins" id="pop-inscription" aria-labelledby="ins-titre" data-client={CLIENT_ID} data-version={VERSION}>
   <header class="ins__tete">
     <span class="ins__ic" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,6 +71,7 @@ const CLIENT_ID = import.meta.env.PUBLIC_WIX_CLIENT_ID ?? '22902884-dd06-4ac4-92
     const pop = document.getElementById('pop-inscription');
     if (!pop) return;
     const CLIENT_ID = pop.dataset.client;
+    console.info('[inscription] version', pop.dataset.version);
 
     const client = createClient({
       modules: ev,
