@@ -282,6 +282,10 @@ export const situations: Situation[] = [
     enFormation:
       'On travaille la profondeur et le rythme des compressions sur mannequin avec retour visuel — presque personne n’appuie assez fort du premier coup — et on manipule un vrai défibrillateur de formation.',
     fiche: { ref: '02PR04', nom: 'Arrêt cardiaque', maj: 'décembre 2023' },
+    image: {
+      fichier: '/img/gestes/arret-cardiaque.jpg',
+      alt: 'Dans un salon, une femme réalise des compressions thoraciques sur un homme inconscient allongé au sol, bras tendus et mains au centre de la poitrine.',
+    },
     seo: {
       title: 'Arrêt cardiaque : que faire ? | Gestes qui sauvent à Nice',
       description:
@@ -337,6 +341,10 @@ export const situations: Situation[] = [
     enFormation:
       'On apprend à poser les bonnes questions, à transmettre un bilan clair au médecin régulateur, et à reconnaître les signes qui font basculer d’un simple malaise à une urgence vitale.',
     fiche: { ref: '02PR05', nom: 'Malaises', maj: 'décembre 2022' },
+    image: {
+      fichier: '/img/gestes/malaise.jpg',
+      alt: 'Une femme appelle les secours en soutenant un homme assis dont le visage est affaissé d’un côté et le bras retombe : deux signes d’accident vasculaire cérébral.',
+    },
     seo: {
       title: 'Malaise, AVC, douleur dans la poitrine : que faire ?',
       description:
@@ -389,6 +397,10 @@ export const situations: Situation[] = [
     enFormation:
       'On apprend à évaluer l’étendue d’une brûlure, à distinguer ce qui relève du médecin traitant de ce qui relève du 15, et à gérer les cas particuliers : brûlure chimique, électrique, par inhalation.',
     fiche: { ref: '02PR07', nom: 'Brûlures', maj: 'décembre 2022' },
+    image: {
+      fichier: '/img/gestes/brulure.jpg',
+      alt: 'Dans une cuisine, une femme maintient l’avant-bras brûlé d’un homme sous l’eau courante de l’évier.',
+    },
     seo: {
       title: 'Brûlure : que faire ? Les bons gestes | Gestes qui sauvent',
       description:

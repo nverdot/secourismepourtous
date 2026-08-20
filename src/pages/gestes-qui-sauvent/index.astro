@@ -67,7 +67,11 @@ const balisages = [
     <div class="wrap">
       <div class="grille">
         {situations.map((s) => (
-          <a class="sit" href={`/gestes-qui-sauvent/${s.slug}`}>
+          <a class:list={['sit', { 'sit--photo': !!s.image }]} href={`/gestes-qui-sauvent/${s.slug}`}>
+            {s.image && (
+              <img class="sit__img" src={s.image.fichier} alt=""
+                   width="1800" height="1013" loading="lazy" decoding="async" />
+            )}
             <span class="sit__e">{s.court}</span>
             <strong>{s.titre}</strong>
             <span class="sit__x">{s.accroche}</span>
@@ -160,9 +164,19 @@ const balisages = [
   .sit {
     display: flex; flex-direction: column; gap: .5rem;
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--r-lg); padding: clamp(1.25rem, 3vw, 1.6rem);
-    text-decoration: none; color: inherit;
+    --marge: clamp(1.25rem, 3vw, 1.6rem);
+    border-radius: var(--r-lg); padding: var(--marge);
+    text-decoration: none; color: inherit; overflow: hidden;
     transition: border-color .15s, box-shadow .15s;
+  }
+  /* L'aperçu occupe toute la largeur de la carte : le padding est reporté
+     après l'image, sinon elle flotterait dans un cadre blanc. */
+  .sit--photo { padding-top: 0; }
+  .sit__img {
+    display: block; width: calc(100% + 2 * var(--marge));
+    margin-inline: calc(-1 * var(--marge));
+    margin-bottom: .35rem;
+    aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%;
   }
   .sit:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
   .sit__e {

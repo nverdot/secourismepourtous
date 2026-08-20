@@ -221,7 +221,17 @@ const balisages = [
       background: linear-gradient(180deg, rgba(7,23,38,.8) 0%, rgba(7,23,38,.9) 55%, rgba(7,23,38,.95) 100%);
     }
   }
-  .tete--photo { padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(3rem, 7vw, 4.5rem); }
+  /* Hero illustré : la photo a besoin de hauteur pour exister. Une hauteur
+     minimale plutôt qu'un simple padding, pour que le cadrage tienne aussi
+     quand le titre est court. */
+  .tete--photo {
+    padding-block: clamp(2rem, 5vw, 3rem) clamp(4rem, 9vw, 6.5rem);
+    min-height: clamp(360px, 46vw, 540px);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  @media (max-width: 820px) {
+    .tete--photo { min-height: clamp(320px, 62vw, 420px); }
+  }
   .tete__in { position: relative; z-index: 1; }
   .fil {
     display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
