@@ -35,7 +35,7 @@ const cartes = ordre.map((cle) => ({
 
     <div class="cartes">
       {cartes.map((c) => (
-        <article class:list={['cf', `cf--${c.couleur}`, { 'cf--large': c.cle === 'pedagogique' }]}>
+        <article id={c.cle} class:list={['cf', `cf--${c.couleur}`, { 'cf--large': c.cle === 'pedagogique' }]}>
           <div class="cf__visuel">
             {c.image
               ? <img src={c.image} alt="" loading="lazy" />
@@ -136,6 +136,20 @@ const cartes = ordre.map((cle) => ({
   document.querySelectorAll<HTMLDialogElement>('.fdlg').forEach((d) => {
     d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
   });
+
+  /**
+   * Arriver depuis le menu avec « #operationnelle » doit ouvrir la filière,
+   * pas seulement faire défiler jusqu'à sa carte : le visiteur a déjà exprimé
+   * son choix dans le menu, le lui faire répéter est une étape de trop.
+   */
+  function ouvreDepuisAncre() {
+    const cle = location.hash.slice(1);
+    if (!cle) return;
+    const boite = document.getElementById(`fdlg-${cle}`);
+    if (boite && typeof boite.showModal === 'function' && !boite.open) boite.showModal();
+  }
+  ouvreDepuisAncre();
+  addEventListener('hashchange', ouvreDepuisAncre);
 </script>
 
 <style>
@@ -152,6 +166,8 @@ const cartes = ordre.map((cle) => ({
   .cf--large { grid-column: 1 / -1; }
 
   .cf {
+    /* L'en-tête est fixe : sans cette marge, une ancre place la carte dessous. */
+    scroll-margin-top: 130px;
     display: grid;
     grid-template-columns: 170px 1fr;
     background: var(--surface);

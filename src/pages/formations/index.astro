@@ -1,5 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { faqFormations } from '../../data/faq';
+import { questionsFrequentes } from '../../lib/schema';
 import { asso } from '../../data/association';
 import { filAriane } from '../../lib/schema';
 import { formations, filieres, type Filiere } from '../../data/formations';
@@ -26,10 +29,13 @@ const groupes = ordre
   title="Formations secourisme à Nice | PSC, PSE, BNSSA, SST"
   description="Toutes nos formations secourisme à Nice et dans le 06 : PSC, PSE1, PSE2, BNSSA, SST et formations de formateur. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile."
   chemin="/formations"
-  schemas={[filAriane([
-    { nom: 'Accueil', chemin: '/' },
-    { nom: 'Formations', chemin: '/formations' },
-  ])]}
+  schemas={[
+    filAriane([
+      { nom: 'Accueil', chemin: '/' },
+      { nom: 'Formations', chemin: '/formations' },
+    ]),
+    questionsFrequentes(faqFormations),
+  ]}
 >
   <header class="tete">
     <div class="wrap">
@@ -66,6 +72,16 @@ const groupes = ordre
   <CartesFilieres />
 
   <Indicateurs />
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Faq
+        titre="Vos questions avant de vous inscrire"
+        intro="Le choix de la formation, le financement, la validité du diplôme : ce qu'on nous demande le plus souvent."
+        questions={faqFormations}
+      />
+    </div>
+  </section>
 
   <!-- ========== ACCESSIBILITÉ ========== -->
   <section class="section section--navy">

@@ -1,0 +1,88 @@
+---
+import type { QR } from '../data/faq';
+
+/**
+ * Foire aux questions.
+ *
+ * Les réponses sont dans le HTML livré, pas chargées au clic : c'est ce qui
+ * permet à Google de les lire et, éventuellement, de les afficher en réponse
+ * directe. Le dépliant natif ne fait que les masquer visuellement.
+ *
+ * Le balisage FAQPage est posé par la page appelante, une seule fois : deux
+ * blocs FAQPage sur une même page se neutralisent.
+ */
+
+interface Props {
+  titre?: string;
+  intro?: string;
+  questions: QR[];
+  /** Ouvre la première question, utile quand le bloc est isolé en bas de page. */
+  premiereOuverte?: boolean;
+}
+const {
+  titre = 'Questions fréquentes',
+  intro,
+  questions,
+  premiereOuverte = false,
+} = Astro.props;
+---
+
+<section class="faq" aria-labelledby="t-faq">
+  <p class="eyebrow">On nous demande souvent</p>
+  <h2 class="h-section" id="t-faq">{titre}</h2>
+  {intro && <p class="lede">{intro}</p>}
+
+  <div class="faq__l">
+    {questions.map((q, i) => (
+      <details class="qr" open={premiereOuverte && i === 0}>
+        <summary>
+          <span>{q.question}</span>
+          <svg class="qr__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </summary>
+        <div class="qr__r"><p>{q.reponse}</p></div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq { padding-block: clamp(2rem, 5vw, 3rem); }
+  .faq__l {
+    margin-top: 2rem; display: flex; flex-direction: column; gap: .6rem;
+    max-width: 78ch;
+  }
+
+  .qr {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); overflow: hidden;
+    transition: border-color .15s;
+  }
+  .qr[open] { border-color: var(--azur); }
+  .qr:hover { border-color: var(--secours); }
+
+  .qr summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    list-style: none; cursor: pointer;
+    padding: 1rem 1.25rem;
+    font-family: 'Archivo', sans-serif; font-size: .98rem; font-weight: 600;
+    color: var(--ink);
+  }
+  .qr summary::-webkit-details-marker { display: none; }
+  .qr summary:focus-visible { outline: 3px solid var(--azur); outline-offset: -3px; }
+
+  .qr__f { flex: none; width: 19px; height: 19px; color: var(--ink-mute); transition: transform .18s; }
+  .qr[open] .qr__f { transform: rotate(180deg); color: var(--azur); }
+
+  .qr__r { padding: 0 1.25rem 1.15rem; }
+  .qr__r p {
+    font-size: .94rem; color: var(--ink-soft); line-height: 1.7;
+    max-width: 68ch;
+  }
+
+  /* Sur fond bleu, la carte s'inverse. */
+  :global(.section--navy) .qr {
+    background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.16);
+  }
+  :global(.section--navy) .qr summary { color: #fff; }
+  :global(.section--navy) .qr__r p { color: var(--on-navy-text); }
+</style>

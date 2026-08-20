@@ -26,14 +26,6 @@ const {
 
 const { adresse, codePostal, ville } = asso.contact;
 
-const DESTINATION = encodeURIComponent(`${adresse}, ${codePostal} ${ville}`);
-const EN_TRANSPORTS = `https://www.google.com/maps/dir/?api=1&destination=${DESTINATION}&travelmode=transit`;
-
-// Le planificateur de Lignes d'Azur est une application Angular : elle ignore
-// tout paramètre d'URL et s'ouvre toujours sur un formulaire vide. On y renvoie
-// quand même, pour le réseau local, en affichant l'adresse à recopier juste à
-// côté — et l'itinéraire Google reste la voie directe, destination déjà remplie.
-const LIGNES_AZUR = 'https://www.lignesdazur.com/fr/itineraires';
 ---
 
 <section class:list={['lieu', { 'lieu--sombre': sombre }]} aria-labelledby="t-lieu">
@@ -63,19 +55,6 @@ const LIGNES_AZUR = 'https://www.lignesdazur.com/fr/itineraires';
           </dd>
         </div>
       )}
-      <div>
-        <dt>En transports en commun</dt>
-        <dd>
-          <a href={EN_TRANSPORTS} target="_blank" rel="noopener">
-            Calculer mon trajet — destination déjà renseignée
-          </a>
-          <p class="lieu__alt">
-            Ou sur le réseau niçois&nbsp;:
-            <a href={LIGNES_AZUR} target="_blank" rel="noopener">Lignes d’Azur</a>
-            <span> — indiquez «&nbsp;{adresse}&nbsp;» comme arrivée.</span>
-          </p>
-        </dd>
-      </div>
     </dl>
   </div>
 
@@ -113,8 +92,6 @@ const LIGNES_AZUR = 'https://www.lignesdazur.com/fr/itineraires';
   }
   .lieu__min { color: var(--ink-mute); }
 
-  .lieu__alt { margin-top: .45rem; font-size: .85rem; color: var(--ink-mute); }
-  .lieu--sombre .lieu__alt { color: var(--on-navy-soft); }
 
   /* Variante sur fond bleu : le bloc doit rester lisible. */
   .lieu--sombre .lieu__l > div { border-color: rgba(255,255,255,.16); }

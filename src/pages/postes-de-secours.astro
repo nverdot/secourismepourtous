@@ -1,5 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import { villes } from '../data/villes.ts';
+import Faq from '../components/Faq.astro';
+import { faqDps } from '../data/faq';
+import { questionsFrequentes } from '../lib/schema';
 import { servicePostesDeSecours, filAriane } from '../lib/schema';
 import { asso } from '../data/association';
 import CarrouselDps from '../components/CarrouselDps.astro';
@@ -58,6 +62,7 @@ const etapes = [
   chemin="/postes-de-secours"
   schemas={[
     servicePostesDeSecours(),
+    questionsFrequentes(faqDps),
     filAriane([
       { nom: 'Accueil', chemin: '/' },
       { nom: 'Postes de secours', chemin: '/postes-de-secours' },
@@ -192,6 +197,37 @@ const etapes = [
     </div>
   </section>
 
+  <!-- ========== VILLES ========== -->
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Sur le terrain</p>
+      <h2 class="h-section">Où nous intervenons</h2>
+      <p class="lede">
+        Nous couvrons tout le département. Voici les communes où nous revenons
+        le plus souvent, et ce que nous y sécurisons.
+      </p>
+      <div class="villes">
+        {villes.map((v) => (
+          <a class="ville" href={`/postes-de-secours/${v.slug}`}>
+            <strong>{v.nom}</strong>
+            <span>{v.references.map((r) => r.nom).join(' · ')}</span>
+            <svg class="ville__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Faq
+        titre="Vos questions sur les dispositifs de secours"
+        intro="Effectifs, délais, tarifs, obligations : ce que demandent les organisateurs avant de nous confier leur événement."
+        questions={faqDps}
+      />
+    </div>
+  </section>
+
   <!-- ========== APPEL ========== -->
   <section class="section section--appel">
     <div class="wrap wrap--etroit appel">
@@ -313,6 +349,26 @@ const etapes = [
   .clip figcaption { display: flex; flex-direction: column; gap: .15rem; margin-top: .7rem; }
   .clip figcaption strong { font-size: .96rem; font-weight: 700; }
   .clip figcaption span { font-size: .87rem; color: var(--ink-mute); }
+
+  .villes {
+    margin-top: 2.5rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  }
+  .ville {
+    display: flex; flex-direction: column; gap: .3rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.15rem 1.3rem;
+    text-decoration: none; color: inherit; position: relative;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .ville:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
+  .ville strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
+  .ville span { font-size: .85rem; color: var(--ink-mute); padding-right: 1.5rem; }
+  .ville__f {
+    position: absolute; right: 1.2rem; top: 1.3rem;
+    width: 17px; height: 17px; color: var(--ink-mute);
+  }
+  .ville:hover .ville__f { color: var(--secours); }
 
   .appel { display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
   .appel__h { font-size: clamp(1.5rem,3.5vw,2rem); font-weight: 800; margin-bottom: .6rem; }

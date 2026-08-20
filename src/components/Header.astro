@@ -29,11 +29,24 @@ const actuel = Astro.url.pathname;
 ---
 
 <header class="entete">
-  <!-- Bandeau de contact : le téléphone accessible en un geste, y compris
-       depuis un mobile en situation d'urgence ou de demande de devis. -->
+  <!--
+    Bandeau de contact. Le téléphone y est accessible en un geste, y compris
+    depuis un mobile en situation d'urgence ou de demande de devis.
+
+    L'adresse y figure en toutes lettres, dès la première page : c'est ce que
+    cherche un visiteur qui vient se former, et c'est aussi le signal que Google
+    recoupe avec la fiche d'établissement pour rattacher l'organisme à Nice.
+    Elle doit rester identique, au caractère près, à celle de la fiche Google.
+  -->
   <div class="entete__bandeau">
     <div class="wrap entete__bandeau-in">
-      <span>Affiliée FFSS · Agréée sécurité civile · Certifiée Qualiopi · Nice et Alpes-Maritimes</span>
+      <span class="entete__labels">Affiliée FFSS · Agréée sécurité civile · Certifiée Qualiopi</span>
+      <span class="entete__lieu">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+        </svg>
+        {asso.contact.adresse}, {asso.contact.codePostal} {asso.contact.ville}
+      </span>
       <a href={`tel:${asso.contact.telephoneLien}`} class="entete__tel">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -109,6 +122,23 @@ const actuel = Astro.url.pathname;
     </nav>
   </div>
 </header>
+
+<script>
+  /**
+   * Un lien vers une ancre de la page courante ne recharge rien : sans ce
+   * script, le panneau mobile restait ouvert par-dessus la section vers
+   * laquelle on venait de naviguer.
+   */
+  const bascule = document.getElementById('menu-mobile');
+  const refermeMenu = () => { if (bascule) bascule.checked = false; };
+
+  document.querySelectorAll('.nav-mobile a').forEach((a) =>
+    a.addEventListener('click', refermeMenu)
+  );
+  addEventListener('hashchange', refermeMenu);
+  // Échap referme aussi, comme n'importe quelle surcouche.
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') refermeMenu(); });
+</script>
 
 <style>
   .entete {
@@ -300,8 +330,17 @@ const actuel = Astro.url.pathname;
     .entete__barre { flex-wrap: wrap; }
   }
 
-  @media (max-width: 620px) {
-    .entete__bandeau-in > span { display: none; }
+  .entete__lieu {
+    display: inline-flex; align-items: center; gap: .35rem;
+    margin-left: auto; margin-right: 1.1rem;
+  }
+  .entete__lieu svg { flex: none; opacity: .7; }
+
+  /* En s'étrécissant, le bandeau abandonne d'abord les labels, puis l'adresse :
+     le téléphone est ce qui doit survivre jusqu'au bout. */
+  @media (max-width: 1080px) { .entete__labels { display: none; } }
+  @media (max-width: 720px) {
+    .entete__lieu { display: none; }
     .entete__bandeau-in { justify-content: flex-end; }
   }
 </style>
