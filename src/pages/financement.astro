@@ -222,14 +222,23 @@ const departements = [
         <!-- ---------- accessibilité ---------- -->
         <fieldset class="bloc bloc--acc">
           <legend><span class="bloc__n">5</span>Accessibilité</legend>
-          <label class="case">
-            <input type="checkbox" name="handicap" value="oui" />
-            <span>
-              Je suis en situation de handicap et souhaite être contacté(e) pour
-              adapter mon accueil.
-              <em>Facultatif. Notre référente handicap vous répondra directement.</em>
-            </span>
-          </label>
+          <p class="bloc__aide">
+            Êtes-vous en situation de handicap&nbsp;? Cela nous permet d'adapter au
+            mieux votre accueil. Question facultative : vous pouvez ne pas répondre.
+          </p>
+          <div class="choix choix--duo">
+            <label class="choix__o">
+              <input type="radio" name="handicap" value="Non concerné(e)" />
+              <span><strong>Non, je ne suis pas concerné(e)</strong></span>
+            </label>
+            <label class="choix__o">
+              <input type="radio" name="handicap" value="Oui, en situation de handicap" />
+              <span>
+                <strong>Oui, je suis en situation de handicap</strong>
+                <em>Notre référente handicap vous contactera</em>
+              </span>
+            </label>
+          </div>
           <label>Précisions ou question
             <textarea name="message" rows="3" placeholder="Toute information utile à l'organisation de votre formation"></textarea>
           </label>
@@ -363,6 +372,9 @@ const departements = [
   .fm textarea { resize: vertical; }
 
   .choix { display: grid; gap: .55rem; }
+  .choix--duo { grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr)); }
+  .choix--duo .choix__o input { accent-color: var(--gold); }
+  .choix--duo .choix__o:hover { border-color: var(--gold); }
   .choix__o {
     flex-direction: row !important; align-items: flex-start; gap: .7rem;
     background: var(--sunk); border: 1px solid var(--line);

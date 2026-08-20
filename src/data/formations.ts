@@ -42,6 +42,8 @@ export interface Formation {
   certificationNote?: string;
   tarif: string;
   tarifNote?: string;
+  /** Tarif applicable en financement CPF, quand il diffère du tarif direct. */
+  tarifCpf?: string;
   aValider?: boolean;
 
   objectifs: Objectif[];
@@ -235,13 +237,14 @@ export const formations: Formation[] = [
       "Passez du geste citoyen à l'intervention en équipe. Le PSE1 est la porte d'entrée du secourisme opérationnel et des postes de secours.",
     resume: "Devenez secouriste équipier et intervenez sur les dispositifs de secours.",
     duree: '35 heures',
-    dureeNote: 'À confirmer',
+    dureeNote: '5 journées',
     prerequis: 'Dès 16 ans',
     prerequisNote: 'À confirmer',
     certification: 'PSE1',
     certificationNote: 'Certificat de compétences',
-    tarif: 'Nous consulter',
-    aValider: true,
+    tarif: '280 €',
+    tarifNote: '350 € en financement CPF',
+    tarifCpf: '350 €',
     objectifs: [
       {
         titre: 'Intervenir en équipe',
@@ -288,12 +291,13 @@ export const formations: Formation[] = [
       "Prenez la responsabilité d'une équipe. Le PSE2 vous forme à conduire l'intervention et à coordonner les secouristes sur le terrain.",
     resume: 'Devenez chef d’équipe secouriste, accessible après le PSE1.',
     duree: '28 heures',
-    dureeNote: 'À confirmer',
+    dureeNote: '4 journées',
     prerequis: 'PSE1 à jour',
     certification: 'PSE2',
     certificationNote: 'Certificat de compétences',
-    tarif: 'Nous consulter',
-    aValider: true,
+    tarif: '280 €',
+    tarifNote: '350 € en financement CPF',
+    tarifCpf: '350 €',
     objectifs: [
       { titre: 'Conduire une intervention', texte: "Organiser l'action de l'équipe et décider des gestes prioritaires.", icone: 'equipe' },
       { titre: 'Immobiliser et relever', texte: 'Mettre en œuvre les techniques d’immobilisation du rachis et des membres.', icone: 'urgence' },
@@ -370,9 +374,8 @@ export const formations: Formation[] = [
     prerequisNote: 'Salariés et employeurs',
     certification: 'SST',
     certificationNote: 'MAC tous les 24 mois',
-    tarif: 'Devis sur mesure',
-    tarifNote: 'Intervention en entreprise',
-    aValider: true,
+    tarif: '190 €',
+    tarifNote: 'MAC SST : 90 € tous les 24 mois',
     objectifs: [
       { titre: 'Secourir en entreprise', texte: 'Intervenir efficacement sur un accident du travail avant l’arrivée des secours.', icone: 'urgence' },
       { titre: 'Prévenir les risques', texte: 'Repérer les situations dangereuses et participer à la prévention dans l’entreprise.', icone: 'bouclier' },
@@ -386,6 +389,7 @@ export const formations: Formation[] = [
       { titre: 'Prévention des risques', texte: 'Contribuer à la démarche de prévention de son établissement.' },
     ],
     suites: ['Maintien et actualisation des compétences (MAC SST) tous les 24 mois'],
+    recyclage: 'mac-sst',
     image: '/img/sst.jpg',
     wixEvent: 'SST',
     seo: {
@@ -411,12 +415,13 @@ export const formations: Formation[] = [
     accroche:
       "Les gestes évoluent, les recommandations aussi. Une demi-journée pour remettre à jour vos réflexes et repartir confiant.",
     resume: 'Remise à niveau des gestes de premiers secours pour les titulaires du PSC.',
-    duree: 'Nous consulter',
+    duree: '7,5 heures',
     prerequis: 'PSC obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Recyclage conseillé tous les 3 ans',
-    tarif: 'Nous consulter',
-    aValider: true,
+    tarif: '90 €',
+    tarifNote: '150 € en financement CPF',
+    tarifCpf: '150 €',
     objectifs: [
       { titre: 'Réactiver les gestes', texte: "Reprendre en pratique les gestes d'urgence vitale, sans repartir de zéro.", icone: 'coeur' },
       { titre: 'Intégrer les évolutions', texte: 'Prendre connaissance des dernières recommandations du référentiel national.', icone: 'bouclier' },
@@ -448,12 +453,14 @@ export const formations: Formation[] = [
     accroche:
       "Obligatoire chaque année pour rester opérationnel. Sans elle, vous ne pouvez plus intervenir sur les postes de secours.",
     resume: 'Le maintien annuel obligatoire des compétences de secouriste équipier.',
-    duree: 'Nous consulter',
+    duree: '7 heures',
     prerequis: 'PSE1 obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle et obligatoire',
-    tarif: 'Nous consulter',
-    aValider: true,
+    tarif: '70 €',
+    dureeNote: '1 journée',
+    tarifNote: '90 € en financement CPF',
+    tarifCpf: '90 €',
     objectifs: [
       { titre: 'Rester opérationnel', texte: "Conserver le droit d'intervenir en équipe sur les dispositifs de secours.", icone: 'equipe' },
       { titre: 'Réviser les gestes techniques', texte: 'Bilans, immobilisations, oxygénothérapie et matériel de relevage.', icone: 'urgence' },
@@ -485,12 +492,14 @@ export const formations: Formation[] = [
     accroche:
       "Chef d'équipe, votre maintien de compétences est annuel. Une journée pour réviser les gestes et la conduite d'intervention.",
     resume: 'Le maintien annuel obligatoire des compétences de chef d’équipe secouriste.',
-    duree: 'Nous consulter',
+    duree: '8 heures',
     prerequis: 'PSE2 obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle et obligatoire',
-    tarif: 'Nous consulter',
-    aValider: true,
+    tarif: '70 €',
+    dureeNote: '1 journée',
+    tarifNote: '90 € en financement CPF',
+    tarifCpf: '90 €',
     objectifs: [
       { titre: 'Conserver la qualification', texte: "Rester habilité à conduire une équipe sur les dispositifs de secours.", icone: 'equipe' },
       { titre: 'Réviser la conduite d’intervention', texte: 'Organisation de l’équipe, priorisation des gestes, transmission aux secours.', icone: 'bouclier' },
@@ -547,6 +556,276 @@ export const formations: Formation[] = [
       title: 'Recyclage BNSSA à Nice | Formation continue',
       description:
         'Recyclez votre BNSSA à Nice pour rester opérationnel. Formation continue obligatoire, agréée FFSS et certifiée Qualiopi. Consultez les dates.',
+    },
+  },
+
+  // ==========================================================================
+  //  FILIÈRE AQUATIQUE — surveillance des baignades
+  // ==========================================================================
+  {
+    slug: 'bsb',
+    sigle: 'BSB',
+    intitule: 'Brevet de Surveillant de Baignade',
+    filiere: 'aquatique',
+    certifiante: true,
+    accroche:
+      "Encadrer la baignade en accueil collectif de mineurs : colonies, centres de loisirs, camps. Le BSB est le diplôme qui vous en donne le droit.",
+    resume: 'Le diplôme pour surveiller les baignades en accueil collectif de mineurs.',
+    duree: '35 heures',
+    dureeNote: '5 journées',
+    prerequis: 'Dès 17 ans',
+    certification: 'BSB',
+    certificationNote: 'Recyclage FC BSB requis',
+    tarif: '290 €',
+    objectifs: [
+      { titre: 'Surveiller un lieu de baignade', texte: "Organiser la baignade, positionner les surveillants et prévenir les accidents.", icone: 'eau' },
+      { titre: 'Intervenir dans l’eau', texte: 'Aborder, dégager et remorquer une victime en milieu aquatique.', icone: 'eau' },
+      { titre: 'Prendre en charge la victime', texte: "Sortie de l'eau, bilan et gestes de secours jusqu'à l'arrivée des renforts.", icone: 'coeur' },
+    ],
+    modules: [
+      { titre: 'Cadre réglementaire', texte: 'Responsabilités du surveillant de baignade en accueil collectif de mineurs.' },
+      { titre: 'Épreuves de nage', texte: 'Préparation physique et technique aux exigences du diplôme.' },
+      { titre: 'Sauvetage aquatique', texte: 'Approche, dégagement de prises et remorquage.' },
+      { titre: 'Secourisme appliqué', texte: "Gestes de secours adaptés au contexte de la baignade." },
+      { titre: 'Organisation de la baignade', texte: 'Mise en place du dispositif, surveillance active et gestion du groupe.' },
+    ],
+    suites: ['Formation continue FC BSB pour maintenir le diplôme'],
+    recyclage: 'fc-bsb',
+    image: '/img/sauvetage-bassin.jpg',
+    wixEvent: 'BSB',
+    seo: {
+      title: 'Formation BSB à Nice | Surveillant de baignade',
+      description:
+        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, agréé FFSS.',
+    },
+  },
+
+  {
+    slug: 'fc-bsb',
+    sigle: 'FC BSB',
+    intitule: 'Formation continue Surveillant de Baignade',
+    filiere: 'aquatique',
+    certifiante: false,
+    estRecyclage: true,
+    accroche:
+      "Maintenez votre BSB pour continuer à encadrer les baignades. Une remise en condition, dans l'eau comme sur les gestes de secours.",
+    resume: 'Le maintien du brevet de surveillant de baignade.',
+    duree: '10 heures',
+    prerequis: 'BSB obtenu',
+    certification: 'BSB prolongé',
+    tarif: '240 €',
+    objectifs: [
+      { titre: 'Conserver le diplôme', texte: 'Rester habilité à surveiller les baignades en accueil collectif de mineurs.', icone: 'eau' },
+      { titre: 'Réviser le sauvetage', texte: 'Reprise des techniques d’approche, de dégagement et de remorquage.', icone: 'eau' },
+      { titre: 'Actualiser les secours', texte: 'Évolutions des recommandations de premiers secours.', icone: 'coeur' },
+    ],
+    modules: [
+      { titre: 'Remise en condition', texte: 'Vérification de l’aisance aquatique et de la condition physique.' },
+      { titre: 'Sauvetage aquatique', texte: 'Reprise pratique des techniques de sauvetage.' },
+      { titre: 'Secourisme', texte: 'Révision des gestes d’urgence appliqués à la baignade.' },
+      { titre: 'Réglementation', texte: 'Ce qui a changé depuis votre dernière formation.' },
+    ],
+    suites: [],
+    image: '/img/filiere-aquatique.jpg',
+    wixEvent: 'FC BSB',
+    seo: {
+      title: 'Recyclage BSB à Nice | Formation continue',
+      description:
+        'Maintenez votre brevet de surveillant de baignade à Nice : 10 h, 240 €. Formation continue agréée FFSS, organisme certifié Qualiopi.',
+    },
+  },
+
+  // ==========================================================================
+  //  FILIÈRE PÉDAGOGIQUE — devenir formateur
+  // ==========================================================================
+  {
+    slug: 'pae-f-psc',
+    sigle: 'PAE FPSC',
+    intitule: 'Pédagogie Appliquée à l’Emploi de Formateur PSC',
+    filiere: 'pedagogique',
+    certifiante: true,
+    accroche:
+      "Transmettre à votre tour. Le PAE FPSC vous donne le droit d'enseigner le PSC — la formation qui touche le plus large public.",
+    resume: 'Le monitorat pour enseigner le PSC, avec le tronc commun pédagogique.',
+    duree: '50 heures',
+    dureeNote: 'PIC F inclus',
+    prerequis: 'PSC à jour',
+    certification: 'PAE FPSC',
+    certificationNote: 'Formation continue annuelle',
+    tarif: '1 000 €',
+    tarifNote: 'Tronc commun pédagogique (PIC F) inclus',
+    objectifs: [
+      { titre: 'Concevoir une séquence', texte: 'Bâtir une progression pédagogique adaptée au public et aux objectifs.', icone: 'pedagogie' },
+      { titre: 'Animer une formation', texte: 'Conduire un groupe, gérer le temps et maintenir l’attention.', icone: 'equipe' },
+      { titre: 'Évaluer les acquis', texte: 'Mettre en œuvre l’évaluation formative propre au référentiel PSC.', icone: 'bouclier' },
+    ],
+    modules: [
+      { titre: 'PIC F — tronc commun', texte: 'Bases de la pédagogie appliquée à l’enseignement du secourisme.' },
+      { titre: 'Techniques d’animation', texte: 'Exposé, démonstration, apprentissage du geste, cas concret.' },
+      { titre: 'Le référentiel PSC', texte: 'Contenus, progression et exigences du référentiel national.' },
+      { titre: 'Conduite de séquence', texte: 'Mises en situation d’animation, observées et débriefées.' },
+      { titre: 'Évaluation', texte: 'Évaluation formative et certificative des stagiaires.' },
+    ],
+    suites: ['Formation continue FC PAE FPSC', 'Poursuivre vers le PAE FPS pour enseigner le PSE'],
+    recyclage: 'fc-pae-f-psc',
+    image: '/img/pse-immobilisation.jpg',
+    wixEvent: 'PAE F PSC',
+    seo: {
+      title: 'PAE FPSC à Nice | Devenir formateur PSC',
+      description:
+        'Devenez formateur en premiers secours avec le PAE FPSC à Nice : 50 h, PIC F inclus, 1 000 €. Organisme certifié Qualiopi, agréé FFSS.',
+    },
+  },
+
+  {
+    slug: 'fc-pae-f-psc',
+    sigle: 'FC PAE FPSC',
+    intitule: 'Formation continue Formateur PSC',
+    filiere: 'pedagogique',
+    certifiante: false,
+    estRecyclage: true,
+    accroche:
+      "Une demi-journée pour rester formateur : évolutions du référentiel, échanges de pratiques et retours d'expérience.",
+    resume: 'Le maintien annuel des compétences de formateur PSC.',
+    duree: '7,5 heures',
+    prerequis: 'PAE FPSC obtenu',
+    certification: 'Attestation FC',
+    certificationNote: 'Annuelle',
+    tarif: '90 €',
+    tarifNote: '150 € en financement CPF',
+    tarifCpf: '150 €',
+    objectifs: [
+      { titre: 'Rester habilité', texte: 'Conserver le droit d’enseigner le PSC.', icone: 'pedagogie' },
+      { titre: 'Intégrer les évolutions', texte: 'Nouveautés du référentiel national et des recommandations.', icone: 'bouclier' },
+      { titre: 'Échanger les pratiques', texte: 'Retours d’expérience entre formateurs.', icone: 'equipe' },
+    ],
+    modules: [
+      { titre: 'Évolutions du référentiel', texte: 'Ce qui a changé depuis la dernière session.' },
+      { titre: 'Retours d’expérience', texte: 'Difficultés rencontrées en animation et solutions partagées.' },
+      { titre: 'Ateliers pédagogiques', texte: 'Reprise de séquences d’animation.' },
+    ],
+    suites: [],
+    image: '/img/pse-equipe.jpg',
+    wixEvent: 'FC PAE F PSC',
+    seo: {
+      title: 'Recyclage formateur PSC à Nice | FC PAE FPSC',
+      description:
+        'Maintenez vos compétences de formateur PSC à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
+    },
+  },
+
+  {
+    slug: 'pae-f-ps',
+    sigle: 'PAE FPS',
+    intitule: 'Pédagogie Appliquée à l’Emploi de Formateur Premiers Secours',
+    filiere: 'pedagogique',
+    certifiante: true,
+    accroche:
+      "Le monitorat le plus complet : enseigner le PSE1 et le PSE2, former les secouristes qui interviendront sur le terrain.",
+    resume: 'Le monitorat pour enseigner le PSE1 et le PSE2.',
+    duree: '70 heures',
+    dureeNote: 'PIC F inclus',
+    prerequis: 'PSE2 à jour',
+    certification: 'PAE FPS',
+    certificationNote: 'Formation continue annuelle',
+    tarif: '1 000 €',
+    tarifNote: 'Tronc commun pédagogique (PIC F) inclus',
+    objectifs: [
+      { titre: 'Former des secouristes', texte: 'Enseigner le PSE1 et le PSE2 selon le référentiel national.', icone: 'pedagogie' },
+      { titre: 'Concevoir une formation', texte: 'Bâtir une progression sur plusieurs journées, théorie et pratique.', icone: 'bouclier' },
+      { titre: 'Conduire des cas concrets', texte: 'Scénariser, animer et débriefer des mises en situation réalistes.', icone: 'equipe' },
+    ],
+    modules: [
+      { titre: 'PIC F — tronc commun', texte: 'Bases de la pédagogie appliquée à l’enseignement du secourisme.' },
+      { titre: 'Référentiels PSE1 et PSE2', texte: 'Contenus, progression et exigences des deux référentiels.' },
+      { titre: 'Techniques d’animation', texte: 'Apprentissage du geste, ateliers, travail en équipe.' },
+      { titre: 'Cas concrets', texte: 'Conception, maquillage, animation et débriefing.' },
+      { titre: 'Évaluation', texte: 'Évaluation formative et certificative des équipiers secouristes.' },
+      { titre: 'Mises en situation', texte: 'Séquences d’animation observées et évaluées.' },
+    ],
+    suites: ['Formation continue FC PAE FPS'],
+    recyclage: 'fc-pae-f-ps',
+    image: '/img/equipe.jpg',
+    wixEvent: 'PAE F PS',
+    seo: {
+      title: 'PAE FPS à Nice | Devenir formateur PSE1 et PSE2',
+      description:
+        'Devenez formateur en premiers secours en équipe avec le PAE FPS à Nice : 70 h, PIC F inclus, 1 000 €. Certifié Qualiopi, agréé FFSS.',
+    },
+  },
+
+  {
+    slug: 'fc-pae-f-ps',
+    sigle: 'FC PAE FPS',
+    intitule: 'Formation continue Formateur Premiers Secours',
+    filiere: 'pedagogique',
+    certifiante: false,
+    estRecyclage: true,
+    accroche:
+      "Le maintien annuel de votre monitorat PSE : évolutions des référentiels et reprise des techniques d'animation.",
+    resume: 'Le maintien annuel des compétences de formateur PSE.',
+    duree: '7,5 heures',
+    prerequis: 'PAE FPS obtenu',
+    certification: 'Attestation FC',
+    certificationNote: 'Annuelle',
+    tarif: '90 €',
+    tarifNote: '150 € en financement CPF',
+    tarifCpf: '150 €',
+    objectifs: [
+      { titre: 'Rester habilité', texte: 'Conserver le droit d’enseigner le PSE1 et le PSE2.', icone: 'pedagogie' },
+      { titre: 'Intégrer les évolutions', texte: 'Nouveautés des référentiels et des recommandations.', icone: 'bouclier' },
+      { titre: 'Échanger les pratiques', texte: 'Retours d’expérience entre formateurs.', icone: 'equipe' },
+    ],
+    modules: [
+      { titre: 'Évolutions des référentiels', texte: 'Ce qui a changé depuis la dernière session.' },
+      { titre: 'Retours d’expérience', texte: 'Difficultés d’animation et solutions partagées.' },
+      { titre: 'Ateliers pédagogiques', texte: 'Reprise de séquences et de cas concrets.' },
+    ],
+    suites: [],
+    image: '/img/pse-equipe.jpg',
+    wixEvent: 'FC PAE F PS',
+    seo: {
+      title: 'Recyclage formateur PSE à Nice | FC PAE FPS',
+      description:
+        'Maintenez vos compétences de formateur PSE1 et PSE2 à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
+    },
+  },
+
+  {
+    slug: 'mac-sst',
+    sigle: 'MAC SST',
+    intitule: 'Maintien et Actualisation des Compétences SST',
+    filiere: 'entreprise',
+    certifiante: false,
+    estRecyclage: true,
+    accroche:
+      "Obligatoire tous les 24 mois. Sans lui, votre certificat SST perd sa validité et vous ne comptez plus dans l'effectif de secouristes de l'entreprise.",
+    resume: 'Le maintien obligatoire du certificat de Sauveteur Secouriste du Travail.',
+    duree: '7 heures',
+    dureeNote: '1 journée, tous les 24 mois',
+    prerequis: 'SST obtenu',
+    certification: 'SST prolongé',
+    certificationNote: 'Valable 24 mois',
+    tarif: '90 €',
+    tarifNote: 'Intervention possible dans vos locaux',
+    objectifs: [
+      { titre: 'Conserver le certificat', texte: 'Rester compté dans l’effectif de sauveteurs secouristes de l’entreprise.', icone: 'bouclier' },
+      { titre: 'Réviser les gestes', texte: 'Reprise pratique des gestes d’urgence en situation de travail.', icone: 'urgence' },
+      { titre: 'Actualiser les connaissances', texte: 'Évolutions des recommandations de l’INRS.', icone: 'coeur' },
+    ],
+    modules: [
+      { titre: 'Retour d’expérience', texte: 'Accidents survenus et conduites tenues depuis la dernière session.' },
+      { titre: 'Protéger et examiner', texte: 'Révision de l’analyse de situation et de la recherche des détresses.' },
+      { titre: 'Secourir', texte: 'Reprise des gestes : saignement, étouffement, malaise, brûlure, arrêt cardiaque.' },
+      { titre: 'Prévention', texte: 'Contribution à la démarche de prévention de l’établissement.' },
+    ],
+    suites: [],
+    image: '/img/sst.jpg',
+    wixEvent: 'MAC SST',
+    seo: {
+      title: 'MAC SST à Nice | Recyclage Sauveteur Secouriste du Travail',
+      description:
+        'Maintenez le certificat SST de vos salariés à Nice : 7 h, 90 €, tous les 24 mois. Organisme certifié Qualiopi, intervention en entreprise.',
     },
   },
 ];
