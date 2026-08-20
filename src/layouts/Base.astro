@@ -11,9 +11,11 @@ interface Props {
   chemin: string;
   /** Filière, pour teinter la page aux couleurs du catalogue. */
   filiere?: string;
+  /** Retire la page des moteurs : page d'erreur, page technique. */
+  noindex?: boolean;
 }
 
-const { title, description, chemin, filiere } = Astro.props;
+const { title, description, chemin, filiere, noindex = false } = Astro.props;
 const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.org').href;
 
 /**
@@ -50,6 +52,7 @@ const schema = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="180x180" href="/favicon.png" />

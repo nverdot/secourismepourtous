@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { mentionsLegales } from '../data/mentions';
+---
+
+<Base
+  title="Mentions légales | Secourisme Pour Tous"
+  description="Mentions légales du site de Secourisme Pour Tous : éditeur, directeur de publication, hébergeur, propriété intellectuelle et responsabilité."
+  chemin="/mentions-legales"
+>
+  <PageLegale
+    titre="Mentions légales"
+    chapeau="Qui édite ce site, qui l'héberge, et à qui s'adresser en cas de problème."
+    blocs={mentionsLegales}
+  />
+</Base>

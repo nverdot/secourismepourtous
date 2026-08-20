@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { filieres } from '../data/formations';
+
+/**
+ * Page affichée quand une adresse n'existe pas.
+ *
+ * Une page d'erreur n'a qu'un travail : remettre le visiteur en route. Elle
+ * propose donc les quatre destinations réellement recherchées sur ce site,
+ * plutôt qu'un « retour à l'accueil » qui l'oblige à recommencer sa navigation.
+ *
+ * Les anciennes adresses du site Wix sont redirigées côté serveur (netlify.toml)
+ * pour que les liens partagés ou indexés continuent d'aboutir ; cette page ne
+ * couvre que ce qui n'existe vraiment pas.
+ */
+
+const pistes = [
+  {
+    titre: 'Nos formations',
+    texte: 'PSC, PSE1, PSE2, BNSSA, SST et formations de formateur, avec les prochaines dates.',
+    lien: '/formations',
+    icone: 'coeur',
+  },
+  {
+    titre: 'Postes de secours',
+    texte: 'Faire sécuriser un événement dans les Alpes-Maritimes.',
+    lien: '/postes-de-secours',
+    icone: 'tente',
+  },
+  {
+    titre: 'Sauvetage sportif',
+    texte: 'Le club, l’école de natation et la compétition.',
+    lien: '/sauvetage-sportif',
+    icone: 'nage',
+  },
+  {
+    titre: 'Nous contacter',
+    texte: 'Une question, un devis, une inscription : on vous répond sous 48 h.',
+    lien: '/contact',
+    icone: 'message',
+  },
+];
+
+const raccourcis = Object.entries(filieres).map(([cle, f]) => ({ cle, nom: f.titre }));
+---
+
+<Base
+  title="Page introuvable | Secourisme Pour Tous"
+  description="Cette page n'existe pas ou plus. Retrouvez nos formations de secourisme à Nice, nos postes de secours et le club de sauvetage sportif."
+  chemin="/404"
+  noindex
+>
+  <header class="tete">
+    <div class="wrap tete__in">
+      <p class="tete__code" aria-hidden="true">404</p>
+      <h1 class="tete__h1">Cette page n’existe pas</h1>
+      <p class="tete__t">
+        L’adresse est peut-être erronée, ou la page a changé de place lors de la
+        refonte du site. Voici par où reprendre.
+      </p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="pistes">
+        {pistes.map((p) => (
+          <a class="piste" href={p.lien}>
+            <span class="piste__ic" aria-hidden="true">
+              {p.icone === 'coeur' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6" /></svg>}
+              {p.icone === 'tente' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z" /><path d="M12 3v17M7 20l5-8 5 8" /></svg>}
+              {p.icone === 'nage' && <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="8.2" cy="7.4" r="2.3" /><path d="M12.1 10.4a1.35 1.35 0 0 1-.15-1.9l3.05-3.4a1.35 1.35 0 1 1 2.01 1.8l-3.05 3.4a1.35 1.35 0 0 1-1.86.1z" /><path d="M3.1 13.5a1.3 1.3 0 0 1 .5-1.77l2.62-1.5a4.2 4.2 0 0 1 4.32.06l4.3 2.7a1.3 1.3 0 0 1-1.38 2.2l-4.3-2.7a1.6 1.6 0 0 0-1.65-.02l-2.62 1.5a1.3 1.3 0 0 1-1.79-.47z" /><path d="M2 17.5c1.5 0 2.05-1.05 3.55-1.05S7.6 17.5 9.1 17.5s2.05-1.05 3.55-1.05 2.05 1.05 3.55 1.05 2.05-1.05 3.3-1.05v2.3c-1.25 0-1.8 1.05-3.3 1.05s-2.05-1.05-3.55-1.05-2.05 1.05-3.55 1.05-2.05-1.05-3.55-1.05S3.5 19.8 2 19.8z" /></svg>}
+              {p.icone === 'message' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z" /></svg>}
+            </span>
+            <span class="piste__txt">
+              <strong>{p.titre}</strong>
+              <span>{p.texte}</span>
+            </span>
+            <svg class="piste__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        ))}
+      </div>
+
+      <div class="direct">
+        <p class="direct__t">Vous cherchiez une formation précise&nbsp;?</p>
+        <ul class="direct__l">
+          {raccourcis.map((r) => (
+            <li><a href={`/formations#${r.cle}`}>{r.nom}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <p class="aide">
+        Vous êtes arrivé ici depuis un lien de notre site&nbsp;? Signalez-le à
+        <a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a>, on le corrige.
+        Pour une urgence d’inscription, appelez le
+        <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+  .tete__code {
+    font-family: 'Archivo', sans-serif; font-weight: 800;
+    font-size: clamp(3.5rem, 12vw, 7rem); line-height: 1;
+    color: rgba(255,255,255,.14); letter-spacing: -.02em;
+    margin-bottom: -.35em;
+  }
+  .tete__h1 {
+    position: relative;
+    font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 800; margin-bottom: .8rem;
+  }
+  .tete__t { max-width: 54ch; color: var(--on-navy-text); }
+
+  .pistes {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .piste {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.15rem 1.3rem;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .piste:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
+  .piste__ic {
+    flex: none; width: 44px; height: 44px; border-radius: 13px;
+    background: var(--azur-wash); color: var(--azur);
+    display: grid; place-items: center;
+  }
+  .piste__ic svg { width: 22px; height: 22px; }
+  .piste__txt { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+  .piste__txt strong { font-family: 'Archivo', sans-serif; font-size: 1rem; font-weight: 700; }
+  .piste__txt span { font-size: .87rem; color: var(--ink-mute); }
+  .piste__f { flex: none; width: 18px; height: 18px; margin-left: auto; color: var(--ink-mute); }
+  .piste:hover .piste__f { color: var(--secours); }
+
+  .direct {
+    margin-top: 2rem; padding: 1.25rem 1.4rem;
+    background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg);
+  }
+  .direct__t {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .7rem;
+  }
+  .direct__l { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .direct__l a {
+    display: inline-block; padding: .4rem .85rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-pill);
+    font-size: .85rem; font-weight: 600; color: var(--ink-soft); text-decoration: none;
+  }
+  .direct__l a:hover { border-color: var(--secours); color: var(--secours); }
+
+  .aide { margin-top: 1.75rem; font-size: .9rem; color: var(--ink-mute); max-width: 70ch; }
+  .aide a { color: var(--azur); }
+</style>

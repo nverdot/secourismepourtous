@@ -1,0 +1,164 @@
+---
+import type { Bloc } from '../data/mentions';
+import { majLegales } from '../data/mentions';
+import { asso } from '../data/association';
+
+/**
+ * Mise en page commune aux pages légales.
+ *
+ * Même structure que les CGV : un sommaire à gauche, le texte à droite. Ces
+ * pages se consultent par recherche d'un point précis, jamais en lecture
+ * suivie — le sommaire est donc la fonctionnalité principale, pas une décoration.
+ */
+
+interface Props {
+  titre: string;
+  chapeau: string;
+  blocs: Bloc[];
+}
+const { titre, chapeau, blocs } = Astro.props;
+
+const ancre = (t: string) =>
+  t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<header class="tete">
+  <div class="wrap">
+    <nav class="fil" aria-label="Fil d'ariane">
+      <a href="/">Accueil</a><i aria-hidden="true">›</i><b>{titre}</b>
+    </nav>
+    <h1 class="tete__h1">{titre}</h1>
+    <p class="tete__t">{chapeau}</p>
+  </div>
+</header>
+
+<div class="wrap lg">
+  <nav class="somm" aria-label="Sommaire">
+    <p class="somm__t">Sommaire</p>
+    <ol>
+      {blocs.map((b) => <li><a href={`#${ancre(b.titre)}`}>{b.titre}</a></li>)}
+    </ol>
+  </nav>
+
+  <article class="corps">
+    {blocs.map((b) => (
+      <section class="bl" id={ancre(b.titre)}>
+        <h2 class="bl__h">{b.titre}</h2>
+        {b.paragraphes?.map((p) => <p class="bl__p">{p}</p>)}
+
+        {b.tableau && (
+          <div class="bl__tab">
+            <table>
+              <thead>
+                <tr>{b.tableau.entete.map((e) => <th scope="col">{e}</th>)}</tr>
+              </thead>
+              <tbody>
+                {b.tableau.lignes.map((l) => (
+                  <tr>{l.map((c, i) => (i === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {b.liste && (
+          <ul class="bl__l">
+            {b.liste.map((e) => <li>{e}</li>)}
+          </ul>
+        )}
+      </section>
+    ))}
+
+    <p class="maj">
+      Dernière mise à jour&nbsp;: {majLegales}. Une question&nbsp;?
+      <a href={`mailto:${asso.contact.email}`}>{asso.contact.email}</a>
+      ou <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>.
+    </p>
+  </article>
+</div>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 3.5rem);
+  }
+  .fil {
+    display: flex; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 800; margin-bottom: .7rem; }
+  .tete__t { color: var(--on-navy-text); max-width: 62ch; }
+
+  .lg {
+    display: grid; gap: clamp(1.75rem, 4vw, 3rem);
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+  @media (max-width: 900px) { .lg { grid-template-columns: 1fr; } }
+
+  .somm {
+    position: sticky; top: 130px;
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.25rem 1.35rem;
+  }
+  @media (max-width: 900px) { .somm { position: static; } }
+  .somm__t {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .85rem;
+  }
+  .somm ol { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .45rem; }
+  .somm li { font-size: .85rem; }
+  .somm a { color: var(--ink-soft); text-decoration: none; }
+  .somm a:hover { color: var(--secours); text-decoration: underline; text-underline-offset: 3px; }
+
+  .corps { max-width: 80ch; }
+  .bl { margin-bottom: 2.5rem; scroll-margin-top: 130px; }
+  .bl__h {
+    font-size: clamp(1.15rem, 2.6vw, 1.4rem); font-weight: 800;
+    padding-bottom: .6rem; margin-bottom: 1rem;
+    border-bottom: 2px solid var(--line);
+  }
+  .bl__p { margin-bottom: .85rem; color: var(--ink-soft); font-size: .95rem; }
+
+  .bl__l { margin: .5rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .bl__l li {
+    position: relative; padding-left: 1.1rem;
+    color: var(--ink-soft); font-size: .95rem;
+  }
+  .bl__l li::before {
+    content: ''; position: absolute; left: 0; top: .62em;
+    width: 5px; height: 5px; border-radius: 50%; background: var(--secours);
+  }
+
+  /* Le tableau des traitements est large : il défile seul, la page jamais. */
+  .bl__tab { overflow-x: auto; margin: 1rem 0; }
+  .bl__tab table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .88rem; }
+  .bl__tab th, .bl__tab td {
+    text-align: left; vertical-align: top;
+    padding: .7rem .8rem; border-bottom: 1px solid var(--line);
+  }
+  .bl__tab thead th {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
+    background: var(--sunk); border-bottom-width: 2px;
+  }
+  .bl__tab tbody th { font-weight: 700; color: var(--ink); }
+  .bl__tab td { color: var(--ink-soft); }
+
+  .maj {
+    margin-top: 2rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: .88rem; color: var(--ink-mute);
+  }
+  .maj a { color: var(--azur); }
+</style>

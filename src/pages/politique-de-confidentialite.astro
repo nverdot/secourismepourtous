@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { confidentialite } from '../data/mentions';
+---
+
+<Base
+  title="Politique de confidentialité | Secourisme Pour Tous"
+  description="Comment Secourisme Pour Tous collecte, utilise et protège vos données personnelles : finalités, durées de conservation, destinataires et vos droits."
+  chemin="/politique-de-confidentialite"
+>
+  <PageLegale
+    titre="Politique de confidentialité"
+    chapeau="Ce que nous collectons, pourquoi, combien de temps nous le gardons, et comment reprendre la main dessus."
+    blocs={confidentialite}
+  />
+</Base>
