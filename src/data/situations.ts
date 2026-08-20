@@ -163,6 +163,10 @@ export const situations: Situation[] = [
     enFormation:
       'On s’entraîne à comprimer efficacement — la plupart des gens appuient trop peu — et à reconnaître les rares situations qui justifient un garrot, puis à le poser correctement.',
     fiche: { ref: '02PR02', nom: 'Hémorragies externes', maj: 'décembre 2023' },
+    image: {
+      fichier: '/img/gestes/saignement-abondant.jpg',
+      alt: 'Un homme ganté comprime une plaie qui saigne à la jambe d’une cycliste assise au sol, une trousse de secours ouverte à côté d’eux.',
+    },
     seo: {
       title: 'Plaie qui saigne beaucoup : que faire ? | Gestes qui sauvent',
       description:
