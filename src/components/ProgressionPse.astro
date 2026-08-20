@@ -1,0 +1,169 @@
+---
+import { chapitres, volume, referentielPse } from '../data/programme-pse';
+
+/**
+ * Ce que le PSE2 ajoute au PSE1.
+ *
+ * Le programme seul ne montre pas la progression : il faut lire les deux pages
+ * et les comparer de tête. Or c'est exactement la question que se pose
+ * quelqu'un qui a le PSE1 — « qu'est-ce que ça m'apporte de plus ». Ce tableau
+ * y répond en une lecture.
+ *
+ * Trois cas de figure sont distingués, parce qu'ils ne veulent pas dire la même
+ * chose : un chapitre entièrement nouveau, un chapitre approfondi, et un
+ * chapitre déjà acquis auquel le PSE2 n'ajoute rien.
+ */
+
+const lignes = chapitres
+  .map((c) => ({
+    ...c,
+    nouveau: c.pse1.length === 0 && c.techniques.pse1 === 0 && (c.pse2.length > 0 || c.techniques.pse2 > 0),
+    approfondi: c.pse1.length > 0 && (c.pse2.length > 0 || c.techniques.pse2 > 0),
+  }))
+  .filter((c) => c.nouveau || c.approfondi);
+
+const v1 = volume('pse1');
+const v2 = volume('pse2');
+const nouveaux = lignes.filter((c) => c.nouveau).length;
+---
+
+<section class="prog2" aria-labelledby="t-prog2">
+  <p class="eyebrow">La progression</p>
+  <h2 class="h-section" id="t-prog2">Ce que le PSE2 ajoute au PSE1</h2>
+  <p class="lede">
+    Le PSE2 ne recommence pas le PSE1 : il s’y ajoute. Vous restez équipier,
+    vous devenez capable d’encadrer, de relever et de prendre en charge des
+    atteintes que le PSE1 n’aborde pas.
+  </p>
+
+  <dl class="bilan">
+    <div>
+      <dt>Chapitres entièrement nouveaux</dt>
+      <dd>{nouveaux}</dd>
+    </div>
+    <div>
+      <dt>Sujets ajoutés</dt>
+      <dd>{v2.sujets}</dd>
+    </div>
+    <div>
+      <dt>Techniques supplémentaires</dt>
+      <dd>{v2.techniques}</dd>
+    </div>
+  </dl>
+
+  <div class="tab">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Chapitre</th>
+          <th scope="col">Acquis en PSE1</th>
+          <th scope="col">Ajouté en PSE2</th>
+        </tr>
+      </thead>
+      <tbody>
+        {lignes.map((c) => (
+          <tr class={c.nouveau ? 'neuf' : ''}>
+            <th scope="row">
+              {c.nom}
+              {c.nouveau && <span class="etiq">Nouveau</span>}
+            </th>
+            {/* Un chapitre peut n'avoir aucun sujet en PSE1 tout en y ayant
+                déjà une technique : « Non abordé » serait alors faux. */}
+            <td class="acquis">
+              {c.pse1.length > 0 && <span>{c.pse1.join(' · ')}</span>}
+              {c.pse1.length === 0 && c.techniques.pse1 > 0 && (
+                <span>
+                  {c.techniques.pse1} technique{c.techniques.pse1 > 1 ? 's' : ''} seulement
+                </span>
+              )}
+              {c.pse1.length === 0 && c.techniques.pse1 === 0 && (
+                <span class="rien">Non abordé</span>
+              )}
+            </td>
+            <td class="ajout">
+              {c.pse2.length > 0 && <span class="ajout__l">{c.pse2.join(' · ')}</span>}
+              {c.techniques.pse2 > 0 && (
+                <span class="ajout__t">
+                  +{c.techniques.pse2} technique{c.techniques.pse2 > 1 ? 's' : ''}
+                </span>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="note">
+    Pour mémoire, le PSE1 couvre à lui seul {v1.chapitres} chapitres,
+    {' '}{v1.sujets} sujets et {v1.techniques} techniques. Source&nbsp;:
+    {' '}{referentielPse.nom}, {referentielPse.edition}.
+  </p>
+</section>
+
+<style>
+  .prog2 { padding-block: 0; }
+
+  .bilan {
+    margin: 2rem 0 0; display: grid; gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  }
+  .bilan > div {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 4px solid var(--secours);
+    border-radius: var(--r-lg); padding: 1rem 1.2rem;
+  }
+  .bilan dt {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .3rem;
+  }
+  .bilan dd {
+    margin: 0; font-family: 'Archivo', sans-serif; font-size: 1.9rem;
+    font-weight: 800; line-height: 1; color: var(--secours);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Le tableau est large : il défile seul, la page jamais. */
+  .tab { margin-top: 2rem; overflow-x: auto; }
+  .tab table {
+    border-collapse: collapse; width: 100%; min-width: 720px;
+    background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden;
+  }
+  .tab th, .tab td {
+    text-align: left; vertical-align: top;
+    padding: .85rem 1.05rem; border-bottom: 1px solid var(--line);
+    font-size: .9rem;
+  }
+  .tab thead th {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .09em; text-transform: uppercase;
+    background: var(--sunk); border-bottom-width: 2px; color: var(--ink-mute);
+  }
+  .tab thead th:nth-child(3) { color: var(--secours); }
+  .tab tbody th {
+    font-family: 'Archivo', sans-serif; font-weight: 700; color: var(--ink);
+    width: 22%;
+  }
+  .tab tbody tr.neuf { background: color-mix(in srgb, var(--secours) 4%, transparent); }
+
+  .etiq {
+    display: inline-block; margin-left: .5rem; vertical-align: middle;
+    font-size: .62rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: #fff; background: var(--secours);
+    border-radius: var(--r-pill); padding: .15rem .5rem;
+  }
+
+  .acquis { color: var(--ink-mute); }
+  .rien { font-style: italic; opacity: .8; }
+  .ajout { color: var(--ink); }
+  .ajout__l { display: block; }
+  .ajout__t {
+    display: inline-block; margin-top: .4rem;
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--secours);
+  }
+
+  .note { margin-top: 1.25rem; font-size: .85rem; color: var(--ink-mute); max-width: 80ch; }
+</style>

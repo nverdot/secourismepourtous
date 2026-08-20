@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import ProgressionPse from '../../components/ProgressionPse.astro';
 import Terrain from '../../components/Terrain.astro';
 import { coursFormation, filAriane } from '../../lib/schema';
 import Lieu from '../../components/Lieu.astro';
@@ -70,6 +71,16 @@ const balisages = [
   <section class="section">
     <div class="wrap"><Documents /></div>
   </section>
+
+  {/* La question de celui qui a déjà le PSE1 : qu'est-ce que le PSE2 apporte
+      de plus ? Le programme seul ne le montre pas. */}
+  {f.slug === 'pse-2' && (
+    <section class="section section--sunk">
+      <div class="wrap">
+        <ProgressionPse />
+      </div>
+    </section>
+  )}
 
   {/* Certains arrivent ici sans savoir si le diplôme leur est imposé : on le
       leur dit avant qu'ils ne s'inscrivent, pas après. */}

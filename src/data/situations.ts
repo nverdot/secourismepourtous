@@ -225,6 +225,10 @@ export const situations: Situation[] = [
     enFormation:
       'Les insufflations chez un nourrisson, la profondeur des compressions sur un thorax d’enfant, l’enchaînement 15 pour 2 : tout se répète sur mannequins pédiatriques, jusqu’à ce que le rythme devienne automatique.',
     fiche: { ref: '02PR04', nom: 'Arrêt cardiaque', maj: 'décembre 2023' },
+    image: {
+      fichier: '/img/gestes/arret-cardiaque-enfant.jpg',
+      alt: 'Formateur agenouillé réalisant des compressions thoraciques sur un mannequin de formation enfant allongé sur un tapis.',
+    },
     seo: {
       title: 'Arrêt cardiaque d’un enfant ou d’un bébé : que faire ?',
       description:
