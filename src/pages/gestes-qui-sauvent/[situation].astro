@@ -188,8 +188,18 @@ const balisages = [
       <div class="autres">
         {autres.map((a) => (
           <a class="autre" href={`/gestes-qui-sauvent/${a.slug}`}>
-            <strong>{a.titre}</strong>
-            <span>{a.court}</span>
+            {a.image && (
+              <img class="autre__img" src={a.image.fichier} alt=""
+                   width="1800" height="1013" loading="lazy" decoding="async" />
+            )}
+            <span class="autre__corps">
+              <span class="autre__e">{a.court}</span>
+              <strong>{a.titre}</strong>
+              <span class="autre__f" aria-hidden="true">
+                Lire la conduite à tenir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </span>
           </a>
         ))}
       </div>
@@ -336,18 +346,32 @@ const balisages = [
     margin-top: 2rem; display: grid; gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   }
+  /* Mêmes cartes que sur le sommaire : le visiteur retrouve la même grammaire
+     visuelle d'une page à l'autre. */
   .autre {
-    display: flex; flex-direction: column-reverse; gap: .3rem;
+    display: flex; flex-direction: column;
     background: var(--surface); border: 1px solid var(--line);
-    border-left: 4px solid var(--azur);
-    border-radius: var(--r-lg); padding: 1.1rem 1.3rem;
+    border-radius: var(--r-lg); padding: 0; overflow: hidden;
     text-decoration: none; color: inherit;
     transition: border-color .15s, box-shadow .15s;
   }
   .autre:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
-  .autre strong { font-size: .97rem; font-weight: 700; }
-  .autre span {
-    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+  .autre__img {
+    display: block; width: 100%;
+    aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%;
   }
+  .autre__corps {
+    display: flex; flex-direction: column; gap: .45rem; flex: 1;
+    padding: clamp(1.15rem, 2.6vw, 1.45rem);
+  }
+  .autre__e {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--secours);
+  }
+  .autre strong { font-size: 1rem; font-weight: 700; line-height: 1.3; }
+  .autre__f {
+    display: flex; align-items: center; gap: .4rem; margin-top: auto; padding-top: .4rem;
+    font-family: 'Archivo', sans-serif; font-size: .82rem; font-weight: 600; color: var(--azur);
+  }
+  .autre__f svg { width: 15px; height: 15px; }
 </style>

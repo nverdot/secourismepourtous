@@ -67,17 +67,19 @@ const balisages = [
     <div class="wrap">
       <div class="grille">
         {situations.map((s) => (
-          <a class:list={['sit', { 'sit--photo': !!s.image }]} href={`/gestes-qui-sauvent/${s.slug}`}>
+          <a class="sit" href={`/gestes-qui-sauvent/${s.slug}`}>
             {s.image && (
               <img class="sit__img" src={s.image.fichier} alt=""
                    width="1800" height="1013" loading="lazy" decoding="async" />
             )}
-            <span class="sit__e">{s.court}</span>
-            <strong>{s.titre}</strong>
-            <span class="sit__x">{s.accroche}</span>
-            <span class="sit__f" aria-hidden="true">
-              Lire la conduite à tenir
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            <span class="sit__corps">
+              <span class="sit__e">{s.court}</span>
+              <strong>{s.titre}</strong>
+              <span class="sit__x">{s.accroche}</span>
+              <span class="sit__f" aria-hidden="true">
+                Lire la conduite à tenir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
             </span>
           </a>
         ))}
@@ -161,22 +163,24 @@ const balisages = [
     display: grid; gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   }
+  /* La carte ne porte aucune marge intérieure : l'aperçu occupe toute sa
+     largeur, et c'est le bloc de texte qui prend le padding. Une marge
+     négative sur l'image aurait marché aussi, mais elle se casse dès qu'on
+     touche au padding de la carte. */
   .sit {
-    display: flex; flex-direction: column; gap: .5rem;
+    display: flex; flex-direction: column;
     background: var(--surface); border: 1px solid var(--line);
-    --marge: clamp(1.25rem, 3vw, 1.6rem);
-    border-radius: var(--r-lg); padding: var(--marge);
-    text-decoration: none; color: inherit; overflow: hidden;
+    border-radius: var(--r-lg); padding: 0; overflow: hidden;
+    text-decoration: none; color: inherit;
     transition: border-color .15s, box-shadow .15s;
   }
-  /* L'aperçu occupe toute la largeur de la carte : le padding est reporté
-     après l'image, sinon elle flotterait dans un cadre blanc. */
-  .sit--photo { padding-top: 0; }
   .sit__img {
-    display: block; width: calc(100% + 2 * var(--marge));
-    margin-inline: calc(-1 * var(--marge));
-    margin-bottom: .35rem;
+    display: block; width: 100%;
     aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%;
+  }
+  .sit__corps {
+    display: flex; flex-direction: column; gap: .5rem; flex: 1;
+    padding: clamp(1.15rem, 2.6vw, 1.45rem);
   }
   .sit:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
   .sit__e {
