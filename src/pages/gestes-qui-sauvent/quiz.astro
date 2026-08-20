@@ -1,0 +1,390 @@
+---
+import Base from '../../layouts/Base.astro';
+import { asso } from '../../data/association';
+import { parSlug } from '../../data/formations';
+import { questions, referentielQuiz } from '../../data/quiz';
+import { situations } from '../../data/situations';
+import { sessionsAVenir, sessionsDe } from '../../lib/wix';
+import { filAriane } from '../../lib/schema';
+
+/**
+ * Quiz de connaissance, niveau PSC.
+ *
+ * Sa vraie fonction n'est pas d'évaluer mais de créer un manque : quelqu'un
+ * qui se croyait au point découvre en cinq minutes qu'il hésite sur la moitié
+ * des cas. C'est un déclencheur d'inscription bien plus efficace qu'un argument.
+ *
+ * Deux garde-fous, sans lesquels il ferait l'inverse de ce qu'on veut :
+ *   — chaque réponse est expliquée, tout de suite, avec sa source ;
+ *   — le résultat final rappelle qu'un questionnaire ne remplace pas la
+ *     pratique. Répondre juste, ce n'est pas savoir faire.
+ *
+ * Tout se joue sans serveur : les questions sont dans le HTML, le score reste
+ * dans le navigateur. Rien n'est envoyé, rien n'est enregistré.
+ */
+
+const psc = parSlug('psc')!;
+const toutes = await sessionsAVenir();
+const sessions = sessionsDe(toutes, psc.wixEvent);
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Gestes qui sauvent', chemin: '/gestes-qui-sauvent' },
+    { nom: 'Quiz', chemin: '/gestes-qui-sauvent/quiz' },
+  ]),
+];
+
+// Les données du quiz partent dans le HTML : le script les relit au chargement.
+const donnees = questions.map((q) => ({
+  ...q,
+  lien: q.situation
+    ? { href: `/gestes-qui-sauvent/${q.situation}`, nom: situations.find((s) => s.slug === q.situation)?.court ?? '' }
+    : null,
+}));
+---
+
+<Base
+  title="Quiz premiers secours : sauriez-vous réagir ? | Niveau PSC"
+  description="12 questions pour tester vos réflexes de premiers secours : étouffement, hémorragie, arrêt cardiaque, AVC, brûlure. Corrigé expliqué, d’après le référentiel PSC 2024."
+  chemin="/gestes-qui-sauvent/quiz"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/gestes-qui-sauvent">Gestes qui sauvent</a><i aria-hidden="true">›</i>
+        <b>Quiz</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">{questions.length} questions</span>
+        <span class="badge badge--contour">5 minutes</span>
+        <span class="badge badge--contour">Corrigé expliqué</span>
+      </div>
+      <h1 class="tete__h1">Sauriez-vous vraiment réagir&nbsp;?</h1>
+      <p class="tete__t">
+        Douze situations, une réponse à chaque fois. Pas de piège&nbsp;: ce sont
+        les décisions que l’on prend réellement, et les erreurs que l’on commet
+        réellement. Chaque réponse est expliquée sur-le-champ.
+      </p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap wrap--etroit">
+      <div class="quiz" data-quiz data-questions={JSON.stringify(donnees)}>
+        <!-- Rendu par le script. Sans JavaScript, la liste ci-dessous reste
+             lisible : les questions et leurs réponses sont dans le HTML. -->
+        <noscript>
+          <ol class="brut">
+            {questions.map((q) => (
+              <li>
+                <strong>{q.question}</strong>
+                <p>Réponse&nbsp;: {q.reponses.find((r) => r.juste)?.texte}. {q.explication}</p>
+              </li>
+            ))}
+          </ol>
+        </noscript>
+      </div>
+
+      <p class="source">
+        Questions établies d’après le {referentielQuiz.nom}, {referentielQuiz.edition}.
+        Ce questionnaire n’a aucune valeur de certification.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== SE FORMER ========== -->
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Et maintenant</p>
+      <h2 class="form__h">Répondre juste, ce n’est pas savoir faire</h2>
+      <p class="lede">
+        Ce quiz teste des décisions. Il ne teste pas votre capacité à masser un
+        thorax, à maintenir une compression pendant dix minutes ou à retourner
+        un nourrisson sur votre avant-bras. Ça, ça ne s’apprend qu’en le faisant.
+      </p>
+      <p class="lede form__p">
+        Le PSC dure {psc.duree.toLowerCase()}, coûte {psc.tarif}, et se passe
+        presque entièrement en mise en situation.
+        {sessions.length > 0 && ` ${sessions.length} sessions sont programmées.`}
+      </p>
+      <div class="form__actions">
+        <a class="btn btn--primaire" href="/formations/psc">
+          Voir les dates du PSC
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .tete__t { max-width: 62ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  /* --- le quiz --- */
+  .quiz :global(.q) {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.4rem, 3vw, 1.9rem);
+  }
+  .quiz :global(.q__barre) {
+    display: flex; align-items: center; gap: .8rem; margin-bottom: 1.25rem;
+  }
+  .quiz :global(.q__jauge) {
+    flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden;
+  }
+  .quiz :global(.q__jauge i) {
+    display: block; height: 100%; background: var(--secours);
+    transition: width .3s ease;
+  }
+  .quiz :global(.q__n) {
+    font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz :global(.q__theme) {
+    display: inline-block; margin-bottom: .7rem;
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: var(--secours);
+    border-radius: var(--r-pill); padding: .2rem .7rem;
+  }
+  .quiz :global(.q__t) {
+    font-size: clamp(1.1rem, 2.6vw, 1.35rem); font-weight: 700;
+    line-height: 1.35; margin-bottom: 1.25rem;
+  }
+
+  .quiz :global(.q__l) { display: flex; flex-direction: column; gap: .6rem; }
+  .quiz :global(.rep) {
+    display: flex; align-items: flex-start; gap: .8rem; width: 100%;
+    text-align: left; cursor: pointer;
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: .9rem 1.1rem;
+    font: inherit; font-size: .96rem; color: var(--ink);
+    transition: border-color .15s, background-color .15s;
+  }
+  .quiz :global(.rep:hover:not([disabled])) { border-color: var(--secours); }
+  .quiz :global(.rep__p) {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid var(--line); display: grid; place-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 700;
+    color: var(--ink-mute);
+  }
+  .quiz :global(.rep--juste) {
+    background: color-mix(in srgb, #1a7f4b 10%, transparent);
+    border-color: #1a7f4b;
+  }
+  .quiz :global(.rep--juste .rep__p) { border-color: #1a7f4b; color: #1a7f4b; }
+  .quiz :global(.rep--faux) {
+    background: color-mix(in srgb, var(--secours) 10%, transparent);
+    border-color: var(--secours);
+  }
+  .quiz :global(.rep--faux .rep__p) { border-color: var(--secours); color: var(--secours); }
+  .quiz :global(.rep[disabled]) { cursor: default; }
+
+  .quiz :global(.q__exp) {
+    margin-top: 1.1rem; padding: 1rem 1.15rem;
+    background: var(--azur-wash); border-left: 3px solid var(--azur);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  }
+  .quiz :global(.q__exp p) { font-size: .93rem; color: var(--ink-soft); }
+  .quiz :global(.q__exp .fiche) {
+    display: block; margin-top: .5rem; font-size: .8rem; color: var(--ink-mute);
+  }
+  .quiz :global(.q__exp .plus) {
+    display: inline-block; margin-top: .6rem; font-size: .89rem;
+    color: var(--azur); font-weight: 600;
+  }
+  .quiz :global(.q__suite) { display: flex; justify-content: flex-end; margin-top: 1.25rem; }
+
+  /* --- résultat --- */
+  .quiz :global(.res) {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 5px solid var(--secours);
+    border-radius: var(--r-lg); padding: clamp(1.6rem, 4vw, 2.4rem);
+    text-align: center;
+  }
+  .quiz :global(.res__score) {
+    font-family: 'Archivo', sans-serif; font-size: clamp(3rem, 9vw, 4.5rem);
+    font-weight: 800; line-height: 1; color: var(--secours);
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz :global(.res__score span) { font-size: .4em; color: var(--ink-mute); }
+  .quiz :global(.res__t) {
+    font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; margin: .8rem 0 .6rem;
+  }
+  .quiz :global(.res__x) { font-size: .98rem; color: var(--ink-soft); max-width: 56ch; margin-inline: auto; }
+  .quiz :global(.res__rappel) {
+    margin-top: 1.5rem; padding: 1rem 1.2rem; text-align: left;
+    background: var(--sunk); border-radius: var(--r-md);
+    font-size: .92rem; color: var(--ink-soft);
+  }
+  .quiz :global(.res__a) { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 1.5rem; }
+
+  .brut { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .brut strong { display: block; margin-bottom: .35rem; }
+  .brut p { font-size: .93rem; color: var(--ink-soft); }
+
+  .source { margin-top: 1.5rem; font-size: .84rem; color: var(--ink-mute); }
+
+  .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .form__p { margin-top: 1rem; }
+  .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+</style>
+
+<script>
+  /**
+   * Le quiz, sans dépendance ni serveur.
+   *
+   * Les réponses sont mélangées à chaque chargement : sans cela, la bonne
+   * réponse serait toujours la première, et on retiendrait sa position plutôt
+   * que son contenu.
+   */
+  const boite = document.querySelector('[data-quiz]');
+  if (boite) {
+    const questions = JSON.parse(boite.dataset.questions);
+    const LETTRES = ['A', 'B', 'C', 'D', 'E'];
+
+    let index = 0;
+    let score = 0;
+    const historique = [];
+
+    const melange = (liste) => {
+      const c = [...liste];
+      for (let i = c.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [c[i], c[j]] = [c[j], c[i]];
+      }
+      return c;
+    };
+
+    function afficheQuestion() {
+      const q = questions[index];
+      const reponses = melange(q.reponses);
+
+      boite.innerHTML = `
+        <div class="q">
+          <div class="q__barre">
+            <span class="q__n">${index + 1} / ${questions.length}</span>
+            <span class="q__jauge"><i style="width:${(index / questions.length) * 100}%"></i></span>
+          </div>
+          <span class="q__theme">${q.theme}</span>
+          <p class="q__t">${q.question}</p>
+          <div class="q__l"></div>
+        </div>`;
+
+      const liste = boite.querySelector('.q__l');
+      reponses.forEach((r, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'rep';
+        b.innerHTML = `<span class="rep__p">${LETTRES[i]}</span><span>${r.texte}</span>`;
+        b.addEventListener('click', () => repond(b, r, q, liste));
+        liste.append(b);
+      });
+    }
+
+    function repond(bouton, choix, q, liste) {
+      const juste = Boolean(choix.juste);
+      if (juste) score++;
+      historique.push({ theme: q.theme, juste });
+
+      // On révèle la bonne réponse quoi qu'il arrive : se tromper sans savoir
+      // ce qu'il fallait faire n'apprend rien.
+      [...liste.children].forEach((b) => {
+        b.disabled = true;
+        const texte = b.querySelector('span:last-child').textContent;
+        const r = q.reponses.find((x) => x.texte === texte);
+        if (r?.juste) b.classList.add('rep--juste');
+        else if (b === bouton) b.classList.add('rep--faux');
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'q__exp';
+      exp.innerHTML = `
+        <p>${q.explication}</p>
+        ${q.lien ? `<a class="plus" href="${q.lien.href}">Lire la conduite à tenir — ${q.lien.nom} →</a>` : ''}
+        <span class="fiche">Source : fiche ${q.fiche}</span>`;
+      boite.querySelector('.q').append(exp);
+
+      const suite = document.createElement('div');
+      suite.className = 'q__suite';
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn--primaire';
+      b.textContent = index < questions.length - 1 ? 'Question suivante' : 'Voir mon résultat';
+      b.addEventListener('click', () => {
+        index++;
+        if (index < questions.length) afficheQuestion();
+        else afficheResultat();
+        boite.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      suite.append(b);
+      boite.querySelector('.q').append(suite);
+    }
+
+    function afficheResultat() {
+      const total = questions.length;
+      const rates = historique.filter((h) => !h.juste).map((h) => h.theme);
+      const uniques = [...new Set(rates)];
+
+      let titre, texte;
+      if (score === total) {
+        titre = 'Sans faute';
+        texte = 'Vous connaissez les bonnes décisions. Reste la partie que ce quiz ne peut pas mesurer : les faire, sous pression, sur une vraie personne.';
+      } else if (score >= total * 0.7) {
+        titre = 'Une bonne base';
+        texte = 'Vous avez les réflexes principaux. Les hésitations qui restent sont précisément celles que la formation lève.';
+      } else if (score >= total * 0.4) {
+        titre = 'Des trous qui comptent';
+        texte = 'Plusieurs de vos réponses auraient aggravé la situation. Ce n’est pas grave — c’est même la raison d’être d’une journée de formation.';
+      } else {
+        titre = 'Vous ne sauriez pas réagir';
+        texte = 'Et c’est le cas de la plupart des gens. En une journée, ça change complètement.';
+      }
+
+      boite.innerHTML = `
+        <div class="res">
+          <p class="res__score">${score}<span>/${total}</span></p>
+          <h2 class="res__t">${titre}</h2>
+          <p class="res__x">${texte}</p>
+          ${uniques.length ? `<div class="res__rappel"><strong>À revoir en priorité :</strong> ${uniques.join(', ')}.</div>` : ''}
+          <div class="res__rappel">
+            <strong>Un rappel qui compte :</strong> répondre juste à un questionnaire
+            ne veut pas dire savoir faire. Aucune page, aucun quiz n’apprend à
+            masser un thorax ou à maintenir une compression. Le PSC, si.
+          </div>
+          <div class="res__a">
+            <a class="btn btn--primaire" href="/formations/psc">Voir les dates du PSC</a>
+            <button type="button" class="btn btn--sobre" data-recommencer>Recommencer</button>
+          </div>
+        </div>`;
+
+      boite.querySelector('[data-recommencer]').addEventListener('click', () => {
+        index = 0; score = 0; historique.length = 0;
+        afficheQuestion();
+      });
+    }
+
+    afficheQuestion();
+  }
+</script>

@@ -90,6 +90,17 @@ const balisages = [
         ))}
       </div>
 
+      <a class="quiz-app" href="/gestes-qui-sauvent/quiz">
+        <span class="quiz-app__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /><circle cx="12" cy="12" r="10" /></svg>
+        </span>
+        <span class="quiz-app__txt">
+          <strong>Sauriez-vous vraiment réagir&nbsp;? Douze questions pour le savoir.</strong>
+          <span>Cinq minutes, chaque réponse expliquée. Sans inscription, rien n’est enregistré.</span>
+        </span>
+        <svg class="quiz-app__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+
       <p class="source">
         Ces pages reprennent le {referentiel.nom}, {referentiel.edition},
         publié par la {referentiel.auteur}. Elles informent&nbsp;; elles ne
@@ -207,4 +218,23 @@ const balisages = [
 
   .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
   .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+
+  .quiz-app {
+    display: flex; align-items: center; gap: 1rem;
+    margin-top: 2rem;
+    background: var(--secours); color: #fff;
+    border-radius: var(--r-lg); padding: 1.3rem 1.5rem;
+    text-decoration: none;
+    transition: box-shadow .15s;
+  }
+  .quiz-app:hover { box-shadow: var(--sh-lg); }
+  .quiz-app__ic {
+    flex: none; width: 44px; height: 44px; border-radius: 13px;
+    background: rgba(255,255,255,.18); display: grid; place-items: center;
+  }
+  .quiz-app__ic svg { width: 22px; height: 22px; }
+  .quiz-app__txt { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+  .quiz-app__txt strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
+  .quiz-app__txt span { font-size: .89rem; color: rgba(255,255,255,.9); }
+  .quiz-app__f { flex: none; width: 19px; height: 19px; margin-left: auto; }
 </style>
