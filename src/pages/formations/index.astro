@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { formations, filieres, type Filiere } from '../../data/formations';
 import { sessionsAVenir, sessionsDe } from '../../lib/wix';
 import CartesFilieres from '../../components/CartesFilieres.astro';
+import Documents from '../../components/Documents.astro';
 
 const toutes = await sessionsAVenir();
 
@@ -38,6 +39,10 @@ const groupes = ordre
   </header>
 
   <CartesFilieres />
+
+  <section class="section section--sunk">
+    <div class="wrap"><Documents /></div>
+  </section>
 
 </Base>
 

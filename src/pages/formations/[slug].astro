@@ -6,6 +6,7 @@ import Sessions from '../../components/Sessions.astro';
 import PopupDates from '../../components/PopupDates.astro';
 import Temoignages from '../../components/Temoignages.astro';
 import ModuleInscription from '../../components/ModuleInscription.astro';
+import Documents from '../../components/Documents.astro';
 import { formations, type Formation } from '../../data/formations';
 import { asso } from '../../data/association';
 import { sessionsAVenir, sessionsDe } from '../../lib/wix';
@@ -40,6 +41,10 @@ const { formation: f, sessions } = Astro.props;
   )}
 
   <ObjectifsProgramme formation={f} />
+
+  <section class="section">
+    <div class="wrap"><Documents /></div>
+  </section>
 
   <Temoignages slug={f.slug} sigle={f.sigle} />
 
