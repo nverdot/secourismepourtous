@@ -121,39 +121,48 @@ export const membres: Membre[] = [
     nom: 'Lorenzetti',
     metier: 'Surveillant en lycée et sapeur-pompier volontaire',
     depuis: '2024',
-    roles: ['Formateur', 'Chef de dispositif', 'Chef de poste', 'Chef d’équipe'],
+    roles: ['Formateur', 'Chef de dispositif', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste'],
     diplomes: ['PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
     photo: '/img/equipe/thibaut.jpg',
     alt: 'Thibaut en gilet « chef de dispositif », devant le véhicule de premiers secours, la grande roue de Nice éclairée en arrière-plan.',
-    citation: 'De ne pas hésiter, et qu’il ne le regrettera pas.',
+    citation: 'Deviens acteur pour faire bouger les choses, et lance-toi !',
     reponses: [
       {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Je suis surveillant dans un lycée, et aussi sapeur-pompier volontaire, tout en préparant mon concours pour rentrer à la brigade des sapeurs-pompiers de Paris.',
+        ],
+      },
+      {
         question: 'Ce qui m’a amené au secourisme',
-        texte: ['Une passion, et un projet professionnel.'],
+        texte: [
+          'Depuis tout petit je n’ai qu’un seul rêve : faire partie de la brigade des sapeurs-pompiers de Paris, être utile aux autres et pouvoir aider les gens qui sont dans le besoin.',
+          'Le secourisme m’a permis de mettre un pied dans cet environnement dès le plus jeune âge, et de découvrir que c’était vraiment ce que je voulais. Bien plus qu’une envie, c’était déjà devenu une passion.',
+        ],
       },
       {
         question: 'Ce qui m’a surpris au début',
-        texte: ['Une ambiance familiale, et cette envie de revenir à chaque fois.'],
+        texte: [
+          'Ce qui m’a le plus surpris au début, c’est notre importance sur beaucoup d’événements, et le travail qu’il y a derrière. En venant en civil à une fête ou à un concert, on ne remarque pas forcément les bénévoles et tout ce qu’il y a derrière.',
+        ],
       },
       {
         question: 'Ce que le terrain change dans ma façon d’enseigner',
-        texte: ['La réalité du terrain, et ses complications.'],
+        texte: [
+          'L’expérience du terrain me permet d’enseigner que les situations auxquelles nous pouvons être confrontés ne seront jamais idéales comme en formation. Elle me permet d’appuyer sur le fait qu’il faut certes être bon sur ses gestes et ses connaissances, mais aussi travailler sa communication en intervention, sa gestion du stress et de l’adrénaline : l’adaptation et la polyvalence sont une des clés pour réussir.',
+          'Cette expérience me permet donc de rendre au maximum mes formations réalistes, pour les rapprocher de la réalité.',
+        ],
       },
       {
         question: 'Ce qui me fait revenir',
         texte: [
-          'L’ambiance conviviale, la différence entre chaque poste, l’adrénaline des interventions.',
+          'Je reviens pour cette ambiance familiale. Sur un poste, nous ne sommes pas simplement des secouristes qui tiennent un poste de secours ensemble, mais une véritable famille avec qui nous partageons de nombreux moments.',
+          'Ce qui me fait aussi revenir, c’est de ne pas savoir sur quoi l’on peut tomber. Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs : voir des choses, des événements, des paysages que je n’aurais jamais vus si je n’étais pas là.',
         ],
       },
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
-        texte: ['De ne pas hésiter, et qu’il ne le regrettera pas.'],
-      },
-      {
-        question: 'Dans la vraie vie',
-        texte: [
-          'Je travaille comme surveillant dans un lycée. Je suis aussi sapeur-pompier volontaire, tout en préparant mon concours pour devenir sapeur-pompier professionnel.',
-        ],
+        texte: ['Deviens acteur pour faire bouger les choses, et lance-toi !'],
       },
     ],
   },
