@@ -75,12 +75,12 @@ export const faqDps: QR[] = [
       'Le plus tôt possible : le dossier de déclaration en préfecture ou en mairie réclame la convention du dispositif, et les équipes se constituent à l’avance. Pour un grand rassemblement, comptez plusieurs semaines. Pour un événement modeste, un délai plus court reste souvent possible — appelez-nous.',
   },
   {
-    question: 'Quel est le prix d’un poste de secours ?',
+    question: 'Combien coûte un poste de secours ?',
     reponse:
       'Il n’y a pas de tarif unique : le coût dépend du nombre de secouristes, de la durée, du matériel engagé et des moyens de transport nécessaires. Décrivez-nous votre événement, nous établissons un devis gratuit.',
   },
   {
-    question: 'Le poste de secours est-il obligatoire pour mon événement ?',
+    question: 'Quand un poste de secours est-il obligatoire ?',
     reponse:
       'Cela dépend de la nature et de l’ampleur de votre manifestation. L’autorité administrative — mairie ou préfecture — peut l’exiger au titre de la sécurité du public. En cas de doute, notre évaluation vous dit ce que le référentiel impose dans votre cas.',
   },

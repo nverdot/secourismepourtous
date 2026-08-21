@@ -110,7 +110,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Quelqu’un s’étouffe : que faire ? | Gestes qui sauvent',
       description:
-        'Étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2026.',
+        'Apprendre les gestes face à un étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -233,7 +233,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Arrêt cardiaque d’un enfant ou d’un bébé : que faire ?',
       description:
-        'Réanimation pédiatrique : 15 compressions pour 2 insufflations, contre 30 pour 2 chez l’adulte. D’après les références techniques nationales PSC de juillet 2026.',
+        'Apprendre la réanimation pédiatrique : 15 compressions pour 2 insufflations, contre 30 pour 2 chez l’adulte. D’après les références techniques nationales PSC de juillet 2026.',
     },
   },
 
@@ -293,7 +293,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Plaie qui saigne beaucoup : que faire ? | Gestes qui sauvent',
       description:
-        'Hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2026.',
+        'Apprendre les gestes face à une hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -412,7 +412,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Arrêt cardiaque : que faire ? | Gestes qui sauvent à Nice',
       description:
-        'Reconnaître un arrêt cardiaque, alerter, masser, utiliser un défibrillateur. La conduite à tenir officielle, d’après le référentiel PSC 2026.',
+        'Apprendre à reconnaître un arrêt cardiaque, alerter, masser et utiliser un défibrillateur, à Nice. La conduite à tenir officielle, d’après le référentiel PSC 2026.',
     },
   },
 
