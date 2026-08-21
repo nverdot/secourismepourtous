@@ -231,4 +231,18 @@ const faits = [
     font-variant-numeric: tabular-nums;
   }
   .fait__note { font-size: 0.86rem; color: var(--ink-soft); }
+
+  /* Sous 700 px, minmax(210px) ne tient plus qu'une colonne : les quatre
+     repères s'empilent sur toute la hauteur de l'écran et repoussent le
+     contenu. En 2×2 ils restent lisibles et tiennent dans le premier regard,
+     comme les chiffres de la page d'accueil. */
+  @media (max-width: 700px) {
+    .faits__grille { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fait { padding: 1rem .95rem; gap: .35rem; }
+    .fait__ic { width: 34px; height: 34px; border-radius: 10px; margin-bottom: .15rem; }
+    .fait__ic svg { width: 18px; height: 18px; }
+    .fait__label { font-size: .62rem; letter-spacing: .1em; }
+    .fait__valeur { font-size: 1.15rem; }
+    .fait__note { font-size: .76rem; }
+  }
 </style>
