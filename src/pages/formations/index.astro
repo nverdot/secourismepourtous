@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { quizParFormation } from '../../data/quiz-fc';
+import { parSlug } from '../../data/formations';
 import Terrain from '../../components/Terrain.astro';
 import Faq from '../../components/Faq.astro';
 import { faqFormations } from '../../data/faq';
@@ -53,6 +55,7 @@ const groupes = ordre
           </p>
         </div>
 
+        <div class="tete__cartes">
         <!-- Le catalogue complet, à portée de clic pour qui veut tout comparer
              hors ligne ou le transmettre à un employeur. -->
         <a class="cata" href="/documents/catalogue-formations.pdf" target="_blank" rel="noopener">
@@ -67,10 +70,61 @@ const groupes = ordre
             <em>Toutes les formations, durées et tarifs — PDF</em>
           </span>
         </a>
+
+        <!-- Beaucoup de visiteurs sont déjà diplômés et viennent vérifier une
+             date de recyclage. Le quiz leur montre pourquoi elle compte. -->
+        <a class="cata cata--test" href="#acquis">
+          <span class="cata__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3 7-7" />
+              <path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10" />
+            </svg>
+          </span>
+          <span class="cata__txt">
+            <strong>Vos acquis sont-ils à jour&nbsp;?</strong>
+            <em>Quiz FC PSC, PSE1, PSE2 — 5 minutes</em>
+          </span>
+        </a>
+        </div>
       </div>
   </header>
 
   <CartesFilieres />
+
+  {/* Un titulaire dont le recyclage approche n'a pas besoin qu'on lui vante
+      la formation : il a besoin de constater lui-même ce qu'il a oublié. */}
+  <section class="section section--sunk" id="acquis">
+    <div class="wrap">
+      <p class="eyebrow">Déjà diplômé</p>
+      <h2 class="h-section">Vos acquis sont-ils encore à jour&nbsp;?</h2>
+      <p class="lede">
+        Les gestes se perdent sans pratique, et les recommandations évoluent.
+        Cinq minutes suffisent pour le vérifier, avec un corrigé sourcé sur les
+        référentiels en vigueur.
+      </p>
+      <div class="tests">
+        {Object.keys(quizParFormation).map((slug) => {
+          const fc = parSlug(slug)!;
+          return (
+            <a class="test" href={`/quiz/${slug}`}>
+              <span class="test__e">{quizParFormation[slug].length} questions</span>
+              <strong>Quiz {fc.sigle}</strong>
+              <span class="test__x">{fc.intitule}</span>
+              <span class="test__f" aria-hidden="true">
+                Tester mes acquis
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+      <p class="tests__n">
+        Jamais formé&nbsp;? Le
+        <a href="/gestes-qui-sauvent/quiz">questionnaire grand public</a>
+        vous dira où vous en êtes.
+      </p>
+    </div>
+  </section>
 
   <section class="section">
     <div class="wrap">
@@ -100,7 +154,7 @@ const groupes = ordre
 
   <Indicateurs />
 
-  <section class="section section--sunk">
+  <section class="section">
     <div class="wrap">
       <Faq
         titre="Vos questions avant de vous inscrire"
@@ -159,6 +213,9 @@ const groupes = ordre
   }
   @media (max-width: 900px) { .tete__grille { grid-template-columns: 1fr; } }
 
+  .tete__cartes { display: grid; gap: .75rem; }
+  #acquis { scroll-margin-top: 5rem; }
+
   .cata {
     display: flex; align-items: center; gap: .9rem;
     background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
@@ -171,6 +228,7 @@ const groupes = ordre
     flex: none; width: 42px; height: 42px; border-radius: 12px;
     background: var(--secours); color: #fff; display: grid; place-items: center;
   }
+  .cata--test .cata__ic { background: var(--azur); }
   .cata__ic svg { width: 21px; height: 21px; }
   .cata__txt { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
   .cata__txt strong { font-family: 'Archivo', sans-serif; font-size: .98rem; font-weight: 700; }
@@ -274,4 +332,31 @@ const groupes = ordre
   .voie:hover { box-shadow: var(--sh-md); border-color: var(--secours); }
   .voie strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
   .voie span { font-size: .89rem; color: var(--ink-mute); }
+
+  .tests {
+    margin-top: 2rem; display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .test {
+    display: flex; flex-direction: column; gap: .35rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 4px solid var(--secours);
+    border-radius: var(--r-lg); padding: 1.25rem 1.4rem;
+    text-decoration: none; color: inherit;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .test:hover { box-shadow: var(--sh-md); border-color: var(--secours); }
+  .test__e {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--secours);
+  }
+  .test strong { font-family: 'Archivo', sans-serif; font-size: 1.1rem; font-weight: 800; }
+  .test__x { font-size: .88rem; color: var(--ink-mute); }
+  .test__f {
+    display: flex; align-items: center; gap: .4rem; margin-top: auto; padding-top: .6rem;
+    font-family: 'Archivo', sans-serif; font-size: .84rem; font-weight: 600; color: var(--azur);
+  }
+  .test__f svg { width: 15px; height: 15px; }
+  .tests__n { margin-top: 1.25rem; font-size: .9rem; color: var(--ink-mute); }
+  .tests__n a { color: var(--azur); font-weight: 600; }
 </style>
