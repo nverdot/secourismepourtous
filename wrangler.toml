@@ -17,6 +17,14 @@ compatibility_date = "2026-08-21"
 directory = "./dist"
 binding = "ASSETS"
 
+# Sans cette ligne, /api/contact répond 405 aux navigateurs et 303 à curl.
+# Le routeur de fichiers statiques traite toute requête portant
+# « Sec-Fetch-Mode: navigate » comme une demande de fichier et ne passe jamais
+# la main au Worker. Or un formulaire HTML soumis normalement EST une
+# navigation — contrairement à un fetch ou à curl, ce qui rend la panne
+# invisible aux tests en ligne de commande.
+run_worker_first = ["/api/*"]
+
 # Astro produit des fichiers plats (`build.format: 'file'`) : /formations doit
 # résoudre vers formations.html. C'est ce que fait « auto-trailing-slash ».
 html_handling = "auto-trailing-slash"

@@ -75,16 +75,6 @@ export const villes: Ville[] = [
         genre: 'culturel',
       },
       {
-        nom: 'Concerts aux Arènes de Cimiez',
-        texte: 'Site en gradins à l’écart du centre : accès des secours et brancardage à anticiper dès la conception du dispositif.',
-        genre: 'culturel',
-      },
-      {
-        nom: 'Marché de Noël',
-        texte: 'Plusieurs semaines de présence, par temps froid, avec un public familial et de nombreux enfants.',
-        genre: 'populaire',
-      },
-      {
         nom: 'Commémorations',
         texte: 'Cérémonies officielles : public souvent âgé, station debout prolongée, coordination avec les services de l’État.',
         genre: 'populaire',
@@ -131,6 +121,21 @@ export const villes: Ville[] = [
         texte: 'Rassemblements en bord de mer, avec les contraintes d’accès propres au littoral.',
         genre: 'festif',
       },
+      {
+        nom: 'Bull Padel Show',
+        texte: 'Tournoi de padel : public compact autour des courts, rotations rapides entre les matchs.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Fête de la musique',
+        texte: 'Scènes dispersées dans la ville, public mobile toute la soirée : plusieurs équipes en itinérance.',
+        genre: 'festif',
+      },
+      {
+        nom: 'Nouvel An',
+        texte: 'Rassemblement du 1er janvier : forte affluence nocturne et prises en charge liées aux excès de la nuit.',
+        genre: 'festif',
+      },
     ],
     alentours: ['Vallauris', 'Golfe-Juan', 'Biot'],
     distanceMinutes: 30,
@@ -141,12 +146,27 @@ export const villes: Ville[] = [
     article: 'à Saint-Laurent-du-Var',
     codePostal: '06700',
     contexte:
-      'Aux portes de Nice, une commune où nous intervenons régulièrement sur les rencontres sportives en salle.',
+      'Aux portes de Nice, une commune dont la saison sportive et festive se concentre sur les berges et le front de mer, avec des publics familiaux nombreux.',
     references: [
       {
-        nom: 'Matchs de volley',
-        texte: 'Compétitions en salle : poste fixe, prise en charge des joueurs comme du public.',
+        nom: 'Tournoi de beach-volley',
+        texte: 'Compétition sur sable : chaleur, déshydratation et traumatismes d’appui, avec un public installé tout autour des terrains.',
         genre: 'sportif',
+      },
+      {
+        nom: 'Tournoi de basket 3×3',
+        texte: 'Rencontres enchaînées sur plusieurs terrains : blessures de contact fréquentes et rotations serrées.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Concerts du BSF',
+        texte: 'Soirées en plein air : public dense devant la scène, dispositif renforcé en fin de programmation.',
+        genre: 'culturel',
+      },
+      {
+        nom: 'Kid’s Day',
+        texte: 'Journée familiale : beaucoup d’enfants, donc des prises en charge pédiatriques et des rapprochements de familles.',
+        genre: 'populaire',
       },
     ],
     alentours: ['Cagnes-sur-Mer', 'La Gaude', 'Saint-Jeannet'],
@@ -158,33 +178,31 @@ export const villes: Ville[] = [
     article: 'à Cagnes-sur-Mer',
     codePostal: '06800',
     contexte:
-      'L’hippodrome de la Côte d’Azur y accueille des réunions qui rassemblent un large public sur un site étendu, où les distances comptent autant que les effectifs.',
+      'Une commune où la saison culturelle et les épreuves sportives se succèdent, du centre-ville aux installations scolaires.',
     references: [
       {
-        nom: 'Courses à l’hippodrome',
-        texte: 'Réunions hippiques : site vaste, public dispersé, délais d’accès à anticiper.',
+        nom: 'Soirées Renoir',
+        texte: 'Rendez-vous culturels en plein air : public assis mais nombreux, accès à préserver pour les secours.',
+        genre: 'culturel',
+      },
+      {
+        nom: 'Soirées place Charles-de-Gaulle',
+        texte: 'Animations en centre-ville : affluence dense sur un espace contraint, circulation à contourner.',
+        genre: 'festif',
+      },
+      {
+        nom: 'Épreuves du baccalauréat',
+        texte: 'Épreuves sportives scolaires : effort maximal chez des jeunes, malaises et traumatismes d’effort.',
+        genre: 'sportif',
+      },
+      {
+        nom: 'Courses sur route',
+        texte: 'Parcours étendu : postes échelonnés et équipes mobiles pour couvrir toute la distance.',
         genre: 'sportif',
       },
     ],
     alentours: ['Villeneuve-Loubet', 'Saint-Laurent-du-Var', 'La Gaude'],
     distanceMinutes: 20,
-  },
-  {
-    slug: 'vence',
-    nom: 'Vence',
-    article: 'à Vence',
-    codePostal: '06140',
-    contexte:
-      'Dans l’arrière-pays niçois, une ville où la saison culturelle rassemble un public nombreux sur des sites en plein air, loin des grands axes.',
-    references: [
-      {
-        nom: 'Festival Les Nuits du Sud',
-        texte: 'Concerts en plein air sur plusieurs soirées, avec un public dense en centre-ville et des accès contraints.',
-        genre: 'culturel',
-      },
-    ],
-    alentours: ['Saint-Paul-de-Vence', 'La Colle-sur-Loup', 'Tourrettes-sur-Loup'],
-    distanceMinutes: 35,
   },
 ];
 
