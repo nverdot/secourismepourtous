@@ -240,14 +240,20 @@ import { redirects } from '@wix/redirects';
         );
         if (!defs.length) return afficheErreur("Aucune place n'est disponible en ligne pour cette session.");
 
+        // Un billet couvrant deux formations ne réserve qu'une date : celle de
+        // la session affichée. Sans cette précision, on laisse croire que les
+        // deux niveaux sont calés d'un coup.
+        const groupe = (nom) => / \+ /.test(nom || '');
+
         zone.innerHTML = defs.map((d) => {
           const max = Math.min(d.limitPerCheckout || 10, 10);
           return `
-          <div class="bil" data-id="${d._id}" data-prix="${d.price?.value ?? 0}" data-devise="${d.price?.currency ?? 'EUR'}">
+          <div class="bil${groupe(d.name) ? ' bil--groupe' : ''}" data-id="${d._id}" data-prix="${d.price?.value ?? 0}" data-devise="${d.price?.currency ?? 'EUR'}">
             <div class="bil__txt">
               <strong>${d.name}</strong>
               ${d.description ? `<span>${d.description.trim()}</span>` : ''}
               <em>${d.free ? 'Gratuit' : euro(d.price?.value, d.price?.currency)}</em>
+              ${groupe(d.name) ? `<span class="bil__note">La date choisie ici est celle du premier niveau. Celle du second sera fixée avec vous ensuite, selon les sessions disponibles.</span>` : ''}
             </div>
             <div class="bil__qte">
               <button type="button" class="bil__b" data-pas="-1" aria-label="Retirer une place">−</button>
@@ -547,4 +553,10 @@ import { redirects } from '@wix/redirects';
   .ins__valider:hover:not(:disabled) { filter: brightness(1.1); }
   .ins__valider:disabled { background: var(--ink-mute); cursor: not-allowed; }
   .ins__valider svg { width: 17px; height: 17px; }
+
+  .bil--groupe { border-color: var(--secours); background: color-mix(in srgb, var(--secours) 4%, transparent); }
+  .bil__note {
+    display: block; margin-top: .35rem; font-size: .82rem; line-height: 1.4;
+    color: var(--ink-mute); max-width: 46ch;
+  }
 </style>

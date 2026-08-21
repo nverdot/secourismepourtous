@@ -70,6 +70,10 @@ const balisages = [
 
   <ObjectifsProgramme formation={f} />
 
+  {/* Juste après « Et après » : c'est le moment où le lecteur se projette
+      dans la suite du parcours, donc celui où l'offre groupée fait sens. */}
+  {f.pack && <Pack formation={f} />}
+
   <section class="section">
     <div class="wrap"><Documents /></div>
   </section>
@@ -142,8 +146,6 @@ const balisages = [
   </section>
 
   <Temoignages slug={f.slug} sigle={f.sigle} />
-
-  {f.pack && <Pack formation={f} />}
 
   <Sessions sessions={sessions} sigle={f.sigle} />
 
