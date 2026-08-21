@@ -42,9 +42,9 @@ export const photosDps: PhotoDps[] = [
     hauteur: 1600,
   },
   {
-    fichier: '/img/dps/marche-noel-nice.jpg',
+    fichier: '/img/dps/marche-noel-antibes.jpg',
     alt: "Trois secouristes de dos devant la grande roue et la pyramide de bois illuminée du marché de Noël, sous un ciel bleu.",
-    legende: 'Marché de Noël — Nice',
+    legende: 'Village de Noël — Antibes',
     largeur: 1500,
     hauteur: 2000,
   },
