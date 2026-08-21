@@ -117,7 +117,7 @@ export const filieres: Record<Filiere, InfoFiliere> = {
     contenu: 'PSC — Citoyen Sauveteur, et sa formation continue FC PSC.',
     couleur: 'azur',
     icone: 'coeur',
-    image: '/img/filiere-operationnelle.jpg',
+    image: '/img/filiere-citoyenne.jpg',
   },
   operationnelle: {
     nom: 'Filière opérationnelle',

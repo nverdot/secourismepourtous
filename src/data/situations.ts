@@ -2,7 +2,7 @@
  * Situations de premiers secours — « que faire si… ».
  *
  * SOURCE UNIQUE : « Recommandations relatives à l'unité d'enseignement
- * Prévention et Secours Civiques de niveau 1 », édition 2024, direction
+ * Premiers Secours Citoyen », édition juillet 2026, direction
  * générale de la Sécurité civile et de la gestion des crises. Chaque situation
  * cite la fiche dont elle est tirée et sa date d'actualisation.
  *
@@ -102,7 +102,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'La différence entre claques dans le dos et compressions, la position à adopter selon qu’il s’agit d’un adulte, d’un enfant ou d’un nourrisson, et la force à mettre : tout cela se travaille sur mannequin, jusqu’à ce que le geste vienne seul.',
-    fiche: { ref: '02PR01', nom: 'Obstruction des voies aériennes', maj: 'décembre 2023' },
+    fiche: { ref: '02PR02', nom: 'Obstruction des voies aériennes', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/etouffement.jpg',
       alt: 'Un homme attablé porte la main à sa gorge, la bouche ouverte, tandis qu’un proche se penche vers lui pour l’aider.',
@@ -110,7 +110,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Quelqu’un s’étouffe : que faire ? | Gestes qui sauvent',
       description:
-        'Étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2024.',
+        'Étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -163,7 +163,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'La prise sur l’avant-bras, la force à mettre sur un corps de quelques kilos, l’enchaînement claques–compressions : cela se travaille sur mannequin nourrisson, et c’est très différent de ce qu’on imagine.',
-    fiche: { ref: '02FT04', nom: 'Désobstruction par compressions thoraciques chez le nourrisson', maj: 'décembre 2022' },
+    fiche: { ref: '02FT05', nom: 'Désobstruction par des compressions thoraciques', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/etouffement-nourrisson.jpg',
       alt: 'Mannequin de formation nourrisson posé à plat ventre le long de l’avant-bras, tête plus basse que le corps, la main libre levée pour donner une claque entre les omoplates.',
@@ -171,7 +171,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Bébé qui s’étouffe : que faire ? | Gestes qui sauvent',
       description:
-        'Étouffement du nourrisson : claques dans le dos, compressions thoraciques — jamais abdominales. La conduite à tenir officielle, d’après le référentiel PSC 2024.',
+        'Étouffement du nourrisson : claques dans le dos, compressions thoraciques — jamais abdominales. La conduite à tenir officielle, d’après le référentiel PSC 2026.',
     },
   },
 
@@ -180,7 +180,7 @@ export const situations: Situation[] = [
     titre: 'Arrêt cardiaque chez un enfant ou un bébé : que faire ?',
     court: 'Arrêt cardiaque de l’enfant',
     accroche:
-      'Chez l’enfant, l’arrêt cardiaque vient presque toujours d’un manque d’oxygène, pas du cœur. C’est pourquoi la réanimation commence par cinq insufflations, avant toute compression — l’inverse de l’adulte.',
+      'Chez l’enfant, l’arrêt cardiaque vient presque toujours d’un manque d’oxygène, pas du cœur. Les insufflations comptent donc davantage que chez l’adulte, et le rythme n’est pas le même : quinze compressions pour deux insufflations.',
     pourQui:
       'Noyade, étouffement, accident : les causes sont souvent respiratoires. Le témoin est presque toujours un parent, et l’enchaînement correct change tout.',
     reconnaitre: [
@@ -195,14 +195,14 @@ export const situations: Situation[] = [
           'Le 15, ou le 112. Si vous êtes seul, criez pour attirer de l’aide avant de commencer.',
       },
       {
-        titre: 'Cinq insufflations pour commencer',
+        titre: 'Commencez la réanimation sans attendre',
         texte:
-          'C’est la différence essentielle avec l’adulte : chez l’enfant et le nourrisson, la réanimation débute par cinq insufflations, avant toute compression.',
+          'Comme chez l’adulte, on débute par les compressions. Toute action qui retarde la réanimation se paie en minutes perdues.',
       },
       {
-        titre: 'Puis 15 compressions pour 2 insufflations',
+        titre: '15 compressions pour 2 insufflations',
         texte:
-          'Ce rythme remplace le 30 pour 2 de l’adulte. Les compressions se font au rythme de 100 à 120 par minute.',
+          'C’est là que l’enfant se distingue de l’adulte, qui est à 30 pour 2. Les compressions se font au rythme de 100 à 120 par minute.',
       },
       {
         titre: 'Utilisez le défibrillateur dès qu’il arrive',
@@ -216,15 +216,16 @@ export const situations: Situation[] = [
       },
     ],
     pieges: [
-      'Appliquer le schéma de l’adulte : commencer par les compressions, et enchaîner 30 pour 2.',
+      'Enchaîner 30 compressions pour 2 insufflations comme chez l’adulte : chez l’enfant et le nourrisson, c’est 15 pour 2.',
+      'Appliquer les cinq insufflations initiales : elles ne figurent plus dans le référentiel depuis juillet 2026.',
       'Renoncer par peur de faire mal. Sans réanimation, l’issue est certaine.',
       'Attendre les secours sans rien faire.',
       'Croire qu’un défibrillateur est interdit sur un enfant.',
     ],
     numero: '15',
     enFormation:
-      'Les insufflations chez un nourrisson, la profondeur des compressions sur un thorax d’enfant, l’enchaînement 15 pour 2 : tout se répète sur mannequins pédiatriques, jusqu’à ce que le rythme devienne automatique.',
-    fiche: { ref: '02PR04', nom: 'Arrêt cardiaque', maj: 'décembre 2023' },
+      'Les insufflations chez un nourrisson, la profondeur des compressions sur un thorax d’enfant, l’enchaînement 15 pour 2 : tout se répète sur mannequins pédiatriques, jusqu’à ce que le rythme devienne automatique. Et si vous avez été formé avant juillet 2026, vous avez appris à commencer par cinq insufflations — ce n’est plus la conduite à tenir.',
+    fiche: { ref: '02PR03', nom: 'Arrêt cardiaque', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/arret-cardiaque-enfant.jpg',
       alt: 'Formateur agenouillé réalisant des compressions thoraciques sur un mannequin de formation enfant allongé sur un tapis.',
@@ -232,7 +233,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Arrêt cardiaque d’un enfant ou d’un bébé : que faire ?',
       description:
-        'Réanimation pédiatrique : 5 insufflations initiales puis 15 compressions pour 2 insufflations. Ce qui change par rapport à l’adulte. D’après le référentiel PSC 2024.',
+        'Réanimation pédiatrique : 15 compressions pour 2 insufflations, contre 30 pour 2 chez l’adulte. D’après les références techniques nationales PSC de juillet 2026.',
     },
   },
 
@@ -284,7 +285,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'On s’entraîne à comprimer efficacement — la plupart des gens appuient trop peu — et à reconnaître les rares situations qui justifient un garrot, puis à le poser correctement.',
-    fiche: { ref: '02PR02', nom: 'Hémorragies externes', maj: 'décembre 2023' },
+    fiche: { ref: '02PR01', nom: 'Hémorragies', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/saignement-abondant.jpg',
       alt: 'Un homme ganté comprime une plaie qui saigne à la jambe d’une cycliste assise au sol, une trousse de secours ouverte à côté d’eux.',
@@ -292,7 +293,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Plaie qui saigne beaucoup : que faire ? | Gestes qui sauvent',
       description:
-        'Hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2024.',
+        'Hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -347,7 +348,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'La position latérale de sécurité est le geste le plus mal fait par ceux qui l’ont seulement vue en vidéo. On la répète jusqu’à ce qu’elle soit stable, y compris sur une personne plus lourde que soi.',
-    fiche: { ref: '02PR03', nom: 'Perte de connaissance', maj: 'décembre 2023' },
+    fiche: { ref: '02PR04', nom: 'Perte de connaissance', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/perte-de-connaissance.jpg',
       alt: 'Dans un salon, une femme téléphone aux secours en gardant une main sur l’épaule d’un homme inconscient qu’elle a installé sur le côté.',
@@ -355,7 +356,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Personne inconsciente qui respire : que faire ? | Gestes qui sauvent',
       description:
-        'Perte de connaissance : vérifier la réponse, libérer les voies aériennes, contrôler la respiration, position latérale de sécurité. D’après le référentiel PSC 2024.',
+        'Perte de connaissance : vérifier la réponse, libérer les voies aériennes, contrôler la respiration, position latérale de sécurité. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -403,7 +404,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'On travaille la profondeur et le rythme des compressions sur mannequin avec retour visuel — presque personne n’appuie assez fort du premier coup — et on manipule un vrai défibrillateur de formation.',
-    fiche: { ref: '02PR04', nom: 'Arrêt cardiaque', maj: 'décembre 2023' },
+    fiche: { ref: '02PR03', nom: 'Arrêt cardiaque', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/arret-cardiaque.jpg',
       alt: 'Dans un salon, une femme réalise des compressions thoraciques sur un homme inconscient allongé au sol, bras tendus et mains au centre de la poitrine.',
@@ -411,7 +412,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Arrêt cardiaque : que faire ? | Gestes qui sauvent à Nice',
       description:
-        'Reconnaître un arrêt cardiaque, alerter, masser, utiliser un défibrillateur. La conduite à tenir officielle, d’après le référentiel PSC 2024.',
+        'Reconnaître un arrêt cardiaque, alerter, masser, utiliser un défibrillateur. La conduite à tenir officielle, d’après le référentiel PSC 2026.',
     },
   },
 
@@ -462,7 +463,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'On apprend à poser les bonnes questions, à transmettre un bilan clair au médecin régulateur, et à reconnaître les signes qui font basculer d’un simple malaise à une urgence vitale.',
-    fiche: { ref: '02PR05', nom: 'Malaises', maj: 'décembre 2022' },
+    fiche: { ref: '02PR05', nom: 'Malaises', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/malaise.jpg',
       alt: 'Une femme appelle les secours en soutenant un homme assis dont le visage est affaissé d’un côté et le bras retombe : deux signes d’accident vasculaire cérébral.',
@@ -470,7 +471,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Malaise, AVC, douleur dans la poitrine : que faire ?',
       description:
-        'Les signes qui imposent d’appeler le 15 immédiatement : paralysie d’un bras, visage déformé, trouble de la parole, douleur thoracique. D’après le référentiel PSC 2024.',
+        'Les signes qui imposent d’appeler le 15 immédiatement : paralysie d’un bras, visage déformé, trouble de la parole, douleur thoracique. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -518,7 +519,7 @@ export const situations: Situation[] = [
     numero: '15',
     enFormation:
       'On apprend à évaluer l’étendue d’une brûlure, à distinguer ce qui relève du médecin traitant de ce qui relève du 15, et à gérer les cas particuliers : brûlure chimique, électrique, par inhalation.',
-    fiche: { ref: '02PR07', nom: 'Brûlures', maj: 'décembre 2022' },
+    fiche: { ref: '02PR07', nom: 'Brûlures', maj: 'juillet 2026' },
     image: {
       fichier: '/img/gestes/brulure.jpg',
       alt: 'Dans une cuisine, une femme maintient l’avant-bras brûlé d’un homme sous l’eau courante de l’évier.',
@@ -526,7 +527,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Brûlure : que faire ? Les bons gestes | Gestes qui sauvent',
       description:
-        'Refroidir 20 minutes à l’eau tempérée, retirer bijoux et vêtements, évaluer la gravité. Les erreurs à ne pas commettre. D’après le référentiel PSC 2024.',
+        'Refroidir 20 minutes à l’eau tempérée, retirer bijoux et vêtements, évaluer la gravité. Les erreurs à ne pas commettre. D’après le référentiel PSC 2026.',
     },
   },
 ];
@@ -535,7 +536,7 @@ export const parSituation = (slug: string) => situations.find((s) => s.slug === 
 
 /** Édition du référentiel dont ces contenus sont tirés. */
 export const referentiel = {
-  nom: 'Recommandations relatives à l’unité d’enseignement « Prévention et Secours Civiques de niveau 1 »',
-  edition: 'édition 2024',
+  nom: 'Références techniques nationales relatives à l’unité d’enseignement « Premiers Secours Citoyen »',
+  edition: 'édition juillet 2026',
   auteur: 'Direction générale de la Sécurité civile et de la gestion des crises',
 };

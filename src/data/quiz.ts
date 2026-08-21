@@ -1,9 +1,15 @@
 /**
  * Questionnaire de connaissance — niveau PSC.
  *
- * SOURCE : « Recommandations relatives à l'unité d'enseignement Prévention et
- * Secours Civiques de niveau 1 », édition 2024. Chaque question renvoie à la
- * fiche dont elle est tirée, et l'explication reprend ce qu'elle dit.
+ * SOURCE : « Références techniques nationales relatives à l'unité
+ * d'enseignement Premiers Secours Citoyen », édition juillet 2026. Chaque
+ * question renvoie à la fiche dont elle est tirée, et l'explication reprend ce
+ * qu'elle dit.
+ *
+ * ⚠️ La refonte de juillet 2026 a renuméroté les fiches (02PR01 est passé de
+ * l'obstruction aux hémorragies) et supprimé les cinq insufflations initiales
+ * chez l'enfant. Toute reprise d'une question ancienne doit être revérifiée
+ * contre le texte, pas contre la version précédente de ce fichier.
  *
  * ⚠️ CE QUE CE QUIZ N'EST PAS.
  *
@@ -60,7 +66,7 @@ export const questions: Question[] = [
     explication:
       'Tant que la personne tousse, l’obstruction est partielle et la toux est plus efficace que n’importe quel geste. Intervenir risquerait d’enfoncer le corps étranger.',
     situation: 'etouffement',
-    fiche: '02PR01 — Obstruction des voies aériennes',
+    fiche: '02PR02 — Obstruction des voies aériennes',
   },
   {
     theme: 'Étouffement du nourrisson',
@@ -74,7 +80,7 @@ export const questions: Question[] = [
     explication:
       'Chez le nourrisson, les compressions se font au niveau thoracique. Les compressions abdominales sont proscrites à cet âge : elles peuvent provoquer des lésions internes graves.',
     situation: 'etouffement-nourrisson',
-    fiche: '02FT04 — Désobstruction chez le nourrisson',
+    fiche: '02FT05 — Désobstruction par des compressions thoraciques',
   },
   {
     theme: 'Hémorragie',
@@ -88,7 +94,7 @@ export const questions: Question[] = [
     explication:
       'C’est la compression qui arrête l’hémorragie, pas le pansement. Le garrot ne vient qu’en second, si la compression est inefficace ou impossible.',
     situation: 'saignement-abondant',
-    fiche: '02PR02 — Hémorragies externes',
+    fiche: '02PR01 — Hémorragies',
   },
   {
     theme: 'Perte de connaissance',
@@ -102,7 +108,7 @@ export const questions: Question[] = [
     explication:
       'Sur le dos, une personne inconsciente risque d’étouffer avec sa langue ou ce qu’elle régurgite. La position latérale libère les voies aériennes en attendant les secours.',
     situation: 'perte-de-connaissance',
-    fiche: '02PR03 — Perte de connaissance',
+    fiche: '02PR04 — Perte de connaissance',
   },
   {
     theme: 'Arrêt cardiaque',
@@ -116,7 +122,7 @@ export const questions: Question[] = [
     explication:
       'Une respiration anormale, dite agonique, doit être considérée comme un arrêt cardiaque. C’est l’erreur la plus fréquente et la plus coûteuse : elle fait perdre les minutes qui comptent.',
     situation: 'arret-cardiaque',
-    fiche: '02PR04 — Arrêt cardiaque',
+    fiche: '02PR03 — Arrêt cardiaque',
   },
   {
     theme: 'Défibrillateur',
@@ -130,21 +136,21 @@ export const questions: Question[] = [
     explication:
       'L’appareil analyse seul le rythme cardiaque et ne délivre un choc que s’il est nécessaire. Il est impossible de se tromper en l’utilisant, y compris sur un enfant.',
     situation: 'arret-cardiaque',
-    fiche: '02FT11 — Défibrillation',
+    fiche: '02FT09 — Défibrillation',
   },
   {
     theme: 'Réanimation de l’enfant',
-    question: 'Chez un enfant en arrêt cardiaque, par quoi commence la réanimation ?',
+    question: 'Un enfant de six ans est en arrêt cardiaque. Quel est le rythme de la réanimation ?',
     reponses: [
-      { texte: 'Cinq insufflations, avant toute compression', juste: true },
-      { texte: 'Trente compressions, comme chez l’adulte' },
-      { texte: 'Deux insufflations puis trente compressions' },
-      { texte: 'Le défibrillateur, et rien d’autre' },
+      { texte: '15 compressions pour 2 insufflations', juste: true },
+      { texte: '30 compressions pour 2 insufflations, comme chez l’adulte' },
+      { texte: 'Cinq insufflations, puis 15 compressions pour 2' },
+      { texte: 'Des compressions en continu, sans insufflation' },
     ],
     explication:
-      'Chez l’enfant, l’arrêt est presque toujours d’origine respiratoire : la réanimation débute par cinq insufflations, puis enchaîne 15 compressions pour 2 insufflations.',
+      'Chez l’enfant et le nourrisson, c’est 15 pour 2, contre 30 pour 2 chez l’adulte. Les cinq insufflations initiales, enseignées jusqu’en 2026, ne figurent plus dans le référentiel : la réanimation débute par les compressions à tout âge.',
     situation: 'arret-cardiaque-enfant',
-    fiche: '02PR04 — Arrêt cardiaque',
+    fiche: '02PR03 — Arrêt cardiaque',
   },
   {
     theme: 'AVC',
@@ -162,15 +168,15 @@ export const questions: Question[] = [
   },
   {
     theme: 'Brûlure',
-    question: 'Une personne se brûle l’avant-bras en cuisinant. Combien de temps arrosez-vous ?',
+    question: 'Une personne se brûle l’avant-bras en cuisinant : une simple rougeur. Combien de temps arrosez-vous ?',
     reponses: [
-      { texte: 'Au moins 10 minutes, idéalement 20', juste: true },
+      { texte: 'Au moins 10 minutes, puis jusqu’à disparition de la douleur', juste: true },
       { texte: 'Une trentaine de secondes suffisent' },
-      { texte: 'Jusqu’à ce que la douleur disparaisse' },
+      { texte: 'Jusqu’à ce que la peau soit froide au toucher' },
       { texte: 'On n’arrose pas : on applique une pommade' },
     ],
     explication:
-      'L’eau tempérée à faible pression limite la profondeur de la brûlure. Commencer l’arrosage plus de trente minutes après n’a en revanche plus d’intérêt.',
+      'L’eau tempérée à faible pression limite la profondeur de la brûlure : au moins 10 minutes, idéalement 20. Pour une brûlure simple, le référentiel 2026 précise que l’on poursuit le refroidissement jusqu’à disparition de la douleur. Commencer l’arrosage plus de trente minutes après n’a en revanche plus d’intérêt.',
     situation: 'brulure',
     fiche: '02PR07 — Brûlures',
   },
@@ -204,6 +210,6 @@ export const questions: Question[] = [
 ];
 
 export const referentielQuiz = {
-  nom: 'Recommandations relatives à l’unité d’enseignement « Prévention et Secours Civiques de niveau 1 »',
-  edition: 'édition 2024',
+  nom: 'Références techniques nationales relatives à l’unité d’enseignement « Premiers Secours Citoyen »',
+  edition: 'édition juillet 2026',
 };
