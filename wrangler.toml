@@ -24,6 +24,14 @@ html_handling = "auto-trailing-slash"
 # Une URL inconnue rend notre page 404, pas celle de Cloudflare.
 not_found_handling = "404-page"
 
-# WIX_API_KEY et WIX_SITE_ID ne sont volontairement PAS ici : ce sont des
-# secrets d'exécution, à poser avec `npx wrangler secret put WIX_API_KEY`.
-# Une clé administrateur n'a rien à faire dans un fichier versionné.
+# L'identifiant du site n'est pas un secret : c'est un numéro, inutilisable
+# sans la clé, et Wix l'expose lui-même dans ses intégrations. Le déclarer ici
+# évite d'avoir à le saisir à la main dans le tableau de bord, et ramène à un
+# seul le nombre de secrets à poser.
+[vars]
+WIX_SITE_ID = "c76f219b-29ee-4805-aae5-8f78da0f719f"
+
+# WIX_API_KEY, en revanche, est une clé administrateur : elle n'a rien à faire
+# dans un fichier versionné. Elle se pose en secret d'exécution, par le tableau
+# de bord (Settings > Variables and secrets) ou par
+# `npx wrangler secret put WIX_API_KEY`.
