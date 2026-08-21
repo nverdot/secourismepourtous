@@ -6,6 +6,7 @@ const { slug, sigle } = Astro.props;
 const avis = temoignagesDe(slug);
 ---
 
+{avis.length > 0 && (
 <section class="preuve" aria-labelledby="t-avis">
   <div class="wrap">
     <div class="preuve__tete">
@@ -13,7 +14,7 @@ const avis = temoignagesDe(slug);
         <p class="eyebrow">Ils l'ont suivie</p>
         <h2 class="h-section" id="t-avis">Ce que disent nos stagiaires</h2>
         <p class="lede">
-          Retours recueillis auprès des {satisfaction.reponses} stagiaires ayant répondu
+          Retours recueillis auprès de nos stagiaires ayant répondu
           à notre questionnaire de satisfaction en {satisfaction.annee}.
         </p>
       </div>
@@ -46,6 +47,7 @@ const avis = temoignagesDe(slug);
     </p>
   </div>
 </section>
+)}
 
 <style>
     .preuve {

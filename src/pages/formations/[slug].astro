@@ -9,6 +9,7 @@ import HeroFormation from '../../components/HeroFormation.astro';
 import ObjectifsProgramme from '../../components/ObjectifsProgramme.astro';
 import Sessions from '../../components/Sessions.astro';
 import PopupDates from '../../components/PopupDates.astro';
+import Pack from '../../components/Pack.astro';
 import Temoignages from '../../components/Temoignages.astro';
 import ModuleInscription from '../../components/ModuleInscription.astro';
 import Documents from '../../components/Documents.astro';
@@ -141,6 +142,8 @@ const balisages = [
   </section>
 
   <Temoignages slug={f.slug} sigle={f.sigle} />
+
+  {f.pack && <Pack formation={f} />}
 
   <Sessions sessions={sessions} sigle={f.sigle} />
 

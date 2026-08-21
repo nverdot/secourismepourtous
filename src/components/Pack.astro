@@ -1,0 +1,84 @@
+---
+import type { Formation } from '../data/formations';
+
+/**
+ * Offre groupée, annoncée juste avant le choix des dates.
+ *
+ * Elle existe déjà dans la billetterie Wix : le visiteur la trouvait au
+ * moment de payer, mais rien ne la lui disait avant. Le placer ici, c'est
+ * lui laisser le temps d'y penser plutôt que de le surprendre au paiement.
+ */
+interface Props { formation: Formation }
+const { formation: f } = Astro.props;
+const p = f.pack!;
+---
+
+<section class="section">
+  <div class="wrap">
+    <div class="pack">
+      <div class="pack__txt">
+        <p class="eyebrow">Les deux niveaux</p>
+        <h2 class="pack__h">{p.libelle}, en une seule inscription</h2>
+        <p class="pack__d">{p.detail}</p>
+      </div>
+
+      <div class="pack__prix">
+        <p class="pack__gain">
+          <span class="pack__eco">−&thinsp;{p.economie}</span>
+          <span class="pack__eco-l">d’économie</span>
+        </p>
+        <p class="pack__chiffres">
+          <b>{p.tarif}</b>
+          <s>{p.separement}</s>
+        </p>
+        <p class="pack__note">
+          au lieu de {f.tarif} par formation prise séparément
+        </p>
+        <a class="btn btn--primaire pack__cta" href="#sessions" data-ouvre-dates>
+          Choisir une date
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pack {
+    display: grid; gap: clamp(1.25rem, 3vw, 2.5rem);
+    grid-template-columns: minmax(0, 1fr) minmax(min(260px, 100%), 20rem);
+    align-items: center;
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 5px solid var(--secours);
+    border-radius: var(--r-lg); padding: clamp(1.4rem, 3vw, 2.1rem);
+    box-shadow: var(--sh-sm);
+  }
+  @media (max-width: 780px) { .pack { grid-template-columns: 1fr; } }
+
+  .pack__h { font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 800; margin-bottom: .6rem; }
+  .pack__d { color: var(--ink-mute); max-width: 54ch; }
+
+  .pack__prix { text-align: left; }
+  @media (min-width: 781px) { .pack__prix { text-align: right; } }
+
+  .pack__gain { display: flex; align-items: baseline; gap: .45rem; margin-bottom: .3rem; }
+  @media (min-width: 781px) { .pack__gain { justify-content: flex-end; } }
+  .pack__eco {
+    font-family: 'Archivo', sans-serif; font-size: 1.05rem; font-weight: 800;
+    color: #fff; background: var(--secours); border-radius: 999px; padding: .15rem .6rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .pack__eco-l {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .pack__chiffres { display: flex; align-items: baseline; gap: .6rem; }
+  @media (min-width: 781px) { .pack__chiffres { justify-content: flex-end; } }
+  .pack__chiffres b {
+    font-family: 'Archivo', sans-serif; font-size: clamp(2rem, 5vw, 2.7rem);
+    font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .pack__chiffres s { color: var(--ink-mute); font-size: 1.05rem; }
+  .pack__note { margin-top: .4rem; font-size: .85rem; color: var(--ink-mute); }
+  .pack__cta { margin-top: 1.1rem; }
+</style>

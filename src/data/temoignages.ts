@@ -104,10 +104,32 @@ export const satisfaction = {
   annee: 2025,
 };
 
-/** Renvoie les avis liés à une formation, avec repli sur l'ensemble. */
+/**
+ * Renvoie les avis liés à une formation.
+ *
+ * Le questionnaire de satisfaction ne distingue pas la formation initiale de
+ * sa formation continue : `cible` ne porte que la famille. Afficher le même
+ * jeu d'avis sur les deux pages donnait le même stagiaire disant la même
+ * chose du PSE1 et de son recyclage — ce qu'il n'a jamais dit.
+ *
+ * On partage donc le vivier : l'initiale prend le début, la continue la fin.
+ * Si le reste est trop mince pour être représentatif, la page continue
+ * n'affiche pas de bloc plutôt que d'emprunter des mots à d'autres.
+ */
+const MINIMUM = 3;
+
 export function temoignagesDe(slug: string): Temoignage[] {
+  const recyclage = slug.startsWith('fc-');
   const base = slug.replace(/^fc-/, '');
   const cible = base === 'psc' ? 'psc' : base === 'pse-1' ? 'pse-1' : base === 'pse-2' ? 'pse-2' : null;
   const filtres = cible ? temoignages.filter((t) => t.cible === cible) : [];
-  return (filtres.length >= 3 ? filtres : temoignages).slice(0, 6);
+  const vivier = filtres.length >= MINIMUM ? filtres : temoignages;
+
+  // La coupe se fait au milieu du vivier, pas après six : partager 8 avis en
+  // « les six premiers » puis « le reste » laisserait forcément des doublons.
+  const coupe = Math.max(MINIMUM, Math.ceil(vivier.length / 2));
+  if (!recyclage) return vivier.slice(0, Math.min(coupe, 6));
+
+  const reste = vivier.slice(coupe);
+  return reste.length >= MINIMUM ? reste.slice(0, 6) : [];
 }

@@ -66,6 +66,20 @@ export interface Formation {
 
   /** Photo de fond du hero. Sans elle, le hero retombe sur son dégradé. */
   image?: string;
+  /**
+   * Offre groupée proposée à la réservation.
+   *
+   * Ce n'est pas un affichage décoratif : le billet existe réellement dans
+   * Wix, et c'est lui que le visiteur choisira au moment de payer. Les
+   * montants doivent donc rester alignés sur la billetterie.
+   */
+  pack?: {
+    libelle: string;
+    tarif: string;
+    separement: string;
+    economie: string;
+    detail: string;
+  };
 
   /** Titre exact de l'événement dans Wix Events, pour rattacher les sessions. */
   wixEvent: string;
@@ -238,7 +252,7 @@ export const formations: Formation[] = [
       },
     ],
     suites: ['La formation continue FC PSC pour rester à jour', 'Poursuivre vers le PSE1, secouriste en équipe'],
-    image: '/img/filiere-operationnelle.jpg',
+    image: '/img/filiere-citoyenne.jpg',
     wixEvent: 'PSC',
     recyclage: 'fc-psc',
     seo: {
@@ -259,14 +273,20 @@ export const formations: Formation[] = [
       "Passez du geste citoyen à l'intervention en équipe. Le PSE1 est la porte d'entrée du secourisme opérationnel et des postes de secours.",
     resume: "Devenez secouriste équipier et intervenez sur les dispositifs de secours.",
     duree: '35 heures',
-    dureeNote: '5 journées',
+    dureeNote: '4 journées',
     prerequis: 'Dès 16 ans',
-    prerequisNote: 'À confirmer',
     certification: 'PSE1',
     certificationNote: 'Certificat de compétences',
     tarif: '280 €',
     tarifNote: '350 € en financement CPF',
     tarifCpf: '350 €',
+    pack: {
+      libelle: 'PSE1 + PSE2',
+      tarif: '480 €',
+      separement: '560 €',
+      economie: '80 €',
+      detail: 'Réservez les deux formations ensemble et enchaînez les deux niveaux sans repasser par la case inscription.',
+    },
     objectifs: [
       {
         titre: 'Intervenir en équipe',
@@ -439,13 +459,11 @@ export const formations: Formation[] = [
     accroche:
       "Les gestes évoluent, les recommandations aussi. Une demi-journée pour remettre à jour vos réflexes et repartir confiant.",
     resume: 'Remise à niveau des gestes de premiers secours pour les titulaires du PSC.',
-    duree: '7,5 heures',
+    duree: '4 heures',
     prerequis: 'PSC obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Recyclage conseillé tous les 3 ans',
-    tarif: '90 €',
-    tarifNote: '150 € en financement CPF',
-    tarifCpf: '150 €',
+    tarif: '30 €',
     objectifs: [
       { titre: 'Réactiver les gestes', texte: "Reprendre en pratique les gestes d'urgence vitale, sans repartir de zéro.", icone: 'coeur' },
       { titre: 'Intégrer les évolutions', texte: 'Prendre connaissance des dernières recommandations du référentiel national.', icone: 'bouclier' },
@@ -693,7 +711,7 @@ export const formations: Formation[] = [
     ],
     suites: ['Formation continue FC PAE FPSC', 'Poursuivre vers le PAE FPS pour enseigner le PSE'],
     recyclage: 'fc-pae-f-psc',
-    image: '/img/pse-immobilisation.jpg',
+    image: '/img/formateur-psc.jpg',
     wixEvent: 'PAE F PSC',
     seo: {
       title: 'PAE FPSC à Nice | Devenir formateur PSC',
@@ -730,7 +748,7 @@ export const formations: Formation[] = [
       { titre: 'Ateliers pédagogiques', texte: 'Reprise de séquences d’animation.' },
     ],
     suites: [],
-    image: '/img/pse-equipe.jpg',
+    image: '/img/formateur-psc.jpg',
     wixEvent: 'FC PAE F PSC',
     seo: {
       title: 'Recyclage formateur PSC à Nice | FC PAE FPSC',
@@ -770,7 +788,7 @@ export const formations: Formation[] = [
     ],
     suites: ['Formation continue FC PAE FPS'],
     recyclage: 'fc-pae-f-ps',
-    image: '/img/equipe.jpg',
+    image: '/img/formateur-pse.jpg',
     wixEvent: 'PAE F PS',
     seo: {
       title: 'PAE FPS à Nice | Devenir formateur PSE1 et PSE2',
@@ -807,7 +825,7 @@ export const formations: Formation[] = [
       { titre: 'Ateliers pédagogiques', texte: 'Reprise de séquences et de cas concrets.' },
     ],
     suites: [],
-    image: '/img/pse-equipe.jpg',
+    image: '/img/formateur-pse.jpg',
     wixEvent: 'FC PAE F PS',
     seo: {
       title: 'Recyclage formateur PSE à Nice | FC PAE FPS',
