@@ -201,7 +201,7 @@ export const metiersPse1: Metier[] = [
     secteur: 'Sécurité civile',
     nature: 'exige',
     exigence:
-      'Le référentiel national des dispositifs prévisionnels de secours impose le PSE1 pour tenir un poste de secours en qualité d’équipier secouriste.',
+      'Le référentiel national des dispositifs prévisionnels de secours impose le PSE1 pour tenir un poste de secours en qualité de secouriste.',
     contexte:
       'C’est le diplôme qui ouvre nos propres équipes : festivals, épreuves sportives, feux d’artifice, marchés de Noël.',
     source: {

@@ -270,7 +270,7 @@ export const formations: Formation[] = [
     certifiante: true,
     accroche:
       "Passez du geste citoyen à l'intervention en équipe. Le PSE1 est la porte d'entrée du secourisme opérationnel et des postes de secours.",
-    resume: "Devenez secouriste équipier et intervenez sur les dispositifs de secours.",
+    resume: "Devenez secouriste et intervenez en équipe sur les dispositifs de secours.",
     duree: '35 heures',
     dureeNote: '4 journées',
     prerequis: 'Dès 16 ans',
@@ -304,21 +304,21 @@ export const formations: Formation[] = [
       },
     ],
     modules: [
-      { titre: 'La chaîne de secours', texte: "Organisation des secours en France et place du secouriste équipier." },
+      { titre: 'La chaîne de secours', texte: "Organisation des secours en France et place du secouriste au sein de l’équipe." },
       { titre: 'Bilans et surveillance', texte: 'Réaliser un bilan circonstanciel, vital et complémentaire, puis surveiller la victime.' },
       { titre: 'Détresses vitales', texte: 'Reconnaître et prendre en charge les détresses respiratoires, circulatoires et neurologiques.' },
       { titre: 'Réanimation et oxygénothérapie', texte: 'RCP à plusieurs équipiers, insufflateur manuel et administration d’oxygène.' },
       { titre: 'Traumatismes', texte: 'Immobilisation, relevage et brancardage adaptés au traumatisme constaté.' },
       { titre: 'Situations particulières', texte: 'Accouchement inopiné, affections spécifiques et conduites à tenir associées.' },
     ],
-    suites: ['Poursuivre vers le PSE2, chef d’équipe', 'Rejoindre nos équipes de postes de secours'],
+    suites: ['Poursuivre vers le PSE2, équipier secouriste', 'Rejoindre nos équipes de postes de secours'],
     image: '/img/equipe.jpg',
     wixEvent: 'PSE1 - Formation',
     recyclage: 'fc-pse-1',
     seo: {
       title: 'Formation PSE1 à Nice | Secourisme Pour Tous',
       description:
-        'Devenez secouriste équipier avec le PSE1 à Nice. Formation agréée sécurité civile pour intervenir en équipe sur les postes de secours. Organisme Qualiopi.',
+        'Devenez secouriste avec le PSE1 à Nice. Formation agréée sécurité civile pour intervenir en équipe sur les postes de secours. Organisme Qualiopi.',
     },
   },
 
@@ -331,7 +331,7 @@ export const formations: Formation[] = [
     certifiante: true,
     accroche:
       "Prenez la responsabilité d'une équipe. Le PSE2 vous forme à conduire l'intervention et à coordonner les secouristes sur le terrain.",
-    resume: 'Devenez chef d’équipe secouriste, accessible après le PSE1.',
+    resume: 'Devenez équipier secouriste et coordonnez l’action, accessible après le PSE1.',
     duree: '28 heures',
     dureeNote: '4 journées',
     prerequis: 'PSE1 à jour',
@@ -346,7 +346,7 @@ export const formations: Formation[] = [
       { titre: 'Assister les équipes médicales', texte: "Préparer le matériel et assister l'équipe médicale sur intervention.", icone: 'coeur' },
     ],
     modules: [
-      { titre: 'Rôle du chef d’équipe', texte: "Coordination, sécurité de l'équipe et transmission des informations." },
+      { titre: 'Rôle de l’équipier secouriste', texte: "Coordination de l'action, sécurité de l'équipe et transmission des informations." },
       { titre: 'Immobilisation du rachis', texte: 'Techniques de maintien de tête, collier cervical et plan dur.' },
       { titre: 'Relevages et brancardages', texte: 'Choisir et réaliser la technique adaptée à la victime et au terrain.' },
       { titre: 'Souffrance psychique', texte: 'Reconnaître et accompagner une victime en détresse psychologique.' },
@@ -359,7 +359,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSE2 à Nice | Secourisme Pour Tous',
       description:
-        'Passez chef d’équipe avec le PSE2 à Nice, accessible après le PSE1. Formation agréée sécurité civile, organisme certifié Qualiopi. Dates et inscription en ligne.',
+        'Devenez équipier secouriste avec le PSE2 à Nice, accessible après le PSE1. Formation agréée sécurité civile, organisme certifié Qualiopi. Dates et inscription en ligne.',
     },
   },
 
@@ -493,7 +493,7 @@ export const formations: Formation[] = [
     estRecyclage: true,
     accroche:
       "Obligatoire chaque année pour rester opérationnel. Sans elle, vous ne pouvez plus intervenir sur les postes de secours.",
-    resume: 'Le maintien annuel obligatoire des compétences de secouriste équipier.',
+    resume: 'Le maintien annuel obligatoire des compétences de secouriste.',
     duree: '7 heures',
     prerequis: 'PSE1 obtenu',
     certification: 'Attestation FC',
@@ -513,7 +513,7 @@ export const formations: Formation[] = [
       { titre: 'Immobilisation et relevage', texte: 'Révision des techniques et du matériel, en équipe constituée.' },
       { titre: 'Mises en situation', texte: 'Cas concrets évalués, proches des conditions réelles de poste de secours.' },
     ],
-    suites: ['Poursuivre vers le PSE2, chef d’équipe'],
+    suites: ['Poursuivre vers le PSE2, équipier secouriste'],
     image: '/img/pse-immobilisation.jpg',
     wixEvent: 'FC PSE1 - Formation',
     seo: {
@@ -532,7 +532,7 @@ export const formations: Formation[] = [
     estRecyclage: true,
     accroche:
       "Chef d'équipe, votre maintien de compétences est annuel. Une journée pour réviser les gestes et la conduite d'intervention.",
-    resume: 'Le maintien annuel obligatoire des compétences de chef d’équipe secouriste.',
+    resume: 'Le maintien annuel obligatoire des compétences d’équipier secouriste.',
     duree: '8 heures',
     prerequis: 'PSE2 obtenu',
     certification: 'Attestation FC',
@@ -548,7 +548,7 @@ export const formations: Formation[] = [
     ],
     modules: [
       { titre: 'Retour d’expérience', texte: 'Analyse des interventions et de la coordination d’équipe.' },
-      { titre: 'Conduite d’intervention', texte: 'Rôle du chef d’équipe, sécurité et prise de décision.' },
+      { titre: 'Conduite d’intervention', texte: 'Rôle de l’équipier secouriste, sécurité et prise de décision.' },
       { titre: 'Immobilisation et relevage', texte: 'Révision des techniques du rachis et des membres.' },
       { titre: 'Mises en situation complexes', texte: 'Plusieurs victimes, accès difficile, coordination inter-services.' },
     ],
@@ -558,7 +558,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSE2 à Nice | Formation continue',
       description:
-        'Maintenez vos compétences de chef d’équipe PSE2 à Nice. Formation continue annuelle obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Dates en ligne.',
+        'Maintenez vos compétences d’équipier secouriste PSE2 à Nice. Formation continue annuelle obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Dates en ligne.',
     },
   },
 
