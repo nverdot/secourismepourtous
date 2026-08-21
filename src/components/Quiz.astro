@@ -1,0 +1,314 @@
+---
+import type { Question } from '../data/quiz';
+
+/**
+ * Moteur de quiz, partagé par le questionnaire PSC et ceux des recyclages.
+ *
+ * Tout se joue dans le navigateur : les questions voyagent dans le HTML, le
+ * score n'en sort jamais. Rien n'est envoyé, rien n'est enregistré — ce qui
+ * évite d'avoir à le déclarer, et laisse le visiteur libre de se tromper.
+ *
+ * Le ton du résultat change selon `severe`. Sur un recyclage, « 8 sur 12, une
+ * bonne base » serait un mensonge confortable : la personne tient des postes
+ * de secours, et un tiers de gestes hésitants s'y paie comptant.
+ */
+
+interface Props {
+  questions: Question[];
+  /** Formation vers laquelle mène le résultat. */
+  cta: { href: string; libelle: string; detail: string };
+  /** Barème exigeant, pour les formations continues. */
+  severe?: boolean;
+}
+const { questions, cta, severe = false } = Astro.props;
+---
+
+<div
+  class="quiz"
+  data-quiz
+  data-severe={severe ? '1' : '0'}
+  data-cta={JSON.stringify(cta)}
+  data-questions={JSON.stringify(questions)}
+>
+  <!-- Rendu par le script. Sans JavaScript, le corrigé reste lisible :
+       les questions et leurs réponses sont dans le HTML livré. -->
+  <noscript>
+    <ol class="brut">
+      {questions.map((q) => (
+        <li>
+          <strong>{q.question}</strong>
+          <p>Réponse&nbsp;: {q.reponses.find((r) => r.juste)?.texte}. {q.explication}</p>
+        </li>
+      ))}
+    </ol>
+  </noscript>
+</div>
+
+<style>
+  .quiz :global(.q) {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.4rem, 3vw, 1.9rem);
+  }
+  .quiz :global(.q__barre) { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.25rem; }
+  .quiz :global(.q__jauge) { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .quiz :global(.q__jauge i) { display: block; height: 100%; background: var(--accent); transition: width .3s ease; }
+  .quiz :global(.q__n) {
+    font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz :global(.q__theme) {
+    display: inline-block; margin-bottom: .7rem;
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: #fff; background: var(--accent);
+    border-radius: var(--r-pill); padding: .2rem .7rem;
+  }
+  .quiz :global(.q__t) {
+    font-size: clamp(1.1rem, 2.6vw, 1.35rem); font-weight: 700;
+    line-height: 1.35; margin-bottom: 1.25rem;
+  }
+
+  .quiz :global(.q__l) { display: flex; flex-direction: column; gap: .6rem; }
+  .quiz :global(.rep) {
+    display: flex; align-items: flex-start; gap: .8rem; width: 100%;
+    text-align: left; cursor: pointer;
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: .9rem 1.1rem;
+    font: inherit; font-size: .96rem; color: var(--ink);
+    transition: border-color .15s, background-color .15s;
+  }
+  .quiz :global(.rep:hover:not([disabled])) { border-color: var(--accent); }
+  .quiz :global(.rep__p) {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid var(--line); display: grid; place-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 700;
+    color: var(--ink-mute);
+  }
+  .quiz :global(.rep--juste) { background: color-mix(in srgb, #1a7f4b 10%, transparent); border-color: #1a7f4b; }
+  .quiz :global(.rep--juste .rep__p) { border-color: #1a7f4b; color: #1a7f4b; }
+  .quiz :global(.rep--faux) { background: color-mix(in srgb, var(--secours) 10%, transparent); border-color: var(--secours); }
+  .quiz :global(.rep--faux .rep__p) { border-color: var(--secours); color: var(--secours); }
+  .quiz :global(.rep[disabled]) { cursor: default; }
+
+  .quiz :global(.q__exp) {
+    margin-top: 1.1rem; padding: 1rem 1.15rem;
+    background: var(--azur-wash); border-left: 3px solid var(--azur);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  }
+  .quiz :global(.q__exp p) { font-size: .93rem; color: var(--ink-soft); }
+  .quiz :global(.q__exp .fiche) { display: block; margin-top: .5rem; font-size: .8rem; color: var(--ink-mute); }
+  .quiz :global(.q__exp .plus) { display: inline-block; margin-top: .6rem; font-size: .89rem; color: var(--azur); font-weight: 600; }
+  .quiz :global(.q__suite) { display: flex; justify-content: flex-end; margin-top: 1.25rem; }
+
+  .quiz :global(.res) {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 5px solid var(--accent);
+    border-radius: var(--r-lg); padding: clamp(1.6rem, 4vw, 2.4rem);
+    text-align: center;
+  }
+  .quiz :global(.res__score) {
+    font-family: 'Archivo', sans-serif; font-size: clamp(3rem, 9vw, 4.5rem);
+    font-weight: 800; line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz :global(.res__score span) { font-size: .4em; color: var(--ink-mute); }
+  .quiz :global(.res__t) { font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 800; margin: .8rem 0 .6rem; }
+  .quiz :global(.res__x) { font-size: .98rem; color: var(--ink-soft); max-width: 56ch; margin-inline: auto; }
+  .quiz :global(.res__rappel) {
+    margin-top: 1.5rem; padding: 1rem 1.2rem; text-align: left;
+    background: var(--sunk); border-radius: var(--r-md);
+    font-size: .92rem; color: var(--ink-soft);
+  }
+  .quiz :global(.res__a) { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 1.5rem; }
+
+  /*
+   * Le message clé de l'écran de résultat. Traité comme une note ordinaire, il
+   * se lisait comme un détail — alors que c'est lui qui empêche le quiz de
+   * produire une fausse assurance.
+   */
+  .quiz :global(.res__cle) {
+    display: flex; gap: 1.1rem; align-items: flex-start; text-align: left;
+    margin-top: 1.75rem; padding: clamp(1.25rem, 3vw, 1.6rem);
+    background: var(--secours); color: #fff;
+    border-radius: var(--r-lg); box-shadow: var(--sh-md);
+  }
+  .quiz :global(.res__cle-ic) {
+    flex: none; width: 44px; height: 44px; border-radius: 13px;
+    background: rgba(255,255,255,.2); display: grid; place-items: center;
+  }
+  .quiz :global(.res__cle-ic svg) { width: 23px; height: 23px; }
+  .quiz :global(.res__cle strong) {
+    display: block; font-family: 'Archivo', sans-serif;
+    font-size: clamp(1.05rem, 2.4vw, 1.25rem); font-weight: 800; margin-bottom: .4rem;
+  }
+  .quiz :global(.res__cle p) { font-size: .95rem; color: rgba(255,255,255,.94); line-height: 1.6; }
+  @media (max-width: 560px) { .quiz :global(.res__cle) { flex-direction: column; gap: .8rem; } }
+
+  .brut { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .brut strong { display: block; margin-bottom: .35rem; }
+  .brut p { font-size: .93rem; color: var(--ink-soft); }
+</style>
+
+<script>
+  for (const boite of document.querySelectorAll('[data-quiz]')) {
+    const questions = JSON.parse(boite.dataset.questions);
+    const cta = JSON.parse(boite.dataset.cta);
+    const severe = boite.dataset.severe === '1';
+    const LETTRES = ['A', 'B', 'C', 'D', 'E'];
+
+    let index = 0;
+    let score = 0;
+    const historique = [];
+
+    /* Les réponses sont mélangées à chaque chargement : sinon on retiendrait
+       la position de la bonne réponse plutôt que son contenu. */
+    const melange = (liste) => {
+      const c = [...liste];
+      for (let i = c.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [c[i], c[j]] = [c[j], c[i]];
+      }
+      return c;
+    };
+
+    function afficheQuestion() {
+      const q = questions[index];
+      boite.innerHTML = `
+        <div class="q">
+          <div class="q__barre">
+            <span class="q__n">${index + 1} / ${questions.length}</span>
+            <span class="q__jauge"><i style="width:${(index / questions.length) * 100}%"></i></span>
+          </div>
+          <span class="q__theme">${q.theme}</span>
+          <p class="q__t">${q.question}</p>
+          <div class="q__l"></div>
+        </div>`;
+
+      const liste = boite.querySelector('.q__l');
+      melange(q.reponses).forEach((r, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'rep';
+        b.innerHTML = `<span class="rep__p">${LETTRES[i]}</span><span>${r.texte}</span>`;
+        b.addEventListener('click', () => repond(b, r, q, liste));
+        liste.append(b);
+      });
+    }
+
+    function repond(bouton, choix, q, liste) {
+      const juste = Boolean(choix.juste);
+      if (juste) score++;
+      historique.push({ theme: q.theme, juste });
+
+      /* On révèle la bonne réponse quoi qu'il arrive : se tromper sans savoir
+         ce qu'il fallait faire n'apprend rien. */
+      [...liste.children].forEach((b) => {
+        b.disabled = true;
+        const texte = b.querySelector('span:last-child').textContent;
+        const r = q.reponses.find((x) => x.texte === texte);
+        if (r?.juste) b.classList.add('rep--juste');
+        else if (b === bouton) b.classList.add('rep--faux');
+      });
+
+      const exp = document.createElement('div');
+      exp.className = 'q__exp';
+      exp.innerHTML = `
+        <p>${q.explication}</p>
+        ${q.lien ? `<a class="plus" href="${q.lien.href}">Lire la conduite à tenir — ${q.lien.nom} →</a>` : ''}
+        <span class="fiche">Source : fiche ${q.fiche}</span>`;
+      boite.querySelector('.q').append(exp);
+
+      const suite = document.createElement('div');
+      suite.className = 'q__suite';
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn--primaire';
+      b.textContent = index < questions.length - 1 ? 'Question suivante' : 'Voir mon résultat';
+      b.addEventListener('click', () => {
+        index++;
+        if (index < questions.length) afficheQuestion();
+        else afficheResultat();
+        boite.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      suite.append(b);
+      boite.querySelector('.q').append(suite);
+    }
+
+    function afficheResultat() {
+      const total = questions.length;
+      const part = score / total;
+      const rates = [...new Set(historique.filter((h) => !h.juste).map((h) => h.theme))];
+
+      let titre, texte;
+      if (severe) {
+        /* Barème de recyclage : la personne intervient déjà sur le terrain. */
+        if (part === 1) {
+          titre = 'À jour';
+          texte = 'Vos connaissances suivent les recommandations en vigueur. Le recyclage annuel reste obligatoire pour rester opérationnel.';
+        } else if (part >= 0.85) {
+          titre = 'Presque à jour';
+          texte = 'Une ou deux recommandations vous ont échappé. Sur un poste de secours, ce sont précisément celles-là qui posent problème.';
+        } else if (part >= 0.6) {
+          titre = 'Des écarts qui comptent';
+          texte = 'Plusieurs de vos réponses ne correspondent plus aux recommandations actuelles. Vous n’êtes pas seul : c’est la raison d’être de la formation continue.';
+        } else {
+          titre = 'Vos acquis se sont émoussés';
+          texte = 'C’est normal et documenté : sans pratique régulière, les gestes se perdent en quelques mois. La formation continue existe pour ça.';
+        }
+      } else {
+        if (part === 1) {
+          titre = 'Sans faute';
+          texte = 'Vous connaissez les bonnes décisions. Reste la partie que ce quiz ne peut pas mesurer : les faire, sous pression, sur une vraie personne.';
+        } else if (part >= 0.7) {
+          titre = 'Une bonne base';
+          texte = 'Vous avez les réflexes principaux. Les hésitations qui restent sont précisément celles que la formation lève.';
+        } else if (part >= 0.4) {
+          titre = 'Des trous qui comptent';
+          texte = 'Plusieurs de vos réponses auraient aggravé la situation. Ce n’est pas grave — c’est même la raison d’être d’une journée de formation.';
+        } else {
+          titre = 'Vous ne sauriez pas réagir';
+          texte = 'Et c’est le cas de la plupart des gens. En une journée, ça change complètement.';
+        }
+      }
+
+      const cle = severe
+        ? {
+            t: 'Un questionnaire ne remet pas les gestes dans les mains.',
+            p: 'Savoir qu’on enchaîne 15 compressions pour 2 insufflations n’est pas la même chose que le faire au bon rythme, sur un enfant, après vingt minutes de dispositif. C’est ce que la formation continue rétablit.',
+          }
+        : {
+            t: 'Répondre juste, ce n’est pas savoir faire.',
+            p: 'Aucune page, aucun quiz n’apprend à masser un thorax, à maintenir une compression pendant dix minutes ou à retourner un nourrisson sur son avant-bras. Ça ne s’apprend qu’en le faisant.',
+          };
+
+      boite.innerHTML = `
+        <div class="res">
+          <p class="res__score">${score}<span>/${total}</span></p>
+          <h2 class="res__t">${titre}</h2>
+          <p class="res__x">${texte}</p>
+          ${rates.length ? `<div class="res__rappel"><strong>À revoir en priorité :</strong> ${rates.join(', ')}.</div>` : ''}
+          <div class="res__cle">
+            <span class="res__cle-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /></svg>
+            </span>
+            <div>
+              <strong>${cle.t}</strong>
+              <p>${cle.p}</p>
+            </div>
+          </div>
+          <div class="res__a">
+            <a class="btn btn--primaire" href="${cta.href}">${cta.libelle}</a>
+            <button type="button" class="btn btn--sobre" data-recommencer>Recommencer</button>
+          </div>
+        </div>`;
+
+      boite.querySelector('[data-recommencer]').addEventListener('click', () => {
+        index = 0; score = 0; historique.length = 0;
+        afficheQuestion();
+      });
+    }
+
+    afficheQuestion();
+  }
+</script>

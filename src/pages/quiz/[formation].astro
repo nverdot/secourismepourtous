@@ -1,0 +1,141 @@
+---
+import Base from '../../layouts/Base.astro';
+import Quiz from '../../components/Quiz.astro';
+import { asso } from '../../data/association';
+import { parSlug } from '../../data/formations';
+import { quizParFormation } from '../../data/quiz-fc';
+import { situations } from '../../data/situations';
+import { referentielQuiz } from '../../data/quiz';
+import { sessionsAVenir, sessionsDe } from '../../lib/wix';
+import { filAriane } from '../../lib/schema';
+
+/**
+ * Questionnaires de formation continue.
+ *
+ * Le public est déjà diplômé : il ne découvre rien, il mesure une dérive. Le
+ * quiz sert donc de miroir — « je croyais savoir » — et le barème est plus
+ * exigeant que celui du PSC (voir `severe` dans Quiz.astro).
+ */
+
+export function getStaticPaths() {
+  return Object.keys(quizParFormation).map((slug) => ({ params: { formation: slug } }));
+}
+
+const { formation } = Astro.params;
+const f = parSlug(formation!)!;
+const questions = quizParFormation[formation!];
+
+const toutes = await sessionsAVenir();
+const sessions = sessionsDe(toutes, f.wixEvent);
+
+// Chaque question peut renvoyer vers la conduite à tenir correspondante.
+const donnees = questions.map((q) => ({
+  ...q,
+  lien: q.situation
+    ? { href: `/gestes-qui-sauvent/${q.situation}`, nom: situations.find((s) => s.slug === q.situation)?.court ?? '' }
+    : null,
+}));
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Formations', chemin: '/formations' },
+    { nom: f.sigle, chemin: `/formations/${f.slug}` },
+    { nom: 'Quiz', chemin: `/quiz/${f.slug}` },
+  ]),
+];
+---
+
+<Base
+  title={`Quiz ${f.sigle} : vos acquis sont-ils à jour ? | Nice`}
+  description={`${questions.length} questions pour évaluer vos acquis avant votre ${f.sigle}. Corrigé expliqué, d’après les recommandations 2024 de la Sécurité civile.`}
+  chemin={`/quiz/${f.slug}`}
+  filiere={f.filiere}
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href={`/formations/${f.slug}`}>{f.sigle}</a><i aria-hidden="true">›</i>
+        <b>Quiz</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">{questions.length} questions</span>
+        <span class="badge badge--contour">5 minutes</span>
+        <span class="badge badge--contour">Corrigé sourcé</span>
+      </div>
+      <h1 class="tete__h1">Vos acquis {f.sigle}<br />sont-ils encore à jour&nbsp;?</h1>
+      <p class="tete__t">
+        Les gestes se perdent sans pratique, et les recommandations évoluent.
+        Ces questions portent sur ce qui s’oublie en premier&nbsp;: les
+        enchaînements, les chiffres, les ordres de priorité.
+      </p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap wrap--etroit">
+      <Quiz
+        questions={donnees}
+        severe
+        cta={{
+          href: `/formations/${f.slug}`,
+          libelle: `Voir les dates du ${f.sigle}`,
+          detail: f.duree,
+        }}
+      />
+      <p class="source">
+        Questions établies d’après les recommandations de la direction générale
+        de la Sécurité civile, {referentielQuiz.edition}. Ce questionnaire n’a
+        aucune valeur de certification et ne remplace pas la formation continue,
+        qui reste obligatoire.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">La suite</p>
+      <h2 class="form__h">Le recyclage remet les gestes dans les mains</h2>
+      <p class="lede">
+        Le {f.sigle} dure {f.duree.toLowerCase()} et coûte {f.tarif}. Il se passe
+        en mise en situation, pas en salle&nbsp;: on refait les gestes jusqu’à ce
+        qu’ils reviennent seuls.
+        {sessions.length > 0 && ` ${sessions.length} sessions sont programmées.`}
+      </p>
+      <div class="form__actions">
+        <a class="btn btn--primaire" href={`/formations/${f.slug}`}>
+          Voir les dates du {f.sigle}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 800; line-height: 1.06; margin-bottom: .8rem; }
+  .tete__t { max-width: 62ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  .source { margin-top: 1.5rem; font-size: .84rem; color: var(--ink-mute); }
+  .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { quizParFormation } from '../../data/quiz-fc';
 import ProgressionPse from '../../components/ProgressionPse.astro';
 import Terrain from '../../components/Terrain.astro';
 import { coursFormation, filAriane } from '../../lib/schema';
@@ -71,6 +72,25 @@ const balisages = [
   <section class="section">
     <div class="wrap"><Documents /></div>
   </section>
+
+  {/* Pour un recyclage, le meilleur argument n'est pas un texte : c'est de
+      constater soi-même ce qu'on a oublié. */}
+  {quizParFormation[f.slug] && (
+    <section class="section">
+      <div class="wrap">
+        <a class="oblig oblig--quiz" href={`/quiz/${f.slug}`}>
+          <span class="oblig__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /><circle cx="12" cy="12" r="10" /></svg>
+          </span>
+          <span class="oblig__txt">
+            <strong>Vos acquis {f.sigle} sont-ils encore à jour&nbsp;?</strong>
+            <span>{quizParFormation[f.slug].length} questions, cinq minutes, corrigé sourcé. Vous verrez vite ce qui s’est émoussé.</span>
+          </span>
+          <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+    </section>
+  )}
 
   {/* La question de celui qui a déjà le PSE1 : qu'est-ce que le PSE2 apporte
       de plus ? Le programme seul ne le montre pas. */}
@@ -198,6 +218,12 @@ const balisages = [
   .oblig--choix {
     background: var(--sunk); border-color: var(--line);
   }
+  .oblig--quiz {
+    background: var(--secours); border-color: var(--secours); color: #fff;
+  }
+  .oblig--quiz .oblig__ic { background: rgba(255,255,255,.2); }
+  .oblig--quiz .oblig__txt span { color: rgba(255,255,255,.92); }
+  .oblig--quiz .oblig__f { color: #fff; }
   .oblig--choix .oblig__ic { background: var(--secours); }
   .oblig--choix .oblig__f { color: var(--secours); }
 

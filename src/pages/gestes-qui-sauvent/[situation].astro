@@ -144,6 +144,18 @@ const balisages = [
           <p class="cote__x">{s.pourQui}</p>
         </div>
 
+        <a class="cote cote--quiz" href="/gestes-qui-sauvent/quiz">
+          <p class="cote__t">Et sur les autres situations&nbsp;?</p>
+          <p class="cote__x">
+            Douze questions pour savoir si vous sauriez réagir. Cinq minutes,
+            chaque réponse expliquée.
+          </p>
+          <span class="cote__f">
+            Faire le test
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+        </a>
+
         <div class="cote cote--fort">
           <p class="cote__t">Lire ne suffit pas</p>
           <p class="cote__x">{s.enFormation}</p>
@@ -330,6 +342,19 @@ const balisages = [
     border-radius: var(--r-lg); padding: 1.25rem 1.4rem;
   }
   .cote--fort { background: var(--azur-wash); border-color: var(--azur); }
+  .cote--quiz {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--secours); border-color: var(--secours);
+    transition: box-shadow .15s;
+  }
+  .cote--quiz:hover { box-shadow: var(--sh-md); }
+  .cote--quiz .cote__t { color: rgba(255,255,255,.75); }
+  .cote--quiz .cote__x { color: rgba(255,255,255,.95); }
+  .cote__f {
+    display: flex; align-items: center; gap: .4rem; margin-top: .8rem;
+    font-family: 'Archivo', sans-serif; font-size: .88rem; font-weight: 700; color: #fff;
+  }
+  .cote__f svg { width: 16px; height: 16px; }
   .cote__t {
     font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
     letter-spacing: .11em; text-transform: uppercase; color: var(--ink-mute);
