@@ -1,14 +1,15 @@
 /**
  * Réception des formulaires du site → contact dans le CRM Wix.
  *
- * Version Cloudflare Pages, jumelle de netlify/functions/contact.mjs. Les deux
- * partagent la même logique ; seule l'enveloppe change — Cloudflare passe les
- * variables d'environnement en argument (`env`) là où Netlify les expose par
- * `process.env`, et route par l'emplacement du fichier plutôt que par une
- * déclaration `config.path`.
+ * ⚠️ Ce fichier vivait dans `functions/api/contact.js`, qui est la convention
+ * Cloudflare *Pages*. Le site est déployé en *Worker* : ce dossier y était
+ * purement ignoré, et les cinq formulaires postaient dans le vide (404 sur
+ * /api/contact, pendant des semaines, sans la moindre trace d'erreur).
+ * Le routage est désormais explicite, dans worker/index.js.
  *
- * ⚠️ Toute correction faite ici doit l'être aussi dans la version Netlify,
- * tant que les deux hébergeurs sont possibles.
+ * Une copie Netlify subsiste dans netlify/functions/contact.mjs, inutilisée
+ * depuis la migration. Toute correction faite ici doit y être reportée tant
+ * qu'on la garde — ou bien il faut la supprimer.
  *
  * Pourquoi une fonction serveur : créer un contact exige une clé
  * administrateur, qui ne doit jamais partir dans le navigateur. Le formulaire
@@ -16,8 +17,10 @@
  *
  * Le site reste statique : cette fonction est le seul morceau dynamique.
  *
- * Variables attendues (Cloudflare > Settings > Environment variables) :
- *   WIX_API_KEY, WIX_SITE_ID
+ * Secrets attendus, en *runtime* et non en variables de build — c'est la
+ * distinction qui se paie cher : `npx wrangler secret put WIX_API_KEY`
+ * (idem WIX_SITE_ID), ou Cloudflare > Worker > Settings > Variables and
+ * Secrets. Une variable posée côté build n'existe pas à l'exécution.
  */
 
 const API = 'https://www.wixapis.com/contacts/v5/contacts';
@@ -56,7 +59,7 @@ function resume(d) {
   return lignes.join('\n');
 }
 
-export async function onRequestPost({ request, env }) {
+export async function contactPost(request, env) {
   const req = request;
 
   if (req.method !== 'POST') {
@@ -173,11 +176,17 @@ export async function onRequestPost({ request, env }) {
   }
 
   return Response.redirect(new URL('/merci', req.url), 303);
-};
+}
 
-export const config = { path: '/api/contact' }
-
-/** Une requête GET sur /api/contact n'a pas de sens : on renvoie le visiteur. */
-export function onRequestGet({ request }) {
-  return Response.redirect(new URL('/contact', request.url), 303);
+/**
+ * Aiguillage de la route.
+ *
+ * Une requête GET sur /api/contact n'a pas de sens : plutôt qu'une erreur, on
+ * ramène le visiteur au formulaire — c'est ce qui arrive quand quelqu'un colle
+ * l'URL dans sa barre d'adresse.
+ */
+export function contact(request, env) {
+  if (request.method === 'POST') return contactPost(request, env);
+  if (request.method === 'GET') return Response.redirect(new URL('/contact', request.url), 303);
+  return new Response('Méthode non autorisée', { status: 405, headers: { Allow: 'GET, POST' } });
 }

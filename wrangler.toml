@@ -1,0 +1,29 @@
+# Déploiement Cloudflare Workers — Secourisme Pour Tous
+#
+# Sans ce fichier, Cloudflare ne connaissait aucune route dynamique : le dossier
+# `functions/` (convention Cloudflare *Pages*) était ignoré et /api/contact
+# répondait 404. Les formulaires postaient dans le vide.
+#
+# `name` doit rester identique au Worker existant, sinon le déploiement en crée
+# un second et l'ancienne adresse continue de servir l'ancien code.
+
+name = "secourismepourtous"
+main = "worker/index.js"
+compatibility_date = "2026-08-21"
+
+# Le site statique produit par Astro. Cloudflare le sert avant d'appeler le
+# Worker : celui-ci ne voit que ce qui ne correspond à aucun fichier.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# Astro produit des fichiers plats (`build.format: 'file'`) : /formations doit
+# résoudre vers formations.html. C'est ce que fait « auto-trailing-slash ».
+html_handling = "auto-trailing-slash"
+
+# Une URL inconnue rend notre page 404, pas celle de Cloudflare.
+not_found_handling = "404-page"
+
+# WIX_API_KEY et WIX_SITE_ID ne sont volontairement PAS ici : ce sont des
+# secrets d'exécution, à poser avec `npx wrangler secret put WIX_API_KEY`.
+# Une clé administrateur n'a rien à faire dans un fichier versionné.
