@@ -20,12 +20,31 @@ import { asso } from '../data/association';
         Merci pour votre demande. Nous vous répondons sous 48 heures ouvrées.
         Pour une demande urgente, appelez-nous directement.
       </p>
+
+      {/* Une panne d'enregistrement ne doit pas se déguiser en accusé de
+          réception : le visiteur doit savoir qu'il faut nous rappeler. */}
+      <p class="echec" hidden>
+        <strong>Votre message n’a pas pu être enregistré.</strong>
+        Un incident technique nous empêche de le recevoir. Merci de nous
+        appeler ou de nous écrire directement — nous corrigeons au plus vite.
+      </p>
       <div class="merci__actions">
         <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
         <a class="btn btn--sobre" href="/formations">Voir nos formations</a>
       </div>
     </div>
   </section>
+
+  <script is:inline>
+    // Page statique : le motif de l'échec arrive par l'URL.
+    if (new URLSearchParams(location.search).get('envoi') === 'echec') {
+      document.querySelector('.echec')?.removeAttribute('hidden');
+      const t = document.querySelector('.merci__h1');
+      if (t) t.textContent = 'Nous n’avons pas reçu votre message';
+      document.querySelector('.merci__in .lede')?.setAttribute('hidden', '');
+      document.querySelector('.merci__ic')?.setAttribute('hidden', '');
+    }
+  </script>
 </Base>
 
 <style>
@@ -37,6 +56,14 @@ import { asso } from '../data/association';
     display: grid; place-items: center; margin-bottom: 1.5rem;
   }
   .merci__ic svg { width: 32px; height: 32px; }
+  .echec {
+    margin-top: 1.25rem; padding: 1rem 1.15rem;
+    background: color-mix(in srgb, var(--secours) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--secours) 35%, transparent);
+    border-left: 4px solid var(--secours);
+    border-radius: var(--r-md); text-align: left; font-size: .95rem;
+  }
+  .echec strong { display: block; margin-bottom: .25rem; }
   .merci__h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); font-weight: 800; margin-bottom: .8rem; }
   .merci .lede { margin-inline: auto; }
   .merci__actions { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 2rem; }

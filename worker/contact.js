@@ -93,9 +93,11 @@ export async function contactPost(request, env) {
   }
 
   if (!cle || !site) {
-    console.error('[contact] clé Wix absente — demande non enregistrée');
-    // On ne bloque pas le visiteur : la notification Netlify prend le relais.
-    return Response.redirect(new URL('/merci', req.url), 303);
+    // Rediriger vers /merci laisserait croire au visiteur que sa demande est
+    // partie, alors qu'elle n'est enregistrée nulle part. On le lui dit, et on
+    // lui donne le téléphone : mieux vaut un appel qu'une demande perdue.
+    console.error('[contact] secrets Wix absents du Worker — demande non enregistrée');
+    return Response.redirect(new URL('/merci?envoi=echec', req.url), 303);
   }
 
   const origine = d.dispositif ? 'Demande de financement'
@@ -185,7 +187,47 @@ export async function contactPost(request, env) {
  * ramène le visiteur au formulaire — c'est ce qui arrive quand quelqu'un colle
  * l'URL dans sa barre d'adresse.
  */
+/**
+ * Contrôle de configuration : /api/contact?diag=1
+ *
+ * Ne renvoie que des booléens, une longueur et le code de réponse de Wix —
+ * jamais la clé. Sert à distinguer « secret absent » de « secret présent mais
+ * refusé par Wix », les deux se manifestant autrement par le même silence.
+ */
+async function diagnostic(env) {
+  const cle = env.WIX_API_KEY;
+  const site = env.WIX_SITE_ID;
+  const etat = {
+    clePresente: Boolean(cle),
+    cleLongueur: cle ? cle.length : 0,
+    cleEspacesParasites: cle ? cle !== cle.trim() : false,
+    cleEntreGuillemets: cle ? /^["']|["']$/.test(cle) : false,
+    sitePresent: Boolean(site),
+    siteFormatValide: site ? /^[0-9a-f-]{36}$/.test(site.trim()) : false,
+  };
+
+  if (etat.clePresente && etat.sitePresent) {
+    try {
+      const r = await fetch('https://www.wixapis.com/wix-data/v2/collections/DemandesSite', {
+        headers: { Authorization: cle, 'wix-site-id': site },
+      });
+      etat.wixStatut = r.status;
+      etat.wixAccepte = r.ok;
+      if (!r.ok) etat.wixMessage = (await r.text()).slice(0, 200);
+    } catch (e) {
+      etat.wixStatut = 'appel impossible';
+      etat.wixMessage = String(e?.message ?? e).slice(0, 200);
+    }
+  }
+
+  return new Response(JSON.stringify(etat, null, 2), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
+  });
+}
+
 export function contact(request, env) {
+  if (new URL(request.url).searchParams.get('diag') === '1') return diagnostic(env);
   if (request.method === 'POST') return contactPost(request, env);
   if (request.method === 'GET') return Response.redirect(new URL('/contact', request.url), 303);
   return new Response('Méthode non autorisée', { status: 405, headers: { Allow: 'GET, POST' } });
