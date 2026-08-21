@@ -198,7 +198,7 @@ const etapes = [
   </section>
 
   <!-- ========== VILLES ========== -->
-  <section class="section">
+  <section class="section section--sunk">
     <div class="wrap">
       <p class="eyebrow">Sur le terrain</p>
       <h2 class="h-section">Où nous intervenons</h2>
@@ -218,7 +218,78 @@ const etapes = [
     </div>
   </section>
 
+  {/* Deux capacités que peu d'associations peuvent annoncer, et qui changent
+      concrètement ce qui se passe quand une victime doit partir. */}
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Nos moyens</p>
+      <h2 class="h-section">Ce que nos équipes peuvent faire sur place</h2>
+      <p class="lede">
+        Un poste de secours ne se limite pas à attendre les pompiers. Deux
+        conventions étendent ce que nous prenons en charge nous-mêmes.
+      </p>
+
+      <div class="moyens">
+        <article class="moyen">
+          <span class="moyen__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 19a2 2 0 1 0 4 0 2 2 0 1 0-4 0M18 19a2 2 0 1 0 4 0 2 2 0 1 0-4 0" />
+              <path d="M2 6h11v13H2zM13 10h4l4 4v5h-3" />
+            </svg>
+          </span>
+          <h3>Nous évacuons nous-mêmes</h3>
+          <p>
+            Une convention tripartite nous autorise à transporter une victime
+            vers l’hôpital depuis nos dispositifs, sur demande du SAMU. Le
+            patient part avec l’équipe qui l’a prise en charge, sans attendre
+            un vecteur supplémentaire — et un moyen public reste disponible
+            pour ailleurs.
+          </p>
+        </article>
+
+        <article class="moyen">
+          <span class="moyen__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12h4l2-6 4 12 2.5-7 1.5 3h6" />
+            </svg>
+          </span>
+          <h3>Nous réalisons un ECG sur place</h3>
+          <p>
+            Nos véhicules de premiers secours embarquent un
+            électrocardiographe. Devant une douleur thoracique, le tracé est
+            réalisé au poste et transmis au SAMU, qui décide au vu de l’examen
+            plutôt que d’une description. Sur un infarctus, ces minutes-là
+            comptent.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {/* Les renforts hors département : ils disent l'échelle du réseau auquel
+      appartient l'association, ce qu'une liste de communes ne montre pas. */}
   <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Au-delà du département</p>
+      <h2 class="h-section">Nos équipes en renfort FFSS</h2>
+      <p class="lede">
+        Nos secouristes partent aussi en renfort sur les grands rassemblements
+        nationaux, aux côtés des autres structures de la fédération. Ils en
+        reviennent avec une expérience que les dispositifs locaux ne donnent
+        pas — et qui nourrit ensuite nos formations.
+      </p>
+      <ul class="renforts">
+        <li><strong>Concerts de Jul</strong><span>Stades et grandes salles, publics de plusieurs dizaines de milliers de personnes.</span></li>
+        <li><strong>Bol d’Or</strong><span>Vingt-quatre heures de course moto : dispositif continu, jour et nuit.</span></li>
+        <li><strong>Roc d’Azur</strong><span>Le plus grand rassemblement VTT d’Europe, sur des parcours étendus.</span></li>
+        <li><strong>Hadra Trance Festival</strong><span>Festival sur plusieurs jours, avec camping et public en continu.</span></li>
+        <li><strong>Tomorrowland — Alpe d’Huez</strong><span>Festival en altitude, en hiver : froid, neige et accès contraints.</span></li>
+        <li><strong>Trail d’Oyonnax</strong><span>Course nature : postes échelonnés sur le parcours et équipes mobiles.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="wrap">
       <Faq
         titre="Vos questions sur les dispositifs de secours"
@@ -373,4 +444,32 @@ const etapes = [
   .appel { display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
   .appel__h { font-size: clamp(1.5rem,3.5vw,2rem); font-weight: 800; margin-bottom: .6rem; }
   .appel__actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+
+  .moyens {
+    margin-top: 2rem; display: grid; gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  }
+  .moyen {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.5rem;
+  }
+  .moyen__ic {
+    display: grid; place-items: center; width: 46px; height: 46px;
+    border-radius: 13px; background: var(--secours); color: #fff; margin-bottom: 1rem;
+  }
+  .moyen__ic svg { width: 24px; height: 24px; }
+  .moyen h3 { font-family: 'Archivo', sans-serif; font-size: 1.12rem; font-weight: 800; margin-bottom: .5rem; }
+  .moyen p { color: var(--ink-mute); font-size: .95rem; }
+
+  .renforts {
+    margin-top: 2rem; list-style: none; padding: 0; display: grid; gap: .9rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+  .renforts li {
+    display: flex; flex-direction: column; gap: .25rem;
+    padding: 1rem 1.15rem; background: var(--sunk);
+    border-radius: var(--r-md); border-left: 3px solid var(--azur);
+  }
+  .renforts strong { font-family: 'Archivo', sans-serif; font-size: 1rem; font-weight: 700; }
+  .renforts span { font-size: .87rem; color: var(--ink-mute); }
 </style>

@@ -4,7 +4,7 @@ import { asso } from '../data/association';
 import { filAriane } from '../lib/schema';
 
 /**
- * École de natation et de sauvetage — enfants de 4 à 18 ans.
+ * École de natation et de sauvetage — enfants de 6 à 18 ans.
  *
  * Public différent du reste du site : ici le visiteur est un parent, pas un
  * stagiaire ni un organisateur. Il ne cherche pas un diplôme, il cherche une
@@ -17,7 +17,7 @@ import { filAriane } from '../lib/schema';
 
 const ages = [
   {
-    tranche: 'Dès 4 ans',
+    tranche: 'Dès 6 ans',
     titre: 'Découvrir l’eau',
     texte: 'Aisance aquatique et premières techniques, dans un cadre ludique et progressif.',
   },
@@ -55,7 +55,7 @@ const balisages = [
     '@type': 'SportsActivityLocation',
     name: 'École de natation et de sauvetage — Secourisme Pour Tous',
     description:
-      'École de natation et de sauvetage sportif pour les enfants de 4 à 18 ans, au Palais des sports Jean Bouin à Nice.',
+      'École de natation et de sauvetage sportif pour les enfants de 6 à 18 ans, au Palais des sports Jean Bouin à Nice.',
     parentOrganization: { '@id': 'https://www.secourismepourtous.org/#organisation' },
     address: {
       '@type': 'PostalAddress',
@@ -69,8 +69,8 @@ const balisages = [
 ---
 
 <Base
-  title="École de natation et de sauvetage à Nice | Dès 4 ans"
-  description="École de natation et de sauvetage sportif pour les enfants de 4 à 18 ans à Nice, piscine Jean Bouin. Apprendre à nager et à porter secours. Licence annuelle."
+  title="École de natation et de sauvetage à Nice | Dès 6 ans"
+  description="École de natation et de sauvetage sportif pour les enfants de 6 à 18 ans à Nice, piscine Jean Bouin. Cours le mercredi matin, licence annuelle 250 €."
   chemin="/ecole-de-natation"
   schemas={balisages}
 >
@@ -84,13 +84,14 @@ const balisages = [
         <b>École de natation</b>
       </nav>
       <div class="tete__badges">
-        <span class="badge badge--contour">De 4 à 18 ans</span>
+        <span class="badge badge--contour">De 6 à 18 ans</span>
+        <span class="badge badge--contour">Le mercredi matin</span>
         <span class="badge badge--contour">Licence annuelle</span>
         <span class="badge badge--contour">Piscine Jean Bouin</span>
       </div>
       <h1 class="tete__h1">Apprendre à nager,<br />apprendre à sauver</h1>
       <p class="tete__t">
-        Depuis plusieurs années, le club accueille les enfants de 4 à 18 ans dans
+        Depuis plusieurs années, le club accueille les enfants de 6 à 18 ans dans
         son école de natation et de sauvetage sportif. Ils y découvrent la nage
         et le secourisme ensemble, dans un cadre sportif et ludique.
       </p>
@@ -177,11 +178,19 @@ const balisages = [
         <dl class="prat__l">
           <div>
             <dt>Âges</dt>
-            <dd>De 4 à 18 ans</dd>
+            <dd>De 6 à 18 ans</dd>
+          </div>
+          <div>
+            <dt>Créneaux</dt>
+            <dd>
+              Le mercredi&nbsp;:<br />
+              9h – 10h pour les 6-8 ans<br />
+              10h – 11h pour les 9-11 ans
+            </dd>
           </div>
           <div>
             <dt>Licence</dt>
-            <dd>Annuelle, de septembre à juin</dd>
+            <dd>250 € l’année, de septembre à juin</dd>
           </div>
           <div>
             <dt>Lieu</dt>
@@ -217,7 +226,7 @@ const balisages = [
         </div>
         <div class="duo">
           <label>Prénom de l’enfant *<input type="text" name="enfant_prenom" required /></label>
-          <label>Âge de l’enfant *<input type="text" name="enfant_age" required placeholder="ex. 7 ans" /></label>
+          <label>Âge de l’enfant *<input type="text" name="enfant_age" required placeholder="ex. 8 ans" /></label>
         </div>
 
         <label>Sait-il déjà nager&nbsp;? *
