@@ -128,6 +128,32 @@ export const metiersPsc: Metier[] = [
       url: 'https://www.interieur.gouv.fr/Le-ministere/Securite-civile',
     },
   },
+  {
+    nom: 'Conducteur de taxi',
+    secteur: 'Transport de personnes',
+    nature: 'exige',
+    exigence:
+      'Une attestation de PSC de moins de deux ans est exigée par la préfecture pour obtenir la carte professionnelle de conducteur de taxi.',
+    contexte:
+      'Un malaise à bord, un accident sur la route : vous êtes seul avec la personne, souvent avant tout le monde. La condition d’ancienneté impose de refaire la formation régulièrement, ce n’est pas un passage unique.',
+    source: {
+      texte: 'Code des transports, article R3121-17 — service-public.fr',
+      url: 'https://entreprendre.service-public.gouv.fr/vosdroits/F21907',
+    },
+  },
+  {
+    nom: 'Chauffeur VTC',
+    secteur: 'Transport de personnes',
+    nature: 'demande',
+    exigence:
+      'Le secourisme n’est plus obligatoire pour la carte professionnelle VTC depuis le 12 août 2026, mais reste explicitement recommandé par l’administration.',
+    contexte:
+      'Les conditions d’exercice sont les mêmes que pour un taxi : seul à bord, premier sur place. Beaucoup de plateformes et de donneurs d’ordre continuent de le demander.',
+    source: {
+      texte: 'Devenir chauffeur VTC — service-public.fr',
+      url: 'https://entreprendre.service-public.gouv.fr/vosdroits/F31027',
+    },
+  },
 ];
 
 export const metiersPse1: Metier[] = [
@@ -201,4 +227,4 @@ export const metiersPse1: Metier[] = [
 /** Date de la dernière vérification des textes cités. */
 export const verifieLe = new Date('2026-08-20');
 
-export const verifieLeTexte = '20 août 2026';
+export const verifieLeTexte = '21 août 2026';
