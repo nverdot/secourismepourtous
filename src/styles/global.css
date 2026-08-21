@@ -27,16 +27,28 @@
      donc il ne sert qu'aux aplats, et toujours avec de l'encre sombre par
      dessus, comme sur le logo. Le texte utilise l'or foncé, qui est la même
      teinte (46°) descendue jusqu'à 4,8:1 sur blanc. */
-  --ocre: #8f6d00;
+  --ocre: #996600;
   --ocre-vif: #f8c000;
   --ocre-encre: #221900;
-  --ocre-wash: #fff4d1;
+  --ocre-wash: #fff8e6;
 
   /* Accent par défaut : le rouge secours. Chaque page de formation le
      redéfinit selon sa filière, pour que la couleur vue dans le catalogue
      se retrouve sur la fiche. */
   --accent: #d8382a;
   --accent-wash: #fdecea;
+  /*
+   * Un accent joue deux rôles que rien n'oblige à confondre : il écrit du
+   * texte sur fond clair, et il remplit des pastilles. La plupart des teintes
+   * du site font les deux, d'où ces deux valeurs par défaut. Le jaune fédéral,
+   * lui, ne peut faire que la seconde — 1,6:1 en texte sur blanc — et exige de
+   * l'encre sombre par dessus. Sans cette séparation, la filière pédagogique
+   * devait choisir entre un texte illisible et un or si sombre qu'il virait à
+   * l'olive : c'est le second qu'elle avait, et les numéros du programme en
+   * portaient la couleur.
+   */
+  --accent-plein: var(--accent);
+  --accent-encre: #fff;
 
   --ground: #f7f9fb;
   --surface: #ffffff;
@@ -239,7 +251,7 @@ summary:focus-visible {
 a.badge--qualiopi { text-decoration: none; transition: box-shadow .15s, transform .15s; }
 a.badge--qualiopi:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.35); }
 a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset: 2px; }
-.badge--secours { background: var(--accent); color: #fff; }
+.badge--secours { background: var(--accent-plein); color: var(--accent-encre); }
 .badge--contour {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
@@ -276,5 +288,6 @@ a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset
 .filiere-citoyenne     { --accent: var(--azur);    --accent-wash: var(--azur-wash); }
 .filiere-operationnelle{ --accent: var(--secours); --accent-wash: var(--secours-wash); }
 .filiere-aquatique     { --accent: var(--ocean);   --accent-wash: var(--ocean-wash); }
-.filiere-pedagogique   { --accent: var(--ocre);    --accent-wash: var(--ocre-wash); }
+.filiere-pedagogique   { --accent: var(--ocre);    --accent-wash: var(--ocre-wash);
+                         --accent-plein: var(--ocre-vif); --accent-encre: var(--ocre-encre); }
 .filiere-entreprise    { --accent: var(--navy);    --accent-wash: var(--azur-wash); }

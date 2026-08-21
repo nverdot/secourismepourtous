@@ -51,7 +51,7 @@ const { questions, cta, severe = false } = Astro.props;
   }
   .quiz :global(.q__barre) { display: flex; align-items: center; gap: .8rem; margin-bottom: 1.25rem; }
   .quiz :global(.q__jauge) { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
-  .quiz :global(.q__jauge i) { display: block; height: 100%; background: var(--accent); transition: width .3s ease; }
+  .quiz :global(.q__jauge i) { display: block; height: 100%; background: var(--accent-plein); transition: width .3s ease; }
   .quiz :global(.q__n) {
     font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 700;
     letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute);
@@ -61,7 +61,7 @@ const { questions, cta, severe = false } = Astro.props;
     display: inline-block; margin-bottom: .7rem;
     font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase;
-    color: #fff; background: var(--accent);
+    color: var(--accent-encre); background: var(--accent-plein);
     border-radius: var(--r-pill); padding: .2rem .7rem;
   }
   .quiz :global(.q__t) {

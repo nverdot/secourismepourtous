@@ -118,6 +118,37 @@ const PAR_DEMI = 16;
 const repetitions = Math.max(1, Math.ceil(PAR_DEMI / Math.max(montres.length, 1)));
 
 /**
+ * Les appels tirés pour cette construction.
+ *
+ * Il y en a dix en réserve pour six emplacements — trois par demi-piste, deux
+ * rangées. Les prendre dans l'ordre de la liste condamnerait les quatre
+ * derniers à ne jamais paraître ; on les mélange donc, comme les portraits,
+ * et le mur change de discours à chaque déploiement.
+ *
+ * Le mélange évite ensuite de placer deux fois la même couleur de filière à la
+ * suite : deux aplats rouges voisins se liraient comme un seul bloc, et la
+ * ponctuation qu'on cherche disparaîtrait.
+ */
+const appels = (() => {
+  // Un tas par filière, chacun mélangé, puis on sert en tourniquet : les cinq
+  // premiers appels portent donc cinq couleurs différentes, et les cinq
+  // suivants aussi. Écarter seulement les doublons voisins ne suffisait pas —
+  // une rangée n'affiche que trois appels, et « océan, ocre, océan » y sortait,
+  // ce qui donne deux tiers d'une rangée dans la même couleur.
+  const tas = new Map<string, typeof APPELS>();
+  [...APPELS].sort(() => Math.random() - 0.5).forEach((a) => {
+    if (!tas.has(a.ton)) tas.set(a.ton, []);
+    tas.get(a.ton)!.push(a);
+  });
+  const piles = [...tas.values()].sort(() => Math.random() - 0.5);
+  const suite: typeof APPELS = [];
+  for (let tour = 0; suite.length < APPELS.length; tour++) {
+    for (const pile of piles) if (pile[tour]) suite.push(pile[tour]);
+  }
+  return suite;
+})();
+
+/**
  * Les appels ferment chaque passage de l'équipe, jamais deux fois le même.
  *
  * Ils ne sont pas glissés au hasard entre les visages : ils closent un tour
@@ -125,11 +156,11 @@ const repetitions = Math.max(1, Math.ceil(PAR_DEMI / Math.max(montres.length, 1)
  * on est invité, puis on revoit tout le monde. Et comme la phrase change à
  * chaque fois, le mur ne se met jamais à répéter le même panneau.
  */
-type Case = { m?: (typeof montres)[number]; appel?: (typeof APPELS)[number]; double?: boolean };
+type Case = { m?: (typeof montres)[number]; appel?: (typeof appels)[number]; double?: boolean };
 const rangee = (source: typeof montres, decalage: number): Case[] => {
   const demi: Case[] = Array.from({ length: repetitions }, (_, k) => [
     ...source.map((m) => ({ m })),
-    { appel: APPELS[(k + decalage) % APPELS.length] },
+    { appel: appels[(k + decalage) % appels.length] },
   ]).flat();
   // Deux moitiés : la première porte les vignettes réelles, la seconde n'existe
   // que pour l'œil et reste hors du clavier et des lecteurs d'écran.
@@ -163,15 +194,20 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
             <li class="mur__i">
               {appel ? (
                 <a
-                  class="fc fc--vous" data-ton={appel.ton} href="/secouriste-actif"
+                  class="fc fc--vous" data-ton={appel.ton} href={appel.lien ?? '/secouriste-actif'}
                   tabindex={double ? -1 : undefined}
                   aria-hidden={double ? 'true' : undefined}
                 >
-                  <span class="fc__vp" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6" /><path d="M4.5 20a7.5 7.5 0 0 1 15 0" /></svg>
-                  </span>
                   <span class="fc__vt">{appel.titre}</span>
                   <span class="fc__vs">{appel.sous}</span>
+                  {/* Le picto de silhouette qui tenait cette place ne disait
+                      rien qu'on ne sache déjà. Un bouton, lui, dit quoi faire :
+                      la vignette annonçait une envie sans jamais nommer le
+                      geste qui la suit. */}
+                  <span class="fc__vb" aria-hidden="true">
+                    {appel.action ?? 'Nous rejoindre'}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                  </span>
                 </a>
               ) : (
               <button
@@ -371,34 +407,6 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     ).observe(m);
   });
 
-  /**
-   * Le survol ralentit la rangée, il ne l'arrête pas.
-   *
-   * Pourquoi en JavaScript et pas en CSS : `animation-play-state` ne sait que
-   * s'arrêter, et changer `animation-duration` en cours de route fait sauter
-   * l'animation — le navigateur recalcule l'avancement à partir du temps
-   * écoulé, qui ne représente plus la même fraction. `updatePlaybackRate`
-   * change la vitesse en conservant la position, donc sans rupture.
-   *
-   * Seule la rangée survolée ralentit : l'autre continue, ce qui garde le
-   * mouvement au bloc pendant qu'on vise.
-   */
-  const RALENTI = 0.12;
-  document.querySelectorAll<HTMLElement>('.mur__p').forEach((rangee) => {
-    const vitesse = (v: number) =>
-      rangee.getAnimations().forEach((a) => a.updatePlaybackRate?.(v));
-
-    ['pointerenter', 'focusin'].forEach((e) =>
-      rangee.addEventListener(e, () => vitesse(RALENTI), { passive: true })
-    );
-    // « pointercancel » en plus des deux autres : au doigt, un geste interrompu
-    // par un défilement n'émet pas toujours « pointerleave », et la rangée
-    // serait restée au ralenti.
-    ['pointerleave', 'pointercancel', 'focusout'].forEach((e) =>
-      rangee.addEventListener(e, () => vitesse(1), { passive: true })
-    );
-  });
-
   // Échap ferme la boîte sans passer par notre code : on repasse derrière.
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setTimeout(synchronise, 0);
@@ -454,7 +462,9 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
      faite de deux moitiés identiques : l'animation décale d'exactement une
      moitié, et le retour à zéro tombe sur une image identique. La durée est
      proportionnelle au nombre de vignettes, pour que la vitesse reste la même
-     quel que soit l'effectif — environ un visage toutes les trois secondes. */
+     quel que soit l'effectif : une trentaine de pixels par seconde, soit un
+     visage toutes les six secondes. Assez lent pour qu'on lise les traits sans
+     suivre du regard, et pour qu'une vignette se clique sans être visée. */
   .mur {
     margin: 2.25rem 0 2rem;
     /* La piste est plus large que l'écran : sans ça, c'est toute la page qui
@@ -469,7 +479,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     list-style: none; padding: 0; margin: 0;
     display: flex; gap: clamp(.5rem, 1vw, .75rem);
     width: max-content;
-    animation: mur-defile calc(var(--n) * 3s) linear infinite;
+    animation: mur-defile calc(var(--n) * 6s) linear infinite;
     will-change: transform;
   }
   .mur__p[data-sens='inverse'] { animation-direction: reverse; }
@@ -478,10 +488,10 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     to   { transform: translate3d(-50%, 0, 0); }
   }
 
-  /* Une seule raison d'arrêter net : la section est sortie de l'écran. Le
-     survol, lui, ralentit — voir le script : c'est une vitesse, pas un
-     interrupteur, et le CSS ne sait pas en changer sans faire sauter
-     l'animation. */
+  /* Une seule raison d'arrêter : la section est sortie de l'écran. Rien au
+     survol — ni arrêt ni ralenti : à cette allure, une vignette se clique
+     sans avoir à être visée, et toute réaction au passage de la souris se
+     lisait comme un défaut plutôt que comme une aide. */
   .mur[data-dort] .mur__p { animation-play-state: paused; }
 
   .mur__i { flex: 0 0 auto; }
@@ -539,18 +549,32 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   .fc--vous[data-ton='secours'] { --t: var(--secours);  --te: #fff; }
   .fc--vous[data-ton='azur']    { --t: var(--azur);     --te: #fff; }
   .fc--vous[data-ton='ocean']   { --t: var(--ocean);    --te: #fff; }
-  .fc--vous[data-ton='sage']    { --t: var(--sage);     --te: #fff; }
+  .fc--vous[data-ton='navy']    { --t: var(--navy);     --te: #fff; }
   .fc--vous[data-ton='ocre']    { --t: var(--ocre-vif); --te: var(--ocre-encre); }
 
   .fc--vous:hover, .fc--vous:focus-visible {
     box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--t), var(--sh-lg);
   }
-  .fc__vp {
-    width: 30px; height: 30px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: color-mix(in srgb, var(--te) 22%, transparent); color: inherit;
+  /* Le bouton inverse le couple de la vignette : encre en fond, fond en encre.
+     Il ressort donc sans introduire de troisième couleur, et le contraste est
+     exactement celui déjà vérifié pour le texte. */
+  .fc__vb {
+    display: inline-flex; align-items: center; gap: .3rem;
+    margin-top: .15rem; padding: .34rem .62rem; border-radius: 999px;
+    background: var(--te); color: var(--t);
+    font-family: 'Archivo', sans-serif; font-size: .66rem; font-weight: 800;
+    letter-spacing: .02em; text-wrap: balance;
+    transition: transform .18s ease;
   }
-  .fc__vp svg { width: 17px; height: 17px; }
+  .fc__vb svg { width: 12px; height: 12px; }
+  .fc--vous:hover .fc__vb, .fc--vous:focus-visible .fc__vb { transform: translateX(2px); }
+
+  /* Sur téléphone, la vignette tombe à 118 pixels : la pastille se resserre et
+     abandonne sa flèche, que la largeur ne permet plus de porter. */
+  @media (max-width: 560px) {
+    .fc__vb { font-size: .58rem; padding: .26rem .5rem; gap: 0; }
+    .fc__vb svg { display: none; }
+  }
   .fc__vt {
     font-family: 'Archivo', sans-serif; font-weight: 800;
     font-size: clamp(.74rem, .96vw, .9rem); line-height: 1.2;
