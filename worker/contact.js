@@ -366,11 +366,19 @@ async function diagnostic(env) {
     try {
       const r = await fetch('https://api.resend.com/domains', { headers: { Authorization: `Bearer ${resend}` } });
       etat.resendStatut = r.status;
-      etat.resendAccepte = r.ok;
+      const corps = await r.text();
+      // Une clé bridée à l'envoi ne peut pas lister les domaines : c'est la
+      // bonne pratique, et ce refus-là vaut confirmation qu'elle est valide.
       if (r.ok) {
-        const { data = [] } = await r.json();
-        etat.resendDomaines = data.map((d) => `${d.name} (${d.status})`);
-      } else etat.resendMessage = (await r.text()).slice(0, 160);
+        etat.resendAccepte = true;
+        etat.resendDomaines = (JSON.parse(corps).data ?? []).map((d) => `${d.name} (${d.status})`);
+      } else if (corps.includes('restricted_api_key')) {
+        etat.resendAccepte = true;
+        etat.resendNote = 'clé valide, restreinte à l’envoi seul (bonne pratique)';
+      } else {
+        etat.resendAccepte = false;
+        etat.resendMessage = corps.slice(0, 160);
+      }
     } catch (e) {
       etat.resendStatut = 'appel impossible';
     }
