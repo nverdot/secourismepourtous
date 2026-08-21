@@ -210,10 +210,6 @@ export const membres: Membre[] = [
           'Qu’être formé aux premiers secours est primordial dans notre vie de tous les jours, et que cela permet d’avoir plus confiance en soi. C’était mon cas.',
         ],
       },
-      {
-        question: 'Et pour la suite',
-        texte: ['J’espère devenir formateur un jour. Pourquoi pas.'],
-      },
     ],
   },
 
@@ -334,7 +330,6 @@ export const ORDRE_QUESTIONS = [
   'Ce que le terrain change dans ma façon d’enseigner',
   'Ce qui me fait revenir',
   'Ce que je dirais à quelqu’un qui hésite',
-  'Et pour la suite',
 ];
 
 export const ordonner = (r: Reponse[]) =>
