@@ -265,10 +265,21 @@ import { redirects } from '@wix/redirects';
 
         charge.hidden = true; zone.hidden = false;
 
-        // Pré-sélection d'une place sur le premier billet : sans elle, la boîte
-        // s'ouvre sur un écran qui semble vide et l'on ne devine pas qu'il faut
-        // cliquer sur « + » pour faire apparaître la suite.
-        const premier = zone.querySelector('.bil');
+        // Pré-sélection d'une place : sans elle, la boîte s'ouvre sur un écran
+        // qui semble vide et l'on ne devine pas qu'il faut cliquer sur « + ».
+        //
+        // Lequel choisir ? Wix renvoie le billet groupé en premier, si bien
+        // qu'ouvrir simplement « les dates » présélectionnait les deux niveaux.
+        // On distingue donc deux entrées : depuis l'offre groupée, on retient
+        // le billet qu'elle annonce ; partout ailleurs, le premier billet
+        // simple — celui qui ne couvre qu'une formation.
+        const vise = document.documentElement.dataset.billetVise;
+        const lignes = [...zone.querySelectorAll('.bil')];
+        const nomDe = (l) => (l.querySelector('strong')?.textContent || '');
+        const premier =
+             (vise && lignes.find((l) => nomDe(l).includes(vise)))
+          || lignes.find((l) => !/ \+ /.test(nomDe(l)))
+          || lignes[0];
         if (premier) {
           premier.querySelector('output').textContent = '1';
           choix = [{

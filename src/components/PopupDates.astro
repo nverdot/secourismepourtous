@@ -106,6 +106,12 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
     document.querySelectorAll('[data-ouvre-dates]').forEach((b) =>
       b.addEventListener('click', (e) => {
         e.preventDefault();
+        // Le choix des dates s'intercale entre le bouton et le module
+        // d'inscription : l'intention doit franchir les deux boîtes. On la
+        // dépose sur le document, seul objet que les deux voient.
+        const vise = (b as HTMLElement).dataset.billet;
+        if (vise) document.documentElement.dataset.billetVise = vise;
+        else delete document.documentElement.dataset.billetVise;
         pop.showModal();
       })
     );
