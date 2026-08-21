@@ -387,32 +387,14 @@ async function diagnostic(env) {
     .map((k) => `${k} (${env[k].length} caractères)`);
   etat.liaisonsVues = Object.keys(env).filter((k) => typeof env[k] !== 'string').sort();
 
-  // Resend : présence de la clé et acceptation par le service.
+  // Resend : on se contente de constater la clé. L'interroger pour vérifier
+  // sa validité inscrivait un 401 dans les journaux du compte à chaque appel
+  // du diagnostic — une clé bridée à l'envoi ne peut pas lister les domaines.
+  // Le seul test qui vaille est un envoi réel, et il a déjà son journal.
   const resend = env.RESEND_API_KEY;
   etat.alerteConfiguree = Boolean(resend);
   etat.alerteDestinataire = env.NOTIF_EMAIL || DESTINATAIRE;
   etat.alerteExpediteur = env.RESEND_FROM || 'onboarding@resend.dev (domaine non vérifié)';
-  if (resend) {
-    try {
-      const r = await fetch('https://api.resend.com/domains', { headers: { Authorization: `Bearer ${resend}` } });
-      etat.resendStatut = r.status;
-      const corps = await r.text();
-      // Une clé bridée à l'envoi ne peut pas lister les domaines : c'est la
-      // bonne pratique, et ce refus-là vaut confirmation qu'elle est valide.
-      if (r.ok) {
-        etat.resendAccepte = true;
-        etat.resendDomaines = (JSON.parse(corps).data ?? []).map((d) => `${d.name} (${d.status})`);
-      } else if (corps.includes('restricted_api_key')) {
-        etat.resendAccepte = true;
-        etat.resendNote = 'clé valide, restreinte à l’envoi seul (bonne pratique)';
-      } else {
-        etat.resendAccepte = false;
-        etat.resendMessage = corps.slice(0, 160);
-      }
-    } catch (e) {
-      etat.resendStatut = 'appel impossible';
-    }
-  }
 
   return new Response(JSON.stringify(etat, null, 2), {
     status: 200,
