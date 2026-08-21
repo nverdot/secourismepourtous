@@ -55,8 +55,9 @@ function resume(d) {
   }
 
   ajoute('Situation de handicap', d.handicap);
-  if (d.message) lignes.push('', '— Message —', d.message);
-  return lignes.join('\n');
+  // Quand le message est seul, l'intertitre et la ligne vide n'apportent rien.
+  if (d.message) lignes.push(...(lignes.length ? ['', '— Message —'] : []), d.message);
+  return lignes.join('\n').trim();
 }
 
 export async function contactPost(request, env) {
@@ -148,6 +149,55 @@ export async function contactPost(request, env) {
     if (!r.ok) console.error('[contact] collection Wix', r.status, (await r.text()).slice(0, 250));
   };
 
+  /**
+   * Recopie dans la collection du formulaire Wix correspondant.
+   *
+   * Le site historique utilise des formulaires Wix « classiques », qui
+   * déposent leurs soumissions dans des collections dédiées — c'est là que
+   * l'association a l'habitude de les relire. Continuer à les alimenter évite
+   * de changer une habitude de travail au moment même où le site change.
+   *
+   * Ces collections n'ont que six champs : tout le détail (financeur, état
+   * civil du stagiaire, accessibilité) ne tiendrait pas. Il reste dans
+   * DemandesSite, qui fait foi, et `resume()` en donne ici une version
+   * lisible dans le champ message.
+   */
+  const miroirWix = async () => {
+    const dps = d.dispositif || /poste de secours|DPS/i.test(d.motif || '');
+    const actif = d['form-name'] === 'secouriste-actif'
+      || /secouriste actif|bénévole|rejoindre/i.test(d.motif || '');
+
+    const cible = dps ? 'Forms/contact11'
+                : actif ? 'Forms/contact112'
+                : 'Forms/contactForm';
+
+    // « Contact 2 » ne porte pas les mêmes colonnes que les deux autres.
+    const item = cible === 'Forms/contactForm'
+      ? {
+          submissionTime: new Date().toISOString(),
+          nomPrenom: `${prenom} ${nom}`.trim(),
+          email,
+          telephone: tel,
+          votreDemande: resume(d) || d.message || '',
+        }
+      : {
+          submissionTime: new Date().toISOString(),
+          firstName: prenom,
+          lastName: nom,
+          email,
+          telephone: tel,
+          writeAMessage: resume(d) || d.message || '',
+        };
+
+    const r = await fetch(DONNEES, {
+      method: 'POST',
+      headers: { Authorization: cle, 'wix-site-id': site, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataCollectionId: cible, dataItem: { data: item } }),
+    });
+    if (!r.ok) console.error('[contact] miroir', cible, r.status, (await r.text()).slice(0, 200));
+    else console.log('[contact] recopié dans', cible);
+  };
+
   try {
     const r = await fetch(API, {
       method: 'POST',
@@ -171,6 +221,7 @@ export async function contactPost(request, env) {
       console.log('[contact] créé', contact?.id, '|', origine, '|', resume(d).replace(/\n/g, ' · '));
     }
     await enregistre();
+    await miroirWix();
   } catch (e) {
     // Une panne de l'API Wix ne doit pas faire perdre la demande : elle reste
     // dans les soumissions Netlify et dans les journaux de cette fonction.
