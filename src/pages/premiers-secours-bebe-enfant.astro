@@ -1,0 +1,431 @@
+---
+import Base from '../layouts/Base.astro';
+import Terrain from '../components/Terrain.astro';
+import Equipe from '../components/Equipe.astro';
+import { asso } from '../data/association';
+import { parSlug } from '../data/formations';
+import { situations, referentiel } from '../data/situations';
+import { sessionsAVenir, sessionsDe } from '../lib/wix';
+import { filAriane, questionsFrequentes } from '../lib/schema';
+
+/**
+ * Premiers secours du bébé et de l'enfant — page destinée aux parents.
+ *
+ * POURQUOI ELLE EXISTE. « Formation premiers secours bébé », « cours premiers
+ * secours nourrisson », « formation urgence bébé » : ces recherches existent
+ * en nombre et rien, sur le site comme dans le département, n'y répondait.
+ * Le mot « bébé » n'apparaissait même pas dans le catalogue.
+ *
+ * L'ANGLE. Un jeune parent ne cherche pas une formation, il cherche à ne plus
+ * avoir peur. La page part donc de la peur — la fausse route, le bébé qui
+ * devient mou, la chute — et arrive à la formation. Pas l'inverse.
+ *
+ * CE QU'ELLE NE FAIT PAS. Elle n'enseigne pas les gestes. Elle dit ce qui se
+ * joue, ce qui distingue un nourrisson d'un adulte, et pourquoi cela ne
+ * s'apprend pas en lisant. Les fiches de conduite à tenir font le reste.
+ *
+ * Et elle est honnête sur un point que personne n'écrit : le PSC n'est pas un
+ * cours de puériculture. Il traite l'enfant et le nourrisson, il ne traite
+ * que ça.
+ */
+
+const psc = parSlug('psc')!;
+const toutes = await sessionsAVenir();
+const sessions = sessionsDe(toutes, psc.wixEvent);
+
+const pediatriques = ['etouffement-nourrisson', 'arret-cardiaque-enfant']
+  .map((s) => situations.find((x) => x.slug === s)!)
+  .filter(Boolean);
+
+const autres = ['etouffement', 'brulure', 'perte-de-connaissance', 'saignement-abondant']
+  .map((s) => situations.find((x) => x.slug === s)!)
+  .filter(Boolean);
+
+const QUESTIONS = [
+  {
+    question: 'À partir de quel âge peut-on se former aux premiers secours pédiatriques ?',
+    reponse:
+      'Le PSC est accessible dès 10 ans, sans aucun prérequis. Beaucoup de parents viennent pendant la grossesse ou dans les premiers mois : c’est le bon moment, avant d’en avoir besoin.',
+  },
+  {
+    question: 'Le PSC traite-t-il vraiment les bébés, ou seulement les adultes ?',
+    reponse:
+      'Il traite les trois âges. L’étouffement du nourrisson, la réanimation de l’enfant et celle du bébé font partie du programme officiel, et vous vous entraînez sur des mannequins nourrisson et enfant, pas seulement adulte.',
+  },
+  {
+    question: 'Faut-il venir à deux, avec l’autre parent ?',
+    reponse:
+      'C’est ce que nous conseillons. Une urgence à la maison mobilise les deux personnes présentes : l’une agit, l’autre appelle le 15 et guide les secours. Se former ensemble évite d’avoir un sachant et un spectateur.',
+  },
+  {
+    question: 'Peut-on organiser une session pour un groupe de parents ?',
+    reponse:
+      'Oui. Crèche, école, association de parents, comité d’entreprise : dès qu’un groupe est constitué, nous venons dans vos locaux, partout dans les Alpes-Maritimes.',
+  },
+  {
+    question: 'Combien de temps et combien ça coûte ?',
+    reponse: `Le PSC dure ${psc.duree.toLowerCase()}, en une journée, et coûte ${psc.tarif}. Il n’y a pas d’examen : la validation se fait en continu, sur les mises en situation.`,
+  },
+];
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Premiers secours bébé et enfant', chemin: '/premiers-secours-bebe-enfant' },
+  ]),
+  questionsFrequentes(QUESTIONS),
+];
+---
+
+<Base
+  title="Premiers secours bébé et enfant à Nice | Formation parents"
+  description="Apprendre les gestes qui sauvent un bébé ou un enfant à Nice : étouffement du nourrisson, réanimation pédiatrique, fièvre et chutes. Formation PSC dès 10 ans, 7 h, 50 €. Sessions le samedi."
+  chemin="/premiers-secours-bebe-enfant"
+  filiere="citoyenne"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>Bébé et enfant</b>
+      </nav>
+      <div class="tete__badges">
+        <span class="badge badge--contour">Dès 10 ans</span>
+        <span class="badge badge--contour">{psc.duree} en une journée</span>
+        <span class="badge badge--contour">{psc.tarif}</span>
+      </div>
+      <h1 class="tete__h1">Sur un bébé,<br />les gestes ne sont pas les mêmes</h1>
+      <p class="tete__t">
+        On ne comprime jamais le ventre d’un nourrisson. La réanimation d’un
+        enfant ne suit pas le rythme de celle d’un adulte. Et une fausse route
+        se joue en quelques dizaines de secondes, avant l’arrivée de qui que ce
+        soit.
+      </p>
+      <p class="tete__t tete__t--fin">
+        Cette page est faite pour les parents, les futurs parents, les
+        grands-parents et ceux qui gardent des enfants. Elle ne vous apprendra
+        pas les gestes — ça ne s’apprend pas en lisant. Elle vous dit ce qui se
+        joue, et ce que vous pouvez y changer.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="/formations/psc">
+          Voir les dates de la formation
+          {sessions.length > 0 && <small>{sessions.length} sessions programmées</small>}
+        </a>
+        <a class="btn btn--fantome" href="#situations">Les situations d’abord</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== POURQUOI LES PARENTS ========== -->
+  <section class="section">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Pourquoi vous</p>
+      <h2 class="h-section">Les accidents domestiques touchent d’abord les moins de 15 ans</h2>
+      <p class="lede">
+        Ce n’est pas une formule : c’est écrit noir sur blanc dans le
+        référentiel national. Les services de secours sont massivement
+        sollicités pour des accidents de la vie courante, et ceux-ci
+        <strong>touchent particulièrement les enfants de moins de 15 ans</strong>
+        et les personnes âgées.
+      </p>
+      <p class="lede lede--suite">
+        Autrement dit : si vous devez un jour faire un geste de premiers
+        secours, il y a de fortes chances que ce soit sur votre enfant, chez
+        vous, sans témoin et sans matériel. Et dans ces minutes-là, personne
+        d’autre ne peut le faire à votre place.
+      </p>
+      <p class="src">
+        D’après les {referentiel.nom.toLowerCase()}, {referentiel.edition}.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== CE QUI CHANGE ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Ce qui change</p>
+      <h2 class="h-section">Trois différences que personne ne devine</h2>
+      <p class="lede">
+        Un enfant n’est pas un adulte en réduction. Appliquer sur lui ce qu’on
+        a vu faire sur un adulte peut aggraver la situation — et c’est
+        justement ce que font la plupart des gens.
+      </p>
+
+      <div class="diff">
+        <article class="df">
+          <span class="df__n">01</span>
+          <h3>Jamais de compression sur le ventre d’un bébé</h3>
+          <p>
+            Chez le nourrisson, les compressions se font sur la poitrine. La
+            manœuvre abdominale que l’on connaît pour l’adulte est
+            <strong>proscrite</strong> à cet âge : elle peut provoquer des
+            lésions internes graves.
+          </p>
+        </article>
+        <article class="df">
+          <span class="df__n">02</span>
+          <h3>Le rythme n’est pas le même</h3>
+          <p>
+            Chez l’enfant et le nourrisson, la réanimation se fait à
+            <strong>15 compressions pour 2 insufflations</strong>, contre 30
+            pour 2 chez l’adulte. Une différence qui n’a l’air de rien, et qui
+            change tout.
+          </p>
+        </article>
+        <article class="df">
+          <span class="df__n">03</span>
+          <h3>La cause est presque toujours respiratoire</h3>
+          <p>
+            Chez l’adulte, le cœur s’arrête d’abord. Chez l’enfant, c’est
+            l’oxygène qui manque en premier — noyade, étouffement, crise
+            d’asthme. Les insufflations comptent donc davantage.
+          </p>
+        </article>
+      </div>
+
+      <div class="alerte">
+        <strong>Si vous avez été formé avant juillet 2026</strong>, vous avez
+        appris à commencer la réanimation d’un enfant par cinq insufflations.
+        Ce n’est plus la conduite à tenir : le référentiel 2026 fait débuter la
+        réanimation par les compressions, à tout âge.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LES SITUATIONS ========== -->
+  <section class="section" id="situations">
+    <div class="wrap">
+      <p class="eyebrow">Les conduites à tenir</p>
+      <h2 class="h-section">Ce qu’il faut faire, situation par situation</h2>
+      <p class="lede">
+        Ces fiches reprennent la conduite à tenir officielle, sans la
+        travestir. Lisez-les — mais lisez aussi ce qu’elles disent toutes à la
+        fin : un texte ne met pas les gestes dans vos mains.
+      </p>
+
+      <div class="sits sits--phare">
+        {pediatriques.map((s) => (
+          <a class="st st--phare" href={`/gestes-qui-sauvent/${s.slug}`}>
+            {s.image && <span class="st__ph"><img src={s.image.fichier} alt={s.image.alt} loading="lazy" width="600" height="400" /></span>}
+            <span class="st__txt">
+              <strong>{s.titre}</strong>
+              <span>{s.accroche}</span>
+              <em>Lire la conduite à tenir →</em>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <h3 class="sits__h3">Et les situations qui ne sont pas propres à l’enfant</h3>
+      <div class="sits">
+        {autres.map((s) => (
+          <a class="st" href={`/gestes-qui-sauvent/${s.slug}`}>
+            <strong>{s.court}</strong>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LA FORMATION ========== -->
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">La formation</p>
+      <h2 class="h-section">Une journée, et vous ne regardez plus votre enfant pareil</h2>
+      <p class="lede">
+        Le PSC — anciennement PSC1 — traite les trois âges : adulte, enfant,
+        nourrisson. Vous vous entraînez sur des mannequins bébé et enfant, pas
+        seulement adulte, et l’essentiel de la journée se passe en mise en
+        situation.
+      </p>
+
+      <div class="ce">
+        <article class="ce__i ce__i--oui">
+          <h3>Ce que vous saurez faire</h3>
+          <ul>
+            <li>Désobstruer les voies aériennes d’un nourrisson qui s’étouffe</li>
+            <li>Réanimer un enfant, avec le bon rythme et la bonne profondeur</li>
+            <li>Reconnaître une perte de connaissance et installer l’enfant</li>
+            <li>Arrêter une hémorragie, refroidir une brûlure</li>
+            <li>Alerter le 15 en donnant les bonnes informations, du premier coup</li>
+          </ul>
+        </article>
+        <article class="ce__i ce__i--non">
+          <h3>Ce que le PSC n’est pas</h3>
+          <ul>
+            <li>Un cours de puériculture : ni sommeil, ni alimentation, ni développement</li>
+            <li>Une consultation médicale : il ne remplace pas votre pédiatre</li>
+            <li>Un diplôme professionnel : c’est une formation de citoyen</li>
+          </ul>
+          <p class="ce__p">
+            Nous préférons le dire. Ce que le PSC couvre, il le couvre
+            entièrement — et rien d’autre.
+          </p>
+        </article>
+      </div>
+
+      <div class="ce__actions">
+        <a class="btn btn--primaire" href="/formations/psc">
+          Voir les dates et s’inscrire
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--sobre" href="/contact?motif=sur-mesure">Organiser une session pour un groupe de parents</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== QUI FORME ========== -->
+  <section class="section">
+    <div class="wrap">
+      <Equipe
+        apercu={2}
+        role="Formateur"
+        titre="Qui vous formera"
+        intro="Des formateurs qui tiennent les postes de secours le reste de l’année. Cliquez sur un visage pour lire son parcours."
+      />
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="wrap">
+      <Terrain titre="Une association, pas un organisme de plus" sombre />
+    </div>
+  </section>
+
+  <!-- ========== QUESTIONS ========== -->
+  <section class="section">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2 class="h-section">Ce que les parents nous demandent</h2>
+      <div class="qs">
+        {QUESTIONS.map((q) => (
+          <details class="qs__i">
+            <summary>{q.question}</summary>
+            <p>{q.reponse}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== APPEL ========== -->
+  <section class="section section--appel">
+    <div class="wrap wrap--etroit appel">
+      <h2 class="appel__h">Le meilleur moment, c’est avant</h2>
+      <p class="appel__t">
+        Personne ne se forme pendant l’urgence. {psc.duree} en une journée,
+        {' '}{psc.tarif}, dès 10 ans, sans aucun prérequis.
+      </p>
+      <div class="appel__actions">
+        <a class="btn btn--primaire" href="/formations/psc">Voir les dates</a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .fil {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--on-navy-soft);
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+  .fil a { color: inherit; text-decoration: none; }
+  .fil a:hover { color: #fff; }
+  .fil i { opacity: .45; font-style: normal; }
+  .fil b { color: #fff; font-weight: 600; }
+  .tete__badges { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+  .tete__h1 { font-size: clamp(1.95rem, 5.2vw, 3.1rem); font-weight: 800; line-height: 1.05; margin-bottom: .9rem; }
+  .tete__t { max-width: 60ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+  .tete__t--fin { margin-top: .85rem; font-size: 1rem; color: var(--on-navy-soft); }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.7rem; }
+  .tete__actions small { display: block; font-size: .78rem; font-weight: 500; opacity: .85; }
+
+  .lede--suite { margin-top: 1rem; }
+  .src { margin-top: 1.25rem; font-size: .84rem; color: var(--ink-mute); }
+
+  .diff {
+    margin-top: 2rem; display: grid; gap: 1.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  }
+  .df {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.5rem;
+  }
+  .df__n {
+    display: block; font-family: 'Archivo', sans-serif; font-size: .82rem;
+    font-weight: 800; letter-spacing: .1em; color: var(--secours); margin-bottom: .6rem;
+  }
+  .df h3 { font-family: 'Archivo', sans-serif; font-size: 1.08rem; font-weight: 800; margin-bottom: .5rem; line-height: 1.25; }
+  .df p { color: var(--ink-mute); font-size: .94rem; }
+
+  .alerte {
+    margin-top: 1.75rem; padding: 1.15rem 1.35rem;
+    background: color-mix(in srgb, var(--secours) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--secours) 32%, transparent);
+    border-left: 4px solid var(--secours);
+    border-radius: var(--r-md); font-size: .95rem; max-width: 78ch;
+  }
+  .alerte strong { color: var(--secours); }
+
+  .sits {
+    margin-top: 1.75rem; display: grid; gap: .9rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+  .sits--phare { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+  .st {
+    display: flex; align-items: center; justify-content: space-between; gap: .7rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 1rem 1.15rem;
+    text-decoration: none; color: inherit; font-weight: 600;
+    transition: border-color .15s;
+  }
+  .st:hover { border-color: var(--secours); }
+  .st svg { width: 15px; height: 15px; color: var(--secours); flex: none; }
+
+  .st--phare {
+    flex-direction: column; align-items: stretch; padding: 0; overflow: hidden;
+    border-top: 4px solid var(--secours);
+  }
+  .st--phare:hover { box-shadow: var(--sh-md); }
+  .st__ph { display: block; aspect-ratio: 3 / 2; background: var(--sunk); }
+  .st__ph img { width: 100%; height: 100%; object-fit: cover; }
+  .st__txt { display: flex; flex-direction: column; gap: .35rem; padding: 1.2rem 1.3rem 1.35rem; }
+  .st__txt strong { font-family: 'Archivo', sans-serif; font-size: 1.08rem; font-weight: 800; line-height: 1.25; }
+  .st__txt span { font-size: .92rem; color: var(--ink-mute); font-weight: 400; }
+  .st__txt em { font-style: normal; font-size: .86rem; font-weight: 700; color: var(--secours); margin-top: .35rem; }
+
+  .sits__h3 { font-family: 'Archivo', sans-serif; font-size: 1.1rem; font-weight: 800; margin-top: 2.25rem; }
+
+  .ce {
+    margin-top: 2rem; display: grid; gap: 1.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .ce__i { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1.5rem; }
+  .ce__i--oui { border-top: 4px solid var(--sage); }
+  .ce__i--non { border-top: 4px solid var(--ink-mute); }
+  .ce__i h3 { font-family: 'Archivo', sans-serif; font-size: 1.08rem; font-weight: 800; margin-bottom: .8rem; }
+  .ce__i ul { list-style: none; padding: 0; display: grid; gap: .55rem; }
+  .ce__i li { position: relative; padding-left: 1.4rem; color: var(--ink-mute); font-size: .94rem; }
+  .ce__i--oui li::before { content: '✓'; position: absolute; left: 0; color: var(--sage); font-weight: 700; }
+  .ce__i--non li::before { content: '—'; position: absolute; left: 0; color: var(--ink-mute); }
+  .ce__p { margin-top: 1rem; font-size: .9rem; color: var(--ink-soft); }
+  .ce__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.9rem; }
+
+  .qs { margin-top: 1.5rem; display: grid; gap: .6rem; }
+  .qs__i { background: var(--sunk); border-radius: var(--r-md); padding: 1rem 1.2rem; }
+  .qs__i summary { cursor: pointer; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem; }
+  .qs__i p { margin-top: .6rem; color: var(--ink-mute); font-size: .95rem; }
+
+  .appel__h { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; margin-bottom: .7rem; }
+  .appel__t { font-size: 1.05rem; max-width: 60ch; }
+  .appel__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+</style>

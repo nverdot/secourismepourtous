@@ -103,10 +103,10 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
             <img src={m.photo} alt={m.alt} loading="lazy" decoding="async" width="600" height="800" />
           </span>
           <span class="mb__txt">
-            <strong class="mb__nom">{m.prenom} {m.nom}</strong>
+            <strong class="mb__nom">{m.prenom}{' '}{m.nom}</strong>
             <span class="mb__met">{m.metier}</span>
             <span class="mb__tags">
-              {m.roles.slice(0, 3).map((r) => <span class="tag">{r}</span>)}
+              {m.roles.slice(0, 3).map((r) => <span class="tag tag--role">{r}</span>)}
             </span>
             <span class="mb__lire">
               Lire son portrait
@@ -145,18 +145,31 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
 
       <div class="pt__d">
         <header class="pt__tete">
-          <h3 class="pt__nom" id={`pt-t-${m.slug}`}>{m.prenom} {m.nom}</h3>
+          <h3 class="pt__nom" id={`pt-t-${m.slug}`}>{m.prenom}{' '}{m.nom}</h3>
           <p class="pt__met">{m.metier}</p>
           <p class="pt__depuis">À Secourisme Pour Tous depuis {m.depuis}</p>
 
-          <div class="pt__tags">
-            {m.roles.map((r) => <span class="tag">{r}</span>)}
-            {m.diplomes.map((dip) => (
-              FICHE_DIPLOME[dip]
-                ? <a class:list={['tag', 'tag--lien', teinte(dip) && `tag--${teinte(dip)}`]}
-                     href={`/formations/${FICHE_DIPLOME[dip]}`}>{dip}</a>
-                : <span class="tag tag--sobre">{dip}</span>
-            ))}
+          {/* Deux natures différentes, donc deux lignes et deux couleurs : ce
+              qu'on fait dans l'association d'un côté, ce qu'on a passé comme
+              diplôme de l'autre. Les mélanger laissait croire que « chef de
+              poste » était une formation. */}
+          <div class="pt__bloc">
+            <span class="pt__lab">Ses rôles dans l’association</span>
+            <span class="pt__tags">
+              {m.roles.map((r) => <span class="tag tag--role">{r}</span>)}
+            </span>
+          </div>
+
+          <div class="pt__bloc">
+            <span class="pt__lab">Ses diplômes</span>
+            <span class="pt__tags">
+              {m.diplomes.map((dip) => (
+                FICHE_DIPLOME[dip]
+                  ? <a class:list={['tag', 'tag--lien', teinte(dip) && `tag--${teinte(dip)}`]}
+                       href={`/formations/${FICHE_DIPLOME[dip]}`}>{dip}</a>
+                  : <span class="tag tag--sobre">{dip}</span>
+              ))}
+            </span>
           </div>
         </header>
 
@@ -311,6 +324,13 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     background: var(--accent-wash, var(--sunk)); color: var(--secours);
     border-radius: 999px; padding: .22rem .6rem;
   }
+  /* Un rôle n'est pas un diplôme : il ne doit porter la couleur d'aucune
+     filière, sous peine de faire passer « chef de poste » pour une formation.
+     Contour neutre, sans aplat coloré. */
+  .tag--role {
+    background: transparent; color: var(--ink-mute);
+    border: 1px solid var(--line);
+  }
   .tag--sobre { background: var(--sunk); color: var(--ink-mute); }
 
   .eq__plus {
@@ -356,16 +376,17 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   }
 
   /* Tout le texte vit sur le fond clair, où il se lit. */
-  .pt__d { padding: 2rem 2.1rem 1.75rem; overflow-y: auto; min-height: 0; }
+  .pt__d { padding: 2.4rem 2.6rem 2rem; overflow-y: auto; min-height: 0; }
 
-  .pt__tete { padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid var(--line); }
+  .pt__tete { padding-bottom: 1.6rem; margin-bottom: 2rem; border-bottom: 1px solid var(--line); }
+  .pt__bloc { margin-top: 1.25rem; }
   .pt__nom {
     font-family: 'Archivo', sans-serif; font-size: clamp(1.4rem, 3vw, 1.75rem);
     font-weight: 800; line-height: 1.12; padding-right: 2.5rem;
   }
   .pt__met { color: var(--ink); font-size: 1rem; margin-top: .35rem; }
   .pt__depuis { color: var(--ink-mute); font-size: .85rem; margin-top: .2rem; }
-  .pt__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: 1.1rem; }
+  .pt__tags { display: flex; flex-wrap: wrap; gap: .35rem; }
 
   .tag--lien {
     text-decoration: none; border: 1px solid transparent;
@@ -421,6 +442,6 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     dialog.pt[open] { grid-template-columns: 1fr; overflow-y: auto; }
     /* En pile, la photo ne doit pas manger l'écran avant le premier mot. */
     .pt__ph { height: auto; aspect-ratio: 4 / 3; object-position: center 15%; }
-    .pt__d { padding: 1.4rem 1.3rem 1.5rem; overflow: visible; }
+    .pt__d { padding: 1.5rem 1.35rem 1.6rem; overflow: visible; }
   }
 </style>
