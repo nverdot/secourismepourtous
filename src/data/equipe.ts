@@ -53,6 +53,60 @@ export interface Membre {
 
 export const membres: Membre[] = [
   {
+    slug: 'annabell',
+    prenom: 'Annabell',
+    nom: 'Perez',
+    metier: 'Formatrice — gestion de formation et communication',
+    depuis: '2018',
+    roles: ['Formateur', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Nageur sauveteur', 'Secouriste'],
+    diplomes: ['PSC', 'PSE1', 'PSE2', 'BNSSA', 'PAE FPSC', 'PAE FPS', 'SST'],
+    photo: '/img/equipe/annabell.jpg',
+    alt: 'Annabell en gilet de sauveteur aquatique, face à la mer, au coucher du soleil.',
+    citation:
+      'Il ne faut pas attendre que ça arrive pour se former. Ça sera peut-être déjà trop tard.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Formatrice le week-end, gestion de formation et communication la semaine.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'J’ai redoublé une année à la fac et j’avais envie de travailler, de passer des diplômes. J’aimais la natation, et une amie faisait partie de l’association : je lui ai demandé les coordonnées pour passer le BNSSA.',
+          'Je n’ai finalement fait qu’une saison de surveillance et quelques postes aquatiques — j’ai passé tout le reste du temps sur les dispositifs de secours, et à évoluer dans la formation.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Tout. Je rentrais dans un domaine que je ne connaissais pas, je ne savais pas à quoi m’attendre. J’ai suivi le mouvement, et AUCUN REGRET.',
+        ],
+      },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'Le terrain apporte du vécu, des anecdotes. Il permet de faire vivre plus facilement une formation, et de capter l’attention des apprenants secouristes.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'L’ambiance, la famille, les amis, les valeurs de l’association, le fait qu’on veuille tous évoluer et aller de l’avant.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'GO GO GO.',
+          'Se former n’oblige pas à devenir secouriste bénévole. Mais un accident arrive si vite, et n’importe où. Très régulièrement j’entends : « Oh, j’ai été face à un accident, je n’ai pas su réagir. Si j’avais su, je me serais formé avant. » Il ne faut pas attendre que ça arrive pour se former. Ça sera peut-être déjà trop tard.',
+          'Connaître le minimum des gestes de secours devrait être obligatoire pour tout le monde. En fin de formation, j’entends très régulièrement : « Je ne savais pas qu’on abordait autant de sujets, je suis agréablement surpris — on se rend compte qu’on ne sait rien faire avant d’avoir fait la formation. » Il n’est jamais trop tard pour se former, et il vaut mieux maintenant que plus tard.',
+          'Pour celui qui hésite à devenir bénévole : ça ne coûte rien d’essayer une fois. L’ambiance est très sympa, nous savons rigoler comme être sérieux quand il le faut, on peut se retrouver dans des cadres et des situations qu’on n’aurait jamais imaginés. Et sûrement que l’essayer, c’est l’adopter.',
+        ],
+      },
+    ],
+  },
+
+  {
     slug: 'anthony',
     prenom: 'Anthony',
     nom: 'Del Aguila',
@@ -111,6 +165,54 @@ export const membres: Membre[] = [
           'Dans la vie de tous les jours, je suis quelqu’un d’assez simple. En dehors du secourisme et du bénévolat, j’ai ma vie professionnelle et personnelle comme tout le monde. Mais je garde toujours ce côté humain et cette envie d’aider les autres.',
           'Le secourisme prend une place importante dans ma vie, mais ce n’est pas toute ma personnalité. J’aime aussi profiter de mes proches, avoir des moments pour moi et découvrir de nouvelles choses. Finalement, je dirais que le secourisme fait partie de moi sans me définir entièrement.',
         ],
+      },
+    ],
+  },
+
+  {
+    slug: 'salah',
+    prenom: 'Salah',
+    nom: 'Boukhari',
+    metier: 'Agent de sécurité incendie (SSIAP)',
+    depuis: '2021',
+    roles: ['Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSE1', 'PSE2'],
+    photo: '/img/equipe/salah.jpg',
+    alt: 'Salah en veste Secours FFSS marquée « équipier », devant le poste de secours du village de Noël d’Antibes.',
+    citation:
+      'Être formé aux premiers secours permet d’avoir plus confiance en soi. C’était mon cas.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Je suis agent de sécurité incendie, SSIAP. Je travaille dans la sécurité privée, et je m’occupe de ma vie familiale.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: ['C’était justement pour effectuer des dispositifs de secours.'],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Ce qui m’a surpris — positivement, bien sûr — c’est la différence entre le PSE1 et le SST. Ça n’a vraiment rien à voir.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'La qualité, le professionnalisme, la convivialité, la bonne humeur. J’en passe, et des meilleures.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Qu’être formé aux premiers secours est primordial dans notre vie de tous les jours, et que cela permet d’avoir plus confiance en soi. C’était mon cas.',
+        ],
+      },
+      {
+        question: 'Et pour la suite',
+        texte: ['J’espère devenir formateur un jour. Pourquoi pas.'],
       },
     ],
   },
@@ -232,6 +334,7 @@ export const ORDRE_QUESTIONS = [
   'Ce que le terrain change dans ma façon d’enseigner',
   'Ce qui me fait revenir',
   'Ce que je dirais à quelqu’un qui hésite',
+  'Et pour la suite',
 ];
 
 export const ordonner = (r: Reponse[]) =>

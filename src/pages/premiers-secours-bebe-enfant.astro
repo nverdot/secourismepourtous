@@ -68,6 +68,46 @@ const QUESTIONS = [
   },
 ];
 
+/**
+ * Chiffres publics sur les accidents de la vie courante chez l'enfant.
+ *
+ * Tous repris de Santé publique France — enquête permanente EPAC, période
+ * 2014-2018 — et cités tels quels. On ne les arrondit pas, on ne les
+ * commente pas au-delà de ce qu'ils disent. Sur un sujet pareil, exagérer
+ * serait à la fois inutile et malhonnête : les chiffres bruts suffisent.
+ */
+const CHIFFRES = [
+  {
+    valeur: '200',
+    suffixe: '+',
+    libelle: 'décès par an',
+    detail: 'chez les moins de 15 ans, par accident de la vie courante',
+  },
+  {
+    valeur: '1',
+    suffixe: 're',
+    libelle: 'cause de mortalité',
+    detail: 'chez les enfants de 1 à 14 ans',
+  },
+  {
+    valeur: '2,4',
+    suffixe: ' M',
+    libelle: 'recours aux soins',
+    detail: 'chaque année, chez les moins de 15 ans',
+  },
+  {
+    valeur: '11',
+    suffixe: ' %',
+    libelle: 'd’hospitalisation',
+    detail: 'après un passage aux urgences avant 1 an, contre 4 à 6 % ensuite',
+  },
+];
+
+const SOURCE_CHIFFRES = {
+  texte: 'Santé publique France, enquête permanente sur les accidents de la vie courante (EPAC), 2014-2018',
+  url: 'https://www.santepubliquefrance.fr/les-actualites/accidents-de-la-vie-courante-chez-les-enfants-moins-de-15-ans-en-france',
+};
+
 const balisages = [
   filAriane([
     { nom: 'Accueil', chemin: '/' },
@@ -119,25 +159,42 @@ const balisages = [
 
   <!-- ========== POURQUOI LES PARENTS ========== -->
   <section class="section">
-    <div class="wrap wrap--etroit">
-      <p class="eyebrow">Pourquoi vous</p>
-      <h2 class="h-section">Les accidents domestiques touchent d’abord les moins de 15 ans</h2>
+    <div class="wrap">
+      <p class="eyebrow">Ce que disent les chiffres</p>
+      <h2 class="h-section">Ce n’est pas une peur de parent, c’est la première cause</h2>
       <p class="lede">
-        Ce n’est pas une formule : c’est écrit noir sur blanc dans le
-        référentiel national. Les services de secours sont massivement
-        sollicités pour des accidents de la vie courante, et ceux-ci
-        <strong>touchent particulièrement les enfants de moins de 15 ans</strong>
-        et les personnes âgées.
+        Les accidents de la vie courante — chute, étouffement, brûlure, noyade —
+        sont la première cause de mortalité des enfants de 1 à 14 ans en France.
+        Devant la maladie, devant tout le reste.
       </p>
-      <p class="lede lede--suite">
-        Autrement dit : si vous devez un jour faire un geste de premiers
-        secours, il y a de fortes chances que ce soit sur votre enfant, chez
-        vous, sans témoin et sans matériel. Et dans ces minutes-là, personne
-        d’autre ne peut le faire à votre place.
-      </p>
-      <p class="src">
-        D’après les {referentiel.nom.toLowerCase()}, {referentiel.edition}.
-      </p>
+
+      <ul class="chf">
+        {CHIFFRES.map((c) => (
+          <li class="chf__i">
+            <span class="chf__v">{c.valeur}<i>{c.suffixe}</i></span>
+            <span class="chf__l">{c.libelle}</span>
+            <span class="chf__d">{c.detail}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="wrap--etroit chf__suite">
+        <p class="lede">
+          Deux choses se lisent entre ces lignes. La première : ces accidents
+          arrivent chez soi, dans les gestes ordinaires d’une journée
+          ordinaire. La seconde : <strong>plus l’enfant est petit, plus c’est
+          grave</strong> — avant un an, un passage aux urgences débouche sur
+          une hospitalisation deux fois plus souvent qu’ensuite.
+        </p>
+        <p class="lede lede--suite">
+          Personne ne se forme pendant l’urgence. C’est précisément pour ça
+          qu’on se forme avant — pendant la grossesse, ou dans les premiers
+          mois, quand on a encore le temps d’y penser.
+        </p>
+        <p class="src">
+          Source&nbsp;: <a href={SOURCE_CHIFFRES.url} target="_blank" rel="noopener">{SOURCE_CHIFFRES.texte}</a>.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -350,6 +407,29 @@ const balisages = [
   .tete__actions small { display: block; font-size: .78rem; font-weight: 500; opacity: .85; }
 
   .lede--suite { margin-top: 1rem; }
+
+  .chf {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+  @media (max-width: 700px) { .chf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .chf__i {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 4px solid var(--secours);
+    border-radius: var(--r-lg); padding: 1.4rem 1.35rem;
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .chf__v {
+    font-family: 'Archivo', sans-serif; font-size: clamp(2rem, 5vw, 2.7rem);
+    font-weight: 800; line-height: 1; color: var(--secours);
+    font-variant-numeric: tabular-nums;
+  }
+  .chf__v i { font-style: normal; font-size: .55em; }
+  .chf__l { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .98rem; margin-top: .35rem; }
+  .chf__d { font-size: .85rem; color: var(--ink-mute); line-height: 1.45; }
+  .chf__suite { margin-top: 2.25rem; margin-left: 0; }
+  .src a { color: var(--azur); }
   .src { margin-top: 1.25rem; font-size: .84rem; color: var(--ink-mute); }
 
   .diff {

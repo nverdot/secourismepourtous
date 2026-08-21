@@ -70,24 +70,7 @@ const balisages = [
     </aside>
   </div>
 
-    {/* Les parents arrivent par une situation précise ; on leur ouvre la porte
-      vers la page qui leur est destinée. */}
-  <section class="section section--sunk">
-    <div class="wrap wrap--etroit">
-      <p class="eyebrow">Vous êtes parent</p>
-      <h2 class="h-section">Sur un bébé, les gestes ne sont pas les mêmes</h2>
-      <p class="lede">
-        On ne comprime jamais le ventre d’un nourrisson, et la réanimation d’un
-        enfant ne suit pas le rythme de celle d’un adulte. Nous avons réuni ce
-        qui change, et ce que vous pouvez y faire.
-      </p>
-      <a class="btn btn--primaire" style="margin-top:1.4rem" href="/premiers-secours-bebe-enfant">
-        Premiers secours bébé et enfant
-      </a>
-    </div>
-  </section>
-
-<section class="section">
+  <section class="section">
     <div class="wrap">
       <div class="grille">
         {situations.map((s, i) => (
@@ -112,6 +95,25 @@ const balisages = [
             </span>
           </a>
         ))}
+
+        {/* Dernière vignette de la grille, dans le même format que les autres :
+            un parent qui vient de lire « brûlure » enchaîne naturellement, là
+            où un bloc pleine largeur l'aurait fait sortir du fil. */}
+        <a class="sit sit--parent" href="/premiers-secours-bebe-enfant">
+          <span class="sit__corps">
+            <span class="sit__e">Bientôt parent, ou déjà</span>
+            <strong>Sur un bébé, vous feriez quoi&nbsp;?</strong>
+            <span class="sit__x">
+              On ne comprime jamais le ventre d’un nourrisson, et la réanimation
+              d’un enfant ne suit pas le rythme de celle d’un adulte. Ce qui
+              change, et ce que vous pouvez y faire.
+            </span>
+            <span class="sit__f" aria-hidden="true">
+              Premiers secours bébé et enfant
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
+          </span>
+        </a>
       </div>
 
       <a class="quiz-app" href="/gestes-qui-sauvent/quiz">
@@ -262,4 +264,15 @@ const balisages = [
   .quiz-app__txt strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
   .quiz-app__txt span { font-size: .89rem; color: rgba(255,255,255,.9); }
   .quiz-app__f { flex: none; width: 19px; height: 19px; margin-left: auto; }
+
+  /* Sans photo, la vignette doit tenir toute seule : un aplat teinté et un
+     filet la distinguent des conduites à tenir sans la faire dépareiller. */
+  .sit--parent {
+    background: color-mix(in srgb, var(--azur) 6%, var(--surface));
+    border-color: color-mix(in srgb, var(--azur) 30%, transparent);
+    border-top: 4px solid var(--azur);
+  }
+  .sit--parent:hover { border-color: var(--azur); }
+  .sit--parent .sit__e { color: var(--azur); }
+  .sit--parent .sit__f { color: var(--azur); }
 </style>
