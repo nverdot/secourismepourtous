@@ -146,7 +146,7 @@ export const villes: Ville[] = [
     article: 'à Saint-Laurent-du-Var',
     codePostal: '06700',
     contexte:
-      'Aux portes de Nice, une commune dont la saison sportive et festive se concentre sur les berges et le front de mer, avec des publics familiaux nombreux.',
+      'Aux portes de Nice, une commune dont la saison se concentre sur le front de mer, autour du Beach Sport Festival et de ses publics familiaux.',
     references: [
       {
         nom: 'Tournoi de beach-volley',
@@ -159,7 +159,7 @@ export const villes: Ville[] = [
         genre: 'sportif',
       },
       {
-        nom: 'Concerts du BSF',
+        nom: 'Concerts du Beach Sport Festival',
         texte: 'Soirées en plein air : public dense devant la scène, dispositif renforcé en fin de programmation.',
         genre: 'culturel',
       },
