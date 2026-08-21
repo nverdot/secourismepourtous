@@ -423,14 +423,20 @@ export const recueilliLe = '21 août 2026';
  * pas du même endroit dans la liste, pour qu'on ne lise jamais deux fois la
  * même chose à la verticale.
  *
+ * Chacun porte une couleur de la palette du site, et jamais la même deux fois
+ * de suite : entre des photos, un aplat franc accroche l'œil là où un cadre
+ * pointillé se fondait dans la grille. Toutes les combinaisons fond/encre
+ * passent le seuil de lisibilité, le jaune fédéral compris — d'où son encre
+ * sombre, la seule qui tienne sur lui.
+ *
  * Le registre : on promet ce qu'on tient. Pas de « devenez un héros » — ce que
  * les bénévoles décrivent eux-mêmes dans leurs portraits, c'est une équipe, des
  * week-ends de terrain et le sentiment d'être utile. C'est ça qu'on met.
  */
-export const APPELS: { titre: string; sous: string }[] = [
-  { titre: 'Envie de rejoindre une famille\u00a0?', sous: 'On recrute toute l\u2019année' },
-  { titre: 'Envie de sauver des vies\u00a0?', sous: 'Ça commence par une formation' },
-  { titre: 'Il manque un visage sur ce mur.', sous: 'Ce serait le vôtre\u00a0?' },
-  { titre: 'Un jour, quelqu\u2019un aura besoin de vous.', sous: 'Autant être prêt' },
-  { titre: 'Nos week-ends ont un sens.', sous: 'Venez voir par vous-même' },
+export const APPELS: { titre: string; sous: string; ton: string }[] = [
+  { ton: 'secours', titre: 'Envie de rejoindre une famille\u00a0?', sous: 'On recrute toute l\u2019année' },
+  { ton: 'azur',    titre: 'Envie de sauver des vies\u00a0?', sous: 'Ça commence par une formation' },
+  { ton: 'ocre',    titre: 'Il manque un visage sur ce mur.', sous: 'Ce serait le vôtre\u00a0?' },
+  { ton: 'ocean',   titre: 'Un jour, quelqu\u2019un aura besoin de vous.', sous: 'Autant être prêt' },
+  { ton: 'sage',    titre: 'Nos week-ends ont un sens.', sous: 'Venez voir par vous-même' },
 ];
