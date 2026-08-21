@@ -98,13 +98,13 @@ export async function contactPost(request, env) {
     return new Response('Coordonnées manquantes', { status: 400 });
   }
 
-  if (!cle || !site) {
-    // Rediriger vers /merci laisserait croire au visiteur que sa demande est
-    // partie, alors qu'elle n'est enregistrée nulle part. On le lui dit, et on
-    // lui donne le téléphone : mieux vaut un appel qu'une demande perdue.
-    console.error('[contact] secrets Wix absents du Worker — demande non enregistrée');
-    return Response.redirect(new URL('/merci?envoi=echec', req.url), 303);
-  }
+  // Wix et l'alerte par e-mail sont deux chemins indépendants, et c'est
+  // délibéré : une migration de compte Cloudflare a un jour emporté la clé
+  // Wix, et l'ancien code s'arrêtait là — supprimant du même coup l'alerte,
+  // pourtant parfaitement fonctionnelle. Deux chemins valent mieux qu'un,
+  // à condition qu'aucun ne puisse faire tomber l'autre.
+  const wixDisponible = Boolean(cle && site);
+  if (!wixDisponible) console.error('[contact] clé Wix absente — enregistrement impossible, l’alerte prend le relais');
 
   const origine = d.dispositif ? 'Demande de financement'
                 : d['form-name'] === 'secouriste-actif' ? 'Candidature secouriste actif'
@@ -203,6 +203,23 @@ export async function contactPost(request, env) {
     else console.log('[contact] recopié dans', cible);
   };
 
+  // L'alerte d'abord : c'est elle qui fait qu'une demande est traitée. Elle ne
+  // dépend pas de Wix, et rien de ce qui suit ne doit pouvoir l'empêcher.
+  // On retient l'issue réelle de l'envoi, pas la simple présence d'une clé :
+  // une clé invalide remercierait le visiteur sans que rien ne soit parti.
+  let alerteOk = false;
+  try {
+    alerteOk = await alerte(d, env, origine, prenom, nom, email, tel);
+  } catch (e) {
+    console.error('[contact] alerte impossible :', e?.message || e);
+  }
+
+  if (!wixDisponible) {
+    // Sans Wix, la demande n'existe que dans le mail. S'il n'est pas parti non
+    // plus, il faut le dire au visiteur plutôt que de le remercier.
+    return Response.redirect(new URL(alerteOk ? '/merci' : '/merci?envoi=echec', req.url), 303);
+  }
+
   try {
     const r = await fetch(API, {
       method: 'POST',
@@ -227,7 +244,6 @@ export async function contactPost(request, env) {
     }
     await enregistre();
     await miroirWix();
-    await alerte(d, env, origine, prenom, nom, email, tel);
   } catch (e) {
     // Une panne de l'API Wix ne doit pas faire perdre la demande : elle reste
     // dans les soumissions Netlify et dans les journaux de cette fonction.
@@ -258,7 +274,7 @@ function ech(v) {
  */
 async function alerte(d, env, origine, prenom, nom, email, tel) {
   const cle = env.RESEND_API_KEY;
-  if (!cle) return;
+  if (!cle) return false;
 
   const expediteur = env.RESEND_FROM || 'Site Secourisme Pour Tous <onboarding@resend.dev>';
   const a = env.NOTIF_EMAIL || DESTINATAIRE;
@@ -310,10 +326,15 @@ async function alerte(d, env, origine, prenom, nom, email, tel) {
         text: `${objet}\n\n${lignes.map(([k, v]) => `${k} : ${v}`).join('\n')}\n\n${resume(d)}`,
       }),
     });
-    if (!r.ok) console.error('[contact] alerte non envoyée', r.status, (await r.text()).slice(0, 250));
-    else console.log('[contact] alerte envoyée à', a);
+    if (!r.ok) {
+      console.error('[contact] alerte non envoyée', r.status, (await r.text()).slice(0, 250));
+      return false;
+    }
+    console.log('[contact] alerte envoyée à', a);
+    return true;
   } catch (e) {
     console.error('[contact] envoi impossible :', e?.message || e);
+    return false;
   }
 }
 
@@ -356,6 +377,15 @@ async function diagnostic(env) {
       etat.wixMessage = String(e?.message ?? e).slice(0, 200);
     }
   }
+
+  // Ce que le Worker voit réellement dans son environnement. Les noms seuls :
+  // un nom mal orthographié ou posé sur l'écran de build plutôt que celui
+  // d'exécution se repère d'un coup d'œil, sans exposer aucune valeur.
+  etat.variablesVues = Object.keys(env)
+    .filter((k) => typeof env[k] === 'string')
+    .sort()
+    .map((k) => `${k} (${env[k].length} caractères)`);
+  etat.liaisonsVues = Object.keys(env).filter((k) => typeof env[k] !== 'string').sort();
 
   // Resend : présence de la clé et acceptation par le service.
   const resend = env.RESEND_API_KEY;
