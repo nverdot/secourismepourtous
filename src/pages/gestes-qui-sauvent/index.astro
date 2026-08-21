@@ -102,15 +102,14 @@ const balisages = [
         <a class="sit sit--parent" href="/premiers-secours-bebe-enfant">
           <span class="sit__corps">
             <span class="sit__e">Bientôt parent, ou déjà</span>
-            <strong>Sur un bébé, vous feriez quoi&nbsp;?</strong>
+            <strong>Sur un bébé,<br />vous feriez quoi&nbsp;?</strong>
             <span class="sit__x">
-              On ne comprime jamais le ventre d’un nourrisson, et la réanimation
-              d’un enfant ne suit pas le rythme de celle d’un adulte. Ce qui
-              change, et ce que vous pouvez y faire.
+              Les gestes ne sont pas les mêmes. Et ceux qui sauvent un adulte
+              peuvent blesser un nourrisson.
             </span>
-            <span class="sit__f" aria-hidden="true">
+            <span class="sit__cta" aria-hidden="true">
               Premiers secours bébé et enfant
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </span>
           </span>
         </a>
@@ -143,9 +142,49 @@ const balisages = [
       <p class="lede">
         Tous ceux qui ont vraiment eu à intervenir le disent&nbsp;: sur le
         moment, on ne se souvient pas d’un article. On refait ce qu’on a
-        répété. Le PSC dure {psc.duree.toLowerCase()}, coûte {psc.tarif},
-        s’ouvre {psc.prerequis.toLowerCase()} et sans aucun prérequis.
+        répété.
       </p>
+
+      {/* Les quatre repères de la formation, en pictos : alignés en prose ils
+          se lisaient mal et ne se retenaient pas. */}
+      <ul class="rep">
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" />
+            </svg>
+          </span>
+          <strong>{psc.duree}</strong>
+          <span>en une journée</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.8 5 3.3 5 1.4 5 3.3-2.2 3-5 3-5-1.1-5-3" />
+            </svg>
+          </span>
+          <strong>{psc.tarif}</strong>
+          <span>tout compris</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="7" r="4" /><path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+            </svg>
+          </span>
+          <strong>{psc.prerequis}</strong>
+          <span>aucune limite d’âge ensuite</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" /><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z" />
+            </svg>
+          </span>
+          <strong>Aucun prérequis</strong>
+          <span>on part de zéro</span>
+        </li>
+      </ul>
       <div class="form__actions">
         <a class="btn btn--primaire" href="/formations/psc">
           Découvrir le PSC
@@ -267,12 +306,57 @@ const balisages = [
 
   /* Sans photo, la vignette doit tenir toute seule : un aplat teinté et un
      filet la distinguent des conduites à tenir sans la faire dépareiller. */
+  /* Cette vignette ne raconte pas une situation, elle interpelle : elle
+     assume donc un aplat plein, un texte centré et un vrai bouton, là où les
+     autres restent sobres. Elle doit accrocher l'œil au milieu de la grille. */
   .sit--parent {
-    background: color-mix(in srgb, var(--azur) 6%, var(--surface));
-    border-color: color-mix(in srgb, var(--azur) 30%, transparent);
-    border-top: 4px solid var(--azur);
+    background: linear-gradient(150deg, var(--azur) 0%, color-mix(in srgb, var(--azur) 82%, #000) 100%);
+    border: 0; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; min-height: 100%;
   }
-  .sit--parent:hover { border-color: var(--azur); }
-  .sit--parent .sit__e { color: var(--azur); }
-  .sit--parent .sit__f { color: var(--azur); }
+  .sit--parent:hover { box-shadow: var(--sh-lg); transform: translateY(-2px); }
+  .sit--parent .sit__corps {
+    display: flex; flex-direction: column; align-items: center; gap: .55rem;
+    padding: 2.4rem 1.6rem;
+  }
+  .sit--parent .sit__e {
+    color: #fff; opacity: .85; letter-spacing: .12em;
+  }
+  .sit--parent strong {
+    color: #fff; font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.1;
+  }
+  .sit--parent .sit__x { color: rgba(255,255,255,.9); max-width: 34ch; }
+  .sit--parent .sit__cta {
+    display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.1rem;
+    background: #fff; color: var(--azur);
+    font-family: 'Archivo', sans-serif; font-weight: 800; font-size: .95rem;
+    border-radius: 999px; padding: .8rem 1.5rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  }
+  .sit--parent .sit__cta svg { width: 16px; height: 16px; }
+
+  /* Repères de formation, sur fond sombre. */
+  .rep {
+    list-style: none; padding: 0; margin: 1.9rem 0 0;
+    display: grid; gap: .9rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+  }
+  @media (max-width: 620px) { .rep { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .rep__i {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .12rem;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: var(--r-lg); padding: 1.1rem 1.15rem;
+  }
+  .rep__ic {
+    display: grid; place-items: center; width: 36px; height: 36px;
+    border-radius: 10px; background: rgba(255, 255, 255, .16); margin-bottom: .5rem;
+  }
+  .rep__ic svg { width: 20px; height: 20px; }
+  .rep__i strong {
+    font-family: 'Archivo', sans-serif; font-size: 1.12rem; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .rep__i span { font-size: .84rem; opacity: .8; line-height: 1.35; }
 </style>

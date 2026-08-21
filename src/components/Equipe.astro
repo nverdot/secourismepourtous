@@ -48,6 +48,15 @@ interface Props {
    * parce que c'est lui qui dit ce qu'est l'association.
    */
   role?: string;
+  /**
+   * Faire défiler les portraits au lieu de les empiler en grille.
+   *
+   * Sur la page d'accueil, on veut montrer tout le monde sans occuper une
+   * demi-page : les vignettes défilent, dans un ordre tiré au hasard à la
+   * construction, et restent cliquables. Le défilement automatique s'arrête
+   * au survol, au clavier, et pour qui a demandé moins d'animations.
+   */
+  carrousel?: boolean;
   /** Où mène « voir toute l'équipe ». */
   lien?: string;
 }
@@ -56,6 +65,7 @@ const {
   intro = 'Ils tiennent les postes de secours, certains forment, et tous ont une vie à côté — étudiant, surveillant de lycée, responsable en sécurité privée. L’association, c’est eux. Voici leurs mots.',
   apercu,
   role,
+  carrousel = false,
   lien = '/qui-sommes-nous#equipe',
 } = Astro.props;
 
@@ -82,7 +92,7 @@ function choisir(n: number) {
   return retenus.slice(0, n);
 }
 
-const montres = apercu ? choisir(apercu) : vivier;
+const montres = carrousel ? melange : apercu ? choisir(apercu) : vivier;
 
 /** Deux blocs peuvent cohabiter sur une même page : la navigation doit rester
     à l'intérieur de son propre groupe de portraits. */
@@ -95,7 +105,8 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   <h2 class="h-section">{titre}</h2>
   <p class="lede">{intro}</p>
 
-  <ul class="eq__l">
+  <div class:list={['eq__piste', carrousel && 'eq__piste--def']}>
+  <ul class:list={['eq__l', carrousel && 'eq__l--car']} data-piste={carrousel ? groupe : undefined}>
     {montres.map((m) => (
       <li class="eq__i">
         <button class="mb" type="button" data-groupe={groupe} data-portrait={m.slug} aria-haspopup="dialog">
@@ -117,6 +128,18 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
       </li>
     ))}
   </ul>
+
+  {carrousel && (
+    <div class="eq__fl">
+      <button type="button" class="eq__f" data-defile="-1" aria-label="Portraits précédents">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+      </button>
+      <button type="button" class="eq__f" data-defile="1" aria-label="Portraits suivants">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </button>
+    </div>
+  )}
+  </div>
 
   {apercu ? (
     <a class="eq__plus" href={lien}>
@@ -247,6 +270,51 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     else liberer();
   }
 
+  /**
+   * Défilement automatique du carrousel.
+   *
+   * Il s'interrompt dès qu'on interagit — survol, doigt, clavier — et ne
+   * démarre pas du tout si le système demande moins d'animations. Un carrousel
+   * qui bouge pendant qu'on essaie de cliquer est une nuisance, pas un effet.
+   */
+  document.querySelectorAll<HTMLElement>('[data-piste]').forEach((piste) => {
+    const doux = matchMedia('(prefers-reduced-motion: reduce)');
+    let minuteur: number | undefined;
+
+    const pas = () => (piste.firstElementChild as HTMLElement | null)?.offsetWidth ?? 280;
+
+    const avancer = () => {
+      const fin = piste.scrollWidth - piste.clientWidth - 8;
+      piste.scrollTo({ left: piste.scrollLeft >= fin ? 0 : piste.scrollLeft + pas() + 16, behavior: 'smooth' });
+    };
+
+    const lancer = () => {
+      if (doux.matches || minuteur) return;
+      minuteur = window.setInterval(avancer, 4500);
+    };
+    const arreter = () => { if (minuteur) { clearInterval(minuteur); minuteur = undefined; } };
+
+    ['pointerenter', 'pointerdown', 'focusin', 'touchstart'].forEach((e) =>
+      piste.addEventListener(e, arreter, { passive: true })
+    );
+    piste.addEventListener('pointerleave', lancer);
+    doux.addEventListener('change', () => (doux.matches ? arreter() : lancer()));
+
+    // On n'anime que ce qui est à l'écran : inutile de faire tourner un
+    // carrousel que personne ne regarde.
+    new IntersectionObserver(
+      ([e]) => (e.isIntersecting ? lancer() : arreter()),
+      { threshold: 0.25 }
+    ).observe(piste);
+
+    piste.parentElement?.querySelectorAll<HTMLButtonElement>('[data-defile]').forEach((b) =>
+      b.addEventListener('click', () => {
+        arreter();
+        piste.scrollBy({ left: Number(b.dataset.defile) * (pas() + 16), behavior: 'smooth' });
+      })
+    );
+  });
+
   // Échap ferme la boîte sans passer par notre code : on repasse derrière.
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setTimeout(synchronise, 0);
@@ -290,6 +358,31 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     display: grid; gap: clamp(1rem, 2.2vw, 1.4rem);
     grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   }
+
+  .eq__piste { position: relative; }
+
+  /* En carrousel, la grille devient une piste horizontale à alignement
+     magnétique : le doigt et la molette fonctionnent, les flèches aussi. */
+  .eq__l--car {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-padding-left: 0; padding-bottom: .5rem;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .eq__l--car::-webkit-scrollbar { display: none; }
+  .eq__l--car > .eq__i {
+    flex: 0 0 clamp(230px, 26vw, 300px); scroll-snap-align: start;
+  }
+
+  .eq__fl { display: flex; gap: .5rem; margin-top: 1.25rem; }
+  .eq__f {
+    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center;
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink);
+    transition: border-color .15s, color .15s;
+  }
+  .eq__f:hover { border-color: var(--secours); color: var(--secours); }
+  .eq__f svg { width: 17px; height: 17px; }
+
   /* Les cases de la grille s'étirent déjà ; encore faut-il que la carte
      occupe toute sa case, et que le bloc de texte absorbe la différence.
      Sans ça, un métier sur deux lignes ou une étiquette de plus décale tout. */

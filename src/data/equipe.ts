@@ -53,6 +53,61 @@ export interface Membre {
 
 export const membres: Membre[] = [
   {
+    slug: 'aurelia',
+    prenom: 'Aurelia',
+    nom: 'Tardivat',
+    metier: 'Directrice de l’association et vice-présidente du comité FFSS 06',
+    depuis: '2018',
+    roles: ['Membre du bureau'],
+    diplomes: ['PSC'],
+    photo: '/img/equipe/aurelia.jpg',
+    alt: 'Aurelia en tenue de l’association, au volant du véhicule de premiers secours.',
+    citation:
+      'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Je vis au rythme de l’urgence, du terrain et de l’engagement.',
+          'Au quotidien, j’assure la direction de l’association Secourisme Pour Tous, où je pilote le développement, la structuration et la gestion des équipes pour faire grandir notre impact. En parallèle, je m’investis à une échelle plus stratégique, en tant que vice-présidente du comité départemental de la FFSS 06.',
+          'Autant dire que mes semaines sont intenses, et que l’action ne s’arrête jamais.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Au détour d’une discussion, on m’a parlé de l’association Secourisme Pour Tous. Le diagnostic était clair : le club avait besoin d’une nouvelle direction pour tout reconstruire, structurer les équipes et relever de nombreux défis.',
+          'C’était avant tout un enjeu humain. L’ampleur de la tâche, la diversité des missions à orchestrer et, surtout, l’impact vital du secourisme m’ont immédiatement interpellée. Relever ce défi et redonner un souffle à ce club, c’est ce qui m’a poussée à m’engager pleinement.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'En arrivant, je pensais intégrer un secteur humain, solidaire. Une autre réalité m’a frappée de plein fouet : j’ai découvert un milieu où la compétition est parfois importante, où chaque association essaie de faire reconnaître sa valeur. Alors qu’en vrai, on a tous le même rôle — aider les autres, sauver, protéger, prendre soin.',
+          'Surtout, j’ai découvert le rythme impitoyable du terrain : du sept jours sur sept, sans le moindre répit. Je n’imaginais pas que la gestion d’un club de secourisme exigeait une telle présence, un engagement de chaque instant où l’on ne déconnecte jamais vraiment. C’est un monde éprouvant, mais d’une adrénaline brute.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'C’est d’abord l’engagement sans faille de mes équipes, et notre présence désormais incontournable sur le terrain. Voir nos projets se concrétiser et dépasser nos objectifs est une immense satisfaction, tout comme d’obtenir la reconnaissance légitime des autorités et de nos partenaires, qui saluent enfin la rigueur de notre travail.',
+          'Mais le vrai moteur, ce sont les retours humains. Quand nous recevons ces messages — « Merci pour votre réactivité, vous avez tout changé », « Une équipe formidable, humaine et pro », ou encore « Grâce à vous, ce projet a pu voir le jour » — cela donne un sens profond à nos efforts.',
+          'Et par-dessus tout, la plus belle des victoires réside dans un détail bien plus personnel : cette étincelle de fierté dans les yeux de ma fille lorsqu’elle raconte autour d’elle ce que nous accomplissons. C’est pour tout cela que je ne lâcherai rien.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
+          'Se former aux premiers secours ou s’engager comme bénévole, ce n’est pas ajouter une ligne sur un CV ni remplir un après-midi libre. C’est décider, très concrètement, de faire la différence quand tout semble basculer et s’écrouler. Un jour, face à une détresse, un arrêt cardiaque ou un accident, il n’y aura pas de spectateurs : il y aura ceux qui doutent, et ceux qui savent quoi faire.',
+          'On s’imagine souvent qu’il faut avoir une vocation hors du commun ou un sang-froid à toute épreuve. C’est faux. L’engagement s’apprend, la technique s’acquiert, et la force vient sur le terrain, aux côtés d’une équipe soudée qui devient une deuxième famille. Tu découvriras une intensité, le sentiment de te sentir utile, et une fierté que peu d’expériences peuvent offrir.',
+          'Tu hésites encore ? Viens simplement tester une journée. Au pire, tu auras appris à sauver une vie.',
+        ],
+      },
+    ],
+  },
+
+  {
     slug: 'annabell',
     prenom: 'Annabell',
     nom: 'Perez',

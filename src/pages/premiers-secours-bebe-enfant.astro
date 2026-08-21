@@ -204,9 +204,10 @@ const balisages = [
       <p class="eyebrow">Ce qui change</p>
       <h2 class="h-section">Trois différences que personne ne devine</h2>
       <p class="lede">
-        Un enfant n’est pas un adulte en réduction. Appliquer sur lui ce qu’on
-        a vu faire sur un adulte peut aggraver la situation — et c’est
-        justement ce que font la plupart des gens.
+        Ce qu’on sait faire sur un adulte ne se transpose pas à un enfant.
+        Son corps réagit autrement, et certains gestes qui sauvent un adulte
+        peuvent le blesser. C’est pourtant ce que fait la plupart des gens,
+        faute d’avoir appris la différence.
       </p>
 
       <div class="diff">
@@ -371,10 +372,48 @@ const balisages = [
   <section class="section section--appel">
     <div class="wrap wrap--etroit appel">
       <h2 class="appel__h">Le meilleur moment, c’est avant</h2>
-      <p class="appel__t">
-        Personne ne se forme pendant l’urgence. {psc.duree} en une journée,
-        {' '}{psc.tarif}, dès 10 ans, sans aucun prérequis.
-      </p>
+      <p class="appel__t">Personne ne se forme pendant l’urgence.</p>
+
+      {/* Quatre chiffres alignés en prose se lisent mal et ne se retiennent
+          pas. Un picto par information les rend saisissables d'un regard. */}
+      <ul class="rep">
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" />
+            </svg>
+          </span>
+          <strong>{psc.duree}</strong>
+          <span>en une journée</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.8 5 3.3 5 1.4 5 3.3-2.2 3-5 3-5-1.1-5-3" />
+            </svg>
+          </span>
+          <strong>{psc.tarif}</strong>
+          <span>tout compris</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="7" r="4" /><path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
+            </svg>
+          </span>
+          <strong>Dès 10 ans</strong>
+          <span>parents, ados, grands-parents</span>
+        </li>
+        <li class="rep__i">
+          <span class="rep__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z" /><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 1 4 20.5z" />
+            </svg>
+          </span>
+          <strong>Aucun prérequis</strong>
+          <span>on part de zéro</span>
+        </li>
+      </ul>
       <div class="appel__actions">
         <a class="btn btn--primaire" href="/formations/psc">Voir les dates</a>
         <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
@@ -507,5 +546,29 @@ const balisages = [
 
   .appel__h { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; margin-bottom: .7rem; }
   .appel__t { font-size: 1.05rem; max-width: 60ch; }
+  .rep {
+    list-style: none; padding: 0; margin: 1.9rem 0 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  }
+  @media (max-width: 620px) { .rep { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .rep__i {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .15rem;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: var(--r-lg); padding: 1.15rem 1.2rem;
+  }
+  .rep__ic {
+    display: grid; place-items: center; width: 38px; height: 38px;
+    border-radius: 11px; background: rgba(255, 255, 255, .16);
+    margin-bottom: .55rem;
+  }
+  .rep__ic svg { width: 21px; height: 21px; }
+  .rep__i strong {
+    font-family: 'Archivo', sans-serif; font-size: 1.18rem; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .rep__i span { font-size: .86rem; opacity: .82; line-height: 1.35; }
+
   .appel__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
 </style>
