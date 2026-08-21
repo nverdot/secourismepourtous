@@ -179,7 +179,7 @@ export const formations: Formation[] = [
   {
     slug: 'psc',
     sigle: 'PSC',
-    intitule: 'Citoyen Sauveteur',
+    intitule: 'Premiers Secours Citoyen — ex-PSC1',
     filiere: 'citoyenne',
     certifiante: true,
     accroche:
@@ -256,9 +256,9 @@ export const formations: Formation[] = [
     wixEvent: 'PSC',
     recyclage: 'fc-psc',
     seo: {
-      title: 'Formation PSC à Nice | Secourisme Pour Tous',
+      title: 'Formation PSC1 à Nice | Prix, dates et inscription',
       description:
-        'Apprenez les gestes qui sauvent avec le PSC à Nice : 7 h en 1 journée, dès 10 ans, sans prérequis, 50 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Le PSC, anciennement PSC1, à Nice : prix 50 €, 7 h en une journée, dès 10 ans, sans prérequis. Calendrier des sessions et inscription en ligne. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -451,7 +451,7 @@ export const formations: Formation[] = [
   {
     slug: 'fc-psc',
     sigle: 'FC PSC',
-    intitule: 'Formation continue Citoyen Sauveteur',
+    intitule: 'Formation continue Premiers Secours Citoyen — ex-FC PSC1',
     filiere: 'citoyenne',
     certifiante: false,
     estRecyclage: true,
@@ -478,7 +478,7 @@ export const formations: Formation[] = [
     image: '/img/pse-equipe.jpg',
     wixEvent: 'FC PSC',
     seo: {
-      title: 'Recyclage PSC à Nice | Formation continue',
+      title: 'Recyclage PSC1 à Nice | Prix, dates et inscription',
       description:
         'Remettez à jour vos gestes de premiers secours avec la formation continue PSC à Nice. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile. Dates et inscription.',
     },

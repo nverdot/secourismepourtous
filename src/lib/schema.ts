@@ -19,9 +19,14 @@ const ID_ORG = `${SITE}/#organisation`;
 
 /** Communes réellement desservies, pour les postes de secours et les formations. */
 export const communes = [
-  'Nice', 'Cannes', 'Antibes', 'Cagnes-sur-Mer', 'Saint-Laurent-du-Var',
-  'Villeneuve-Loubet', 'Grasse', 'Menton', 'Vallauris', 'Mandelieu-la-Napoule',
-  'Mougins', 'Le Cannet', 'Vence', 'Saint-Jean-Cap-Ferrat', 'Beaulieu-sur-Mer',
+  'Nice', 'Cannes', 'Antibes', 'Juan-les-Pins', 'Cagnes-sur-Mer',
+  'Saint-Laurent-du-Var', 'Villeneuve-Loubet', 'Grasse', 'Menton', 'Vallauris',
+  'Mandelieu-la-Napoule', 'Mougins', 'Le Cannet', 'Vence',
+  'Saint-Jean-Cap-Ferrat', 'Beaulieu-sur-Mer',
+  // Bassins d'emploi et zones d'activité où l'on nous cherche autant que dans
+  // les communes littorales, et qui manquaient à l'appel.
+  'Sophia Antipolis', 'Valbonne', 'Biot', 'Carros', 'Saint-André-de-la-Roche',
+  'La Trinité', 'Drap', 'Contes', 'Levens', 'Cap-d’Ail', 'Roquebrune-Cap-Martin',
 ];
 
 /** Fiche de l'organisation, référencée par toutes les autres. */
