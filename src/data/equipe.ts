@@ -202,5 +202,47 @@ export const membres: Membre[] = [
   },
 ];
 
+/**
+ * Ordre d'affichage des questions, quel que soit celui du questionnaire.
+ *
+ * On commence par « dans la vraie vie » : savoir que la personne est
+ * surveillante de lycée ou étudiante change la lecture de tout ce qui suit.
+ * On finit par le conseil à celui qui hésite — c'est la phrase qu'on veut
+ * garder en tête en refermant.
+ */
+export const ORDRE_QUESTIONS = [
+  'Et dans la vraie vie',
+  'Ce qui m’a amené au secourisme',
+  'Ce qui m’a surpris au début',
+  'Ce que le terrain change dans ma façon d’enseigner',
+  'Ce qui me fait revenir',
+  'Ce que je dirais à quelqu’un qui hésite',
+];
+
+export const ordonner = (r: Reponse[]) =>
+  [...r].sort((a, b) => {
+    const i = ORDRE_QUESTIONS.indexOf(a.question);
+    const j = ORDRE_QUESTIONS.indexOf(b.question);
+    return (i < 0 ? 99 : i) - (j < 0 ? 99 : j);
+  });
+
+/**
+ * Diplôme → fiche de formation.
+ *
+ * Un visiteur qui lit « PSE2 » sur le portrait de son futur formateur doit
+ * pouvoir cliquer pour savoir de quoi il s'agit. C'est le chemin le plus
+ * court entre l'émotion et l'inscription.
+ */
+export const FICHE_DIPLOME: Record<string, string> = {
+  'PSC': 'psc',
+  'PSE1': 'pse-1',
+  'PSE2': 'pse-2',
+  'BNSSA': 'bnssa',
+  'BSB': 'bsb',
+  'SST': 'sst',
+  'PAE FPSC': 'pae-f-psc',
+  'PAE FPS': 'pae-f-ps',
+};
+
 /** Portraits recueillis à cette date, par questionnaire. */
 export const recueilliLe = '21 août 2026';
