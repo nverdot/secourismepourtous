@@ -127,7 +127,7 @@ export const asso = {
       titre: 'École de sauvetage jeunesse',
       texte:
         'Les Pitchouns Nissart initient les enfants et adolescents au sauvetage en mer, entre compétences physiques et esprit citoyen.',
-      lien: '/ecole-de-sauvetage',
+      lien: '/ecole-de-natation',
     },
   ],
 

@@ -1,0 +1,29 @@
+# Redirections depuis les anciennes URL du site Wix.
+#
+# Google a indexé ces adresses depuis des années, et elles circulent dans des
+# mails, des publications et des documents. Sans ces règles, chacune devient
+# une 404 le jour où le domaine bascule sur ce site.
+#
+# Établies à partir de pages-sitemap.xml du site Wix, le 21 août 2026.
+
+# ---- Fiches formation : elles vivent désormais sous /formations/ ----
+/psc                    /formations/psc            301
+/pse-1                  /formations/pse-1          301
+/pse-2                  /formations/pse-2          301
+/bnssa                  /formations/bnssa          301
+/fc-bnssa               /formations/fc-bnssa       301
+/bsb-et-fc-bsb          /formations/bsb            301
+/fc-pse1-ou-pse2        /formations/fc-pse-1       301
+/sst-ou-mac-sst         /formations/sst            301
+/pae-f-psc              /formations/pae-f-psc      301
+/pae-f-ps               /formations/pae-f-ps       301
+/pae-f-ps-ou-fo-ps      /formations/pae-f-ps       301
+
+# ---- Pages renommées ----
+/formateur                  /devenir-formateur   301
+/copie-de-sauvetage-sportif /sauvetage-sportif   301
+
+# ---- Billetterie : elle reste chez Wix, sur son sous-domaine ----
+# ⚠️ Ne prend effet qu'une fois « reservation » défini comme domaine principal
+# du site Wix. Dans l'autre ordre, Wix renvoie vers www et la boucle se ferme.
+/event-details/*  https://reservation.secourismepourtous.org/event-details/:splat  301
