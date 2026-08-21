@@ -17,6 +17,12 @@
  * ajouter un mot qu'ils n'ont pas écrit, ou couper ce qui dérange. Un portrait
  * réécrit sonne faux, et ils le reliront avant publication.
  *
+ * À ANTICIPER. Les photos sont stockées en pleine définition (jusqu'à
+ * 1000 × 1400). Tant qu'il y a trois portraits, c'est sans conséquence. Passé
+ * une dizaine, il faudra produire des vignettes réduites — 400 px de large
+ * suffisent pour la grille — et ne charger la grande image qu'à l'ouverture
+ * du portrait. Sinon la page d'équipe pèsera plusieurs mégaoctets.
+ *
  * ⚠️ RELECTURE. Chacun doit valider son texte avant mise en ligne. C'est ce
  * qu'on leur a promis dans le formulaire, en toutes lettres.
  */
@@ -99,7 +105,7 @@ export const membres: Membre[] = [
         ],
       },
       {
-        question: 'Et dans la vraie vie',
+        question: 'Dans la vraie vie',
         texte: [
           'Je suis responsable dans une entreprise de sécurité privée, tout en étant moi-même sur le terrain. Mes qualifications : SSIAP 1 et 2, agent de sécurité renforcé armé en catégorie D.',
           'Dans la vie de tous les jours, je suis quelqu’un d’assez simple. En dehors du secourisme et du bénévolat, j’ai ma vie professionnelle et personnelle comme tout le monde. Mais je garde toujours ce côté humain et cette envie d’aider les autres.',
@@ -144,7 +150,7 @@ export const membres: Membre[] = [
         texte: ['De ne pas hésiter, et qu’il ne le regrettera pas.'],
       },
       {
-        question: 'Et dans la vraie vie',
+        question: 'Dans la vraie vie',
         texte: [
           'Je travaille comme surveillant dans un lycée. Je suis aussi sapeur-pompier volontaire, tout en préparant mon concours pour devenir sapeur-pompier professionnel.',
         ],
@@ -192,7 +198,7 @@ export const membres: Membre[] = [
         ],
       },
       {
-        question: 'Et dans la vraie vie',
+        question: 'Dans la vraie vie',
         texte: [
           'Je suis en licence CPES, une formation hybride entre faculté et prépa qui prépare aux concours de la fonction publique — direction d’hôpitaux, protection sociale — et aux écoles de commerce.',
           'En parallèle, le secourisme me permet de sortir des cours, de changer d’air et de développer d’autres compétences.',
@@ -211,7 +217,7 @@ export const membres: Membre[] = [
  * garder en tête en refermant.
  */
 export const ORDRE_QUESTIONS = [
-  'Et dans la vraie vie',
+  'Dans la vraie vie',
   'Ce qui m’a amené au secourisme',
   'Ce qui m’a surpris au début',
   'Ce que le terrain change dans ma façon d’enseigner',

@@ -39,6 +39,15 @@ interface Props {
    * visages changent à chaque déploiement, ce qui suffit à faire vivre la page.
    */
   apercu?: number;
+  /**
+   * N'afficher que les membres tenant ce rôle.
+   *
+   * Sur une fiche de formation, on veut voir des formateurs — pas un
+   * secouriste, si compétent soit-il : le visiteur cherche à savoir qui va
+   * l'enseigner. Sur la page d'accueil au contraire, on montre le mélange,
+   * parce que c'est lui qui dit ce qu'est l'association.
+   */
+  role?: string;
   /** Où mène « voir toute l'équipe ». */
   lien?: string;
 }
@@ -46,14 +55,41 @@ const {
   titre = 'Celles et ceux qui font l’association',
   intro = 'Ils tiennent les postes de secours, certains forment, et tous ont une vie à côté — étudiant, surveillant de lycée, responsable en sécurité privée. L’association, c’est eux. Voici leurs mots.',
   apercu,
+  role,
   lien = '/qui-sommes-nous#equipe',
 } = Astro.props;
 
-const montres = apercu
-  ? [...membres].sort(() => Math.random() - 0.5).slice(0, apercu)
-  : membres;
+const vivier = role ? membres.filter((m) => m.roles.includes(role)) : membres;
+const melange = [...vivier].sort(() => Math.random() - 0.5);
+
+/**
+ * Sélection de l'aperçu.
+ *
+ * Sans filtre de rôle, on force le mélange : au moins un formateur et au moins
+ * quelqu'un qui ne l'est pas. Un tirage purement aléatoire finirait par sortir
+ * trois formateurs et donnerait de l'association l'image d'un organisme de
+ * formation — exactement ce qu'on cherche à corriger.
+ */
+function choisir(n: number) {
+  if (role) return melange.slice(0, n);
+  const formateurs = melange.filter((m) => m.roles.includes('Formateur'));
+  const terrain = melange.filter((m) => !m.roles.includes('Formateur'));
+  const retenus = [...terrain.slice(0, 1), ...formateurs.slice(0, 1)];
+  for (const m of melange) {
+    if (retenus.length >= n) break;
+    if (!retenus.includes(m)) retenus.push(m);
+  }
+  return retenus.slice(0, n);
+}
+
+const montres = apercu ? choisir(apercu) : vivier;
+
+/** Deux blocs peuvent cohabiter sur une même page : la navigation doit rester
+    à l'intérieur de son propre groupe de portraits. */
+const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
+{montres.length > 0 && (
 <div class="eq">
   <p class="eyebrow">Notre équipe</p>
   <h2 class="h-section">{titre}</h2>
@@ -62,7 +98,7 @@ const montres = apercu
   <ul class="eq__l">
     {montres.map((m) => (
       <li class="eq__i">
-        <button class="mb" type="button" data-portrait={m.slug} aria-haspopup="dialog">
+        <button class="mb" type="button" data-groupe={groupe} data-portrait={m.slug} aria-haspopup="dialog">
           <span class="mb__ph">
             <img src={m.photo} alt={m.alt} loading="lazy" decoding="async" width="600" height="800" />
           </span>
@@ -90,45 +126,40 @@ const montres = apercu
   ) : (
     <p class="eq__note">
       Portraits recueillis auprès de nos membres en {recueilliLe}, publiés avec
-      leur accord et relus par eux.
+      leur accord.
     </p>
   )}
 </div>
+)}
 
 {montres.map((m) => (
-  <dialog class="pt" id={`portrait-${m.slug}`} aria-labelledby={`pt-t-${m.slug}`}>
+  <dialog class="pt" data-groupe={groupe} id={`portrait-${groupe}-${m.slug}`} aria-labelledby={`pt-t-${m.slug}`}>
     <button class="pt__x" type="button" data-ferme aria-label="Fermer le portrait">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
     </button>
 
     <div class="pt__grille">
-      {/* Colonne de gauche : le visage, en grand, et l'identité. Elle reste
-          visible pendant qu'on fait défiler le récit — on lit les mots de
-          quelqu'un qu'on a sous les yeux. */}
-      <aside class="pt__g">
-        <img class="pt__ph" src={m.photo} alt={m.alt} width="600" height="800" />
-        <div class="pt__id">
+      {/* La photo occupe toute la colonne, sans texte par-dessus : un visage
+          en grand vaut mieux qu'une vignette entourée de mentions. */}
+      <img class="pt__ph" src={m.photo} alt={m.alt} width="700" height="950" />
+
+      <div class="pt__d">
+        <header class="pt__tete">
           <h3 class="pt__nom" id={`pt-t-${m.slug}`}>{m.prenom} {m.nom}</h3>
           <p class="pt__met">{m.metier}</p>
           <p class="pt__depuis">À Secourisme Pour Tous depuis {m.depuis}</p>
 
-          <span class="pt__lab">Rôles</span>
-          <span class="pt__tags">{m.roles.map((r) => <span class="tag">{r}</span>)}</span>
-
-          <span class="pt__lab">Diplômes</span>
-          <span class="pt__tags">
+          <div class="pt__tags">
+            {m.roles.map((r) => <span class="tag">{r}</span>)}
             {m.diplomes.map((dip) => (
               FICHE_DIPLOME[dip]
                 ? <a class:list={['tag', 'tag--lien', teinte(dip) && `tag--${teinte(dip)}`]}
                      href={`/formations/${FICHE_DIPLOME[dip]}`}>{dip}</a>
                 : <span class="tag tag--sobre">{dip}</span>
             ))}
-          </span>
-        </div>
-      </aside>
+          </div>
+        </header>
 
-      {/* Colonne de droite : le récit, et lui seul. */}
-      <div class="pt__d">
         {ordonner(m.reponses).map((r) => (
           <section class="pt__q">
             <h4>{r.question}</h4>
@@ -140,26 +171,102 @@ const montres = apercu
           <a class="btn btn--primaire" href="/secouriste-actif">Rejoindre l’équipe</a>
           <a class="btn btn--sobre" href="/formations">Se former avec nous</a>
         </div>
+
+        {montres.length > 1 && (
+          <nav class="pt__nav" aria-label="Autres portraits">
+            <button type="button" class="pt__flc" data-va="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+              Portrait précédent
+            </button>
+            <button type="button" class="pt__flc" data-va="1">
+              Portrait suivant
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </button>
+          </nav>
+        )}
       </div>
     </div>
   </dialog>
 ))}
 
 <script>
-  // Chaque vignette ouvre le portrait correspondant. Sans JavaScript, rien ne
-  // s'ouvre — mais les textes restent dans le HTML, donc lisibles et indexables.
-  document.querySelectorAll<HTMLButtonElement>('[data-portrait]').forEach((b) =>
-    b.addEventListener('click', () => {
-      const d = document.getElementById(`portrait-${b.dataset.portrait}`) as HTMLDialogElement | null;
-      d?.showModal();
-      d?.querySelector<HTMLElement>('.pt__corps')?.scrollTo(0, 0);
-    })
+  /**
+   * Ouverture, navigation et verrouillage du défilement.
+   *
+   * Deux pièges corrigés ici. D'abord, ouvrir une boîte modale ne fige pas la
+   * page derrière : elle continue de défiler, et l'on ne retrouve plus sa
+   * place en refermant. On la fige donc, en mémorisant la position exacte.
+   *
+   * Ensuite, passer d'un portrait à l'autre imposait de refermer, retrouver la
+   * grille et cliquer ailleurs. Deux flèches suffisent.
+   */
+  document.querySelectorAll<HTMLElement>('[data-groupe]').forEach(() => {});
+
+  const groupes = new Set(
+    [...document.querySelectorAll<HTMLElement>('dialog.pt')].map((d) => d.dataset.groupe!)
   );
 
-  document.querySelectorAll<HTMLDialogElement>('dialog.pt').forEach((d) => {
-    d.querySelector('[data-ferme]')?.addEventListener('click', () => d.close());
-    // Clic sur le fond, hors de la boîte.
-    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  let positionPage = 0;
+
+  function figer() {
+    if (document.body.dataset.fige) return;
+    positionPage = window.scrollY;
+    document.body.dataset.fige = '1';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${positionPage}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+  }
+
+  function liberer() {
+    if (!document.body.dataset.fige) return;
+    delete document.body.dataset.fige;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, positionPage);
+  }
+
+  /** Fige ou libère la page selon qu'une boîte est ouverte, où qu'elle soit. */
+  function synchronise() {
+    if (document.querySelector('dialog.pt[open]')) figer();
+    else liberer();
+  }
+
+  // Échap ferme la boîte sans passer par notre code : on repasse derrière.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setTimeout(synchronise, 0);
+  });
+
+  groupes.forEach((g) => {
+    const boites = [...document.querySelectorAll<HTMLDialogElement>(`dialog.pt[data-groupe="${g}"]`)];
+
+    const ouvrir = (i: number) => {
+      const cible = boites[(i + boites.length) % boites.length];
+      boites.forEach((d) => d.open && d.close());
+      figer();
+      cible.showModal();
+      // Une boîte est ouverte : l'état est déjà juste, on court-circuite la
+      // resynchronisation différée qu'aurait déclenchée la fermeture.
+      cible.querySelector<HTMLElement>('.pt__d')?.scrollTo(0, 0);
+    };
+
+    document
+      .querySelectorAll<HTMLButtonElement>(`[data-portrait][data-groupe="${g}"]`)
+      .forEach((b, i) => b.addEventListener('click', () => ouvrir(i)));
+
+    boites.forEach((d, i) => {
+      // On ne s'appuie pas sur l'événement « close » : certains navigateurs ne
+      // l'émettent pas du tout, et la page restait alors figée pour de bon.
+      // On resynchronise donc nous-mêmes, à chaque fermeture provoquée.
+      const fermer = () => { d.close(); synchronise(); };
+      d.querySelector('[data-ferme]')?.addEventListener('click', fermer);
+      d.addEventListener('click', (e) => { if (e.target === d) fermer(); });
+      d.querySelectorAll<HTMLButtonElement>('[data-va]').forEach((b) =>
+        b.addEventListener('click', () => ouvrir(i + Number(b.dataset.va)))
+      );
+    });
   });
 </script>
 
@@ -219,46 +326,50 @@ const montres = apercu
   /* ── Le portrait ────────────────────────────────────────────────────── */
   dialog.pt { display: none; }
   dialog.pt[open] {
-    /* Sans cette ligne, le « display: none » ci-dessus n'est jamais contredit
-       et la boîte s'ouvre vide, sans hauteur ni largeur. */
-    display: block;
+    /* La grille est portée par la boîte, et non par un conteneur intérieur :
+       autrement la colonne de texte prend la hauteur de son contenu — 2 400 px
+       pour un long portrait — et déborde d'une boîte qui masque le surplus.
+       Le texte devenait alors inatteignable. */
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    /* Sans cette ligne, la rangée se dimensionne sur son contenu : la colonne
+       de texte prend 2 500 px, déborde de la boîte qui masque le surplus, et
+       la fin du portrait devient inatteignable. « minmax(0, 1fr) » la force à
+       tenir dans la hauteur disponible — et donc à défiler. */
+    grid-template-rows: minmax(0, 1fr);
     position: relative;
-    width: min(100%, 62rem); max-height: min(92vh, 940px);
+    width: min(100%, 64rem); max-height: min(92vh, 940px);
     padding: 0; border: 0; border-radius: var(--r-lg); overflow: hidden;
     background: var(--surface); color: var(--ink);
     box-shadow: 0 30px 90px rgba(0,0,0,.35);
   }
   dialog.pt::backdrop { background: rgba(10, 20, 35, .68); backdrop-filter: blur(3px); }
 
-  .pt__grille {
-    display: grid;
-    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
-    max-height: inherit;
+  /* Le conteneur s'efface : ses deux enfants deviennent les cases de la
+     grille portée par la boîte. */
+  .pt__grille { display: contents; }
+
+  /* La photo occupe toute la hauteur de la boîte, sans rien par-dessus. */
+  .pt__ph {
+    width: 100%; height: 100%; min-height: 0; object-fit: cover;
+    object-position: center 18%; background: var(--sunk);
   }
 
-  /* Colonne gauche : elle ne défile pas, le visage reste là. */
-  .pt__g {
-    background: var(--sunk); border-right: 1px solid var(--line);
-    display: flex; flex-direction: column; min-height: 0;
+  /* Tout le texte vit sur le fond clair, où il se lit. */
+  .pt__d { padding: 2rem 2.1rem 1.75rem; overflow-y: auto; min-height: 0; }
+
+  .pt__tete { padding-bottom: 1.5rem; margin-bottom: 1.75rem; border-bottom: 1px solid var(--line); }
+  .pt__nom {
+    font-family: 'Archivo', sans-serif; font-size: clamp(1.4rem, 3vw, 1.75rem);
+    font-weight: 800; line-height: 1.12; padding-right: 2.5rem;
   }
-  .pt__ph {
-    width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 18%;
-    flex: none;
-  }
-  .pt__id { padding: 1.35rem 1.4rem 1.5rem; overflow-y: auto; }
-  .pt__nom { font-family: 'Archivo', sans-serif; font-size: 1.35rem; font-weight: 800; line-height: 1.15; }
-  .pt__met { color: var(--ink-mute); font-size: .93rem; margin-top: .3rem; }
-  .pt__depuis { color: var(--ink-soft); font-size: .82rem; margin-top: .25rem; }
-  .pt__lab {
-    display: block; font-family: 'Archivo', sans-serif; font-size: .64rem;
-    font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
-    color: var(--ink-mute); margin: 1.15rem 0 .45rem;
-  }
-  .pt__tags { display: flex; flex-wrap: wrap; gap: .35rem; }
-  /* Chaque diplôme porte la couleur de sa filière, comme partout ailleurs. */
+  .pt__met { color: var(--ink); font-size: 1rem; margin-top: .35rem; }
+  .pt__depuis { color: var(--ink-mute); font-size: .85rem; margin-top: .2rem; }
+  .pt__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: 1.1rem; }
+
   .tag--lien {
     text-decoration: none; border: 1px solid transparent;
-    transition: border-color .15s, filter .15s;
+    transition: border-color .15s;
   }
   .tag--lien:hover { border-color: currentColor; text-decoration: underline; }
   .tag--azur    { background: var(--azur-wash);    color: var(--azur); }
@@ -267,11 +378,7 @@ const montres = apercu
   .tag--ocre    { background: var(--ocre-wash);    color: var(--ocre); }
   .tag--navy    { background: var(--sunk);         color: var(--navy); }
 
-  /* Colonne droite : le récit défile seul. */
-  .pt__d { padding: 2rem 2.1rem 1.75rem; overflow-y: auto; min-height: 0; }
-
-  /* Question et réponse doivent se distinguer au premier coup d'œil : la
-     question porte un filet rouge et le poids du titre, la réponse respire. */
+  /* Question et réponse doivent se distinguer au premier coup d'œil. */
   .pt__q { margin-bottom: 1.9rem; }
   .pt__q h4 {
     font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 800;
@@ -287,6 +394,19 @@ const montres = apercu
     padding-top: 1.5rem; border-top: 1px solid var(--line);
   }
 
+  .pt__nav {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem;
+    margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+  }
+  .pt__flc {
+    display: inline-flex; align-items: center; gap: .45rem;
+    border: 0; background: none; cursor: pointer; padding: .35rem 0;
+    font-family: 'Archivo', sans-serif; font-size: .88rem; font-weight: 700;
+    color: var(--secours);
+  }
+  .pt__flc:hover { text-decoration: underline; }
+  .pt__flc svg { width: 15px; height: 15px; }
+
   .pt__x {
     position: absolute; top: .8rem; right: .9rem; z-index: 2;
     border: 0; cursor: pointer; padding: .45rem; line-height: 0;
@@ -298,12 +418,9 @@ const montres = apercu
 
   @media (max-width: 820px) {
     dialog.pt[open] { max-height: 94vh; }
-    .pt__grille { grid-template-columns: 1fr; overflow-y: auto; }
-    .pt__g { border-right: 0; border-bottom: 1px solid var(--line); }
-    /* En pile, la photo ne doit pas manger tout l'écran avant le texte. */
-    .pt__ph { aspect-ratio: 4 / 3; object-position: center 15%; }
-    .pt__id { overflow: visible; padding: 1.2rem 1.25rem 1.35rem; }
+    dialog.pt[open] { grid-template-columns: 1fr; overflow-y: auto; }
+    /* En pile, la photo ne doit pas manger l'écran avant le premier mot. */
+    .pt__ph { height: auto; aspect-ratio: 4 / 3; object-position: center 15%; }
     .pt__d { padding: 1.4rem 1.3rem 1.5rem; overflow: visible; }
-    .pt__nom { font-size: 1.2rem; }
   }
 </style>

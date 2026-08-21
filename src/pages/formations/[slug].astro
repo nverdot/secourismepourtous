@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Equipe from '../../components/Equipe.astro';
 import { quizParFormation } from '../../data/quiz-fc';
 import ProgressionPse from '../../components/ProgressionPse.astro';
 import Terrain from '../../components/Terrain.astro';
@@ -142,6 +143,19 @@ const balisages = [
   <section class="section section--navy">
     <div class="wrap">
       <Terrain titre={`Qui vous formera au ${f.sigle}`} sombre />
+    </div>
+  </section>
+
+  {/* Des formateurs, et seulement eux : sur cette page le visiteur cherche à
+      savoir qui va l'enseigner, pas qui tient les postes de secours. */}
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Equipe
+        apercu={2}
+        role="Formateur"
+        titre="Vos formateurs"
+        intro="Ils enseignent, et ils sont sur le terrain le reste de l'année. Cliquez sur un visage pour lire son parcours."
+      />
     </div>
   </section>
 
