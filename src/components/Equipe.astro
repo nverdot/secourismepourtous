@@ -194,7 +194,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
             <li class="mur__i">
               {appel ? (
                 <a
-                  class="fc fc--vous" data-ton={appel.ton} href={appel.lien ?? '/secouriste-actif'}
+                  class="fc fc--vous" data-ton={appel.ton} href="/secouriste-actif"
                   tabindex={double ? -1 : undefined}
                   aria-hidden={double ? 'true' : undefined}
                 >
@@ -205,7 +205,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
                       la vignette annonçait une envie sans jamais nommer le
                       geste qui la suit. */}
                   <span class="fc__vb" aria-hidden="true">
-                    {appel.action ?? 'Nous rejoindre'}
+                    Nous rejoindre
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
                   </span>
                 </a>

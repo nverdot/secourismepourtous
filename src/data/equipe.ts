@@ -432,44 +432,34 @@ export const recueilliLe = '21 août 2026';
  * Toutes les combinaisons fond/encre passent le seuil de lisibilité, le jaune
  * fédéral compris — d'où son encre sombre, la seule qui tienne sur lui.
  *
+ * Ils ont un seul objet : faire venir des bénévoles dans les équipes de
+ * secours. Pas vendre une formation, pas recruter des formateurs — ces
+ * chemins-là ont leurs propres pages, et les mélanger ici brouillerait le seul
+ * message que ce mur porte. Tous mènent donc à « devenir secouriste actif ».
+ *
  * Le registre : on promet ce qu'on tient. Pas de « devenez un héros » — ce que
  * les bénévoles décrivent eux-mêmes dans leurs portraits, c'est une équipe, des
  * week-ends de terrain et le sentiment d'être utile. C'est ça qu'on met.
  */
-export const APPELS: {
-  ton: string;
-  titre: string;
-  sous: string;
-  /**
-   * Ce qu'annonce le bouton. Par défaut, « Nous rejoindre ».
-   *
-   * Court : la vignette ne fait que 118 pixels de large sur téléphone, et
-   * un libellé de plus de quinze signes en sortait.
-   */
-  action?: string;
-  /** Où il mène. Par défaut, la page « devenir secouriste actif ». */
-  lien?: string;
-}[] = [
+export const APPELS: { ton: string; titre: string; sous: string }[] = [
   { ton: 'secours', titre: 'Envie de rejoindre une famille\u00a0?',
     sous: 'On recrute toute l\u2019année' },
-  { ton: 'azur', titre: 'Envie de sauver des vies\u00a0?',
-    sous: 'Ça commence par une formation',
-    action: 'Les formations', lien: '/formations' },
+  { ton: 'azur', titre: 'Nos week-ends ont un sens.',
+    sous: 'Venez voir par vous-même' },
   { ton: 'ocre', titre: 'Il manque un visage sur ce mur.',
     sous: 'Ce serait le vôtre\u00a0?' },
-  { ton: 'ocean', titre: 'Un jour, quelqu\u2019un aura besoin de vous.',
-    sous: 'Autant être prêt', action: 'Se former', lien: '/formations' },
-  { ton: 'navy', titre: 'Nos week-ends ont un sens.',
-    sous: 'Venez voir par vous-même' },
-  { ton: 'secours', titre: 'On ne naît pas secouriste.',
-    sous: 'On le devient', action: 'Où commencer', lien: '/psc-ou-pse1' },
-  { ton: 'azur', titre: 'Vous avez déjà le PSC\u00a0?',
-    sous: 'La suite s\u2019appelle PSE1', action: 'Voir le PSE1', lien: '/formations/pse-1' },
   { ton: 'ocean', titre: 'Être là quand ça compte.',
     sous: 'C\u2019est tout ce qu\u2019on demande' },
-  { ton: 'ocre', titre: 'Plus de 270 postes de secours par an.',
+  { ton: 'navy', titre: 'Plus de 270 postes de secours par an.',
     sous: 'Et jamais trop de bras' },
-  { ton: 'navy', titre: 'Apprendre, puis transmettre.',
-    sous: 'Nos formateurs ont commencé ici',
-    action: 'Être formateur', lien: '/devenir-formateur' },
+  { ton: 'secours', titre: 'On ne rejoint pas une association.',
+    sous: 'On rejoint une équipe' },
+  { ton: 'azur', titre: 'Un diplôme au tiroir ne sert personne.',
+    sous: 'Venez le faire vivre' },
+  { ton: 'ocre', titre: 'Ici, on compte les uns sur les autres.',
+    sous: 'Il en manque toujours un' },
+  { ton: 'ocean', titre: 'Diplômé, jamais sorti en poste\u00a0?',
+    sous: 'On vous attend' },
+  { ton: 'navy', titre: 'Le terrain vous manque\u00a0?',
+    sous: 'Il y a de la place ce week-end' },
 ];
