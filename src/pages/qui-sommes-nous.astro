@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Equipe from '../components/Equipe.astro';
 import Lieu from '../components/Lieu.astro';
 import { asso } from '../data/association';
 ---
@@ -181,8 +182,16 @@ import { asso } from '../data/association';
     </div>
   </section>
 
-  <!-- ========== PARTENAIRES ========== -->
+  {/* L'organigramme dit qui décide. Celui-ci dit qui vous formera, et c'est
+      ce qui compte pour quelqu'un qui hésite à s'inscrire. */}
   <section class="section">
+    <div class="wrap">
+      <Equipe />
+    </div>
+  </section>
+
+  <!-- ========== PARTENAIRES ========== -->
+  <section class="section section--sunk">
     <div class="wrap">
       <p class="eyebrow">Ils nous font confiance</p>
       <h2 class="h-section">Nos partenaires</h2>

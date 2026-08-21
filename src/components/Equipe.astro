@@ -1,0 +1,232 @@
+---
+import { membres, recueilliLe } from '../data/equipe';
+
+/**
+ * « Notre équipe » — vignettes cliquables, portrait complet en boîte de dialogue.
+ *
+ * Pourquoi une boîte plutôt qu'une page par personne : on veut que le visiteur
+ * parcoure les visages, en ouvre deux ou trois, et reste sur la page. Une page
+ * par membre le ferait sortir à chaque fois, et créerait autant d'URL à
+ * maintenir quand quelqu'un s'en va.
+ *
+ * Sans JavaScript, `<dialog>` ne s'ouvre pas : chaque vignette reste alors un
+ * lien vers l'ancre du portrait, qui est bien dans le HTML. Le contenu est
+ * lisible dans tous les cas, y compris pour les moteurs de recherche.
+ */
+
+interface Props {
+  titre?: string;
+  intro?: string;
+}
+const {
+  titre = 'Celles et ceux qui vous formeront',
+  intro = 'Nos formateurs et nos secouristes ne sont pas des intervenants de passage. Ils tiennent les postes de secours, ils enseignent, et ils ont une vie à côté. La voici, dans leurs mots.',
+} = Astro.props;
+---
+
+<div class="eq">
+  <p class="eyebrow">Notre équipe</p>
+  <h2 class="h-section">{titre}</h2>
+  <p class="lede">{intro}</p>
+
+  <ul class="eq__l">
+    {membres.map((m) => (
+      <li class="eq__i">
+        <button class="mb" type="button" data-portrait={m.slug} aria-haspopup="dialog">
+          <span class="mb__ph">
+            <img src={m.photo} alt={m.alt} loading="lazy" decoding="async" width="600" height="800" />
+          </span>
+          <span class="mb__txt">
+            <strong class="mb__nom">{m.prenom} {m.nom}</strong>
+            <span class="mb__met">{m.metier}</span>
+            <span class="mb__tags">
+              {m.roles.slice(0, 3).map((r) => <span class="tag">{r}</span>)}
+            </span>
+            <span class="mb__lire">
+              Lire son portrait
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <p class="eq__note">
+    Portraits recueillis auprès de nos membres en {recueilliLe}, publiés avec
+    leur accord et relus par eux.
+  </p>
+</div>
+
+{membres.map((m) => (
+  <dialog class="pt" id={`portrait-${m.slug}`} aria-labelledby={`pt-t-${m.slug}`}>
+    <div class="pt__tete">
+      <div class="pt__ident">
+        <img class="pt__ph" src={m.photo} alt={m.alt} width="200" height="260" />
+        <div>
+          <h3 class="pt__nom" id={`pt-t-${m.slug}`}>{m.prenom} {m.nom}</h3>
+          <p class="pt__met">{m.metier}</p>
+          <p class="pt__depuis">À Secourisme Pour Tous depuis {m.depuis}</p>
+        </div>
+      </div>
+      <button class="pt__x" type="button" data-ferme aria-label="Fermer le portrait">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+      </button>
+    </div>
+
+    <div class="pt__corps">
+      <div class="pt__meta">
+        <div>
+          <span class="pt__lab">Rôles</span>
+          <span class="pt__tags">{m.roles.map((r) => <span class="tag">{r}</span>)}</span>
+        </div>
+        <div>
+          <span class="pt__lab">Diplômes</span>
+          <span class="pt__tags">{m.diplomes.map((d) => <span class="tag tag--sobre">{d}</span>)}</span>
+        </div>
+      </div>
+
+      <blockquote class="pt__cit">{m.citation}</blockquote>
+
+      {m.reponses.map((r) => (
+        <section class="pt__q">
+          <h4>{r.question}</h4>
+          {r.texte.map((t) => <p>{t}</p>)}
+        </section>
+      ))}
+
+      <div class="pt__pied">
+        <a class="btn btn--primaire" href="/secouriste-actif">Rejoindre l’équipe</a>
+        <a class="btn btn--sobre" href="/formations">Se former avec nous</a>
+      </div>
+    </div>
+  </dialog>
+))}
+
+<script>
+  // Chaque vignette ouvre le portrait correspondant. Sans JavaScript, rien ne
+  // s'ouvre — mais les textes restent dans le HTML, donc lisibles et indexables.
+  document.querySelectorAll<HTMLButtonElement>('[data-portrait]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const d = document.getElementById(`portrait-${b.dataset.portrait}`) as HTMLDialogElement | null;
+      d?.showModal();
+      d?.querySelector<HTMLElement>('.pt__corps')?.scrollTo(0, 0);
+    })
+  );
+
+  document.querySelectorAll<HTMLDialogElement>('dialog.pt').forEach((d) => {
+    d.querySelector('[data-ferme]')?.addEventListener('click', () => d.close());
+    // Clic sur le fond, hors de la boîte.
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  });
+</script>
+
+<style>
+  /* ── La grille de vignettes ─────────────────────────────────────────── */
+  .eq__l {
+    list-style: none; padding: 0; margin-top: 2rem;
+    display: grid; gap: clamp(1rem, 2.2vw, 1.4rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  }
+  .mb {
+    width: 100%; text-align: left; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); overflow: hidden; padding: 0;
+    display: flex; flex-direction: column;
+    font: inherit; color: inherit;
+    transition: box-shadow .18s, border-color .18s, transform .18s;
+  }
+  .mb:hover, .mb:focus-visible {
+    box-shadow: var(--sh-lg); border-color: var(--secours); transform: translateY(-2px);
+  }
+  .mb__ph { display: block; aspect-ratio: 3 / 4; background: var(--sunk); overflow: hidden; }
+  .mb__ph img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; }
+  .mb__txt { display: flex; flex-direction: column; gap: .3rem; padding: 1.1rem 1.2rem 1.25rem; }
+  .mb__nom { font-family: 'Archivo', sans-serif; font-size: 1.12rem; font-weight: 800; }
+  .mb__met { font-size: .88rem; color: var(--ink-mute); }
+  .mb__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
+  .mb__lire {
+    display: flex; align-items: center; gap: .4rem; margin-top: .7rem;
+    font-family: 'Archivo', sans-serif; font-size: .84rem; font-weight: 700; color: var(--secours);
+  }
+  .mb__lire svg { width: 14px; height: 14px; }
+
+  .tag {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
+    background: var(--accent-wash, var(--sunk)); color: var(--secours);
+    border-radius: 999px; padding: .22rem .6rem;
+  }
+  .tag--sobre { background: var(--sunk); color: var(--ink-mute); }
+
+  .eq__note { margin-top: 1.5rem; font-size: .85rem; color: var(--ink-mute); }
+
+  /* ── Le portrait ────────────────────────────────────────────────────── */
+  dialog.pt { display: none; }
+  dialog.pt[open] {
+    display: flex; flex-direction: column;
+    width: min(100%, 46rem); max-height: min(90vh, 900px);
+    padding: 0; border: 0; border-radius: var(--r-lg);
+    background: var(--surface); color: var(--ink);
+    box-shadow: 0 30px 90px rgba(0,0,0,.35);
+  }
+  dialog.pt::backdrop { background: rgba(10, 20, 35, .68); backdrop-filter: blur(3px); }
+
+  .pt__tete {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+    padding: 1.4rem 1.5rem; border-bottom: 1px solid var(--line);
+    background: var(--sunk); flex: none;
+  }
+  .pt__ident { display: flex; gap: 1rem; align-items: center; min-width: 0; }
+  .pt__ph {
+    width: 74px; height: 96px; flex: none; object-fit: cover; object-position: center 22%;
+    border-radius: var(--r-md);
+  }
+  .pt__nom { font-family: 'Archivo', sans-serif; font-size: 1.3rem; font-weight: 800; }
+  .pt__met { color: var(--ink-mute); font-size: .92rem; margin-top: .15rem; }
+  .pt__depuis { color: var(--ink-soft); font-size: .82rem; margin-top: .2rem; }
+  .pt__x {
+    flex: none; border: 0; background: none; cursor: pointer; padding: .3rem;
+    color: var(--ink-mute); line-height: 0;
+  }
+  .pt__x:hover { color: var(--ink); }
+  .pt__x svg { width: 20px; height: 20px; }
+
+  .pt__corps { padding: 1.5rem; overflow-y: auto; }
+  .pt__meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.4rem; }
+  .pt__lab {
+    display: block; font-family: 'Archivo', sans-serif; font-size: .66rem;
+    font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-mute); margin-bottom: .4rem;
+  }
+  .pt__tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+
+  .pt__cit {
+    margin: 0 0 1.75rem; padding: 1rem 1.25rem;
+    border-left: 4px solid var(--secours); background: var(--sunk);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    font-size: 1.05rem; line-height: 1.5; font-style: italic;
+  }
+
+  .pt__q { margin-bottom: 1.5rem; }
+  .pt__q h4 {
+    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--secours);
+    margin-bottom: .5rem;
+  }
+  .pt__q p { color: var(--ink-mute); margin-bottom: .7rem; max-width: 62ch; }
+  .pt__q p:last-child { margin-bottom: 0; }
+
+  .pt__pied {
+    display: flex; flex-wrap: wrap; gap: .7rem;
+    padding-top: 1.25rem; border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 560px) {
+    dialog.pt[open] { max-height: 94vh; border-radius: var(--r-md); }
+    .pt__tete { padding: 1.1rem 1.15rem; }
+    .pt__ph { width: 58px; height: 76px; }
+    .pt__nom { font-size: 1.12rem; }
+    .pt__corps { padding: 1.15rem; }
+  }
+</style>
