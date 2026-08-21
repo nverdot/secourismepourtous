@@ -22,8 +22,15 @@
   --gold-wash: #fbf1dc;
   --ocean: #0e7c86;
   --ocean-wash: #e2f2f3;
-  --ocre: #a9741b;
-  --ocre-wash: #fbf1dc;
+  /* La filière pédagogique porte le jaune de la FFSS, échantillonné sur le
+     logo fédéral : #f8c000. Il est trop clair pour du texte — 1,6:1 sur blanc —
+     donc il ne sert qu'aux aplats, et toujours avec de l'encre sombre par
+     dessus, comme sur le logo. Le texte utilise l'or foncé, qui est la même
+     teinte (46°) descendue jusqu'à 4,8:1 sur blanc. */
+  --ocre: #8f6d00;
+  --ocre-vif: #f8c000;
+  --ocre-encre: #221900;
+  --ocre-wash: #fff4d1;
 
   /* Accent par défaut : le rouge secours. Chaque page de formation le
      redéfinit selon sa filière, pour que la couleur vue dans le catalogue

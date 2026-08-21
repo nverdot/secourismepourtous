@@ -239,11 +239,6 @@ const actuel = Astro.url.pathname;
   /* Séparation garantie, quelle que soit la largeur. */
   .entete__cta { margin-left: 1.5rem; flex: none; }
 
-  @media (max-width: 1440px) {
-    .nav { margin-left: 0.9rem; }
-    .nav__lien { padding-inline: 0.45rem; }
-    .entete__cta { padding-inline: 1.1rem; margin-left: 1.1rem; }
-  }
   .nav__lien {
     font-family: 'Archivo', sans-serif;
     font-size: 0.92rem;
@@ -258,6 +253,18 @@ const actuel = Astro.url.pathname;
   .nav__lien.est-actif { color: var(--secours); }
 
   .entete__cta { padding: 0.65rem 1.3rem; font-size: 0.92rem; flex: none; }
+
+  /*
+   * Cette compaction vient APRÈS les règles de base, et pas avant : à
+   * spécificité égale, c'est l'ordre d'écriture qui tranche, pas la requête
+   * média. Placée plus haut, elle était réécrite par les règles qui suivaient,
+   * et le bouton « S'engager » sortait de l'écran entre 1180 et 1440 pixels.
+   */
+  @media (max-width: 1440px) {
+    .nav { margin-left: 0.9rem; }
+    .nav__lien { padding-inline: 0.45rem; }
+    .entete__cta { padding-inline: 1.1rem; margin-left: 1.1rem; }
+  }
 
   /* --- mobile --- */
   .entete__burger { display: none; }

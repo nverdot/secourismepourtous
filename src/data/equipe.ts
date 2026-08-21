@@ -414,3 +414,23 @@ export const FICHE_DIPLOME: Record<string, string> = {
 
 /** Portraits recueillis à cette date, par questionnaire. */
 export const recueilliLe = '21 août 2026';
+
+/**
+ * Les appels glissés entre les visages, sur la page d'accueil.
+ *
+ * Ils tournent : voir passer quatre fois la même phrase donnerait une bannière
+ * publicitaire, alors qu'on veut une invitation. Les deux rangées ne partent
+ * pas du même endroit dans la liste, pour qu'on ne lise jamais deux fois la
+ * même chose à la verticale.
+ *
+ * Le registre : on promet ce qu'on tient. Pas de « devenez un héros » — ce que
+ * les bénévoles décrivent eux-mêmes dans leurs portraits, c'est une équipe, des
+ * week-ends de terrain et le sentiment d'être utile. C'est ça qu'on met.
+ */
+export const APPELS: { titre: string; sous: string }[] = [
+  { titre: 'Envie de rejoindre une famille\u00a0?', sous: 'On recrute toute l\u2019année' },
+  { titre: 'Envie de sauver des vies\u00a0?', sous: 'Ça commence par une formation' },
+  { titre: 'Il manque un visage sur ce mur.', sous: 'Ce serait le vôtre\u00a0?' },
+  { titre: 'Un jour, quelqu\u2019un aura besoin de vous.', sous: 'Autant être prêt' },
+  { titre: 'Nos week-ends ont un sens.', sous: 'Venez voir par vous-même' },
+];

@@ -222,13 +222,14 @@ const cartes = ordre.map((cle) => ({
   .cf--azur    .cf__ic, .cf--azur    .cf__btn { background: var(--azur); }
   .cf--secours .cf__ic, .cf--secours .cf__btn { background: var(--secours); }
   .cf--ocean   .cf__ic, .cf--ocean   .cf__btn { background: #0E7C86; }
-  .cf--ocre    .cf__ic, .cf--ocre    .cf__btn { background: #A9741B; }
+  /* Jaune fédéral en aplat : l'encre passe en sombre, le blanc n'y tiendrait pas. */
+  .cf--ocre    .cf__ic, .cf--ocre    .cf__btn { background: var(--ocre-vif); color: var(--ocre-encre); }
   .cf--navy    .cf__ic, .cf--navy    .cf__btn { background: var(--navy); }
 
   .cf--azur    .cf__titre { color: var(--azur); }
   .cf--secours .cf__titre { color: var(--secours); }
   .cf--ocean   .cf__titre { color: #0E7C86; }
-  .cf--ocre    .cf__titre { color: #A9741B; }
+  .cf--ocre    .cf__titre { color: var(--ocre); }
   .cf--navy    .cf__titre { color: var(--navy); }
 
   /* ================= boîte de dialogue ================= */
@@ -249,7 +250,7 @@ const cartes = ordre.map((cle) => ({
   .fdlg--azur    .fdlg__tete { background: var(--azur); }
   .fdlg--secours .fdlg__tete { background: var(--secours); }
   .fdlg--ocean   .fdlg__tete { background: #0E7C86; }
-  .fdlg--ocre    .fdlg__tete { background: #A9741B; }
+  .fdlg--ocre    .fdlg__tete { background: var(--ocre-vif); color: var(--ocre-encre); }
   .fdlg--navy    .fdlg__tete { background: var(--navy); }
 
   .fdlg__ic { width: 30px; height: 30px; flex: none; display: grid; place-items: center; }
@@ -265,7 +266,7 @@ const cartes = ordre.map((cle) => ({
   .fdlg--azur    .fdlg__accroche { color: var(--azur); }
   .fdlg--secours .fdlg__accroche { color: var(--secours); }
   .fdlg--ocean   .fdlg__accroche { color: #0E7C86; }
-  .fdlg--ocre    .fdlg__accroche { color: #A9741B; }
+  .fdlg--ocre    .fdlg__accroche { color: var(--ocre); }
   .fdlg--navy    .fdlg__accroche { color: var(--navy); }
   .fdlg__texte { color: var(--ink-soft); font-size: .93rem; margin-bottom: 1.4rem; }
 
@@ -299,13 +300,13 @@ const cartes = ordre.map((cle) => ({
   .fdlg--azur    .fitem__b--plein { background: var(--azur); }
   .fdlg--secours .fitem__b--plein { background: var(--secours); }
   .fdlg--ocean   .fitem__b--plein { background: #0E7C86; }
-  .fdlg--ocre    .fitem__b--plein { background: #A9741B; }
+  .fdlg--ocre    .fitem__b--plein { background: var(--ocre-vif); color: var(--ocre-encre); }
   .fdlg--navy    .fitem__b--plein { background: var(--navy); }
 
   .fdlg--azur    .fitem__b--creux { color: var(--azur);   border-color: var(--azur); }
   .fdlg--secours .fitem__b--creux { color: var(--secours); border-color: var(--secours); }
   .fdlg--ocean   .fitem__b--creux { color: #0E7C86;       border-color: #0E7C86; }
-  .fdlg--ocre    .fitem__b--creux { color: #A9741B;       border-color: #A9741B; }
+  .fdlg--ocre    .fitem__b--creux { color: var(--ocre);   border-color: var(--ocre); }
   .fdlg--navy    .fitem__b--creux { color: var(--navy);   border-color: var(--navy); }
 
   .fdlg__vide { text-align: center; padding: 1rem 0 .5rem; }
