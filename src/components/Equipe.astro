@@ -717,14 +717,26 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   .tag--navy    { background: var(--sunk);         color: var(--navy); }
 
   /* Question et réponse doivent se distinguer au premier coup d'œil. */
-  .pt__q { margin-bottom: 1.9rem; }
+  .pt__q { margin-bottom: 2.2rem; }
   .pt__q h4 {
     font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 800;
     line-height: 1.25; color: var(--ink);
     padding-left: .85rem; border-left: 3px solid var(--secours);
     margin-bottom: .75rem;
   }
-  .pt__q p { color: var(--ink-mute); margin-bottom: .75rem; max-width: 62ch; line-height: 1.65; }
+  /*
+   * Le corps d'un portrait n'est pas une légende : il se lit d'un bout à
+   * l'autre. D'où l'encre douce plutôt que le gris discret, et un blanc entre
+   * paragraphes assez large pour qu'une rupture se voie — à .75rem, l'écart
+   * entre deux paragraphes valait à peine celui entre deux lignes.
+   */
+  .pt__q p {
+    color: var(--ink-soft); margin-bottom: 1.05rem;
+    /* 53ch et non 62 : l'unité « ch » mesure le zéro, bien plus large qu'une
+       lettre moyenne. À 62ch la ligne portait 79 signes, mesurés caractère par
+       caractère — au-dessus de la plage de confort, qui va de 45 à 75. */
+    max-width: 53ch; line-height: 1.7;
+  }
   .pt__q p:last-child { margin-bottom: 0; }
 
   .pt__pied {

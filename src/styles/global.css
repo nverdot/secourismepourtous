@@ -56,7 +56,14 @@
 
   --ink: #0e1b2a;
   --ink-soft: #3d5064;
-  --ink-mute: #6b7c8d;
+  /*
+   * Assombri de #6b7c8d, qui plafonnait à 4,29:1 sur blanc — sous le seuil de
+   * lisibilité, alors que ce gris porte le texte courant de 43 fichiers, dont
+   * le corps des portraits. Même teinte, même saturation, seule la clarté
+   * descend : la hiérarchie encre / doux / discret reste lisible d'un coup
+   * d'œil. Il tient désormais 5,08:1 sur blanc, 4,55:1 sur les fonds creusés.
+   */
+  --ink-mute: #617080;
   --line: #dde5ec;
 
   --on-navy: #f2f6fa;

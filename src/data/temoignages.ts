@@ -39,7 +39,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'psc',
     auteur: 'Léa B.',
-    texte: 'Les formateurs sont pédagogues et passionnés par leur sujet, ce qui rend la formation super !',
+    texte: 'Les formateurs sont pédagogues et passionnés par leur sujet, ce qui rend la formation super !',
   },
   {
     cible: 'psc',
@@ -49,7 +49,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'psc',
     auteur: 'Nicolas G.',
-    texte: 'Formation rapide et efficace, un duo de formateurs professionnels et très sympathiques ! Je recommande à tous ceux qui veulent passer le PSC1 de passer par eux.',
+    texte: 'Formation rapide et efficace, un duo de formateurs professionnels et très sympathiques ! Je recommande à tous ceux qui veulent passer le PSC1 de passer par eux.',
   },
   {
     cible: 'psc',
@@ -59,7 +59,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'psc',
     auteur: 'Teo R.',
-    texte: 'Des animateurs qui mettent du rythme : pas de moment creux, et assez ludique.',
+    texte: 'Des animateurs qui mettent du rythme : pas de moment creux, et assez ludique.',
   },
   {
     cible: 'psc',
@@ -81,12 +81,12 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'pse-1',
     auteur: 'Alessio B.',
-    texte: 'Très éducatif et intéressant : on apprend vraiment bien avec toute l’équipe !',
+    texte: 'Très éducatif et intéressant : on apprend vraiment bien avec toute l’équipe !',
   },
   {
     cible: 'pse-1',
     auteur: 'Sébastien L.',
-    texte: 'Plus de place dans le frigo ! Non, tout était parfait, merci à toute l’équipe.',
+    texte: 'Plus de place dans le frigo ! Non, tout était parfait, merci à toute l’équipe.',
   },
 
   // ── PSE2 ───────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'fc-psc',
     auteur: 'Karim S.',
-    texte: 'Franchement, je ne vois rien à redire : c’était vraiment complet, de A à Z.',
+    texte: 'Franchement, je ne vois rien à redire : c’était vraiment complet, de A à Z.',
   },
   {
     cible: 'fc-psc',
@@ -137,7 +137,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'fc-pse-1',
     auteur: 'Leslie B.',
-    texte: 'C’était super : on a pu tout revoir, et passer du temps sur certains thèmes qu’on avait oubliés. Merci !',
+    texte: 'C’était super : on a pu tout revoir, et passer du temps sur certains thèmes qu’on avait oubliés. Merci !',
   },
   {
     cible: 'fc-pse-1',
@@ -152,7 +152,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'fc-pse-1',
     auteur: 'Neige D.',
-    texte: 'Très enrichissant : de la bienveillance, un bel accueil, une vraie qualité pédagogique.',
+    texte: 'Très enrichissant : de la bienveillance, un bel accueil, une vraie qualité pédagogique.',
   },
   {
     cible: 'fc-pse-1',
@@ -174,7 +174,7 @@ export const temoignages: Temoignage[] = [
   {
     cible: 'fc-pse-2',
     auteur: 'Claire S.',
-    texte: 'La variété des cas pratiques, et des informations nouvelles à connaître : femmes enceintes, notions de psychologie.',
+    texte: 'La variété des cas pratiques, et des informations nouvelles à connaître : femmes enceintes, notions de psychologie.',
   },
   {
     cible: 'fc-pse-2',

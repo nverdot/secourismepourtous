@@ -73,7 +73,7 @@ export const membres: Membre[] = [
     vignette: '/img/equipe/aurelia-min.jpg',
     alt: 'Aurelia en tenue de l’association, au volant du véhicule de premiers secours.',
     citation:
-      'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
+      'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
     reponses: [
       {
         question: 'Dans la vraie vie',
@@ -86,7 +86,7 @@ export const membres: Membre[] = [
       {
         question: 'Ce qui m’a amené au secourisme',
         texte: [
-          'Au détour d’une discussion, on m’a parlé de l’association Secourisme Pour Tous. Le diagnostic était clair : le club avait besoin d’une nouvelle direction pour tout reconstruire, structurer les équipes et relever de nombreux défis.',
+          'Au détour d’une discussion, on m’a parlé de l’association Secourisme Pour Tous. Le diagnostic était clair : le club avait besoin d’une nouvelle direction pour tout reconstruire, structurer les équipes et relever de nombreux défis.',
           'C’était avant tout un enjeu humain. L’ampleur de la tâche, la diversité des missions à orchestrer et, surtout, l’impact vital du secourisme m’ont immédiatement interpellée. Relever ce défi et redonner un souffle à ce club, c’est ce qui m’a poussée à m’engager pleinement.',
         ],
       },
@@ -94,24 +94,24 @@ export const membres: Membre[] = [
         question: 'Ce qui me fait revenir',
         texte: [
           'C’est d’abord l’engagement sans faille de mes équipes et notre présence désormais incontournable sur le terrain. Voir nos projets se concrétiser et dépasser nos objectifs est une immense satisfaction, tout comme d’obtenir la reconnaissance légitime des autorités et de nos partenaires, qui saluent enfin la rigueur de notre travail.',
-          'Mais le vrai moteur, ce sont les retours humains. Quand nous recevons ces messages — « Merci pour votre réactivité, vous avez tout changé », « Une équipe formidable, humaine et pro », ou encore « Grâce à vous, ce projet a pu voir le jour » —, cela donne un sens profond à nos efforts.',
-          'Et par-dessus tout, la plus belle des victoires réside dans un détail bien plus personnel : cette étincelle de fierté dans les yeux de ma fille lorsqu’elle raconte autour d’elle ce que nous accomplissons. C’est pour tout cela que je ne lâcherai rien.',
+          'Mais le vrai moteur, ce sont les retours humains. Quand nous recevons ces messages — « Merci pour votre réactivité, vous avez tout changé », « Une équipe formidable, humaine et pro », ou encore « Grâce à vous, ce projet a pu voir le jour » —, cela donne un sens profond à nos efforts.',
+          'Et par-dessus tout, la plus belle des victoires réside dans un détail bien plus personnel : cette étincelle de fierté dans les yeux de ma fille lorsqu’elle raconte autour d’elle ce que nous accomplissons. C’est pour tout cela que je ne lâcherai rien.',
         ],
       },
       {
         question: 'Ce qui m’a surpris au début',
         texte: [
-          'En arrivant, je pensais intégrer un secteur humain, solidaire, mais une autre réalité m’a frappée de plein fouet. J’ai découvert un milieu où parfois la compétition est importante et où chaque association essaye de faire reconnaître sa valeur. Alors qu’en vrai, on a tous le même rôle : aider les autres, sauver, protéger, prendre soin.',
-          'Surtout, j’ai découvert le rythme impitoyable du terrain : du 7 jours sur 7, sans le moindre répit. Je n’imaginais pas que la gestion d’un club de secourisme exigeait une telle présence, un engagement de chaque instant où l’on ne déconnecte jamais vraiment. C’est un monde éprouvant, mais d’une adrénaline brute.',
+          'En arrivant, je pensais intégrer un secteur humain, solidaire, mais une autre réalité m’a frappée de plein fouet. J’ai découvert un milieu où parfois la compétition est importante et où chaque association essaye de faire reconnaître sa valeur. Alors qu’en vrai, on a tous le même rôle : aider les autres, sauver, protéger, prendre soin.',
+          'Surtout, j’ai découvert le rythme impitoyable du terrain : du 7 jours sur 7, sans le moindre répit. Je n’imaginais pas que la gestion d’un club de secourisme exigeait une telle présence, un engagement de chaque instant où l’on ne déconnecte jamais vraiment. C’est un monde éprouvant, mais d’une adrénaline brute.',
         ],
       },
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
-          'Se former aux premiers secours ou s’engager comme bénévole, ce n’est pas ajouter une ligne sur un CV ni remplir un après-midi libre. C’est décider, très concrètement, de faire la différence quand tout semble basculer et s’écrouler. Un jour, face à une détresse, un arrêt cardiaque ou un accident, il n’y aura pas de spectateurs : il y aura ceux qui doutent, et ceux qui savent quoi faire.',
+          'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
+          'Se former aux premiers secours ou s’engager comme bénévole, ce n’est pas ajouter une ligne sur un CV ni remplir un après-midi libre. C’est décider, très concrètement, de faire la différence quand tout semble basculer et s’écrouler. Un jour, face à une détresse, un arrêt cardiaque ou un accident, il n’y aura pas de spectateurs : il y aura ceux qui doutent, et ceux qui savent quoi faire.',
           'On s’imagine souvent qu’il faut avoir une vocation hors du commun ou un sang-froid à toute épreuve. C’est faux. L’engagement s’apprend, la technique s’acquiert, et la force vient sur le terrain, aux côtés d’une équipe soudée qui devient une deuxième famille. Tu découvriras une intensité, le sentiment de te sentir utile et une fierté que peu d’expériences peuvent offrir.',
-          'Tu hésites encore ? Viens simplement tester une journée. Au pire, tu auras appris à sauver une vie.',
+          'Tu hésites encore ? Viens simplement tester une journée. Au pire, tu auras appris à sauver une vie.',
         ],
       },
     ],
@@ -141,7 +141,7 @@ export const membres: Membre[] = [
         texte: [
           'J’ai redoublé une année à la fac et j’avais envie de travailler, de me former et de passer des diplômes. J’aimais la natation, et une amie faisait partie de l’association. Je lui ai donc demandé les coordonnées pour passer le BNSSA.',
           'Je n’ai finalement fait qu’une saison de surveillance et quelques postes aquatiques… J’ai surtout passé mon temps sur les dispositifs de secours, avant d’évoluer progressivement dans la formation.',
-          'Comme quoi, parfois, il suffit d’un petit détour pour trouver sa voie !',
+          'Comme quoi, parfois, il suffit d’un petit détour pour trouver sa voie !',
         ],
       },
       {
@@ -154,28 +154,28 @@ export const membres: Membre[] = [
       {
         question: 'Ce qui m’a surpris au début',
         texte: [
-          'Tout. Je rentrais dans un domaine que je ne connaissais absolument pas. Je ne savais pas vraiment à quoi m’attendre, alors j’ai suivi le mouvement… et aucun regret !',
+          'Tout. Je rentrais dans un domaine que je ne connaissais absolument pas. Je ne savais pas vraiment à quoi m’attendre, alors j’ai suivi le mouvement… et aucun regret !',
         ],
       },
       {
         question: 'Ce que le terrain change dans ma façon d’enseigner',
         texte: [
           'Le terrain apporte du vécu, des anecdotes et des situations concrètes. Il permet de donner vie aux formations, de rendre les apprentissages plus parlants et surtout de capter plus facilement l’attention des apprenants.',
-          'On ne transmet pas seulement des gestes : on transmet aussi des expériences.',
+          'On ne transmet pas seulement des gestes : on transmet aussi des expériences.',
         ],
       },
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'GO GO GO !',
+          'GO GO GO !',
           'Se former aux premiers secours ne signifie pas forcément devenir secouriste bénévole. Mais un accident peut arriver très vite, n’importe où et à n’importe qui.',
-          'J’entends très régulièrement : « J’ai été face à un accident et je n’ai pas su réagir. Si j’avais su, je me serais formé avant. »',
+          'J’entends très régulièrement : « J’ai été face à un accident et je n’ai pas su réagir. Si j’avais su, je me serais formé avant. »',
           'Il ne faut pas attendre d’être confronté à une situation pour apprendre à y faire face. Il sera peut-être déjà trop tard.',
           'À mes yeux, connaître les gestes essentiels de premiers secours devrait être une évidence pour tout le monde.',
-          'Et très souvent, à la fin d’une formation, j’entends aussi : « Je ne savais pas qu’on abordait autant de choses ! Je suis agréablement surpris. »',
-          'C’est justement ça, le but : prendre conscience qu’on est parfois démuni face à une situation d’urgence… et repartir en sachant quoi faire.',
+          'Et très souvent, à la fin d’une formation, j’entends aussi : « Je ne savais pas qu’on abordait autant de choses ! Je suis agréablement surpris. »',
+          'C’est justement ça, le but : prendre conscience qu’on est parfois démuni face à une situation d’urgence… et repartir en sachant quoi faire.',
           'Il n’est jamais trop tard pour se former. Alors autant le faire maintenant que plus tard. ❤️',
-          'Et pour celles et ceux qui hésitent à devenir bénévoles : ça ne coûte rien d’essayer une fois.',
+          'Et pour celles et ceux qui hésitent à devenir bénévoles : ça ne coûte rien d’essayer une fois.',
           'L’ambiance est conviviale, on sait rigoler comme être sérieux quand il le faut, et on peut se retrouver dans des cadres et des situations qu’on n’aurait jamais imaginés.',
           'Et puis… souvent, l’essayer, c’est l’adopter. 😉',
         ],
@@ -194,7 +194,7 @@ export const membres: Membre[] = [
     vignette: '/img/equipe/anthony-min.jpg',
     alt: 'Anthony en tenue Secours FFSS, bras croisés, devant le véhicule de premiers secours sur la Promenade des Anglais.',
     citation:
-      'Il ne faut pas forcément se sentir prêt à 100 % avant de commencer.',
+      'Il ne faut pas forcément se sentir prêt à 100 % avant de commencer.',
     reponses: [
       {
         question: 'Dans la vraie vie',
@@ -223,7 +223,7 @@ export const membres: Membre[] = [
         question: 'Ce qui m’a surpris au début',
         texte: [
           'Au début, ce qui m’a le plus surpris, c’est que le secourisme ne se résume pas seulement aux gestes techniques et aux interventions. J’imaginais surtout qu’il fallait savoir réagir rapidement face à une situation d’urgence.',
-          'Avec le temps, j’ai découvert que l’aspect humain était tout aussi important : savoir écouter, rassurer une personne, communiquer avec elle et garder son calme, même dans des situations parfois stressantes.',
+          'Avec le temps, j’ai découvert que l’aspect humain était tout aussi important : savoir écouter, rassurer une personne, communiquer avec elle et garder son calme, même dans des situations parfois stressantes.',
           'J’ai également été surpris par l’importance du travail en équipe. On apprend à faire confiance aux autres, à communiquer efficacement et à chacun trouver sa place. C’est quelque chose que je n’avais pas forcément imaginé au départ et qui m’a beaucoup plu.',
         ],
       },
@@ -240,7 +240,7 @@ export const membres: Membre[] = [
         texte: [
           'À quelqu’un qui hésite à se former, je lui dirais de ne pas attendre d’être confronté à une situation d’urgence pour se demander s’il aurait pu aider. Une formation de premiers secours donne des connaissances et des réflexes qui peuvent réellement faire la différence. On peut tous être un jour témoin d’un malaise, d’un accident ou d’une situation où quelqu’un a besoin d’aide.',
           'À quelqu’un qui hésite à devenir bénévole, je lui dirais d’essayer. Le bénévolat demande du temps et de l’investissement, mais il apporte énormément sur le plan humain. On apprend à travailler en équipe, à prendre des responsabilités, à gérer des situations différentes et surtout à se sentir utile.',
-          'Pour moi, il ne faut pas forcément se sentir prêt à 100 % avant de commencer. On apprend justement en se formant, en pratiquant et en vivant des expériences avec les autres. Si on a envie d’aider et de donner un peu de son temps, c’est déjà une très bonne raison de se lancer.',
+          'Pour moi, il ne faut pas forcément se sentir prêt à 100 % avant de commencer. On apprend justement en se formant, en pratiquant et en vivant des expériences avec les autres. Si on a envie d’aider et de donner un peu de son temps, c’est déjà une très bonne raison de se lancer.',
         ],
       },
     ],
@@ -257,7 +257,7 @@ export const membres: Membre[] = [
     vignette: '/img/equipe/raphael-radier-min.jpg',
     alt: 'Raphael en tenue Secours FFSS, en salle, face à deux chefs de dispositif pendant une formation.',
     citation:
-      'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
+      'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
     reponses: [
       {
         question: 'Dans la vraie vie',
@@ -277,7 +277,7 @@ export const membres: Membre[] = [
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
+          'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
         ],
       },
     ],
@@ -292,7 +292,7 @@ export const membres: Membre[] = [
     diplomes: ['PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
     photo: '/img/equipe/thibaut.jpg',
     vignette: '/img/equipe/thibaut-min.jpg',
-    alt: 'Thibaut en gilet « chef de dispositif », devant le véhicule de premiers secours, la grande roue de Nice éclairée en arrière-plan.',
+    alt: 'Thibaut en gilet « chef de dispositif », devant le véhicule de premiers secours, la grande roue de Nice éclairée en arrière-plan.',
     citation:
       'Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs.',
     reponses: [
@@ -305,15 +305,15 @@ export const membres: Membre[] = [
       {
         question: 'Ce qui m’a amené au secourisme',
         texte: [
-          'Depuis tout petit je n’ai qu’un seul rêve : faire partie de la brigade des sapeurs-pompiers de Paris, être utile aux autres et pouvoir aider les gens qui sont dans le besoin.',
-          'Le secourisme m’a permis de mettre un pied dans cet environnement dès le plus jeune âge, et de découvrir que c’était vraiment ce que je voulais. Bien plus qu’une envie : c’était déjà devenu une passion.',
+          'Depuis tout petit je n’ai qu’un seul rêve : faire partie de la brigade des sapeurs-pompiers de Paris, être utile aux autres et pouvoir aider les gens qui sont dans le besoin.',
+          'Le secourisme m’a permis de mettre un pied dans cet environnement dès le plus jeune âge, et de découvrir que c’était vraiment ce que je voulais. Bien plus qu’une envie : c’était déjà devenu une passion.',
         ],
       },
       {
         question: 'Ce qui me fait revenir',
         texte: [
           'Je reviens pour cette ambiance familiale. Sur poste, nous ne sommes pas simplement des secouristes qui tenons un poste de secours ensemble, mais une véritable famille avec qui nous partageons de nombreux moments.',
-          'Ce qui me fait aussi revenir, c’est de ne pas savoir sur quoi l’on peut tomber. Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs : voir des choses, des événements, des paysages que je n’aurais jamais vus si je n’étais pas là.',
+          'Ce qui me fait aussi revenir, c’est de ne pas savoir sur quoi l’on peut tomber. Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs : voir des choses, des événements, des paysages que je n’aurais jamais vus si je n’étais pas là.',
         ],
       },
       {
@@ -371,7 +371,7 @@ export const membres: Membre[] = [
     diplomes: ['PSE1', 'PSE2'],
     photo: '/img/equipe/salah.jpg',
     vignette: '/img/equipe/salah-min.jpg',
-    alt: 'Salah en veste Secours FFSS marquée « équipier », devant le poste de secours du village de Noël d’Antibes.',
+    alt: 'Salah en veste Secours FFSS marquée « équipier », devant le poste de secours du village de Noël d’Antibes.',
     citation:
       'Être formé aux premiers secours permet d’avoir plus confiance en soi. C’était mon cas.',
     reponses: [
@@ -464,7 +464,7 @@ export const membres: Membre[] = [
     vignette: '/img/equipe/angele-min.jpg',
     alt: 'Cinq secouristes en tenue Secours FFSS, de dos, devant un feu d’artifice sur le front de mer.',
     citation:
-      'Je lui dirais de foncer : la formation nous apprend énormément, ça ne sera jamais une perte de l’avoir faite.',
+      'Je lui dirais de foncer : la formation nous apprend énormément, ça ne sera jamais une perte de l’avoir faite.',
     reponses: [
       { question: 'Dans la vraie vie', texte: ['Dans la vraie vie, je suis étudiante en commerce.'] },
       { question: 'Ce qui m’a amené au secourisme', texte: ['C’est une amie qui m’en a parlé.'] },
@@ -483,7 +483,7 @@ export const membres: Membre[] = [
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'Je lui dirais de foncer : la formation est vraiment géniale et elle nous apprend énormément, donc ça ne sera jamais une perte de l’avoir faite. Et quitte à ne pas faire de postes derrière — en ayant essayé —, au moins la personne saura les gestes de premiers secours, qui ne sont pas toujours innés chez les gens. Et qui sait, peut-être que ça sauvera des gens.',
+          'Je lui dirais de foncer : la formation est vraiment géniale et elle nous apprend énormément, donc ça ne sera jamais une perte de l’avoir faite. Et quitte à ne pas faire de postes derrière — en ayant essayé —, au moins la personne saura les gestes de premiers secours, qui ne sont pas toujours innés chez les gens. Et qui sait, peut-être que ça sauvera des gens.',
         ],
       },
     ],
