@@ -17,11 +17,11 @@
  * ajouter un mot qu'ils n'ont pas écrit, ou couper ce qui dérange. Un portrait
  * réécrit sonne faux, et ils le reliront avant publication.
  *
- * À ANTICIPER. Les photos sont stockées en pleine définition (jusqu'à
- * 1000 × 1400). Tant qu'il y a trois portraits, c'est sans conséquence. Passé
- * une dizaine, il faudra produire des vignettes réduites — 400 px de large
- * suffisent pour la grille — et ne charger la grande image qu'à l'ouverture
- * du portrait. Sinon la page d'équipe pèsera plusieurs mégaoctets.
+ * LES IMAGES. Chaque portrait existe en deux tailles : 900 × 1200 pour le
+ * portrait ouvert, 360 × 480 pour la vignette. C'était anticipé comme un
+ * problème à venir ; c'en est devenu un à neuf portraits, le mur affichant
+ * plus de soixante vignettes. En pleine définition la page pesait 2,3 Mo ;
+ * elle en pèse 288 Ko. La grande image n'est demandée qu'à l'ouverture.
  *
  * ⚠️ RELECTURE. Chacun doit valider son texte avant mise en ligne. C'est ce
  * qu'on leur a promis dans le formulaire, en toutes lettres.
@@ -44,7 +44,16 @@ export interface Membre {
   /** Rôles tenus, dans l'ordre d'importance. Sert d'étiquettes sur la vignette. */
   roles: string[];
   diplomes: string[];
+  /** Grande image, montrée dans le portrait ouvert. 900 × 1200. */
   photo: string;
+  /**
+   * Vignette, montrée sur le mur et dans la grille. 360 × 480.
+   *
+   * Le mur répète les visages pour boucler sans couture : il affiche plus de
+   * soixante images. En pleine définition, cela ferait plusieurs mégaoctets
+   * pour une bande de vignettes larges de 170 pixels.
+   */
+  vignette: string;
   alt: string;
   /** Phrase mise en avant sur la vignette, tirée mot pour mot de ses réponses. */
   citation: string;
@@ -61,6 +70,7 @@ export const membres: Membre[] = [
     roles: ['Membre du bureau'],
     diplomes: ['PSC'],
     photo: '/img/equipe/aurelia.jpg',
+    vignette: '/img/equipe/aurelia-min.jpg',
     alt: 'Aurelia en tenue de l’association, au volant du véhicule de premiers secours.',
     citation:
       'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
@@ -81,18 +91,18 @@ export const membres: Membre[] = [
         ],
       },
       {
-        question: 'Ce qui m’a surpris au début',
+        question: 'Ce qui me fait revenir',
         texte: [
-          'En arrivant, je pensais intégrer un secteur humain, solidaire. Une autre réalité m’a frappée de plein fouet : j’ai découvert un milieu où la compétition est parfois importante, où chaque association essaie de faire reconnaître sa valeur. Alors qu’en vrai, on a tous le même rôle — aider les autres, sauver, protéger, prendre soin.',
-          'Surtout, j’ai découvert le rythme impitoyable du terrain : du sept jours sur sept, sans le moindre répit. Je n’imaginais pas que la gestion d’un club de secourisme exigeait une telle présence, un engagement de chaque instant où l’on ne déconnecte jamais vraiment. C’est un monde éprouvant, mais d’une adrénaline brute.',
+          'C’est d’abord l’engagement sans faille de mes équipes et notre présence désormais incontournable sur le terrain. Voir nos projets se concrétiser et dépasser nos objectifs est une immense satisfaction, tout comme d’obtenir la reconnaissance légitime des autorités et de nos partenaires, qui saluent enfin la rigueur de notre travail.',
+          'Mais le vrai moteur, ce sont les retours humains. Quand nous recevons ces messages — « Merci pour votre réactivité, vous avez tout changé », « Une équipe formidable, humaine et pro », ou encore « Grâce à vous, ce projet a pu voir le jour » —, cela donne un sens profond à nos efforts.',
+          'Et par-dessus tout, la plus belle des victoires réside dans un détail bien plus personnel : cette étincelle de fierté dans les yeux de ma fille lorsqu’elle raconte autour d’elle ce que nous accomplissons. C’est pour tout cela que je ne lâcherai rien.',
         ],
       },
       {
-        question: 'Ce qui me fait revenir',
+        question: 'Ce qui m’a surpris au début',
         texte: [
-          'C’est d’abord l’engagement sans faille de mes équipes, et notre présence désormais incontournable sur le terrain. Voir nos projets se concrétiser et dépasser nos objectifs est une immense satisfaction, tout comme d’obtenir la reconnaissance légitime des autorités et de nos partenaires, qui saluent enfin la rigueur de notre travail.',
-          'Mais le vrai moteur, ce sont les retours humains. Quand nous recevons ces messages — « Merci pour votre réactivité, vous avez tout changé », « Une équipe formidable, humaine et pro », ou encore « Grâce à vous, ce projet a pu voir le jour » — cela donne un sens profond à nos efforts.',
-          'Et par-dessus tout, la plus belle des victoires réside dans un détail bien plus personnel : cette étincelle de fierté dans les yeux de ma fille lorsqu’elle raconte autour d’elle ce que nous accomplissons. C’est pour tout cela que je ne lâcherai rien.',
+          'En arrivant, je pensais intégrer un secteur humain, solidaire, mais une autre réalité m’a frappée de plein fouet. J’ai découvert un milieu où parfois la compétition est importante et où chaque association essaye de faire reconnaître sa valeur. Alors qu’en vrai, on a tous le même rôle : aider les autres, sauver, protéger, prendre soin.',
+          'Surtout, j’ai découvert le rythme impitoyable du terrain : du 7 jours sur 7, sans le moindre répit. Je n’imaginais pas que la gestion d’un club de secourisme exigeait une telle présence, un engagement de chaque instant où l’on ne déconnecte jamais vraiment. C’est un monde éprouvant, mais d’une adrénaline brute.',
         ],
       },
       {
@@ -100,102 +110,106 @@ export const membres: Membre[] = [
         texte: [
           'N’attends pas le moment parfait : le moment de l’engagement, c’est toi qui le provoques.',
           'Se former aux premiers secours ou s’engager comme bénévole, ce n’est pas ajouter une ligne sur un CV ni remplir un après-midi libre. C’est décider, très concrètement, de faire la différence quand tout semble basculer et s’écrouler. Un jour, face à une détresse, un arrêt cardiaque ou un accident, il n’y aura pas de spectateurs : il y aura ceux qui doutent, et ceux qui savent quoi faire.',
-          'On s’imagine souvent qu’il faut avoir une vocation hors du commun ou un sang-froid à toute épreuve. C’est faux. L’engagement s’apprend, la technique s’acquiert, et la force vient sur le terrain, aux côtés d’une équipe soudée qui devient une deuxième famille. Tu découvriras une intensité, le sentiment de te sentir utile, et une fierté que peu d’expériences peuvent offrir.',
+          'On s’imagine souvent qu’il faut avoir une vocation hors du commun ou un sang-froid à toute épreuve. C’est faux. L’engagement s’apprend, la technique s’acquiert, et la force vient sur le terrain, aux côtés d’une équipe soudée qui devient une deuxième famille. Tu découvriras une intensité, le sentiment de te sentir utile et une fierté que peu d’expériences peuvent offrir.',
           'Tu hésites encore ? Viens simplement tester une journée. Au pire, tu auras appris à sauver une vie.',
         ],
       },
     ],
   },
-
   {
     slug: 'annabell',
     prenom: 'Annabell',
-    nom: 'Perez',
-    metier: 'Formatrice — gestion de formation et communication',
+    nom: 'Perez Björkman',
+    metier: 'Administration en semaine, formatrice en secourisme le week-end',
     depuis: '2018',
-    roles: ['Formateur', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Nageur sauveteur', 'Secouriste'],
-    diplomes: ['PSC', 'PSE1', 'PSE2', 'BNSSA', 'PAE FPSC', 'PAE FPS', 'SST'],
+    roles: ['Formateur', 'Chef de dispositif', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Nageur sauveteur'],
+    diplomes: ['PSE1', 'PSE2', 'BNSSA', 'PAE FPSC', 'PAE FPS', 'SST'],
     photo: '/img/equipe/annabell.jpg',
+    vignette: '/img/equipe/annabell-min.jpg',
     alt: 'Annabell en gilet de sauveteur aquatique, face à la mer, au coucher du soleil.',
     citation:
-      'Il ne faut pas attendre que ça arrive pour se former. Ça sera peut-être déjà trop tard.',
+      'Il ne faut pas attendre d’être confronté à une situation pour apprendre à y faire face.',
     reponses: [
       {
         question: 'Dans la vraie vie',
-        texte: ['Formatrice le week-end, gestion de formation et communication la semaine.'],
+        texte: [
+          'Anciennement dans le management du sport, je travaille aujourd’hui dans l’administration en semaine et je suis formatrice en secourisme le week-end.',
+        ],
       },
       {
         question: 'Ce qui m’a amené au secourisme',
         texte: [
-          'J’ai redoublé une année à la fac et j’avais envie de travailler, de passer des diplômes. J’aimais la natation, et une amie faisait partie de l’association : je lui ai demandé les coordonnées pour passer le BNSSA.',
-          'Je n’ai finalement fait qu’une saison de surveillance et quelques postes aquatiques — j’ai passé tout le reste du temps sur les dispositifs de secours, et à évoluer dans la formation.',
-        ],
-      },
-      {
-        question: 'Ce qui m’a surpris au début',
-        texte: [
-          'Tout. Je rentrais dans un domaine que je ne connaissais pas, je ne savais pas à quoi m’attendre. J’ai suivi le mouvement, et AUCUN REGRET.',
-        ],
-      },
-      {
-        question: 'Ce que le terrain change dans ma façon d’enseigner',
-        texte: [
-          'Le terrain apporte du vécu, des anecdotes. Il permet de faire vivre plus facilement une formation, et de capter l’attention des apprenants secouristes.',
+          'J’ai redoublé une année à la fac et j’avais envie de travailler, de me former et de passer des diplômes. J’aimais la natation, et une amie faisait partie de l’association. Je lui ai donc demandé les coordonnées pour passer le BNSSA.',
+          'Je n’ai finalement fait qu’une saison de surveillance et quelques postes aquatiques… J’ai surtout passé mon temps sur les dispositifs de secours, avant d’évoluer progressivement dans la formation.',
+          'Comme quoi, parfois, il suffit d’un petit détour pour trouver sa voie !',
         ],
       },
       {
         question: 'Ce qui me fait revenir',
         texte: [
-          'L’ambiance, la famille, les amis, les valeurs de l’association, le fait qu’on veuille tous évoluer et aller de l’avant.',
+          'L’ambiance, les amis, les valeurs de l’association et cette envie commune d’évoluer et d’aller toujours de l’avant.',
+          'Il y a aussi toutes ces rencontres, ces moments partagés et ces situations qu’on n’aurait probablement jamais vécues ailleurs.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Tout. Je rentrais dans un domaine que je ne connaissais absolument pas. Je ne savais pas vraiment à quoi m’attendre, alors j’ai suivi le mouvement… et aucun regret !',
+        ],
+      },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'Le terrain apporte du vécu, des anecdotes et des situations concrètes. Il permet de donner vie aux formations, de rendre les apprentissages plus parlants et surtout de capter plus facilement l’attention des apprenants.',
+          'On ne transmet pas seulement des gestes : on transmet aussi des expériences.',
         ],
       },
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'GO GO GO.',
-          'Se former n’oblige pas à devenir secouriste bénévole. Mais un accident arrive si vite, et n’importe où. Très régulièrement j’entends : « Oh, j’ai été face à un accident, je n’ai pas su réagir. Si j’avais su, je me serais formé avant. » Il ne faut pas attendre que ça arrive pour se former. Ça sera peut-être déjà trop tard.',
-          'Connaître le minimum des gestes de secours devrait être obligatoire pour tout le monde. En fin de formation, j’entends très régulièrement : « Je ne savais pas qu’on abordait autant de sujets, je suis agréablement surpris — on se rend compte qu’on ne sait rien faire avant d’avoir fait la formation. » Il n’est jamais trop tard pour se former, et il vaut mieux maintenant que plus tard.',
-          'Pour celui qui hésite à devenir bénévole : ça ne coûte rien d’essayer une fois. L’ambiance est très sympa, nous savons rigoler comme être sérieux quand il le faut, on peut se retrouver dans des cadres et des situations qu’on n’aurait jamais imaginés. Et sûrement que l’essayer, c’est l’adopter.',
+          'GO GO GO !',
+          'Se former aux premiers secours ne signifie pas forcément devenir secouriste bénévole. Mais un accident peut arriver très vite, n’importe où et à n’importe qui.',
+          'J’entends très régulièrement : « J’ai été face à un accident et je n’ai pas su réagir. Si j’avais su, je me serais formé avant. »',
+          'Il ne faut pas attendre d’être confronté à une situation pour apprendre à y faire face. Il sera peut-être déjà trop tard.',
+          'À mes yeux, connaître les gestes essentiels de premiers secours devrait être une évidence pour tout le monde.',
+          'Et très souvent, à la fin d’une formation, j’entends aussi : « Je ne savais pas qu’on abordait autant de choses ! Je suis agréablement surpris. »',
+          'C’est justement ça, le but : prendre conscience qu’on est parfois démuni face à une situation d’urgence… et repartir en sachant quoi faire.',
+          'Il n’est jamais trop tard pour se former. Alors autant le faire maintenant que plus tard. ❤️',
+          'Et pour celles et ceux qui hésitent à devenir bénévoles : ça ne coûte rien d’essayer une fois.',
+          'L’ambiance est conviviale, on sait rigoler comme être sérieux quand il le faut, et on peut se retrouver dans des cadres et des situations qu’on n’aurait jamais imaginés.',
+          'Et puis… souvent, l’essayer, c’est l’adopter. 😉',
         ],
       },
     ],
   },
-
   {
     slug: 'anthony',
     prenom: 'Anthony',
     nom: 'Del Aguila',
     metier: 'Responsable en sécurité privée',
     depuis: '2019',
-    roles: ['Formateur', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste'],
+    roles: ['Formateur', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Secouriste'],
     diplomes: ['PSC', 'PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS', 'SST'],
     photo: '/img/equipe/anthony.jpg',
+    vignette: '/img/equipe/anthony-min.jpg',
     alt: 'Anthony en tenue Secours FFSS, bras croisés, devant le véhicule de premiers secours sur la Promenade des Anglais.',
     citation:
-      'Ne pas attendre d’être confronté à une situation d’urgence pour se demander si on aurait pu aider.',
+      'Il ne faut pas forcément se sentir prêt à 100 % avant de commencer.',
     reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Dans la vie de tous les jours, je suis quelqu’un d’assez simple. En dehors du secourisme et du bénévolat, j’ai ma vie professionnelle et personnelle comme tout le monde. Mais je garde toujours ce côté humain et cette envie d’aider les autres.',
+          'Le secourisme prend une place importante dans ma vie, mais ce n’est pas toute ma personnalité. J’aime aussi profiter de mes proches, avoir des moments pour moi et découvrir de nouvelles choses.',
+          'Finalement, je dirais que le secourisme fait partie de moi sans me définir entièrement. C’est un engagement qui m’apporte beaucoup et qui a forcément influencé la personne que je suis aujourd’hui.',
+        ],
+      },
       {
         question: 'Ce qui m’a amené au secourisme',
         texte: [
           'C’est avant tout mon parcours personnel. Au collège, j’ai vécu pendant deux années une période de harcèlement physique et moral qui m’a profondément marqué.',
           'J’ai également été victime de l’attentat du 14 juillet 2016, un événement qui a lui aussi eu un impact important sur ma vie.',
           'Ces deux expériences m’ont énormément marqué et m’ont progressivement orienté vers les métiers de la protection, du secours et de l’assistance aux personnes. Aujourd’hui, le secourisme représente pour moi une manière d’être utile aux autres, de porter assistance aux personnes dans des moments difficiles et de transformer ces expériences personnelles en une motivation pour aider et protéger.',
-        ],
-      },
-      {
-        question: 'Ce qui m’a surpris au début',
-        texte: [
-          'Ce qui m’a le plus surpris, c’est que le secourisme ne se résume pas seulement aux gestes techniques et aux interventions. J’imaginais surtout qu’il fallait savoir réagir rapidement face à une situation d’urgence.',
-          'Avec le temps, j’ai découvert que l’aspect humain était tout aussi important : savoir écouter, rassurer une personne, communiquer avec elle et garder son calme, même dans des situations parfois stressantes.',
-          'J’ai également été surpris par l’importance du travail en équipe. On apprend à faire confiance aux autres, à communiquer efficacement et à chacun trouver sa place. C’est quelque chose que je n’avais pas forcément imaginé au départ et qui m’a beaucoup plu.',
-        ],
-      },
-      {
-        question: 'Ce que le terrain change dans ma façon d’enseigner',
-        texte: [
-          'Il me permet de transmettre des situations que j’ai réellement vécues et de montrer que le secourisme ne se limite pas à apprendre des gestes par cœur.',
-          'Je peux davantage insister sur les réflexes, la communication, la gestion du stress et l’adaptation à chaque situation. Sur le terrain, on se rend compte que chaque victime et chaque intervention sont différentes, et qu’il faut savoir s’adapter tout en respectant les procédures.',
-          'Mon expérience du terrain me permet donc de rendre mes formations plus concrètes et réalistes, mais surtout de transmettre l’importance de rester humain, calme et rassurant face à une personne en difficulté.',
         ],
       },
       {
@@ -206,6 +220,22 @@ export const membres: Membre[] = [
         ],
       },
       {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Au début, ce qui m’a le plus surpris, c’est que le secourisme ne se résume pas seulement aux gestes techniques et aux interventions. J’imaginais surtout qu’il fallait savoir réagir rapidement face à une situation d’urgence.',
+          'Avec le temps, j’ai découvert que l’aspect humain était tout aussi important : savoir écouter, rassurer une personne, communiquer avec elle et garder son calme, même dans des situations parfois stressantes.',
+          'J’ai également été surpris par l’importance du travail en équipe. On apprend à faire confiance aux autres, à communiquer efficacement et à chacun trouver sa place. C’est quelque chose que je n’avais pas forcément imaginé au départ et qui m’a beaucoup plu.',
+        ],
+      },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'Le terrain change beaucoup ma façon d’enseigner, parce qu’il me permet de transmettre des situations que j’ai réellement vécues et de montrer que le secourisme ne se limite pas à apprendre des gestes par cœur.',
+          'Je peux davantage insister sur les réflexes, la communication, la gestion du stress et l’adaptation à chaque situation. Sur le terrain, on se rend compte que chaque victime et chaque intervention sont différentes, et qu’il faut savoir s’adapter tout en respectant les procédures.',
+          'Mon expérience du terrain me permet donc de rendre mes formations plus concrètes et réalistes, mais surtout de transmettre l’importance de rester humain, calme et rassurant face à une personne en difficulté.',
+        ],
+      },
+      {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
           'À quelqu’un qui hésite à se former, je lui dirais de ne pas attendre d’être confronté à une situation d’urgence pour se demander s’il aurait pu aider. Une formation de premiers secours donne des connaissances et des réflexes qui peuvent réellement faire la différence. On peut tous être un jour témoin d’un malaise, d’un accident ou d’une situation où quelqu’un a besoin d’aide.',
@@ -213,72 +243,58 @@ export const membres: Membre[] = [
           'Pour moi, il ne faut pas forcément se sentir prêt à 100 % avant de commencer. On apprend justement en se formant, en pratiquant et en vivant des expériences avec les autres. Si on a envie d’aider et de donner un peu de son temps, c’est déjà une très bonne raison de se lancer.',
         ],
       },
-      {
-        question: 'Dans la vraie vie',
-        texte: [
-          'Je suis responsable dans une entreprise de sécurité privée, tout en étant moi-même sur le terrain. Mes qualifications : SSIAP 1 et 2, agent de sécurité renforcé armé en catégorie D.',
-          'Dans la vie de tous les jours, je suis quelqu’un d’assez simple. En dehors du secourisme et du bénévolat, j’ai ma vie professionnelle et personnelle comme tout le monde. Mais je garde toujours ce côté humain et cette envie d’aider les autres.',
-          'Le secourisme prend une place importante dans ma vie, mais ce n’est pas toute ma personnalité. J’aime aussi profiter de mes proches, avoir des moments pour moi et découvrir de nouvelles choses. Finalement, je dirais que le secourisme fait partie de moi sans me définir entièrement.',
-        ],
-      },
     ],
   },
-
   {
-    slug: 'salah',
-    prenom: 'Salah',
-    nom: 'Boukhari',
-    metier: 'Agent de sécurité incendie (SSIAP)',
-    depuis: '2021',
-    roles: ['Équipier secouriste', 'Secouriste'],
-    diplomes: ['PSE1', 'PSE2'],
-    photo: '/img/equipe/salah.jpg',
-    alt: 'Salah en veste Secours FFSS marquée « équipier », devant le poste de secours du village de Noël d’Antibes.',
+    slug: 'raphael-radier',
+    prenom: 'Raphael',
+    nom: 'Radier',
+    metier: 'Infirmier coordinateur au conseil départemental',
+    depuis: '2019',
+    roles: ['Formateur', 'Membre du bureau', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSC', 'PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS', 'SST'],
+    photo: '/img/equipe/raphael-radier.jpg',
+    vignette: '/img/equipe/raphael-radier-min.jpg',
+    alt: 'Raphael en tenue Secours FFSS, en salle, face à deux chefs de dispositif pendant une formation.',
     citation:
-      'Être formé aux premiers secours permet d’avoir plus confiance en soi. C’était mon cas.',
+      'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
     reponses: [
       {
         question: 'Dans la vraie vie',
         texte: [
-          'Je suis agent de sécurité incendie, SSIAP. Je travaille dans la sécurité privée, et je m’occupe de ma vie familiale.',
+          'Je suis infirmier coordinateur médico-social au conseil départemental, après avoir passé vingt ans aux urgences.',
         ],
       },
+      { question: 'Ce qui m’a amené au secourisme', texte: ['L’armée.'] },
+      { question: 'Ce qui me fait revenir', texte: ['La passion.'] },
+      { question: 'Ce qui m’a surpris au début', texte: ['Le nombre de passionnés bienveillants.'] },
       {
-        question: 'Ce qui m’a amené au secourisme',
-        texte: ['C’était justement pour effectuer des dispositifs de secours.'],
-      },
-      {
-        question: 'Ce qui m’a surpris au début',
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
         texte: [
-          'Ce qui m’a surpris — positivement, bien sûr — c’est la différence entre le PSE1 et le SST. Ça n’a vraiment rien à voir.',
-        ],
-      },
-      {
-        question: 'Ce qui me fait revenir',
-        texte: [
-          'La qualité, le professionnalisme, la convivialité, la bonne humeur. J’en passe, et des meilleures.',
+          'Une expérience plus complète, qui est un avantage lors de l’enseignement du secourisme.',
         ],
       },
       {
         question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'Qu’être formé aux premiers secours est primordial dans notre vie de tous les jours, et que cela permet d’avoir plus confiance en soi. C’était mon cas.',
+          'Venez, n’ayez pas peur : on vous accueillera, accompagnera, et vous rencontrerez des gens formidables.',
         ],
       },
     ],
   },
-
   {
     slug: 'thibaut',
     prenom: 'Thibaut',
     nom: 'Lorenzetti',
-    metier: 'Surveillant en lycée et sapeur-pompier volontaire',
+    metier: 'Surveillant dans un lycée, sapeur-pompier volontaire',
     depuis: '2024',
     roles: ['Formateur', 'Chef de dispositif', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste'],
     diplomes: ['PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
     photo: '/img/equipe/thibaut.jpg',
+    vignette: '/img/equipe/thibaut-min.jpg',
     alt: 'Thibaut en gilet « chef de dispositif », devant le véhicule de premiers secours, la grande roue de Nice éclairée en arrière-plan.',
-    citation: 'Deviens acteur pour faire bouger les choses, et lance-toi !',
+    citation:
+      'Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs.',
     reponses: [
       {
         question: 'Dans la vraie vie',
@@ -290,61 +306,130 @@ export const membres: Membre[] = [
         question: 'Ce qui m’a amené au secourisme',
         texte: [
           'Depuis tout petit je n’ai qu’un seul rêve : faire partie de la brigade des sapeurs-pompiers de Paris, être utile aux autres et pouvoir aider les gens qui sont dans le besoin.',
-          'Le secourisme m’a permis de mettre un pied dans cet environnement dès le plus jeune âge, et de découvrir que c’était vraiment ce que je voulais. Bien plus qu’une envie, c’était déjà devenu une passion.',
-        ],
-      },
-      {
-        question: 'Ce qui m’a surpris au début',
-        texte: [
-          'Ce qui m’a le plus surpris au début, c’est notre importance sur beaucoup d’événements, et le travail qu’il y a derrière. En venant en civil à une fête ou à un concert, on ne remarque pas forcément les bénévoles et tout ce qu’il y a derrière.',
-        ],
-      },
-      {
-        question: 'Ce que le terrain change dans ma façon d’enseigner',
-        texte: [
-          'L’expérience du terrain me permet d’enseigner que les situations auxquelles nous pouvons être confrontés ne seront jamais idéales comme en formation. Elle me permet d’appuyer sur le fait qu’il faut certes être bon sur ses gestes et ses connaissances, mais aussi travailler sa communication en intervention, sa gestion du stress et de l’adrénaline : l’adaptation et la polyvalence sont une des clés pour réussir.',
-          'Cette expérience me permet donc de rendre au maximum mes formations réalistes, pour les rapprocher de la réalité.',
+          'Le secourisme m’a permis de mettre un pied dans cet environnement dès le plus jeune âge, et de découvrir que c’était vraiment ce que je voulais. Bien plus qu’une envie : c’était déjà devenu une passion.',
         ],
       },
       {
         question: 'Ce qui me fait revenir',
         texte: [
-          'Je reviens pour cette ambiance familiale. Sur un poste, nous ne sommes pas simplement des secouristes qui tiennent un poste de secours ensemble, mais une véritable famille avec qui nous partageons de nombreux moments.',
+          'Je reviens pour cette ambiance familiale. Sur poste, nous ne sommes pas simplement des secouristes qui tenons un poste de secours ensemble, mais une véritable famille avec qui nous partageons de nombreux moments.',
           'Ce qui me fait aussi revenir, c’est de ne pas savoir sur quoi l’on peut tomber. Chaque poste est unique, chaque poste est une nouvelle expérience qui nous rend meilleurs : voir des choses, des événements, des paysages que je n’aurais jamais vus si je n’étais pas là.',
-        ],
-      },
-      {
-        question: 'Ce que je dirais à quelqu’un qui hésite',
-        texte: ['Deviens acteur pour faire bouger les choses, et lance-toi !'],
-      },
-    ],
-  },
-
-  {
-    slug: 'raphael',
-    prenom: 'Raphaël',
-    nom: 'Lebreuilly',
-    metier: 'Étudiant en licence CPES',
-    depuis: '2025',
-    roles: ['Secouriste', 'Nageur sauveteur'],
-    diplomes: ['PSE1', 'BNSSA'],
-    photo: '/img/equipe/raphael.jpg',
-    alt: 'Raphaël en tenue de secouriste, dans l’arrière-pays niçois, les collines en arrière-plan.',
-    citation:
-      'Ce n’est pas si sorcier, quand on écoute en formation et qu’on est bien entouré sur le terrain.',
-    reponses: [
-      {
-        question: 'Ce qui m’a amené au secourisme',
-        texte: [
-          'Après mon BAFA surveillant de baignade, un camarade de lycée m’a proposé de passer le BNSSA. Nous nous sommes motivés et avons décroché le diplôme ensemble.',
-          'Pour valider le BNSSA, la formation PSE1 était requise. C’est à ce moment-là que l’on nous a proposé d’intégrer des postes de secours. Mon tout premier s’est déroulé à l’hôtel de ville de Tours, avec l’association FFSS Aqua Life Saving, lors d’une soirée de BDE. L’ambiance était excellente et m’a immédiatement donné envie de renouveler l’expérience.',
-          'À mon arrivée à Nice pour mes études, j’ai rejoint Secourisme Pour Tous afin de m’occuper et surtout de poursuivre cet engagement, continuer à me former et me rendre utile.',
         ],
       },
       {
         question: 'Ce qui m’a surpris au début',
         texte: [
-          'L’importance de notre présence sur les événements, et la manière dont elle rassure les gens qui sont dans le besoin.',
+          'Ce qui m’a le plus surpris au début, c’est notre importance sur beaucoup d’événements, et le travail qu’il y a derrière. En venant en civil à une fête ou un concert, on ne remarque pas forcément les bénévoles et le travail qu’il y a derrière.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'anne-sophie',
+    prenom: 'Anne Sophie',
+    nom: 'Côte',
+    metier: 'Entraîneur de natation artistique',
+    depuis: '2026',
+    roles: ['Formateur', 'Équipier secouriste', 'Secouriste', 'Nageur sauveteur'],
+    diplomes: ['PSE1', 'PSE2', 'BNSSA'],
+    photo: '/img/equipe/anne-sophie.jpg',
+    vignette: '/img/equipe/anne-sophie-min.jpg',
+    alt: 'Anne Sophie en tenue, à bord du véhicule de premiers secours.',
+    citation:
+      'C’est une formation qui sera utile toute sa vie, dans de nombreux domaines.',
+    reponses: [
+      { question: 'Dans la vraie vie', texte: ['Maman, éducateur sportif.'] },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Lors du passage de mon BNSSA à mes 18 ans, je me suis découvert une réelle passion pour le secourisme. J’ai décidé de participer à des postes de secours en parallèle de mes études.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'Je suis devenue formatrice BNSSA pour l’asso il y a peu. Cela m’a donné envie de m’investir au maximum dans l’asso, par envie d’être utile et pour les belles rencontres humaines aussi.',
+          'Participer aux DPS me permet aussi de devenir meilleure secouriste, en gagnant expérience et automatisme que nous n’avons pas forcément l’occasion d’utiliser en milieu pro.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Se former au secourisme dépasse une utilisation dans le cadre de l’association. C’est une formation qui sera utile toute sa vie, dans de nombreux domaines.',
+          'Donner de son temps, c’est surtout accéder à une expérience humaine, de belles rencontres, progresser et continuer à se former.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'salah',
+    prenom: 'Salah',
+    nom: 'Boukhari',
+    metier: 'Agent de sécurité incendie SSIAP',
+    depuis: '2021',
+    roles: ['Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSE1', 'PSE2'],
+    photo: '/img/equipe/salah.jpg',
+    vignette: '/img/equipe/salah-min.jpg',
+    alt: 'Salah en veste Secours FFSS marquée « équipier », devant le poste de secours du village de Noël d’Antibes.',
+    citation:
+      'Être formé aux premiers secours permet d’avoir plus confiance en soi. C’était mon cas.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Je travaille dans la sécurité privée et m’occupe de ma vie familiale.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: ['C’était justement pour effectuer des dispositifs de secours.'],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'La qualité, le professionnalisme, la convivialité, la bonne humeur — j’en passe, et des meilleurs.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Ce qui m’a surpris — positivement, bien sûr —, c’est la différence entre le PSE1 et le SST. Ça n’a vraiment rien à voir.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Qu’être formé aux premiers secours est primordial dans notre vie de tous les jours, et que cela permet d’avoir plus confiance en soi. C’était mon cas.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'raphael-lebreuilly',
+    prenom: 'Raphaël',
+    nom: 'Lebreuilly',
+    metier: 'Étudiant à l’université Côte d’Azur',
+    depuis: '2025',
+    roles: ['Secouriste', 'Nageur sauveteur'],
+    diplomes: ['PSE1', 'BNSSA'],
+    photo: '/img/equipe/raphael-lebreuilly.jpg',
+    vignette: '/img/equipe/raphael-lebreuilly-min.jpg',
+    alt: 'Raphaël en tenue de secouriste, dans l’arrière-pays niçois, les collines en arrière-plan.',
+    citation:
+      'Ce n’est pas si sorcier, quand on écoute en formation et qu’on est bien entouré sur le terrain.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Je suis en licence CPES, une formation hybride entre fac et prépa qui prépare aux concours de la fonction publique (direction d’hôpitaux, protection sociale) et aux écoles de commerce.',
+          'En parallèle, le secourisme me permet de sortir des cours, de changer d’air et de développer d’autres compétences.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Après mon BAFA SB, un camarade de lycée m’a proposé de passer le BNSSA. Nous nous sommes motivés et avons décroché le diplôme ensemble.',
+          'Pour valider le BNSSA, la formation PSE1 était requise. C’est à ce moment-là que l’on nous a proposé d’intégrer des postes de secours. Mon tout premier s’est déroulé à l’hôtel de ville de Tours avec l’association FFSS Aqua Life Saving, lors d’une soirée de BDE. L’ambiance était excellente et m’a immédiatement donné envie de renouveler l’expérience.',
+          'À mon arrivée à Nice pour mes études, j’ai rejoint l’association Secourisme Pour Tous afin de m’occuper et surtout de poursuivre cet engagement, continuer à me former et me rendre utile.',
         ],
       },
       {
@@ -354,16 +439,51 @@ export const membres: Membre[] = [
         ],
       },
       {
-        question: 'Ce que je dirais à quelqu’un qui hésite',
+        question: 'Ce qui m’a surpris au début',
         texte: [
-          'Que ce n’est pas si sorcier, quand on écoute en formation et qu’on est bien entouré sur le terrain.',
+          'L’importance de notre présence sur les événements, et la manière dont notre présence rassure les gens qui sont dans le besoin.',
         ],
       },
       {
-        question: 'Dans la vraie vie',
+        question: 'Ce que je dirais à quelqu’un qui hésite',
         texte: [
-          'Je suis en licence CPES, une formation hybride entre faculté et prépa qui prépare aux concours de la fonction publique — direction d’hôpitaux, protection sociale — et aux écoles de commerce.',
-          'En parallèle, le secourisme me permet de sortir des cours, de changer d’air et de développer d’autres compétences.',
+          'Le fait que ce ne soit pas si sorcier, quand on écoute en formation et que l’on est bien entouré sur le terrain.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'angele',
+    prenom: 'Angèle',
+    nom: 'Biret',
+    metier: 'Étudiante en commerce',
+    depuis: '2026',
+    roles: ['Secouriste'],
+    diplomes: ['PSE1'],
+    photo: '/img/equipe/angele.jpg',
+    vignette: '/img/equipe/angele-min.jpg',
+    alt: 'Cinq secouristes en tenue Secours FFSS, de dos, devant un feu d’artifice sur le front de mer.',
+    citation:
+      'Je lui dirais de foncer : la formation nous apprend énormément, ça ne sera jamais une perte de l’avoir faite.',
+    reponses: [
+      { question: 'Dans la vraie vie', texte: ['Dans la vraie vie, je suis étudiante en commerce.'] },
+      { question: 'Ce qui m’a amené au secourisme', texte: ['C’est une amie qui m’en a parlé.'] },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'J’adore l’ambiance de l’équipe, être au contact des gens, et sur chaque poste j’espère pouvoir apprendre à mieux secourir les gens.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Le fait d’arriver une à deux heures avant sur les lieux des événements et de devoir attendre. Mais aussi n’avoir pratiquement aucune intervention sur la journée.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Je lui dirais de foncer : la formation est vraiment géniale et elle nous apprend énormément, donc ça ne sera jamais une perte de l’avoir faite. Et quitte à ne pas faire de postes derrière — en ayant essayé —, au moins la personne saura les gestes de premiers secours, qui ne sont pas toujours innés chez les gens. Et qui sait, peut-être que ça sauvera des gens.',
         ],
       },
     ],
@@ -413,7 +533,7 @@ export const FICHE_DIPLOME: Record<string, string> = {
 };
 
 /** Portraits recueillis à cette date, par questionnaire. */
-export const recueilliLe = '21 août 2026';
+export const recueilliLe = '22 août 2026';
 
 /**
  * Les appels glissés entre les visages, sur la page d'accueil.

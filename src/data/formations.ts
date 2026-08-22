@@ -9,7 +9,7 @@
  * Voir src/lib/wix.ts.
  *
  * ⚠️ À FAIRE VALIDER PAR SPT : tarifs, durées et prérequis marqués « aValider ».
- * Seul le PSC a été confirmé depuis le site actuel (50 €, 7 h, dès 10 ans).
+ * Seul le PSC a été confirmé depuis le site actuel (50 €, 7 h, dès 10 ans).
  */
 
 export type Filiere = 'citoyenne' | 'operationnelle' | 'aquatique' | 'pedagogique' | 'entreprise';
@@ -192,7 +192,7 @@ export const formations: Formation[] = [
     prerequisNote: 'Aucun prérequis',
     certification: 'PSC',
     certificationNote: 'Contrôle continu, sans examen final',
-    tarif: '50 €',
+    tarif: '50 €',
     tarifNote: 'Non éligible au CPF',
     objectifs: [
       {
@@ -258,7 +258,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSC1 à Nice | Prix, dates et inscription',
       description:
-        'Le PSC, anciennement PSC1, à Nice : prix 50 €, 7 h en une journée, dès 10 ans, sans prérequis. Calendrier des sessions et inscription en ligne. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Le PSC, anciennement PSC1, à Nice : prix 50 €, 7 h en une journée, dès 10 ans, sans prérequis. Calendrier des sessions et inscription en ligne. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -276,14 +276,14 @@ export const formations: Formation[] = [
     prerequis: 'Dès 16 ans',
     certification: 'PSE1',
     certificationNote: 'Certificat de compétences',
-    tarif: '280 €',
-    tarifNote: '350 € en financement CPF',
-    tarifCpf: '350 €',
+    tarif: '280 €',
+    tarifNote: '350 € en financement CPF',
+    tarifCpf: '350 €',
     pack: {
       libelle: 'PSE1 + PSE2',
-      tarif: '480 €',
-      separement: '560 €',
-      economie: '80 €',
+      tarif: '480 €',
+      separement: '560 €',
+      economie: '80 €',
       detail: 'Réservez les deux formations ensemble et enchaînez les deux niveaux sans repasser par la case inscription.',
     },
     objectifs: [
@@ -337,9 +337,9 @@ export const formations: Formation[] = [
     prerequis: 'PSE1 à jour',
     certification: 'PSE2',
     certificationNote: 'Certificat de compétences',
-    tarif: '280 €',
-    tarifNote: '350 € en financement CPF',
-    tarifCpf: '350 €',
+    tarif: '280 €',
+    tarifNote: '350 € en financement CPF',
+    tarifCpf: '350 €',
     objectifs: [
       { titre: 'Conduire une intervention', texte: "Organiser l'action de l'équipe et décider des gestes prioritaires.", icone: 'equipe' },
       { titre: 'Immobiliser et relever', texte: 'Mettre en œuvre les techniques d’immobilisation du rachis et des membres.', icone: 'urgence' },
@@ -417,8 +417,8 @@ export const formations: Formation[] = [
     prerequisNote: 'Salariés et employeurs',
     certification: 'SST',
     certificationNote: 'MAC tous les 24 mois',
-    tarif: '190 €',
-    tarifNote: 'MAC SST : 90 € tous les 24 mois',
+    tarif: '190 €',
+    tarifNote: 'MAC SST : 90 € tous les 24 mois',
     objectifs: [
       { titre: 'Secourir en entreprise', texte: 'Intervenir efficacement sur un accident du travail avant l’arrivée des secours.', icone: 'urgence' },
       { titre: 'Prévenir les risques', texte: 'Repérer les situations dangereuses et participer à la prévention dans l’entreprise.', icone: 'bouclier' },
@@ -462,7 +462,7 @@ export const formations: Formation[] = [
     prerequis: 'PSC obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Recyclage conseillé tous les 3 ans',
-    tarif: '30 €',
+    tarif: '30 €',
     objectifs: [
       { titre: 'Réactiver les gestes', texte: "Reprendre en pratique les gestes d'urgence vitale, sans repartir de zéro.", icone: 'coeur' },
       { titre: 'Intégrer les évolutions', texte: 'Prendre connaissance des dernières recommandations du référentiel national.', icone: 'bouclier' },
@@ -498,10 +498,10 @@ export const formations: Formation[] = [
     prerequis: 'PSE1 obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle et obligatoire',
-    tarif: '70 €',
+    tarif: '70 €',
     dureeNote: '1 journée',
-    tarifNote: '90 € en financement CPF',
-    tarifCpf: '90 €',
+    tarifNote: '90 € en financement CPF',
+    tarifCpf: '90 €',
     objectifs: [
       { titre: 'Rester opérationnel', texte: "Conserver le droit d'intervenir en équipe sur les dispositifs de secours.", icone: 'equipe' },
       { titre: 'Réviser les gestes techniques', texte: 'Bilans, immobilisations, oxygénothérapie et matériel de relevage.', icone: 'urgence' },
@@ -537,10 +537,10 @@ export const formations: Formation[] = [
     prerequis: 'PSE2 obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle et obligatoire',
-    tarif: '70 €',
+    tarif: '70 €',
     dureeNote: '1 journée',
-    tarifNote: '90 € en financement CPF',
-    tarifCpf: '90 €',
+    tarifNote: '90 € en financement CPF',
+    tarifCpf: '90 €',
     objectifs: [
       { titre: 'Conserver la qualification', texte: "Rester habilité à conduire une équipe sur les dispositifs de secours.", icone: 'equipe' },
       { titre: 'Réviser la conduite d’intervention', texte: 'Organisation de l’équipe, priorisation des gestes, transmission aux secours.', icone: 'bouclier' },
@@ -618,7 +618,7 @@ export const formations: Formation[] = [
     prerequis: 'Dès 17 ans',
     certification: 'BSB',
     certificationNote: 'Recyclage FC BSB requis',
-    tarif: '290 €',
+    tarif: '290 €',
     objectifs: [
       { titre: 'Surveiller un lieu de baignade', texte: "Organiser la baignade, positionner les surveillants et prévenir les accidents.", icone: 'eau' },
       { titre: 'Intervenir dans l’eau', texte: 'Aborder, dégager et remorquer une victime en milieu aquatique.', icone: 'eau' },
@@ -638,7 +638,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation BSB à Nice | Surveillant de baignade',
       description:
-        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -655,7 +655,7 @@ export const formations: Formation[] = [
     duree: '10 heures',
     prerequis: 'BSB obtenu',
     certification: 'BSB prolongé',
-    tarif: '240 €',
+    tarif: '240 €',
     objectifs: [
       { titre: 'Conserver le diplôme', texte: 'Rester habilité à surveiller les baignades en accueil collectif de mineurs.', icone: 'eau' },
       { titre: 'Réviser le sauvetage', texte: 'Reprise des techniques d’approche, de dégagement et de remorquage.', icone: 'eau' },
@@ -673,7 +673,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage BSB à Nice | Formation continue',
       description:
-        'Maintenez votre brevet de surveillant de baignade à Nice : 10 h, 240 €. Formation continue affiliée FFSS et agréée sécurité civile, organisme certifié Qualiopi.',
+        'Maintenez votre brevet de surveillant de baignade à Nice : 10 h, 240 €. Formation continue affiliée FFSS et agréée sécurité civile, organisme certifié Qualiopi.',
     },
   },
 
@@ -694,7 +694,7 @@ export const formations: Formation[] = [
     prerequis: 'PSC à jour',
     certification: 'PAE FPSC',
     certificationNote: 'Formation continue annuelle',
-    tarif: '1 000 €',
+    tarif: '1 000 €',
     tarifNote: 'Tronc commun pédagogique (PIC F) inclus',
     objectifs: [
       { titre: 'Concevoir une séquence', texte: 'Bâtir une progression pédagogique adaptée au public et aux objectifs.', icone: 'pedagogie' },
@@ -715,7 +715,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'PAE FPSC à Nice | Devenir formateur PSC',
       description:
-        'Devenez formateur en premiers secours avec le PAE FPSC à Nice : 50 h, PIC F inclus, 1 000 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Devenez formateur en premiers secours avec le PAE FPSC à Nice : 50 h, PIC F inclus, 1 000 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -733,9 +733,9 @@ export const formations: Formation[] = [
     prerequis: 'PAE FPSC obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle',
-    tarif: '90 €',
-    tarifNote: '150 € en financement CPF',
-    tarifCpf: '150 €',
+    tarif: '90 €',
+    tarifNote: '150 € en financement CPF',
+    tarifCpf: '150 €',
     objectifs: [
       { titre: 'Rester habilité', texte: 'Conserver le droit d’enseigner le PSC.', icone: 'pedagogie' },
       { titre: 'Intégrer les évolutions', texte: 'Nouveautés du référentiel national et des recommandations.', icone: 'bouclier' },
@@ -752,7 +752,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage formateur PSC à Nice | FC PAE FPSC',
       description:
-        'Maintenez vos compétences de formateur PSC à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
+        'Maintenez vos compétences de formateur PSC à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
     },
   },
 
@@ -770,7 +770,7 @@ export const formations: Formation[] = [
     prerequis: 'PSE2 à jour',
     certification: 'PAE FPS',
     certificationNote: 'Formation continue annuelle',
-    tarif: '1 000 €',
+    tarif: '1 000 €',
     tarifNote: 'Tronc commun pédagogique (PIC F) inclus',
     objectifs: [
       { titre: 'Former des secouristes', texte: 'Enseigner le PSE1 et le PSE2 selon le référentiel national.', icone: 'pedagogie' },
@@ -792,7 +792,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'PAE FPS à Nice | Devenir formateur PSE1 et PSE2',
       description:
-        'Devenez formateur en premiers secours en équipe avec le PAE FPS à Nice : 70 h, PIC F inclus, 1 000 €. Certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Devenez formateur en premiers secours en équipe avec le PAE FPS à Nice : 70 h, PIC F inclus, 1 000 €. Certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
     },
   },
 
@@ -810,9 +810,9 @@ export const formations: Formation[] = [
     prerequis: 'PAE FPS obtenu',
     certification: 'Attestation FC',
     certificationNote: 'Annuelle',
-    tarif: '90 €',
-    tarifNote: '150 € en financement CPF',
-    tarifCpf: '150 €',
+    tarif: '90 €',
+    tarifNote: '150 € en financement CPF',
+    tarifCpf: '150 €',
     objectifs: [
       { titre: 'Rester habilité', texte: 'Conserver le droit d’enseigner le PSE1 et le PSE2.', icone: 'pedagogie' },
       { titre: 'Intégrer les évolutions', texte: 'Nouveautés des référentiels et des recommandations.', icone: 'bouclier' },
@@ -829,7 +829,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage formateur PSE à Nice | FC PAE FPS',
       description:
-        'Maintenez vos compétences de formateur PSE1 et PSE2 à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
+        'Maintenez vos compétences de formateur PSE1 et PSE2 à Nice : 7,5 h, 90 €. Formation continue annuelle, organisme certifié Qualiopi.',
     },
   },
 
@@ -848,7 +848,7 @@ export const formations: Formation[] = [
     prerequis: 'SST obtenu',
     certification: 'SST prolongé',
     certificationNote: 'Valable 24 mois',
-    tarif: '90 €',
+    tarif: '90 €',
     tarifNote: 'Intervention possible dans vos locaux',
     objectifs: [
       { titre: 'Conserver le certificat', texte: 'Rester compté dans l’effectif de sauveteurs secouristes de l’entreprise.', icone: 'bouclier' },
@@ -867,7 +867,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'MAC SST à Nice | Recyclage Sauveteur Secouriste du Travail',
       description:
-        'Maintenez le certificat SST de vos salariés à Nice : 7 h, 90 €, tous les 24 mois. Organisme certifié Qualiopi, intervention en entreprise.',
+        'Maintenez le certificat SST de vos salariés à Nice : 7 h, 90 €, tous les 24 mois. Organisme certifié Qualiopi, intervention en entreprise.',
     },
   },
 ];

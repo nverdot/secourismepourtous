@@ -223,7 +223,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
                     le fichier est déjà en cache. On les verrait apparaître en blanc
                     au fil du défilement. Ces six fichiers sont de toute façon déjà
                     demandés par les portraits, plus bas dans la page. */}
-                <img src={m!.photo} alt="" fetchpriority="low" decoding="async" width="420" height="560" />
+                <img src={m!.vignette} alt="" fetchpriority="low" decoding="async" width="360" height="480" />
                 {/* Le repère est là en permanence, pas seulement au survol :
                     sur un téléphone, rien ne survole. */}
                 <span class="fc__p" aria-hidden="true">
@@ -243,7 +243,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
         <li class="eq__i">
           <button class="mb" type="button" data-groupe={groupe} data-portrait={m.slug} aria-haspopup="dialog">
             <span class="mb__ph">
-              <img src={m.photo} alt={m.alt} loading="lazy" decoding="async" width="600" height="800" />
+              <img src={m.vignette} alt={m.alt} loading="lazy" decoding="async" width="360" height="480" />
             </span>
             <span class="mb__txt">
               <strong class="mb__nom">{m.prenom}{' '}{m.nom}</strong>
@@ -263,7 +263,9 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   )}
 
   <div class:list={[mur && 'wrap']}>
-    {(apercu || mur) ? (
+    {/* Le lien n'a de sens qu'en aperçu. Le mur vit désormais sur la page
+        d'équipe elle-même : l'y laisser aurait pointé vers la page en cours. */}
+    {apercu ? (
       <a class="eq__plus" href={lien}>
         Voir toute l’équipe
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
@@ -287,7 +289,13 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     <div class="pt__grille">
       {/* La photo occupe toute la colonne, sans texte par-dessus : un visage
           en grand vaut mieux qu'une vignette entourée de mentions. */}
-      <img class="pt__ph" src={m.photo} alt={m.alt} width="700" height="950" />
+      {/* La vignette d'abord, la grande image à l'ouverture.
+          « loading=lazy » ne suffisait pas : une boîte fermée est en
+          display:none, sans boîte de rendu, et le navigateur charge alors
+          l'image sans attendre — vérifié, les neuf y passaient. Partir de la
+          vignette a un second avantage : elle est déjà en cache, donc le
+          portrait s'affiche instantanément, puis se précise. */}
+      <img class="pt__ph" src={m.vignette} data-grande={m.photo} alt={m.alt} decoding="async" width="900" height="1200" />
 
       <div class="pt__d">
         <header class="pt__tete">
@@ -423,6 +431,10 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
       // Une boîte est ouverte : l'état est déjà juste, on court-circuite la
       // resynchronisation différée qu'aurait déclenchée la fermeture.
       cible.querySelector<HTMLElement>('.pt__d')?.scrollTo(0, 0);
+
+      // On passe à la grande image, une fois seulement.
+      const ph = cible.querySelector<HTMLImageElement>('.pt__ph[data-grande]');
+      if (ph) { ph.src = ph.dataset.grande!; delete ph.dataset.grande; }
     };
 
     // On relie chaque vignette à son portrait par son identifiant, jamais par

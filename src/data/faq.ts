@@ -23,7 +23,7 @@ export const faqFormations: QR[] = [
   {
     question: 'Quelle formation choisir quand on n’a jamais rien fait ?',
     reponse:
-      'Le PSC (anciennement PSC1) est la porte d’entrée : 7 heures sur une journée, dès 10 ans, sans aucun prérequis, pour 50 €. Il apprend les gestes qui sauvent au quotidien. Le PSE1 vient ensuite, pour qui veut intervenir en équipe sur des postes de secours.',
+      'Le PSC (anciennement PSC1) est la porte d’entrée : 7 heures sur une journée, dès 10 ans, sans aucun prérequis, pour 50 €. Il apprend les gestes qui sauvent au quotidien. Le PSE1 vient ensuite, pour qui veut intervenir en équipe sur des postes de secours.',
   },
   {
     question: 'Le PSC est-il éligible au CPF ?',

@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import Equipe from '../components/Equipe.astro';
 import AvisGoogle from '../components/AvisGoogle.astro';
 import { asso } from '../data/association';
 import { formations, filieres, type Filiere } from '../data/formations';
@@ -102,18 +101,6 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
   <AvisGoogle />
 
   <!-- ============ PARTENAIRES ============ -->
-  {/* Des visages dès la page d'accueil : c'est là que se joue la différence
-      avec un catalogue de formations. Le tirage mélange volontairement gens
-      du terrain et formateurs. */}
-  {/* Pas de .wrap ici : le mur de visages prend toute la largeur de l'écran,
-      et remet lui-même son titre et son lien dans la colonne de texte. */}
-  <section class="section">
-    <Equipe
-      mur
-      titre="L'association, c'est eux"
-      intro="Ils tiennent les postes de secours toute l'année, animent les formations, vont apprendre les gestes qui sauvent jusque dans les centres de loisirs. Chacun a sa vie à côté, et une seule chose nous réunit : sauver des vies, et se rendre utile. Cliquez sur un visage pour lire son histoire."
-    />
-  </section>
 
   <section class="section section--sunk" aria-labelledby="t-partenaires">
     <div class="wrap">

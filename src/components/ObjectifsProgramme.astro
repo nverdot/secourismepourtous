@@ -278,13 +278,17 @@ const v = niveauPse ? volume(niveauPse) : null;
   }
 
   .op__tete { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
+  /* Aplat plein plutôt que lavis : un trait de couleur sur fond très clair
+     plafonne à 1,6:1 quand la filière porte le jaune fédéral, c'est-à-dire
+     presque rien. Rempli, avec l'encre que la filière désigne, il tient dans
+     tous les cas — et c'est déjà la grammaire des cartes de filière. */
   .op__ic {
     width: 42px; height: 42px;
     border-radius: 12px;
     display: grid; place-items: center;
     flex: none;
-    background: var(--accent-wash);
-    color: var(--accent);
+    background: var(--accent-plein);
+    color: var(--accent-encre);
   }
   .op__ic svg { width: 21px; height: 21px; }
   .op__h { font-size: clamp(1.5rem, 3.4vw, 1.95rem); font-weight: 700; }
@@ -297,8 +301,12 @@ const v = niveauPse ? volume(niveauPse) : null;
     border-radius: var(--r-md);
     padding: 1.05rem 1.2rem;
   }
-  .but__ic { flex: none; width: 26px; height: 26px; color: var(--accent); margin-top: 0.15rem; }
-  .but__ic svg { width: 100%; height: 100%; }
+  .but__ic {
+    flex: none; width: 30px; height: 30px; margin-top: 0.05rem;
+    border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent-plein); color: var(--accent-encre);
+  }
+  .but__ic svg { width: 17px; height: 17px; }
   .but h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 0.15rem; }
   .but p { font-size: 0.93rem; color: var(--ink-soft); }
 
@@ -401,10 +409,11 @@ const v = niveauPse ? volume(niveauPse) : null;
   }
   .mods__ic {
     flex: none; width: 26px; height: 26px;
-    color: var(--accent);
+    border-radius: 50%;
+    background: var(--accent-plein); color: var(--accent-encre);
     display: grid; place-items: center;
   }
-  .mods__ic svg { width: 26px; height: 26px; }
+  .mods__ic svg { width: 15px; height: 15px; }
   .mods__i dd { padding-left: calc(26px + .45rem); }
   .mods__i dd { margin: 0; font-size: .9rem; color: var(--ink); }
   .mods__n { display: block; margin-top: .2rem; font-size: .83rem; color: var(--ink-mute); }

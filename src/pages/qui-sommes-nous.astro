@@ -184,10 +184,10 @@ import { asso } from '../data/association';
 
   {/* L'organigramme dit qui décide. Celui-ci dit qui vous formera, et c'est
       ce qui compte pour quelqu'un qui hésite à s'inscrire. */}
+  {/* Pas de .wrap : le mur de visages prend toute la largeur de l'écran, et
+      remet lui-même son titre dans la colonne de texte. */}
   <section class="section" id="equipe">
-    <div class="wrap">
-      <Equipe />
-    </div>
+    <Equipe mur />
   </section>
 
   <!-- ========== PARTENAIRES ========== -->
