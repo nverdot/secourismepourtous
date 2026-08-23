@@ -509,7 +509,7 @@ export const membres: Membre[] = [
     diplomes: ['PSC', 'PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
     photo: '/img/equipe/guillaume.jpg',
     vignette: '/img/equipe/guillaume-min.jpg',
-    alt: 'Guillaume en tenue d’équipier, avec trois autres secouristes, sur le front de mer.',
+    alt: 'Guillaume en polo d’équipier, lunettes de soleil, sur le front de mer.',
     citation: 'On ne sait jamais ce que la vie nous réserve.',
     reponses: [
       {

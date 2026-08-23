@@ -54,7 +54,12 @@ PORTRAITS = {
     'thibaut': {'fichier': '02A1D0DE-BFE7-46D3-A529-FF0E2AC94392.png', 'ancre': (.5, .18)},
     'angele': {'fichier': 'e82bf838-ac33-41ed-8640-1ef98f543f75.jpeg', 'ancre': (.5, .5)},
     'anne-sophie': {'fichier': '20260813_161437.jpg', 'ancre': (.55, .5)},
-    'guillaume': {'fichier': '01ba0ead-3a4d-42a6-9290-a09f35535d69.JPG', 'ancre': (.0, .5)},
+    'guillaume': {
+        'fichier': '01ba0ead-3a4d-42a6-9290-a09f35535d69.JPG',
+        # Selfie à quatre. Guillaume est le second en partant de la gauche,
+        # barbu et lunettes roses. Le premier n'est pas lui.
+        'boite': (463, 88, 883, 648),
+    },
     'julien': {'fichier': 'IMG-20260510-WA0006.jpg', 'ancre': (.5, .5)},
     'yaad': {'fichier': 'IMG_6770.jpeg', 'ancre': (.5, .03)},
 }
