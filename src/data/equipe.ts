@@ -322,6 +322,17 @@ export const membres: Membre[] = [
           'Ce qui m’a le plus surpris au début, c’est notre importance sur beaucoup d’événements, et le travail qu’il y a derrière. En venant en civil à une fête ou un concert, on ne remarque pas forcément les bénévoles et le travail qu’il y a derrière.',
         ],
       },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'L’expérience sur le terrain me permet d’enseigner que les situations auxquelles nous pouvons être confrontés ne seront jamais idéales comme en formation. Cette expérience me permet d’appuyer sur le fait qu’il faut certes être bon sur ses gestes et connaissances, mais aussi travailler sa communication sur intervention, sa gestion du stress et de l’adrénaline. L’adaptation et la polyvalence sont une des clés pour réussir.',
+          'Cette expérience me permet donc de rendre au maximum mes formations réalistes, pour les rapprocher de la réalité.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: ['Deviens acteur pour faire bouger les choses, et lance-toi\u00a0!!'],
+      },
     ],
   },
   {
@@ -488,6 +499,132 @@ export const membres: Membre[] = [
       },
     ],
   },
+  {
+    slug: 'guillaume',
+    prenom: 'Guillaume',
+    nom: 'Rizo',
+    metier: 'Kinésithérapeute en cabinet libéral à Antibes',
+    depuis: '2021',
+    roles: ['Formateur', 'Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSC', 'PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
+    photo: '/img/equipe/guillaume.jpg',
+    vignette: '/img/equipe/guillaume-min.jpg',
+    alt: 'Guillaume en tenue d’équipier, avec trois autres secouristes, sur le front de mer.',
+    citation: 'On ne sait jamais ce que la vie nous réserve.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Je suis kinésithérapeute dans un cabinet libéral à Antibes.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Une connaissance, et l’envie de découvrir comment aider les gens dans des situations d’urgence.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: ['La diversité des dispositifs, la vie en communauté dans l’association.'],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Nous ne sommes pas tout le temps sollicités, mais quand une intervention arrive, d’autres s’en suivent rapidement.',
+        ],
+      },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'L’expérience ; le partage du terrain avec les apprenants ; insister sur des points qui sont cruciaux.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Une porte entrouverte ne demande qu’à révéler ce qu’elle cache, et surtout de ses connaissances.',
+          'On ne sait jamais ce que la vie nous réserve : savoir porter secours et réagir dans des situations d’urgence devient primordial dans la société d’aujourd’hui.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'yaad',
+    prenom: 'Yaad',
+    nom: 'Mosbahi',
+    metier: 'Étudiant en médecine, arbitre de basket-ball',
+    depuis: '2026',
+    roles: ['Équipier secouriste'],
+    diplomes: ['PSC', 'PSE1', 'PSE2'],
+    photo: '/img/equipe/yaad.jpg',
+    vignette: '/img/equipe/yaad-min.jpg',
+    alt: 'Yaad en tenue de secouriste, sous la tente du poste de secours.',
+    citation: 'Fonce, car tu vas passer des moments inoubliables.',
+    reponses: [
+      { question: 'Dans la vraie vie', texte: ['Toujours étudiant en médecine 😂'] },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: ['À la base, je me suis inscrit pour avoir un bon dossier Parcoursup.'],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'L’aide à la personne, l’entente au sein des équipes, ma curiosité à toujours vouloir voir plus loin.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Cette facilité, au sein de l’association, à mettre en confiance la personne pendant ses premiers dispositifs de secours.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: ['Fonce, car tu vas passer des moments inoubliables.'],
+      },
+    ],
+  },
+  {
+    slug: 'julien',
+    prenom: 'Julien',
+    nom: 'Grothé',
+    metier: 'SSIAP 1, faisant fonction d’aide-soignant',
+    depuis: '2026',
+    roles: ['Secouriste'],
+    diplomes: ['PSE1'],
+    photo: '/img/equipe/julien.jpg',
+    vignette: '/img/equipe/julien-min.jpg',
+    alt: 'Deux secouristes en veste Secours FFSS, de dos, sur une piste de l’arrière-pays.',
+    citation: 'Beaucoup de bienveillance. Bref, plus une famille.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Je suis SSIAP 1 et faisant fonction d’aide-soignant.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Mon poste de SSIAP 1 au CADAM m’a amené à faire la formation PSE1, car obligatoire. Un organisme très impliqué, très familial.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'Je reviens sur ce que je disais avant, c’est-à-dire que c’est un organisme qui est très familial, très pédagogue. Un organisme également qui fait monter les gens. Beaucoup de bienveillance. Bref, plus une famille.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: ['L’intégration et la motivation de chacun.'],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Pour le coup je peux en parler, car ça m’est arrivé. J’en ai parlé avec un collègue de travail à moi, pour qui le fait de travailler de manière bénévole est assez archaïque.',
+          'Comme je lui ai expliqué, ce n’est pas tant le bénévolat, et surtout le côté humain : le côté être là au bon moment, au bon endroit, pour des personnes en difficulté, et être respectueux et bienveillant sur la santé physique et morale des personnes à qui on vient en aide lors de nos interventions.',
+        ],
+      },
+    ],
+  },
 ];
 
 /**
@@ -533,7 +670,7 @@ export const FICHE_DIPLOME: Record<string, string> = {
 };
 
 /** Portraits recueillis à cette date, par questionnaire. */
-export const recueilliLe = '22 août 2026';
+export const recueilliLe = '23 août 2026';
 
 /**
  * Les appels glissés entre les visages, sur la page d'accueil.

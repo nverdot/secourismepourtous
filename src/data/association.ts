@@ -41,15 +41,17 @@ export const asso = {
   /**
    * Desserte en transports en commun.
    *
-   * ⚠️ À COMPLÉTER PAR SPT : lignes et arrêts exacts desservant le 31 boulevard
-   * Impératrice Eugénie. Rien n'est inventé ici — un numéro de ligne faux
-   * envoie un stagiaire au mauvais endroit le matin de sa formation. Tant que
-   * la liste est vide, la page n'affiche que le calculateur d'itinéraire
-   * Lignes d'Azur, qui est toujours juste.
+   * Renseigné par SPT. Rien n'est déduit ici — un numéro de ligne faux envoie
+   * un stagiaire au mauvais endroit le matin de sa formation. Le temps de
+   * marche depuis l'arrêt n'a pas été communiqué : il reste absent plutôt
+   * qu'estimé. La page affiche par ailleurs le calculateur d'itinéraire
+   * Lignes d'Azur, qui reste juste même si une ligne change de tracé.
    *
-   * Format attendu : { mode: 'Bus' | 'Tram', ligne: '12', arret: 'Nom', minutes: 3 }
+   * Format : { mode: 'Bus' | 'Tram', ligne: '12', arret: 'Nom', minutes: 3 }
    */
-  acces: [] as { mode: string; ligne: string; arret: string; minutes?: number }[],
+  acces: [
+    { mode: 'Bus', ligne: '110 ou 34', arret: 'Résidence universitaire' },
+  ] as { mode: string; ligne: string; arret: string; minutes?: number }[],
 
   agrements: [
     { nom: 'Affiliée FFSS', detail: 'Fédération Française de Sauvetage et de Secourisme' },
