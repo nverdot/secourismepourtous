@@ -25,6 +25,12 @@
  *
  * ⚠️ RELECTURE. Chacun doit valider son texte avant mise en ligne. C'est ce
  * qu'on leur a promis dans le formulaire, en toutes lettres.
+ *
+ * ⚠️ CONSENTEMENT. Le formulaire pose deux cases distinctes : l'autorisation
+ * de publier, et le fait de savoir qu'on peut demander le retrait. Seule la
+ * première autorise quoi que ce soit. Une réponse du 24 août n'avait coché que
+ * la seconde : elle ne figure pas ici, ni son nom, ni sa photo, ni son texte.
+ * Vérifier cette case avant d'ajouter quiconque.
  */
 
 import empreintes from './empreintes-portraits.json';
@@ -641,6 +647,120 @@ export const membres: Membre[] = [
       },
     ],
   },
+  {
+    slug: 'mathieu',
+    prenom: 'Mathieu',
+    nom: 'Caous',
+    metier: 'Lycéen en ST2S, futur infirmier',
+    depuis: '2025',
+    roles: ['Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSE1', 'PSE2'],
+    photo: '/img/equipe/mathieu.jpg',
+    vignette: '/img/equipe/mathieu-min.jpg',
+    alt: 'Une équipe de secouristes FFSS autour d’une victime sous couverture de survie, lors d’une intervention.',
+    citation: 'Nous sommes bénévoles, mais pas amateurs.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Dans la vie, je suis lycéen au CNED, en filière ST2S. Mon objectif, après le lycée, est d’intégrer une école paramédicale — pour devenir infirmier — ou dans le domaine de l’éducation.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Depuis mon plus jeune âge, je souhaite m’investir dans le monde du secours. Mon père étant pompier et ma mère travaillant en direction dans un établissement médicalisé, ils m’ont transmis leur passion du soin, de l’entraide et du secours.',
+          'Très jeune, j’ai découvert le quotidien des soignants aux côtés de ma mère, ce qui m’a naturellement donné envie de m’investir à mon tour dans le secours. Après avoir obtenu mon PSC et découvert par la même occasion les associations de sécurité civile, j’ai cherché une association dans laquelle poursuivre cet engagement. C’est ainsi que j’ai découvert Secourisme Pour Tous.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'Les raisons qui me font revenir sont nombreuses. Ce sont les personnes avec qui je travaille : les collègues sont toujours bienveillants, et l’ambiance au sein du club est vraiment particulière. Nous avons également la possibilité de participer à des sorties, qu’elles soient culturelles ou sportives, ce qui permet de créer des liens en dehors des activités de secourisme.',
+          'Il y a aussi toujours des équipiers très compétents qui permettent aux nouveaux de progresser rapidement. C’est quelque chose que j’apprécie énormément : on apprend constamment des autres, quel que soit son niveau ou son expérience. Nous sommes bénévoles, mais pas amateurs.',
+          'Je n’oublie évidemment pas notre directrice, qui fait énormément, de jour comme de nuit, pour que nous puissions travailler dans de bonnes conditions : de bons partenaires, du matériel performant, des personnes bien formées et surtout de bonnes équipes.',
+          'Les postes de secours sont également une grande motivation. Nous travaillons avec des partenaires de plus en plus importants, ce qui nous permet de participer à des événements parfois très connus. C’est toujours un réel honneur de pouvoir assurer la sécurité du public sur ce type d’événements. Et même lorsqu’il n’y a heureusement aucune victime à prendre en charge, on peut profiter du poste, de l’équipe…',
+          'Enfin, il y a tout simplement le plaisir de faire du secours à personne et de mettre en pratique nos compétences et nos gestes de secours, avec le matériel performant à notre disposition.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'J’ai découvert une véritable pluralité de profils : beaucoup de jeunes, des étudiants, mais aussi des personnes plus expérimentées et de tous les âges. Cette diversité est, selon moi, une vraie richesse pour le club, car chacun peut apporter son expérience, ses compétences et sa façon de voir les choses. C’est aussi ce qui en fait un club particulièrement dynamique, avec une vraie complémentarité entre les générations.',
+          'Ce qui m’a également beaucoup surpris, c’est la diversité des missions que l’on peut réaliser. Avant de rejoindre la FFSS, je pensais que les missions d’une association agréée de sécurité civile se limitaient principalement aux postes de secours et aux formations. J’ai découvert que notre champ d’action est bien plus large : nous pouvons notamment participer à des recherches de personnes ou intervenir en soutien lors de sinistres et de situations exceptionnelles — catastrophes naturelles, industrielles, mais également des situations sanitaires comme des épidémies ou des actes malveillants.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'À quelqu’un qui hésite à se former, je dirais que connaître les gestes de premiers secours peut un jour sauver une vie. Une urgence peut arriver à n’importe qui, et savoir comment réagir permet d’avoir les bons réflexes.',
+          'Pour ceux qui hésitent à devenir bénévoles, je dirais : foncez ! Après le PSE1, chacun peut s’investir selon ses disponibilités. Il n’est pas nécessaire d’être présent chaque semaine pour être utile : quelques postes pendant les vacances ou les week-ends peuvent suffire.',
+          'Et surtout, vous ne serez jamais seul : vous serez formé, accompagné et encadré par des personnes expérimentées. Il ne faut donc pas avoir peur de se lancer.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'manon',
+    prenom: 'Manon',
+    nom: 'Dewaest-Faure',
+    metier: 'Conseillère de vente, bientôt pisteuse secouriste',
+    depuis: '2026',
+    roles: ['Secouriste', 'Nageur sauveteur'],
+    diplomes: ['PSE1', 'BNSSA'],
+    photo: '/img/equipe/manon.jpg',
+    vignette: '/img/equipe/manon-min.jpg',
+    alt: 'Manon, souriante, lunettes et bandeau, en portrait.',
+    citation: 'Ce n’est pas si compliqué que ça. On n’est jamais seul, toujours accompagné.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Je suis conseillère de vente, mais plus pour longtemps. J’ai mon BNSSA, je compte être pisteur secouriste, m’engager chez les pompiers volontaires, et continuer à être secouriste avec la FFSS.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'J’ai toujours voulu faire ça, mais je n’ai jamais pris le temps. 2026 m’a permis de me lancer.',
+        ],
+      },
+      { question: 'Ce qui me fait revenir', texte: ['La cohésion, les postes.'] },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Que ce n’est pas si compliqué que ça. Je me mettais une énorme pression, mais on n’est jamais seul, toujours accompagné.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: ['De foncer, de ne pas avoir peur.'],
+      },
+    ],
+  },
+  {
+    slug: 'romain',
+    prenom: 'Romain',
+    nom: 'Gélin',
+    metier: 'Alternant data manager',
+    depuis: '2023',
+    roles: ['Équipier secouriste'],
+    diplomes: ['PSE1', 'PSE2'],
+    photo: '/img/equipe/romain.jpg',
+    vignette: '/img/equipe/romain-min.jpg',
+    alt: 'Romain en veste de secouriste, sous la tente d’un poste de secours.',
+    citation: 'C’est une bonne expérience, et c’est toujours utile.',
+    reponses: [
+      { question: 'Dans la vraie vie', texte: ['Je suis alternant data manager.'] },
+      { question: 'Ce qui m’a amené au secourisme', texte: ['Une rencontre.'] },
+      { question: 'Ce qui me fait revenir', texte: ['La bienveillance.'] },
+      { question: 'Ce qui m’a surpris au début', texte: ['La mise en place des dispositifs de secours.'] },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: ['C’est une bonne expérience, et c’est toujours utile.'],
+      },
+    ],
+  },
 ];
 
 /**
@@ -686,7 +806,7 @@ export const FICHE_DIPLOME: Record<string, string> = {
 };
 
 /** Portraits recueillis à cette date, par questionnaire. */
-export const recueilliLe = '23 août 2026';
+export const recueilliLe = '24 août 2026';
 
 /**
  * Les appels glissés entre les visages, sur la page d'accueil.

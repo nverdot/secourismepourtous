@@ -114,27 +114,21 @@ const montres = mur ? melange : apercu ? choisir(apercu) : vivier;
  * La seconde rangée part de la fin, pour qu'on ne lise pas deux fois la même
  * suite de visages à la verticale.
  */
-const PAR_DEMI = 16;
-const repetitions = Math.max(1, Math.ceil(PAR_DEMI / Math.max(montres.length, 1)));
-
 /**
  * Les appels tirés pour cette construction.
  *
- * Il y en a dix en réserve pour six emplacements — trois par demi-piste, deux
- * rangées. Les prendre dans l'ordre de la liste condamnerait les quatre
- * derniers à ne jamais paraître ; on les mélange donc, comme les portraits,
- * et le mur change de discours à chaque déploiement.
+ * Il y en a dix en réserve pour six emplacements. Les prendre dans l'ordre de
+ * la liste condamnerait les derniers à ne jamais paraître ; on les mélange
+ * donc, comme les portraits, et le mur change de discours à chaque
+ * déploiement.
  *
- * Le mélange évite ensuite de placer deux fois la même couleur de filière à la
- * suite : deux aplats rouges voisins se liraient comme un seul bloc, et la
- * ponctuation qu'on cherche disparaîtrait.
+ * Un tas par filière, chacun mélangé, puis on sert en tourniquet : les cinq
+ * premiers appels portent cinq couleurs différentes, et les cinq suivants
+ * aussi. Écarter seulement les doublons voisins ne suffisait pas — une rangée
+ * n'affiche que quelques appels, et « océan, ocre, océan » y sortait, ce qui
+ * mettait deux tiers d'une rangée dans la même couleur.
  */
 const appels = (() => {
-  // Un tas par filière, chacun mélangé, puis on sert en tourniquet : les cinq
-  // premiers appels portent donc cinq couleurs différentes, et les cinq
-  // suivants aussi. Écarter seulement les doublons voisins ne suffisait pas —
-  // une rangée n'affiche que trois appels, et « océan, ocre, océan » y sortait,
-  // ce qui donne deux tiers d'une rangée dans la même couleur.
   const tas = new Map<string, typeof APPELS>();
   [...APPELS].sort(() => Math.random() - 0.5).forEach((a) => {
     if (!tas.has(a.ton)) tas.set(a.ton, []);
@@ -149,25 +143,38 @@ const appels = (() => {
 })();
 
 /**
- * Les appels ferment chaque passage de l'équipe, jamais deux fois le même.
+ * Une moitié de piste : des groupes de visages, chacun suivi d'un appel.
  *
- * Ils ne sont pas glissés au hasard entre les visages : ils closent un tour
- * complet des portraits, ce qui donne un rythme — on voit tout le monde, puis
- * on est invité, puis on revoit tout le monde. Et comme la phrase change à
- * chaque fois, le mur ne se met jamais à répéter le même panneau.
+ * La règle a d'abord été « un appel par tour complet de l'équipe ». Elle tenait
+ * à six portraits ; à quinze, l'appel ne revenait plus que toutes les deux
+ * minutes, et la piste portait cent vingt vignettes. Le rythme doit dépendre de
+ * ce qu'on voit passer, pas de l'effectif : un appel tous les six visages.
+ *
+ * La moitié doit rester plus large que l'écran, sinon la boucle laisse voir le
+ * vide derrière. Six visages et un appel font environ 1 300 pixels ; on répète
+ * jusqu'à dépasser la largeur d'un très grand écran.
  */
+const PAR_GROUPE = 6;
+const MIN_VIGNETTES = 15;
+
 type Case = { m?: (typeof montres)[number]; appel?: (typeof appels)[number]; double?: boolean };
 const rangee = (source: typeof montres, decalage: number): Case[] => {
-  const demi: Case[] = Array.from({ length: repetitions }, (_, k) => [
-    ...source.map((m) => ({ m })),
-    { appel: appels[(k + decalage) % appels.length] },
-  ]).flat();
+  const demi: Case[] = [];
+  let visage = 0;
+  let appel = decalage;
+  while (demi.length < MIN_VIGNETTES) {
+    for (let k = 0; k < PAR_GROUPE && source.length; k++) {
+      demi.push({ m: source[visage++ % source.length] });
+    }
+    demi.push({ appel: appels[appel++ % appels.length] });
+  }
   // Deux moitiés : la première porte les vignettes réelles, la seconde n'existe
   // que pour l'œil et reste hors du clavier et des lecteurs d'écran.
   return [...demi, ...demi].map((c, i) => ({ ...c, double: i >= demi.length }));
 };
+
 const rangees = mur
-  ? [rangee(montres, 0), rangee([...montres].reverse(), repetitions)]
+  ? [rangee(montres, 0), rangee([...montres].reverse(), 3)]
   : [];
 
 /** Deux blocs peuvent cohabiter sur une même page : la navigation doit rester
@@ -263,7 +270,11 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   )}
 
   <div class:list={[mur && 'wrap']}>
-    {/* Le lien n'a de sens qu'en aperçu. Le mur vit désormais sur la page
+    {/* « en 24 août 2026 » ne se dit pas : la date est devenue précise au jour
+        près — elle change à chaque nouvel envoi —, elle se donne donc comme une
+        date de mise à jour et non comme une période.
+
+        Le lien, lui, n'a de sens qu'en aperçu. Le mur vit désormais sur la page
         d'équipe elle-même : l'y laisser aurait pointé vers la page en cours. */}
     {apercu ? (
       <a class="eq__plus" href={lien}>
@@ -272,8 +283,8 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
       </a>
     ) : (
       <p class="eq__note">
-        Portraits recueillis auprès de nos membres en {recueilliLe}, publiés avec
-        leur accord.
+        Portraits recueillis auprès de nos membres, publiés avec leur accord.
+        Mise à jour du {recueilliLe}.
       </p>
     )}
   </div>

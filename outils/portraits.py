@@ -72,6 +72,21 @@ PORTRAITS = {
     },
     'julien': {'fichier': 'IMG-20260510-WA0006.jpg', 'ancre': (.5, .5)},
     'yaad': {'fichier': 'IMG_6770.jpeg', 'ancre': (.5, .03)},
+    'manon': {'fichier': 'IMG_3475.jpeg', 'ancre': (.5, .0)},
+    'romain': {
+        'fichier': 'Screenshot_2026-08-24-11-15-08-728_com.miui.gallery.jpg',
+        # Capture d'écran très haute : sans boîte il n'est qu'une silhouette
+        # sous la tente, et le bas de l'image porte une bande noire.
+        'boite': (238, 1050, 798, 1797),
+    },
+    'mathieu': {
+        'fichier': 'WhatsApp Image 2026-02-21 at 18.18.51.jpeg',
+        # ⚠️ Scène d'intervention à plusieurs. On ne sait pas lequel est
+        # Mathieu : tant que ce n'est pas confirmé, on garde la scène entière
+        # plutôt que de serrer sur quelqu'un au hasard. Deux cadrages ont déjà
+        # été faits à l'envers faute de cette précaution.
+        'ancre': (.5, .0),
+    },
 }
 
 # On n'agrandit jamais une photo au-delà de ce facteur : mieux vaut une image
