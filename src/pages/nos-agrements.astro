@@ -1,0 +1,167 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { agrements, verifier } from '../data/agrements';
+import { filAriane, questionsFrequentes } from '../lib/schema';
+
+/**
+ * « Nos agréments : ce qu'ils changent pour vous ».
+ *
+ * Trois étiquettes s'affichent en haut des cinquante-cinq pages du site et
+ * n'étaient expliquées nulle part. Deux d'entre elles conditionnent pourtant
+ * légalement ce que le visiteur vient chercher : tenir un poste de secours,
+ * faire financer une formation.
+ *
+ * ELLE S'ADRESSE À DEUX PERSONNES QUI DÉCIDENT. L'organisateur qui compare des
+ * prestataires de dispositifs, et le particulier qui cherche un financement.
+ * D'où l'ordre : l'agrément de sécurité civile d'abord, parce que c'est le seul
+ * dont l'absence rend l'autre en faute.
+ *
+ * ELLE APPREND À VÉRIFIER. Y compris ailleurs. C'est contre-intuitif et c'est
+ * l'essentiel : on ne craint pas le contrôle qu'on enseigne soi-même.
+ */
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', url: '/' },
+    { nom: 'Qui sommes-nous', url: '/qui-sommes-nous' },
+    { nom: 'Nos agréments', url: '/nos-agrements' },
+  ]),
+  questionsFrequentes([
+    {
+      q: 'Qu’est-ce que la FFSS ?',
+      r: 'La Fédération Française de Sauvetage et de Secourisme, association loi 1901 née en 1899 et reconnue d’utilité publique depuis 1927. Elle est titulaire d’un agrément national de sécurité civile et porte la délégation du ministère des Sports pour le sauvetage sportif. C’est sous son habilitation que nous délivrons les diplômes d’État.',
+    },
+    {
+      q: 'Faut-il un agrément pour tenir un poste de secours ?',
+      r: 'Oui. Le code de la sécurité intérieure réserve les dispositifs prévisionnels de secours aux associations agréées de sécurité civile. Un organisateur qui confie son poste à une structure sans agrément n’est pas en règle.',
+    },
+    {
+      q: 'À quoi sert la certification Qualiopi ?',
+      r: 'Depuis le 1er janvier 2022, elle conditionne la prise en charge d’une formation par des fonds publics ou mutualisés : compte personnel de formation, OPCO, France Travail. Sans elle, la formation reste à votre charge.',
+    },
+    {
+      q: 'Comment vérifier qu’un organisme est bien agréé ?',
+      r: 'La préfecture publie la liste des associations agréées de son département. Pour Qualiopi, chaque certificat porte un numéro et une date de validité. Le nôtre est le QUA009665, valable jusqu’au 29 novembre 2027.',
+    },
+  ]),
+];
+---
+
+<Base
+  title="Affiliée FFSS, agréée sécurité civile, certifiée Qualiopi"
+  description="Ce que valent nos trois agréments : lequel autorise à tenir un poste de secours, lequel ouvre les financements, ce qu’est la FFSS, et comment vérifier chez n’importe quel prestataire."
+  chemin="/nos-agrements"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/qui-sommes-nous">Qui sommes-nous</a><i aria-hidden="true">›</i>
+        <b>Nos agréments</b>
+      </nav>
+      <h1 class="tete__h1">Trois étiquettes,<br />et ce qu'elles autorisent</h1>
+      <p class="tete__t">
+        « Affiliée FFSS · Agréée sécurité civile · Certifiée Qualiopi » s'affiche
+        en haut de chaque page de ce site. Deux de ces trois mentions
+        conditionnent légalement ce que vous venez chercher. Voici lesquelles,
+        et comment les vérifier — chez nous comme ailleurs.
+      </p>
+    </div>
+  </header>
+
+  {agrements.map((a, i) => (
+    <section class:list={['section', i % 2 === 1 && 'section--sunk']} aria-labelledby={`t-${i}`}>
+      <div class="wrap">
+        <div class="ag">
+          <div class="ag__g">
+            <p class="eyebrow">{a.quoi}</p>
+            <h2 class="h-section" id={`t-${i}`}>{a.nom}</h2>
+            <ul class="ag__l">
+              {a.autorise.map((t) => <li>{t}</li>)}
+            </ul>
+          </div>
+          <aside class="ag__d">
+            <h3 class="ag__dt">Ce que ça change pour vous</h3>
+            <p>{a.pourVous}</p>
+            <div class="ag__src">
+              {a.sources.map((s) => <a href={s.url} rel="noopener">{s.texte}</a>)}
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section" aria-labelledby="t-verif">
+    <div class="wrap">
+      <p class="eyebrow">Ne nous croyez pas sur parole</p>
+      <h2 class="h-section" id="t-verif">{verifier.titre}</h2>
+      <p class="lede">{verifier.intro}</p>
+
+      <ul class="ver">
+        {verifier.pistes.map((p) => (
+          <li class="ver__i">
+            <strong>{p.quoi}</strong>
+            <p>{p.comment}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="ver__a">
+        <a class="btn btn--sobre" href="/documents/certificat-qualiopi.pdf">Notre certificat Qualiopi</a>
+        <a class="btn btn--sobre" href="/qui-sommes-nous">Qui nous sommes</a>
+        <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; line-height: 1.05; margin-bottom: .8rem; }
+  .tete__t { max-width: 62ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  /* Le texte réglementaire à gauche, sa conséquence à droite : on peut lire
+     l'une sans l'autre, et la plupart des gens ne liront que la droite. */
+  .ag {
+    display: grid; gap: clamp(1.4rem, 3vw, 2.5rem);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+  }
+  @media (max-width: 860px) { .ag { grid-template-columns: 1fr; } }
+
+  .ag__l { margin: 1.5rem 0 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
+  .ag__l li { color: var(--ink-soft); line-height: 1.75; max-width: 62ch; }
+  .ag__l li::marker { color: var(--accent); }
+
+  .ag__d {
+    background: var(--surface); border: 1px solid var(--line);
+    border-top: 3px solid var(--accent-plein);
+    border-radius: var(--r-lg); padding: clamp(1.2rem, 2.6vw, 1.6rem);
+  }
+  .ag__dt {
+    font-family: 'Archivo', sans-serif; font-size: .74rem; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: .7rem;
+  }
+  .ag__d p { color: var(--ink); line-height: 1.7; }
+  .ag__src { display: flex; flex-direction: column; gap: .45rem; margin-top: 1.2rem; }
+  .ag__src a { font-size: .82rem; color: var(--ink-mute); line-height: 1.45; }
+  .ag__src a:hover { color: var(--accent); }
+
+  .ver { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem;
+         grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+  .ver__i {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.1rem, 2.4vw, 1.4rem);
+  }
+  .ver__i strong { display: block; font-size: 1.02rem; font-weight: 800; margin-bottom: .5rem; }
+  .ver__i p { color: var(--ink-soft); line-height: 1.7; font-size: .94rem; }
+  .ver__a { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
+</style>
