@@ -7,9 +7,6 @@
  * `wixEvent` fait le lien avec Wix Events : c'est le titre exact de l'événement
  * côté Wix, utilisé pour rattacher les sessions réelles à la bonne formation.
  * Voir src/lib/wix.ts.
- *
- * ⚠️ À FAIRE VALIDER PAR SPT : tarifs, durées et prérequis marqués « aValider ».
- * Seul le PSC a été confirmé depuis le site actuel (50 €, 7 h, dès 10 ans).
  */
 
 export type Filiere = 'citoyenne' | 'operationnelle' | 'aquatique' | 'pedagogique' | 'entreprise';
@@ -48,9 +45,15 @@ export interface Formation {
    * page du PSE1 seul brouille le tarif annoncé juste au-dessus.
    */
   billetsMasques?: string[];
+  /**
+   * Masque les objectifs et le programme tant que le référentiel n'est pas paru.
+   *
+   * Publier un programme qu'on ne peut pas tenir vaut moins que ne rien
+   * publier : quelqu'un s'inscrirait sur la foi d'un contenu qui changera.
+   */
+  programmeEnAttente?: boolean;
   /** Tarif applicable en financement CPF, quand il diffère du tarif direct. */
   tarifCpf?: string;
-  aValider?: boolean;
 
   objectifs: Objectif[];
   modules: Module[];
@@ -375,6 +378,7 @@ export const formations: Formation[] = [
     accroche:
       "Surveillez les piscines, les plages et les plans d'eau. Le SSA, qui remplace le BNSSA depuis le 1er octobre 2026, est le diplôme de référence du sauvetage aquatique, et le premier pas vers un métier.",
     resume: 'Le diplôme national pour devenir sauveteur aquatique.',
+    programmeEnAttente: true,
     duree: 'Nous consulter',
     // L'âge et le prérequis de secourisme du SSA ne sont pas repris ici tant
     // que le référentiel FFSS n'est pas publié. Les chiffres qui circulent —
@@ -385,7 +389,6 @@ export const formations: Formation[] = [
     certification: 'SSA',
     certificationNote: 'Remplace le BNSSA depuis le 1er octobre 2026',
     tarif: 'Nous consulter',
-    aValider: true,
     objectifs: [
       { titre: 'Surveiller un bassin', texte: 'Prévenir les risques, repérer les comportements à risque et intervenir vite.', icone: 'eau' },
       { titre: 'Sauver en milieu aquatique', texte: 'Techniques d’approche, de dégagement et de remorquage d’une victime.', icone: 'eau' },
@@ -585,7 +588,6 @@ export const formations: Formation[] = [
     certification: 'SSA prolongé',
     certificationNote: 'Tous les 5 ans',
     tarif: 'Nous consulter',
-    aValider: true,
     objectifs: [
       { titre: 'Prolonger le diplôme', texte: 'Conserver le droit de surveiller les baignades et les plans d’eau.', icone: 'eau' },
       { titre: 'Réviser le sauvetage', texte: 'Approche, dégagement et remorquage d’une victime en milieu aquatique.', icone: 'eau' },

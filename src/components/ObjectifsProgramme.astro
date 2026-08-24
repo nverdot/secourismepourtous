@@ -90,7 +90,36 @@ const v = niveauPse ? volume(niveauPse) : null;
 
 <section class="section" aria-label="Contenu de la formation">
   <div class="wrap op">
+    {/* Tant que le référentiel n'est pas paru, on ne publie ni objectifs ni
+        programme : ce serait promettre un contenu qu'on ne peut pas tenir, et
+        quelqu'un s'inscrirait dessus. Les modalités restent — elles n'en
+        dépendent pas, et Qualiopi impose de les publier. */}
+    {f.programmeEnAttente && (
+      <div class="att">
+        <span class="att__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+        </span>
+        <div>
+          <h2 class="att__t">Programme à paraître</h2>
+          <p>
+            Le référentiel officiel de la FFSS n'est pas encore publié. Nous ne
+            mettons donc en ligne ni objectifs ni programme&nbsp;: annoncer un
+            contenu que le texte viendrait démentir n'aiderait personne.
+          </p>
+          <p>
+            Tout sera publié ici dès sa parution. Écrivez-nous pour être prévenu
+            de l'ouverture des inscriptions.
+          </p>
+          <a class="att__l" href="/bnssa-devient-ssa">
+            Ce que change la réforme
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </div>
+      </div>
+    )}
+
     <!-- Objectifs -->
+    {!f.programmeEnAttente && (
     <div class="buts-col">
       <div class="op__tete">
         <span class="op__ic">
@@ -121,6 +150,7 @@ const v = niveauPse ? volume(niveauPse) : null;
       </div>
 
     </div>
+    )}
 
     <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
          de les publier ; les répéter ailleurs ferait doublon. -->
@@ -156,6 +186,7 @@ const v = niveauPse ? volume(niveauPse) : null;
     </div>
 
     <!-- Programme -->
+    {!f.programmeEnAttente && (
     <div id="programme">
       <div class="op__tete">
         <span class="op__ic">
@@ -222,6 +253,7 @@ const v = niveauPse ? volume(niveauPse) : null;
         </p>
       )}
     </div>
+    )}
   </div>
 
   {f.suites.length > 0 && (
@@ -270,12 +302,41 @@ const v = niveauPse ? volume(niveauPse) : null;
   .op > .buts-col { grid-column: 1; grid-row: 1; }
   .op > .mods { grid-column: 1; grid-row: 2; }
   .op > #programme { grid-column: 2; grid-row: 1 / span 2; }
+  /* Sans objectifs ni programme, la grille à deux colonnes laisserait la
+     moitié droite vide. La note passe en pleine largeur, les modalités
+     dessous. */
+  .op > .att { grid-column: 1 / -1; grid-row: 1; }
+  .op:has(.att) > .mods { grid-column: 1 / -1; grid-row: 2; }
   @media (max-width: 880px) {
     .op { grid-template-columns: 1fr; grid-template-rows: none; }
     .op > .buts-col,
     .op > .mods,
     .op > #programme { grid-column: 1; grid-row: auto; }
   }
+
+  /* L'encadré d'attente occupe la place des objectifs : il tient la colonne
+     seul, sans laisser un blanc là où le lecteur cherchait un contenu. */
+  .att {
+    display: flex; gap: 1.1rem; align-items: flex-start;
+    background: var(--accent-wash); border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: var(--r-lg); padding: clamp(1.2rem, 2.6vw, 1.7rem);
+  }
+  .att__ic {
+    flex: none; width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent-plein); color: var(--accent-encre);
+  }
+  .att__ic svg { width: 20px; height: 20px; }
+  .att__t { font-size: 1.15rem; font-weight: 800; margin-bottom: .6rem; }
+  .att p { color: var(--ink-soft); line-height: 1.7; max-width: 60ch; }
+  .att p + p { margin-top: .7rem; }
+  .att__l {
+    display: inline-flex; align-items: center; gap: .45rem; margin-top: 1rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .92rem;
+    color: var(--accent); text-decoration: none;
+  }
+  .att__l:hover { text-decoration: underline; }
+  .att__l svg { width: 15px; height: 15px; }
 
   .op__tete { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1.5rem; }
   /* Aplat plein plutôt que lavis : un trait de couleur sur fond très clair
