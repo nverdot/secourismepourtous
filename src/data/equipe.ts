@@ -761,6 +761,67 @@ export const membres: Membre[] = [
       },
     ],
   },
+  {
+    slug: 'nicolas',
+    prenom: 'Nicolas',
+    nom: 'Verdot',
+    metier: 'Accompagnement d’équipes et de dirigeants, moniteur de plongée',
+    depuis: '2020',
+    roles: ['Formateur', 'Équipier secouriste'],
+    diplomes: ['PSC', 'PSE1', 'PSE2', 'PAE FPSC', 'PAE FPS'],
+    photo: '/img/equipe/nicolas.jpg',
+    vignette: '/img/equipe/nicolas-min.jpg',
+    alt: 'Nicolas en polo d’équipier, lunettes de soleil, sur le front de mer.',
+    citation:
+      'Pas pour devenir un héros, mais pour ne pas être complètement démuni le jour où quelque chose arrive.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'Booster de leaders et d’équipes. J’ai plusieurs casquettes. Mon activité principale, c’est d’accompagner des équipes, des managers et des dirigeants à mieux travailler ensemble, prendre des décisions et passer à l’action. Je fais beaucoup de facilitation, de formation et d’accompagnement collectif.',
+          'Et à côté de ça, je suis aussi moniteur de plongée. Finalement, dans tous mes métiers, il y a un point commun : transmettre, accompagner et aider les gens à prendre confiance.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Au départ, c’est surtout la plongée. Quand tu encadres des personnes en mer, savoir réagir en cas de problème fait forcément partie du métier.',
+          'Et puis je me suis rendu compte que le secourisme m’intéressait bien au-delà de la plongée : comprendre ce qu’il faut faire, être capable d’agir et surtout ne pas rester spectateur quand quelque chose arrive.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'Le terrain et les gens.',
+          'Il y a quelque chose de très concret dans le secourisme : tu apprends, tu pratiques, tu rencontres des personnes très différentes et tu sais pourquoi tu es là.',
+          'Et puis il y a toujours quelque chose à apprendre. Deux interventions ne se ressemblent jamais vraiment.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Je pensais que le secourisme, c’était surtout des gestes techniques à connaître parfaitement.',
+          'En réalité, la technique est importante, évidemment, mais il y a énormément d’humain : rassurer, observer, communiquer, s’adapter, travailler en équipe… et parfois simplement être présent au bon moment.',
+          'C’est probablement ça qui m’a le plus surpris.',
+        ],
+      },
+      {
+        question: 'Ce que le terrain change dans ma façon d’enseigner',
+        texte: [
+          'Énormément.',
+          'Le terrain te rappelle que dans la vraie vie, personne ne te présente une situation propre avec écrit dessus : « victime inconsciente », « malaise » ou « obstruction des voies aériennes ». Il faut observer, comprendre, décider, communiquer et gérer tout ce qu’il y a autour.',
+          'Du coup, quand je forme, j’essaie de ne pas seulement faire apprendre une procédure. Je veux que les personnes comprennent pourquoi elles font les choses, qu’elles réfléchissent et surtout qu’elles soient capables d’agir quand la situation n’est pas exactement comme dans le manuel.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'À quelqu’un qui hésite à se former, je dirais : vas-y. Pas pour devenir un héros, mais simplement pour ne pas être complètement démuni le jour où quelque chose arrive. On imagine toujours que ça concernera un inconnu… alors que très souvent, la personne qu’on devra aider sera un proche, un collègue, un ami. Se former, c’est surtout gagner la capacité d’agir plutôt que de subir la situation.',
+          'Et pour devenir bénévole, je dirais : viens essayer avant de décider que ce n’est pas pour toi. On vient pour apprendre le secourisme, mais on reste aussi beaucoup pour les rencontres, l’équipe, les moments partagés et le sentiment d’être utile concrètement. Tu n’as pas besoin d’être expert en arrivant : tu apprends sur le terrain, entouré par les autres.',
+        ],
+      },
+    ],
+  },
 ];
 
 /**

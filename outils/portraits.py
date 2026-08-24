@@ -79,6 +79,12 @@ PORTRAITS = {
         # sous la tente, et le bas de l'image porte une bande noire.
         'boite': (238, 1050, 798, 1797),
     },
+    'nicolas': {
+        'fichier': 'Nicolas verdot a gauche.JPG',
+        # Selfie à quatre, il est le premier à gauche — le fichier le dit, et
+        # c'est ce qui a manqué pour Guillaume.
+        'boite': (0, 170, 600, 970),
+    },
     'mathieu': {
         'fichier': 'WhatsApp Image 2026-02-21 at 18.18.51.jpeg',
         # ⚠️ Scène d'intervention à plusieurs. On ne sait pas lequel est

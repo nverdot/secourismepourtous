@@ -160,21 +160,41 @@ const MIN_VIGNETTES = 15;
 type Case = { m?: (typeof montres)[number]; appel?: (typeof appels)[number]; double?: boolean };
 const rangee = (source: typeof montres, decalage: number): Case[] => {
   const demi: Case[] = [];
-  let visage = 0;
   let appel = decalage;
-  while (demi.length < MIN_VIGNETTES) {
-    for (let k = 0; k < PAR_GROUPE && source.length; k++) {
-      demi.push({ m: source[visage++ % source.length] });
-    }
+  // On découpe la liste en tranches plutôt que de boucler dessus : à seize
+  // portraits et six par groupe, une boucle repartait au début avant d'avoir
+  // épuisé la liste, et deux visages revenaient deux fois dans la même
+  // demi-piste — visible d'un coup d'œil sur une rangée.
+  for (let i = 0; i < source.length; i += PAR_GROUPE) {
+    source.slice(i, i + PAR_GROUPE).forEach((m) => demi.push({ m }));
     demi.push({ appel: appels[appel++ % appels.length] });
   }
+  // Si l'effectif ne suffit pas à couvrir la largeur d'un écran, on répète.
+  const base = [...demi];
+  while (demi.length < MIN_VIGNETTES) demi.push(...base);
   // Deux moitiés : la première porte les vignettes réelles, la seconde n'existe
   // que pour l'œil et reste hors du clavier et des lecteurs d'écran.
   return [...demi, ...demi].map((c, i) => ({ ...c, double: i >= demi.length }));
 };
 
+/**
+ * Trois rangées, chacune dans un ordre différent.
+ *
+ * La première prend les portraits tels qu'ils sortent du mélange, la deuxième
+ * les prend à l'envers, la troisième les fait tourner d'un tiers. Sans ça, les
+ * mêmes visages se retrouveraient alignés verticalement à chaque tour — et le
+ * mur ressemblerait à un tableau plutôt qu'à une foule.
+ *
+ * Le décalage des appels suit la même logique : chaque rangée entre dans la
+ * liste des messages à un endroit différent.
+ */
+const tiers = Math.floor(montres.length / 3);
 const rangees = mur
-  ? [rangee(montres, 0), rangee([...montres].reverse(), 3)]
+  ? [
+      rangee(montres, 0),
+      rangee([...montres].reverse(), 3),
+      rangee([...montres.slice(tiers), ...montres.slice(0, tiers)], 6),
+    ]
   : [];
 
 /** Deux blocs peuvent cohabiter sur une même page : la navigation doit rester
@@ -506,6 +526,10 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     will-change: transform;
   }
   .mur__p[data-sens='inverse'] { animation-direction: reverse; }
+  /* La troisième rangée va dans le même sens que la première : à vitesse
+     égale, les deux se verrouilleraient et le mur se lirait comme un bloc.
+     Un cinquième plus lent suffit à les désolidariser. */
+  .mur__p:nth-child(3) { animation-duration: calc(var(--n) * 7.2s); }
   @keyframes mur-defile {
     from { transform: translate3d(0, 0, 0); }
     to   { transform: translate3d(-50%, 0, 0); }
