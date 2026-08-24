@@ -105,16 +105,9 @@ export const photosDps: PhotoDps[] = [
     hauteur: 2000,
   },
   {
-    fichier: '/img/dps/feu-artifice-equipe.jpg',
-    alt: "Une équipe de secouristes alignée dos au feu d'artifice, à côté du véhicule de premiers secours FFSS 06 sur le front de mer.",
-    legende: 'Feu d’artifice — dispositif sur le front de mer',
-    largeur: 2000,
-    hauteur: 1500,
-  },
-  {
     fichier: '/img/dps/feu-artifice.jpg',
-    alt: "Une équipe de secouristes FFSS alignée face au public pendant un feu d'artifice, à côté du véhicule de premiers secours FFSS 06.",
-    legende: 'Feu d’artifice — surveillance du public',
+    alt: "Une dizaine de secouristes en veste « Secours FFSS », de dos face au feu d'artifice, alignés le long du véhicule de premiers secours FFSS 06.",
+    legende: 'Feu d’artifice — dispositif sur le front de mer',
     largeur: 2000,
     hauteur: 1500,
   },
