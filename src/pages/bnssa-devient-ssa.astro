@@ -135,7 +135,11 @@ const balisages = [
         </p>
         <div class="aide__a">
           <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
-          <a class="btn btn--fantome" href="/contact">Nous écrire</a>
+          {/* « sobre » et non « fantôme » : le fantôme est blanc sur fond
+              transparent, prévu pour le bandeau sombre. Sur cette section
+              claire il était invisible — et il décalait le numéro vers la
+              gauche en occupant sa place sans se montrer. */}
+          <a class="btn btn--sobre" href="/contact">Nous écrire</a>
         </div>
       </div>
     </div>
