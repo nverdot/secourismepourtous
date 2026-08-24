@@ -79,6 +79,13 @@ PORTRAITS = {
         # sous la tente, et le bas de l'image porte une bande noire.
         'boite': (238, 1050, 798, 1797),
     },
+    'andrea': {
+        'fichier': '29e5ff3b-9af8-4f3b-bbbd-0cc0b56dc712.jpeg',
+        # ⚠️ Deux secouristes dans le véhicule, et on ne sait pas laquelle est
+        # Andréa. Le cadrage les garde toutes les deux plutôt que de serrer sur
+        # l'une au hasard. À reprendre dès que c'est confirmé.
+        'boite': (575, 871, 1915, 2658),
+    },
     'nicolas': {
         'fichier': 'Nicolas verdot a gauche.JPG',
         # Selfie à quatre, il est le premier à gauche — le fichier le dit, et

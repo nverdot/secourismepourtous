@@ -822,6 +822,55 @@ export const membres: Membre[] = [
       },
     ],
   },
+  {
+    slug: 'andrea',
+    prenom: 'Andréa',
+    nom: 'Richard Filippi',
+    metier: 'Étudiante en fac de sport',
+    depuis: '2026',
+    roles: ['Secouriste'],
+    diplomes: ['PSC', 'PSE1'],
+    photo: '/img/equipe/andrea.jpg',
+    vignette: '/img/equipe/andrea-min.jpg',
+    alt: 'Deux secouristes en tenue à l’intérieur du véhicule de premiers secours, penchées sur du matériel.',
+    citation:
+      'Te former, c’est la case départ de tout ce que tu pourras faire après.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Dans la vie de tous les jours, je suis étudiante en fac de sport.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'Un an auparavant, j’ai entendu parler d’une formation de premiers secours, mais arrivée trop tard. J’ai pris l’initiative cette année d’aller vers l’association avec une amie, pour être formée et pouvoir exercer si la situation le demande, au lieu de ne pouvoir qu’alerter.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'L’ambiance qu’on retrouve à chaque poste, ou même durant des missions pour l’association.',
+          'Le plaisir de parler avec des gens passionnés qui te racontent ou t’expliquent la situation pour mieux la comprendre, et ainsi mieux agir sur poste ou même dans la vie de tous les jours.',
+          'Et tout simplement l’envie d’aider, de mieux comprendre les gens, de pouvoir enfin servir ceux qui en ont besoin, dans la plus banale des situations ou dans les grands événements.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Je m’imaginais une ambiance beaucoup plus stricte, dans le sens où il n’y a pas forcément de liens amicaux rapides, ou qu’on soit laissé seul face à des victimes dans nos premiers postes.',
+          'Alors que c’est tout l’inverse qui nous attend là-bas : on cherche à vous mettre à l’aise et vous n’êtes jamais laissé seul, afin de profiter et d’être le plus opérationnel possible.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Hésiter à se former ou avoir peur de mal faire, c’est remettre en question notre envie d’aider quelqu’un alors qu’il en a le plus besoin. Si tu as envie, si c’est quelque chose que tu aimes faire — AIDER.',
+          'Te former, c’est la case départ de tout ce que tu pourras faire après, et évoluer !',
+          'Devenir bénévole, c’est mettre à exécution tout ce que tu as appris. Tu ne l’utilises pas seulement dans la vie de tous les jours, mais aussi sur des événements où tout peut arriver… alors fonce et n’hésite plus !',
+        ],
+      },
+    ],
+  },
 ];
 
 /**
