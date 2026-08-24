@@ -118,22 +118,38 @@ export const agrements: Agrement[] = [
 export const verifier = {
   titre: 'Comment vérifier, chez nous comme ailleurs',
   intro:
-    'Ces trois mentions se contrôlent en quelques minutes, et personne ne devrait avoir à nous croire sur parole.',
+    'Ces trois mentions se contrôlent en quelques minutes, et personne ne devrait avoir à nous croire sur parole. Voici où regarder — les liens mènent aux sources officielles, pas à nos propres pages.',
   pistes: [
     {
       quoi: 'L’agrément de sécurité civile',
       comment:
-        'La préfecture publie la liste des associations agréées de son département. Demandez le numéro et le type d’agrément : un prestataire qui hésite vous a déjà répondu.',
+        'La préfecture des Alpes-Maritimes publie la liste des associations agréées du département. Nous y figurons en première page, sous le nom du comité départemental de la FFSS, à notre adresse — agréés pour les quatre missions, A à D.',
+      lien: {
+        texte: 'Liste préfectorale des associations agréées (PDF)',
+        url: 'https://www.alpes-maritimes.gouv.fr/contenu/telechargement/50548/393101/file/Liste_AASC06.pdf',
+      },
+    },
+    {
+      quoi: 'L’agrément national de la fédération',
+      comment:
+        'Celui de la FFSS est un arrêté publié au Journal officiel. Le dernier renouvellement date du 31 octobre 2024 et vaut trois ans, pour les quatre types de missions.',
+      lien: {
+        texte: 'Arrêté du 31 octobre 2024 sur Légifrance',
+        url: 'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000050429669',
+      },
     },
     {
       quoi: 'La certification Qualiopi',
       comment:
-        'Chaque certificat porte un numéro, une date de validité et un organisme certificateur. Le nôtre est le QUA009665, valable jusqu’au 29 novembre 2027, et le certificat est téléchargeable sur ce site.',
-    },
-    {
-      quoi: 'L’affiliation fédérale',
-      comment:
-        'La FFSS publie l’annuaire de ses comités départementaux et de ses clubs. Nous sommes affiliés au comité des Alpes-Maritimes.',
+        'L’annuaire des entreprises de l’État affiche notre statut d’organisme de formation et notre certification, mis à jour quotidiennement par le ministère du Travail. Notre certificat porte le numéro QUA009665 et court jusqu’au 29 novembre 2027.',
+      lien: {
+        texte: 'Notre fiche sur l’annuaire des entreprises',
+        url: 'https://annuaire-entreprises.data.gouv.fr/entreprise/secourisme-pour-tous-509334033',
+      },
+      telechargement: {
+        texte: 'Télécharger notre certificat',
+        url: '/documents/certificat-qualiopi.pdf',
+      },
     },
   ],
 };

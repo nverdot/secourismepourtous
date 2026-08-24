@@ -115,12 +115,24 @@ const balisages = [
           <li class="ver__i">
             <strong>{p.quoi}</strong>
             <p>{p.comment}</p>
+            {/* Les liens mènent aux sources officielles, jamais à nos propres
+                pages : c'est ce qui fait la différence entre une preuve et une
+                affirmation de plus. */}
+            <a class="ver__l" href={p.lien.url} rel="noopener">
+              {p.lien.texte}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><path d="M15 3h6v6M10 14 21 3" /></svg>
+            </a>
+            {p.telechargement && (
+              <a class="ver__l ver__l--dl" href={p.telechargement.url}>
+                {p.telechargement.texte}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+              </a>
+            )}
           </li>
         ))}
       </ul>
 
       <div class="ver__a">
-        <a class="btn btn--sobre" href="/documents/certificat-qualiopi.pdf">Notre certificat Qualiopi</a>
         <a class="btn btn--sobre" href="/qui-sommes-nous">Qui nous sommes</a>
         <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
       </div>
@@ -179,5 +191,14 @@ const balisages = [
   }
   .ver__i strong { display: block; font-size: 1.02rem; font-weight: 800; margin-bottom: .5rem; }
   .ver__i p { color: var(--ink-soft); line-height: 1.7; font-size: .94rem; }
+  .ver__l {
+    display: inline-flex; align-items: center; gap: .45rem; margin-top: .9rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .86rem;
+    color: var(--accent); text-decoration: none; line-height: 1.35;
+  }
+  .ver__l:hover { text-decoration: underline; }
+  .ver__l svg { flex: none; width: 14px; height: 14px; }
+  .ver__l--dl { color: var(--ink-soft); }
+
   .ver__a { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
 </style>
