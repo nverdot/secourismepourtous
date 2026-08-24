@@ -522,13 +522,21 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     list-style: none; padding: 0; margin: 0;
     display: flex; gap: clamp(.5rem, 1vw, .75rem);
     width: max-content;
-    animation: mur-defile calc(var(--n) * 6s) linear infinite;
+    animation: mur-defile calc(var(--n) * 6.8s) linear infinite;
     will-change: transform;
   }
   .mur__p[data-sens='inverse'] { animation-direction: reverse; }
-  /* La troisième rangée va dans le même sens que la première : à vitesse
-     égale, les deux se verrouilleraient et le mur se lirait comme un bloc.
-     Un cinquième plus lent suffit à les désolidariser. */
+  /*
+   * Trois vitesses proches, sans qu'aucune ne se détache.
+   *
+   * La rangée du milieu passait pour la plus rapide alors qu'elle allait à la
+   * vitesse de la première : c'est son sens inverse qui trompe l'œil, la
+   * vitesse relative entre deux rangées qui se croisent valant la somme des
+   * deux. Elle est donc la plus lente des trois, et l'écart entre les
+   * extrêmes ne dépasse plus 15 % — assez pour éviter que deux rangées se
+   * verrouillent, trop peu pour qu'une seule attire l'œil.
+   */
+  .mur__p:nth-child(2) { animation-duration: calc(var(--n) * 7.6s); }
   .mur__p:nth-child(3) { animation-duration: calc(var(--n) * 7.2s); }
   @keyframes mur-defile {
     from { transform: translate3d(0, 0, 0); }

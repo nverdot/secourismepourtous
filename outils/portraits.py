@@ -77,7 +77,9 @@ PORTRAITS = {
         'fichier': 'Screenshot_2026-08-24-11-15-08-728_com.miui.gallery.jpg',
         # Capture d'écran très haute : sans boîte il n'est qu'une silhouette
         # sous la tente, et le bas de l'image porte une bande noire.
-        'boite': (238, 1050, 798, 1797),
+        # Remontée : la tête touchait le bord haut une fois recadrée par la
+        # boîte de dialogue, qui ne montre que 54 % de la largeur.
+        'boite': (200, 950, 840, 1803),
     },
     'andrea': {
         'fichier': '29e5ff3b-9af8-4f3b-bbbd-0cc0b56dc712.jpeg',
@@ -90,7 +92,9 @@ PORTRAITS = {
         'fichier': 'Nicolas verdot a gauche.JPG',
         # Selfie à quatre, il est le premier à gauche — le fichier le dit, et
         # c'est ce qui a manqué pour Guillaume.
-        'boite': (0, 170, 600, 970),
+        # Desserrée : à (0, 170, 600, 970) le haut du crâne touchait le bord,
+        # et le portrait ouvert le montrait coupé.
+        'boite': (0, 110, 720, 1070),
     },
     'mathieu': {
         'fichier': 'WhatsApp Image 2026-02-21 at 18.18.51.jpeg',
