@@ -22,6 +22,14 @@
 
 export interface Agrement {
   nom: string;
+  /**
+   * L'emblème, quand nous en avons le fichier et le droit de l'afficher.
+   *
+   * Il manque celui de la sécurité civile — l'emblème est réglementé, et on ne
+   * le reconstitue pas depuis une photo d'écusson. La section s'affiche très
+   * bien sans, et l'ajouter tiendra en une ligne le jour où le fichier arrive.
+   */
+  logo?: { src: string; alt: string; largeur: number; hauteur: number };
   /** Ce que c'est, en une ligne. */
   quoi: string;
   /** Ce que le texte autorise — la partie réglementaire. */
@@ -55,6 +63,11 @@ export const agrements: Agrement[] = [
   },
   {
     nom: 'Affiliée FFSS',
+    logo: {
+      src: '/img/logo-ffss.png',
+      alt: 'Emblème de la Fédération Française de Sauvetage et de Secourisme',
+      largeur: 500, hauteur: 500,
+    },
     quoi: 'La fédération sous l’habilitation de laquelle nous formons',
     autorise: [
       'La Fédération Française de Sauvetage et de Secourisme est une association loi 1901 née en 1899 et reconnue d’utilité publique depuis 1927. Son agrément national de sécurité civile, renouvelé par arrêté du 31 octobre 2024 pour trois ans, couvre les quatre types de missions : opérations de secours, soutien aux populations, encadrement des bénévoles et dispositifs prévisionnels.',
@@ -72,6 +85,11 @@ export const agrements: Agrement[] = [
   },
   {
     nom: 'Certifiée Qualiopi',
+    logo: {
+      src: '/img/qualiopi.png',
+      alt: 'Marque Qualiopi — processus certifié, actions de formation',
+      largeur: 600, hauteur: 362,
+    },
     quoi: 'La certification qui ouvre les financements publics',
     autorise: [
       'Depuis le 1er janvier 2022, un organisme de formation doit être certifié Qualiopi pour que ses formations soient prises en charge par des fonds publics ou mutualisés.',

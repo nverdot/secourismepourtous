@@ -78,9 +78,9 @@ Pour modifier un tarif, une durée ou un programme : tout est dans
 ## Ce qui reste à faire
 
 **Contenu à valider par l'association**
-- Tarifs, durées et prérequis de PSE1, PSE2, BNSSA et SST — marqués `aValider`
-  dans les données, et signalés par un bandeau sur les pages concernées.
-  Seul le PSC est confirmé (50 €, 7 h, dès 10 ans).
+- Durée, prérequis et tarif du SSA et de son recyclage : les champs affichent
+  « Nous consulter » en attendant le référentiel FFSS, ce qui ne publie aucun
+  chiffre non confirmé.
 - Intitulés des modules de programme pour les formations autres que le PSC.
 
 **Pages non encore créées**

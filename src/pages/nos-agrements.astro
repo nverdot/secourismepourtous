@@ -76,8 +76,18 @@ const balisages = [
       <div class="wrap">
         <div class="ag">
           <div class="ag__g">
-            <p class="eyebrow">{a.quoi}</p>
-            <h2 class="h-section" id={`t-${i}`}>{a.nom}</h2>
+            {/* L'emblème à côté du titre : c'est lui qu'on reconnaît avant de
+                lire, et c'est lui qu'on a vu passer en haut de chaque page. */}
+            <div class="ag__t">
+              {a.logo && (
+                <img class="ag__logo" src={a.logo.src} alt={a.logo.alt}
+                     width={a.logo.largeur} height={a.logo.hauteur} loading="lazy" decoding="async" />
+              )}
+              <div>
+                <p class="eyebrow">{a.quoi}</p>
+                <h2 class="h-section" id={`t-${i}`}>{a.nom}</h2>
+              </div>
+            </div>
             <ul class="ag__l">
               {a.autorise.map((t) => <li>{t}</li>)}
             </ul>
@@ -135,6 +145,12 @@ const balisages = [
     align-items: start;
   }
   @media (max-width: 860px) { .ag { grid-template-columns: 1fr; } }
+
+  .ag__t { display: flex; align-items: center; gap: clamp(.9rem, 2vw, 1.4rem); }
+  .ag__logo {
+    flex: none; width: clamp(56px, 8vw, 76px); height: auto;
+    object-fit: contain;
+  }
 
   .ag__l { margin: 1.5rem 0 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
   .ag__l li { color: var(--ink-soft); line-height: 1.75; max-width: 62ch; }
