@@ -528,13 +528,13 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     position: absolute; right: .5rem; bottom: .5rem;
     width: 26px; height: 26px; border-radius: 50%;
     display: grid; place-items: center;
-    background: rgba(255, 255, 255, .92); color: var(--secours);
+    background: rgba(255, 255, 255, .92); color: var(--accent);
     box-shadow: 0 1px 4px rgba(14, 27, 42, .28);
     transition: background .2s ease, color .2s ease, transform .2s ease;
   }
   .fc__p svg { width: 14px; height: 14px; }
   .fc:hover .fc__p, .fc:focus-visible .fc__p {
-    background: var(--secours); color: #fff; transform: rotate(90deg);
+    background: var(--accent); color: #fff; transform: rotate(90deg);
   }
 
   /* Le prénom, lui, n'apparaît qu'au survol : le mur doit se lire comme des
@@ -621,7 +621,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     transition: box-shadow .18s, border-color .18s, transform .18s;
   }
   .mb:hover, .mb:focus-visible {
-    box-shadow: var(--sh-lg); border-color: var(--secours); transform: translateY(-2px);
+    box-shadow: var(--sh-lg); border-color: var(--accent); transform: translateY(-2px);
   }
   .mb__ph { display: block; aspect-ratio: 3 / 4; background: var(--sunk); overflow: hidden; }
   .mb__ph img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
@@ -631,14 +631,14 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   .mb__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
   .mb__lire {
     display: flex; align-items: center; gap: .4rem; margin-top: auto; padding-top: .8rem;
-    font-family: 'Archivo', sans-serif; font-size: .84rem; font-weight: 700; color: var(--secours);
+    font-family: 'Archivo', sans-serif; font-size: .84rem; font-weight: 700; color: var(--accent);
   }
   .mb__lire svg { width: 14px; height: 14px; }
 
   .tag {
     font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
     letter-spacing: .06em; text-transform: uppercase;
-    background: var(--accent-wash, var(--sunk)); color: var(--secours);
+    background: var(--accent-wash, var(--sunk)); color: var(--accent);
     border-radius: 999px; padding: .22rem .6rem;
   }
   /* Un rôle n'est pas un diplôme : il ne doit porter la couleur d'aucune
@@ -653,7 +653,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   .eq__plus {
     display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.75rem;
     font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem;
-    color: var(--secours); text-decoration: none;
+    color: var(--accent); text-decoration: none;
   }
   .eq__plus:hover { text-decoration: underline; }
   .eq__plus svg { width: 15px; height: 15px; }
@@ -721,7 +721,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
   .pt__q h4 {
     font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 800;
     line-height: 1.25; color: var(--ink);
-    padding-left: .85rem; border-left: 3px solid var(--secours);
+    padding-left: .85rem; border-left: 3px solid var(--accent);
     margin-bottom: .75rem;
   }
   /*
@@ -752,7 +752,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
     display: inline-flex; align-items: center; gap: .45rem;
     border: 0; background: none; cursor: pointer; padding: .35rem 0;
     font-family: 'Archivo', sans-serif; font-size: .88rem; font-weight: 700;
-    color: var(--secours);
+    color: var(--accent);
   }
   .pt__flc:hover { text-decoration: underline; }
   .pt__flc svg { width: 15px; height: 15px; }

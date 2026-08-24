@@ -46,8 +46,16 @@
    * devait choisir entre un texte illisible et un or si sombre qu'il virait à
    * l'olive : c'est le second qu'elle avait, et les numéros du programme en
    * portaient la couleur.
+   *
+   * ⚠️ « --accent-plein » ne peut PAS valoir « var(--accent) ». Une propriété
+   * personnalisée résout ses var() là où elle est déclarée : sur :root,
+   * --accent valait encore le rouge, et c'est ce rouge qui héritait ensuite,
+   * même sur une page dont le body redéfinit --accent. Résultat, les numéros
+   * du programme et les pastilles d'icône étaient rouges sur les filières
+   * citoyenne, aquatique et entreprise. Chaque filière déclare donc sa propre
+   * valeur, et celle-ci n'est qu'un repli littéral.
    */
-  --accent-plein: var(--accent);
+  --accent-plein: #d8382a;
   --accent-encre: #fff;
 
   --ground: #f7f9fb;
@@ -292,9 +300,9 @@ a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset
    Accent de filière — appliqué sur <body> des pages formation.
    Une seule variable pilote badges, numéros de module, icônes et boutons.
    ========================================================================== */
-.filiere-citoyenne     { --accent: var(--azur);    --accent-wash: var(--azur-wash); }
-.filiere-operationnelle{ --accent: var(--secours); --accent-wash: var(--secours-wash); }
-.filiere-aquatique     { --accent: var(--ocean);   --accent-wash: var(--ocean-wash); }
+.filiere-citoyenne     { --accent: var(--azur);    --accent-wash: var(--azur-wash);    --accent-plein: var(--azur); }
+.filiere-operationnelle{ --accent: var(--secours); --accent-wash: var(--secours-wash); --accent-plein: var(--secours); }
+.filiere-aquatique     { --accent: var(--ocean);   --accent-wash: var(--ocean-wash);   --accent-plein: var(--ocean); }
 .filiere-pedagogique   { --accent: var(--ocre);    --accent-wash: var(--ocre-wash);
                          --accent-plein: var(--ocre-vif); --accent-encre: var(--ocre-encre); }
-.filiere-entreprise    { --accent: var(--navy);    --accent-wash: var(--azur-wash); }
+.filiere-entreprise    { --accent: var(--navy);    --accent-wash: var(--azur-wash);    --accent-plein: var(--navy); }
