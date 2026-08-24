@@ -27,6 +27,22 @@
  * qu'on leur a promis dans le formulaire, en toutes lettres.
  */
 
+import empreintes from './empreintes-portraits.json';
+
+/**
+ * Ajoute l'empreinte du contenu à l'adresse d'une image.
+ *
+ * Les fichiers de public/ sont servis sous un nom stable, avec un cache d'une
+ * semaine. Recadrer une photo sans changer son nom ne se voyait donc nulle
+ * part avant sept jours — c'est exactement ce qui est arrivé au portrait de
+ * Guillaume, corrigé en production mais invisible derrière le cache. Avec
+ * l'empreinte, un contenu différent a une adresse différente.
+ *
+ * Le tableau est écrit par outils/portraits.py à chaque génération.
+ */
+export const versionnee = (chemin: string) =>
+  chemin + ((empreintes as Record<string, string>)[chemin] ? `?v=${(empreintes as Record<string, string>)[chemin]}` : '');
+
 export interface Reponse {
   question: string;
   /** Un élément par paragraphe. */

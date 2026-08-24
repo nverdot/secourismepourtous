@@ -13,13 +13,23 @@ la vignette du mur. Le rapport est toujours 3/4.
     python3 outils/portraits.py "/chemin/vers/le/dossier/Tally"
 """
 
+import hashlib
+import json
 import pathlib
 import sys
 
 from PIL import Image, ImageOps
 
 RATIO = 3 / 4
-SORTIE = pathlib.Path(__file__).resolve().parent.parent / 'public' / 'img' / 'equipe'
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+SORTIE = RACINE / 'public' / 'img' / 'equipe'
+
+# Les images de public/ sont servies telles quelles, sous un nom stable et avec
+# un cache d'une semaine. Recadrer une photo sans changer son nom ne se voyait
+# donc nulle part avant sept jours — ni chez nous, ni chez les visiteurs déjà
+# passés. On écrit l'empreinte du contenu dans ce fichier, que le site ajoute
+# en fin d'URL : contenu différent, adresse différente, cache contourné.
+EMPREINTES = RACINE / 'src' / 'data' / 'empreintes-portraits.json'
 
 # Deux façons de cadrer.
 #
@@ -84,6 +94,7 @@ def cadre(im, fiche):
 
 def main(source):
     src = pathlib.Path(source)
+    empreintes = {}
     for slug, fiche in PORTRAITS.items():
         im = ImageOps.exif_transpose(Image.open(src / fiche['fichier'])).convert('RGB')
         v = cadre(im, fiche)
@@ -94,10 +105,16 @@ def main(source):
             v.resize((largeur, round(largeur / RATIO)), Image.LANCZOS).save(
                 SORTIE / f'{slug}{suffixe}.jpg', 'JPEG',
                 quality=qualite, optimize=True, progressive=True)
+        for suffixe in ('', '-min'):
+            f = SORTIE / f'{slug}{suffixe}.jpg'
+            empreintes[f'/img/equipe/{f.name}'] = hashlib.sha256(f.read_bytes()).hexdigest()[:8]
         g = (SORTIE / f'{slug}.jpg').stat().st_size // 1024
         m = (SORTIE / f'{slug}-min.jpg').stat().st_size // 1024
         cadrage = 'boîte' if 'boite' in fiche else 'ancre'
         print(f'  {slug:<20} {cadrage:<6} {v.width}×{v.height} → {g} ko + {m} ko')
+
+    EMPREINTES.write_text(json.dumps(dict(sorted(empreintes.items())), indent=2) + '\n')
+    print(f'\n  {len(empreintes)} empreintes écrites dans {EMPREINTES.relative_to(RACINE)}')
 
 
 if __name__ == '__main__':

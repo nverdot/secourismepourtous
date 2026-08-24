@@ -1,5 +1,5 @@
 ---
-import { membres, recueilliLe, ordonner, FICHE_DIPLOME, APPELS } from '../data/equipe';
+import { membres, recueilliLe, ordonner, FICHE_DIPLOME, APPELS, versionnee } from '../data/equipe';
 import { parSlug, filieres } from '../data/formations';
 
 /**
@@ -223,7 +223,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
                     le fichier est déjà en cache. On les verrait apparaître en blanc
                     au fil du défilement. Ces six fichiers sont de toute façon déjà
                     demandés par les portraits, plus bas dans la page. */}
-                <img src={m!.vignette} alt="" fetchpriority="low" decoding="async" width="360" height="480" />
+                <img src={versionnee(m!.vignette)} alt="" fetchpriority="low" decoding="async" width="360" height="480" />
                 {/* Le repère est là en permanence, pas seulement au survol :
                     sur un téléphone, rien ne survole. */}
                 <span class="fc__p" aria-hidden="true">
@@ -243,7 +243,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
         <li class="eq__i">
           <button class="mb" type="button" data-groupe={groupe} data-portrait={m.slug} aria-haspopup="dialog">
             <span class="mb__ph">
-              <img src={m.vignette} alt={m.alt} loading="lazy" decoding="async" width="360" height="480" />
+              <img src={versionnee(m.vignette)} alt={m.alt} loading="lazy" decoding="async" width="360" height="480" />
             </span>
             <span class="mb__txt">
               <strong class="mb__nom">{m.prenom}{' '}{m.nom}</strong>
@@ -295,7 +295,7 @@ const groupe = `eq-${Math.random().toString(36).slice(2, 8)}`;
           l'image sans attendre — vérifié, les neuf y passaient. Partir de la
           vignette a un second avantage : elle est déjà en cache, donc le
           portrait s'affiche instantanément, puis se précise. */}
-      <img class="pt__ph" src={m.vignette} data-grande={m.photo} alt={m.alt} decoding="async" width="900" height="1200" />
+      <img class="pt__ph" src={versionnee(m.vignette)} data-grande={versionnee(m.photo)} alt={m.alt} decoding="async" width="900" height="1200" />
 
       <div class="pt__d">
         <header class="pt__tete">
