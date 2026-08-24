@@ -90,7 +90,7 @@ import {
       
         {/* Les trois logos ne disent pas ce qu'ils autorisent. La page qui
             l'explique existe maintenant : autant y mener depuis ici. */}
-        <a class="agrements__l" href="/nos-agrements">
+        <a class="agrements__plus" href="/nos-agrements">
           Ce que ces agréments autorisent
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </a>
@@ -343,13 +343,18 @@ import {
   }
 
   .agrements { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r-lg); padding: clamp(1.35rem,3vw,1.9rem); }
-  .agrements__l {
+  /* « __plus » et non « __l » : cette dernière était déjà la classe de la
+     liste des agréments juste au-dessus. La réutiliser lui appliquait le
+     display en ligne, la couleur d'accent et le soulignement au survol d'un
+     lien — d'où trois puces désalignées qui se soulignaient sans être
+     cliquables. */
+  .agrements__plus {
     display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.1rem;
     font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .9rem;
     color: var(--accent); text-decoration: none;
   }
-  .agrements__l:hover { text-decoration: underline; }
-  .agrements__l svg { width: 15px; height: 15px; }
+  .agrements__plus:hover { text-decoration: underline; }
+  .agrements__plus svg { width: 15px; height: 15px; }
 
   .agrements__h { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.1rem; }
   .agrements__logos {

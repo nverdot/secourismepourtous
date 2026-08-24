@@ -154,6 +154,7 @@ const v = niveauPse ? volume(niveauPse) : null;
 
     <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
          de les publier ; les répéter ailleurs ferait doublon. -->
+    {!f.programmeEnAttente && (
     <div class="mods">
       <div class="op__tete">
         <span class="op__ic">
@@ -184,6 +185,8 @@ const v = niveauPse ? volume(niveauPse) : null;
       </dl>
 
     </div>
+
+    )}
 
     <!-- Programme -->
     {!f.programmeEnAttente && (
@@ -256,7 +259,8 @@ const v = niveauPse ? volume(niveauPse) : null;
     )}
   </div>
 
-  {f.suites.length > 0 && (
+  {/* « Et après » suppose que la formation existe. */}
+  {!f.programmeEnAttente && f.suites.length > 0 && (
     <div class="wrap">
       <div class="apres">
         <h3>
@@ -306,6 +310,9 @@ const v = niveauPse ? volume(niveauPse) : null;
      moitié droite vide. La note passe en pleine largeur, les modalités
      dessous. */
   .op > .att { grid-column: 1 / -1; grid-row: 1; }
+  /* Seule dans sa section, la note laissait 220 pixels de blanc avant la
+     suivante : le rembourrage prévu pour trois colonnes de contenu. */
+  section:has(.op .att) { padding-bottom: clamp(1.5rem, 3vw, 2.25rem); }
   .op:has(.att) > .mods { grid-column: 1 / -1; grid-row: 2; }
   @media (max-width: 880px) {
     .op { grid-template-columns: 1fr; grid-template-rows: none; }
