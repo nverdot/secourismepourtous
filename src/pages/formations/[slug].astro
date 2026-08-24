@@ -112,7 +112,7 @@ const balisages = [
       arrive sur cette fiche a le droit de l'apprendre ici, pas six mois plus
       tard. L'encart passe avant les autres : c'est l'information la plus
       périssable de la page. */}
-  {['bnssa', 'pse-2'].includes(f.slug) && (
+  {['bnssa', 'fc-bnssa', 'bsb', 'fc-bsb', 'pse-2'].includes(f.slug) && (
     <section class="section">
       <div class="wrap">
         <a class="oblig oblig--reforme" href="/bnssa-devient-ssa">
@@ -122,7 +122,7 @@ const balisages = [
           <span class="oblig__txt">
             <strong>Le BNSSA devient le SSA au 1er octobre 2026</strong>
             <span>
-              {f.slug === 'bnssa'
+              {f.filiere === 'aquatique'
                 ? 'Ce que dit l’arrêté du 29 juillet 2026, et pourquoi le PSE2 devient indispensable.'
                 : 'Les titulaires du BNSSA ont désormais besoin du PSE2 pour obtenir l’équivalence SSA.'}
             </span>

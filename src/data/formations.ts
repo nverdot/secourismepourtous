@@ -364,19 +364,26 @@ export const formations: Formation[] = [
   },
 
   {
+    // Le slug reste « bnssa » : c'est l'adresse de la page, et les liens qui
+    // pointent dessus n'ont pas à casser parce qu'un diplôme change de nom.
+    // Ce que le visiteur lit, en revanche, est le nom en vigueur.
     slug: 'bnssa',
-    sigle: 'BNSSA',
-    intitule: 'Brevet National de Sécurité et de Sauvetage Aquatique',
+    sigle: 'SSA',
+    intitule: 'Surveillant Sauveteur Aquatique — ex-BNSSA',
     filiere: 'aquatique',
     certifiante: true,
     accroche:
-      "Surveillez les piscines, les plages et les plans d'eau. Le BNSSA est le diplôme de référence du sauvetage aquatique, et le premier pas vers un métier.",
+      "Surveillez les piscines, les plages et les plans d'eau. Le SSA, qui remplace le BNSSA depuis le 1er octobre 2026, est le diplôme de référence du sauvetage aquatique, et le premier pas vers un métier.",
     resume: 'Le diplôme national pour devenir sauveteur aquatique.',
     duree: 'Nous consulter',
-    prerequis: 'Dès 17 ans',
-    prerequisNote: 'PSE1 à jour requis',
-    certification: 'BNSSA',
-    certificationNote: 'Devient le SSA au 1er octobre 2026',
+    // L'âge et le prérequis de secourisme du SSA ne sont pas repris ici tant
+    // que le référentiel FFSS n'est pas publié. Les chiffres qui circulent —
+    // 35 heures, dès 17 ans — ne figurent pas dans l'arrêté du 29 juillet 2026,
+    // et annoncer un prérequis faux ferait venir des gens pour rien.
+    prerequis: 'Nous consulter',
+    prerequisNote: 'Référentiel FFSS en attente',
+    certification: 'SSA',
+    certificationNote: 'Remplace le BNSSA depuis le 1er octobre 2026',
     tarif: 'Nous consulter',
     aValider: true,
     objectifs: [
@@ -396,9 +403,9 @@ export const formations: Formation[] = [
     wixEvent: 'BNSSA',
     recyclage: 'fc-bnssa',
     seo: {
-      title: 'Formation BNSSA à Nice | Secourisme Pour Tous',
+      title: 'SSA — ex-BNSSA à Nice | Sauveteur aquatique',
       description:
-        'Préparez le BNSSA à Nice et devenez sauveteur aquatique : entraînement, épreuves et secourisme. Affilié FFSS, certifié Qualiopi. Dates et tarifs.',
+        'Le SSA remplace le BNSSA depuis le 1er octobre 2026. Devenez sauveteur aquatique à Nice : entraînement, épreuves et secourisme. Affilié FFSS, certifié Qualiopi.',
     },
   },
 
@@ -564,8 +571,8 @@ export const formations: Formation[] = [
 
   {
     slug: 'fc-bnssa',
-    sigle: 'FC BNSSA',
-    intitule: 'Recyclage BNSSA',
+    sigle: 'FC SSA',
+    intitule: 'Recyclage SSA — ex-FC BNSSA',
     filiere: 'aquatique',
     certifiante: false,
     estRecyclage: true,
@@ -575,7 +582,7 @@ export const formations: Formation[] = [
     duree: 'Nous consulter',
     prerequis: 'BNSSA obtenu',
     prerequisNote: 'PSE1 à jour requis',
-    certification: 'BNSSA prolongé',
+    certification: 'SSA prolongé',
     certificationNote: 'Tous les 5 ans',
     tarif: 'Nous consulter',
     aValider: true,
@@ -595,7 +602,7 @@ export const formations: Formation[] = [
     suspendue: { raison: "Le recyclage BNSSA n'est pas proposé actuellement. Contactez-nous pour connaître les prochaines sessions." },
     wixEvent: 'FC BNSSA - Recyclage',
     seo: {
-      title: 'Recyclage BNSSA à Nice | Formation continue',
+      title: 'Recyclage SSA — ex-FC BNSSA à Nice | Dates et tarif',
       description:
         'Recyclez votre BNSSA à Nice pour rester opérationnel. Formation continue obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Consultez les dates.',
     },

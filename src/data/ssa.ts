@@ -82,3 +82,19 @@ export const situations = [
     lien: { texte: 'Nous écrire', url: '/contact' },
   },
 ];
+
+/**
+ * Où en est l'association.
+ *
+ * Dit avant qu'on nous le demande. Quelqu'un qui lit cette page cherche à se
+ * former ou à régulariser son titre : lui laisser croire qu'il peut s'inscrire
+ * demain, puis lui répondre au téléphone que non, serait une perte de temps
+ * pour lui et une déception évitable.
+ */
+export const notreSituation = {
+  titre: 'Où nous en sommes',
+  texte: [
+    'Nous ne proposons pas encore de session SSA. Le référentiel officiel de la FFSS n’est pas publié : tant qu’il ne l’est pas, personne ne peut annoncer honnêtement une durée, un tarif ni un contenu de formation.',
+    'Nous le suivons de près, et nous ouvrirons les inscriptions dès qu’il sera paru. Écrivez-nous pour être prévenu — c’est la seule chose à faire aujourd’hui, et elle ne coûte rien.',
+  ],
+};
