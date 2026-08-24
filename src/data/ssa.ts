@@ -33,7 +33,13 @@ export interface Point {
   citation?: string;
 }
 
-/** Ce que le texte change, dans l'ordre où ça intéresse un lecteur. */
+/**
+ * Ce que le texte change, dans l'ordre où ça intéresse un lecteur.
+ *
+ * Le délai de six mois laissé aux organismes pour se réhabiliter en a été
+ * retiré : c'est une contrainte d'organisme, pas une information de lecteur, et
+ * elle diluait les deux points qui, eux, le concernent.
+ */
 export const changements: Point[] = [
   {
     titre: 'Le nom change, partout',
@@ -49,13 +55,6 @@ export const changements: Point[] = [
     texte: [
       'C’est le vrai changement, et il ne tient pas au nom. Le BNSSA se présentait avec le PSE1. L’équivalence vers le SSA demande le PSE2 — le secours en équipe, à deux niveaux au-dessus du seul sauvetage.',
       'L’employabilité comme surveillant sauveteur est ensuite conditionnée à la formation continue annuelle d’équipier secouriste PSE2. Ce n’est plus une formalité de recyclage : c’est ce qui permet de travailler.',
-    ],
-  },
-  {
-    titre: 'Les organismes ont six mois',
-    texte: [
-      'Les organismes agréés pour le BNSSA disposent de six mois à compter de l’entrée en vigueur pour demander leur habilitation SSA. Passé ce délai, les agréments antérieurs sont réputés caducs.',
-      'Ils peuvent mettre en œuvre le SSA dès le dépôt de leur demande, sans attendre la réponse.',
     ],
   },
 ];

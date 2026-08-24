@@ -296,6 +296,31 @@ a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset
 }
 
 
+/*
+ * Le fil d'ariane.
+ *
+ * Il était redéfini dans vingt-et-un fichiers, en neuf variantes : même règle
+ * à quelques détails près — une marge qui changeait de 8 pixels, des décimales
+ * écrites autrement, et trois copies qui avaient perdu le « flex-wrap », donc
+ * débordaient dès qu'un fil était long sur un écran étroit. Une page de plus,
+ * et on oubliait de le recopier : c'est arrivé.
+ *
+ * Il vit désormais ici, une seule fois. Toujours sur le bandeau sombre, d'où
+ * les couleurs claires.
+ */
+.fil {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+  font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 600;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: var(--on-navy-soft);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+.fil a { color: inherit; text-decoration: none; }
+.fil a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.fil i { opacity: .45; font-style: normal; }
+.fil b { color: #fff; font-weight: 600; }
+
+
 /* ==========================================================================
    Accent de filière — appliqué sur <body> des pages formation.
    Une seule variable pilote badges, numéros de module, icônes et boutons.

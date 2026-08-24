@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro';
 import { asso } from '../data/association';
 import { arrete, changements, situations } from '../data/ssa';
+
+/** Compté, jamais écrit en toutes lettres : un point retiré et le titre ment. */
+const MOTS = ['Aucun', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'];
 import { filAriane, questionsFrequentes } from '../lib/schema';
 
 /**
@@ -98,7 +101,7 @@ const balisages = [
   <section class="section section--sunk" aria-labelledby="t-texte">
     <div class="wrap">
       <p class="eyebrow">Ce que dit le texte</p>
-      <h2 class="h-section" id="t-texte">Trois changements, et une date</h2>
+      <h2 class="h-section" id="t-texte">{MOTS[changements.length]} changements, et une date</h2>
 
       <ol class="chg">
         {changements.map((c, i) => (
