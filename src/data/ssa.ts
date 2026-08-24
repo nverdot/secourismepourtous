@@ -22,7 +22,7 @@ export const arrete = {
   publication: 'JORF n° 0178 du 1er août 2026',
   url: 'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000054594151',
   entreeEnVigueur: '1er octobre 2026',
-  /** Fin du délai d'équivalence : trois ans après l'entrée en vigueur. */
+  /** Fin du délai d'équivalence : trois ans après l'entrée en vigueur. */
   finEquivalence: '1er octobre 2029',
 };
 
@@ -48,13 +48,13 @@ export const changements: Point[] = [
       'Les deux arrêtés qui régissaient le BNSSA depuis 1979 sont abrogés.',
     ],
     citation:
-      'Les mots : certificat de compétences de surveillant sauveteur aquatique (SSA) se substituent aux mots : brevet national de sécurité et sauvetage aquatique et BNSSA dans tous les textes réglementaires.',
+      'Les mots : certificat de compétences de surveillant sauveteur aquatique (SSA) se substituent aux mots : brevet national de sécurité et sauvetage aquatique et BNSSA dans tous les textes réglementaires.',
   },
   {
     titre: 'Le PSE2 devient la référence',
     texte: [
       'C’est le vrai changement, et il ne tient pas au nom. Le BNSSA se présentait avec le PSE1. L’équivalence vers le SSA demande le PSE2 — le secours en équipe, à deux niveaux au-dessus du seul sauvetage.',
-      'L’employabilité comme surveillant sauveteur est ensuite conditionnée à la formation continue annuelle d’équipier secouriste PSE2. Ce n’est plus une formalité de recyclage : c’est ce qui permet de travailler.',
+      'L’employabilité comme surveillant sauveteur est ensuite conditionnée à la formation continue annuelle d’équipier secouriste PSE2. Ce n’est plus une formalité de recyclage : c’est ce qui permet de travailler.',
     ],
   },
 ];
@@ -75,7 +75,7 @@ export const situations = [
     titre: 'Vous voulez passer le diplôme',
     accroche: 'Ce n’est plus le BNSSA que vous passerez, c’est le SSA.',
     etapes: [
-      'Le contenu du sauvetage aquatique ne change pas : c’est le cadre réglementaire et le niveau de secourisme exigé qui évoluent.',
+      'Le contenu du sauvetage aquatique ne change pas : c’est le cadre réglementaire et le niveau de secourisme exigé qui évoluent.',
       'Les sessions ouvertes après le 1er octobre 2026 relèvent du SSA.',
       'Écrivez-nous pour connaître les dates, le tarif et les prérequis exacts de la prochaine session.',
     ],
@@ -94,7 +94,7 @@ export const situations = [
 export const notreSituation = {
   titre: 'Où nous en sommes',
   texte: [
-    'Nous ne proposons pas encore de session SSA. Le référentiel officiel de la FFSS n’est pas publié : tant qu’il ne l’est pas, personne ne peut annoncer honnêtement une durée, un tarif ni un contenu de formation.',
+    'Nous ne proposons pas encore de session SSA. Le référentiel officiel de la FFSS n’est pas publié : tant qu’il ne l’est pas, personne ne peut annoncer honnêtement une durée, un tarif ni un contenu de formation.',
     'Nous le suivons de près, et nous ouvrirons les inscriptions dès qu’il sera paru. Écrivez-nous pour être prévenu — c’est la seule chose à faire aujourd’hui, et elle ne coûte rien.',
   ],
 };

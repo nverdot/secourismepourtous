@@ -112,6 +112,25 @@ const balisages = [
       arrive sur cette fiche a le droit de l'apprendre ici, pas six mois plus
       tard. L'encart passe avant les autres : c'est l'information la plus
       périssable de la page. */}
+  {/* Sur une formation continue, la question précède l'inscription : « y
+      suis-je obligé, et depuis quand ? ». La réponse a sa page. */}
+  {(f.slug.startsWith('fc-') || f.slug === 'mac-sst') && (
+    <section class="section">
+      <div class="wrap">
+        <a class="oblig oblig--choix" href="/validite-recyclage">
+          <span class="oblig__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+          </span>
+          <span class="oblig__txt">
+            <strong>Votre diplôme est-il encore valable&nbsp;?</strong>
+            <span>Ce qui est obligatoire, ce qui est conseillé, et ce qui se passe si vous avez laissé passer plusieurs années.</span>
+          </span>
+          <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+    </section>
+  )}
+
   {['bnssa', 'fc-bnssa', 'bsb', 'fc-bsb', 'pse-2'].includes(f.slug) && (
     <section class="section">
       <div class="wrap">

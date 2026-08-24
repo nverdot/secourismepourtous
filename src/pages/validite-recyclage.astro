@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { regles, malentendu } from '../data/validite';
+import { parSlug } from '../data/formations';
+import { filAriane, questionsFrequentes } from '../lib/schema';
+
+/**
+ * « Votre diplôme est-il encore valable ? »
+ *
+ * POURQUOI CETTE PAGE. L'association vend sept formations continues sans jamais
+ * répondre à la question qui précède l'achat. Quelqu'un qui tape « combien de
+ * temps est valable le PSC1 » ou « faut-il recycler le PSE1 » ne trouvait rien
+ * chez nous — alors que c'est très exactement quelqu'un qui paiera une
+ * formation continue dans les semaines qui suivent.
+ *
+ * ELLE COMMENCE PAR LEVER LE MALENTENDU. Les gens croient que leur diplôme
+ * expire et qu'il faudra tout repasser. C'est faux, et c'est ce qui les fait
+ * attendre. La bonne nouvelle passe donc avant le tableau.
+ *
+ * ELLE DIT « JE NE SAIS PAS » QUAND C'EST LE CAS. La périodicité conseillée du
+ * PSC est une position de l'association, présentée comme telle, pas maquillée
+ * en obligation.
+ */
+
+const fiches = Object.fromEntries(
+  regles.filter((r) => r.fc).map((r) => [r.sigle, parSlug(r.fc!)]),
+);
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', url: '/' },
+    { nom: 'Formations', url: '/formations' },
+    { nom: 'Validité et recyclage', url: '/validite-recyclage' },
+  ]),
+  questionsFrequentes([
+    {
+      q: 'Combien de temps le PSC1 est-il valable ?',
+      r: 'Aucun texte ne fixe de durée de validité au PSC. Votre attestation reste valable indéfiniment. Ce sont les gestes qui se périment, pas le papier — nous conseillons une formation continue tous les trois ans.',
+    },
+    {
+      q: 'Le recyclage du PSE1 est-il obligatoire ?',
+      r: 'Oui, tous les ans. Sans formation continue annuelle, vous ne pouvez plus être engagé sur un dispositif de secours. Le certificat n’est pas perdu pour autant : le droit d’intervenir revient dès la formation continue suivie.',
+    },
+    {
+      q: 'Que se passe-t-il si je n’ai pas recyclé depuis plusieurs années ?',
+      r: 'Rien d’irréversible. Il n’y a jamais à repasser la formation initiale : une journée de formation continue suffit à vous remettre à jour, même après une longue interruption.',
+    },
+    {
+      q: 'Tous les combien faut-il repasser le SST ?',
+      r: 'Le maintien et l’actualisation des compétences, le MAC SST, se repasse tous les 24 mois.',
+    },
+  ]),
+];
+---
+
+<Base
+  title="Validité et recyclage : votre diplôme est-il encore valable ?"
+  description="PSC1, PSE1, PSE2, SST, SSA : combien de temps chaque diplôme reste valable, ce qui est obligatoire, et ce qui se passe si vous n’avez pas recyclé depuis longtemps."
+  chemin="/validite-recyclage"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/formations">Formations</a><i aria-hidden="true">›</i>
+        <b>Validité et recyclage</b>
+      </nav>
+      <h1 class="tete__h1">Votre diplôme est-il<br />encore valable&nbsp;?</h1>
+      <p class="tete__t">
+        Ça dépend lequel. Certains se périment tous les ans, un autre jamais.
+        Et dans tous les cas, il n'y a jamais à tout repasser.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" aria-labelledby="t-mal">
+    <div class="wrap">
+      <div class="mal">
+        <span class="mal__b" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+        </span>
+        <div>
+          <h2 class="mal__t" id="t-mal">{malentendu.titre}</h2>
+          {malentendu.texte.map((t) => <p>{t}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sunk" aria-labelledby="t-tableau">
+    <div class="wrap">
+      <p class="eyebrow">Diplôme par diplôme</p>
+      <h2 class="h-section" id="t-tableau">Ce que dit la règle</h2>
+
+      <ul class="reg">
+        {regles.map((r) => (
+          <li class="reg__i">
+            <div class="reg__tete">
+              <strong class="reg__s">{r.sigle}</strong>
+              <span class="reg__n">{r.nom}</span>
+              <span class:list={['reg__p', r.obligatoire ? 'reg__p--ob' : 'reg__p--co']}>
+                {r.periodicite}
+                <i>{r.obligatoire ? 'Obligatoire' : 'Conseillé'}</i>
+              </span>
+            </div>
+            <p class="reg__c">{r.consequence}</p>
+            <div class="reg__pied">
+              {fiches[r.sigle] && (
+                <a class="reg__lien" href={`/formations/${fiches[r.sigle]!.slug}`}>
+                  {fiches[r.sigle]!.sigle}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </a>
+              )}
+              {r.source && (
+                <a class="reg__src" href={r.source.url} rel="noopener">{r.source.texte}</a>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <p class="note">
+        Le PSC est le seul de cette liste qu'aucun texte n'oblige à recycler.
+        Les trois ans que nous conseillons sont une position de l'association,
+        fondée sur ce qu'on observe en formation continue&nbsp;: au-delà, les
+        gestes ne reviennent plus tout seuls.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="t-aide">
+    <div class="wrap">
+      <div class="aide">
+        <h2 class="h-section" id="t-aide">Vous ne savez plus où vous en êtes&nbsp;?</h2>
+        <p>
+          Appelez-nous avec la date de votre dernière formation. On vous dit en
+          deux minutes si vous êtes à jour, et ce qu'il vous faut sinon.
+        </p>
+        <div class="aide__a">
+          <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+          <a class="btn btn--sobre" href="/contact">Nous écrire</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; line-height: 1.05; margin-bottom: .8rem; }
+  .tete__t { max-width: 60ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  /* La bonne nouvelle d'abord, en vert : c'est un soulagement, pas une alerte. */
+  .mal {
+    display: flex; gap: 1.1rem; align-items: flex-start;
+    background: var(--sage-wash); border: 1px solid color-mix(in srgb, var(--sage) 22%, transparent);
+    border-radius: var(--r-lg); padding: clamp(1.2rem, 2.6vw, 1.7rem);
+  }
+  .mal__b {
+    flex: none; width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--sage); color: #fff;
+  }
+  .mal__b svg { width: 20px; height: 20px; }
+  .mal__t { font-size: 1.15rem; font-weight: 800; margin-bottom: .6rem; }
+  .mal p { color: var(--ink-soft); line-height: 1.7; max-width: 62ch; }
+  .mal p + p { margin-top: .7rem; }
+
+  .reg { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-direction: column; gap: 1rem; }
+  .reg__i {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.1rem, 2.4vw, 1.5rem);
+  }
+  .reg__tete { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem .8rem; }
+  .reg__s { font-family: 'Archivo', sans-serif; font-size: 1.25rem; font-weight: 800; }
+  .reg__n { color: var(--ink-mute); font-size: .9rem; flex: 1; min-width: 12ch; }
+  /* La périodicité est ce qu'on vient chercher : elle se lit sans lire le reste. */
+  .reg__p {
+    display: inline-flex; flex-direction: column; align-items: flex-end;
+    padding: .35rem .8rem; border-radius: var(--r-sm);
+    font-family: 'Archivo', sans-serif; font-size: .9rem; font-weight: 800; line-height: 1.2;
+  }
+  .reg__p i {
+    font-style: normal; font-size: .64rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; opacity: .8; margin-top: .15rem;
+  }
+  .reg__p--ob { background: var(--secours-wash); color: var(--secours); }
+  .reg__p--co { background: var(--sage-wash); color: var(--sage); }
+  .reg__c { margin-top: .9rem; color: var(--ink-soft); line-height: 1.7; max-width: 68ch; }
+  .reg__pied { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.2rem; margin-top: 1rem; }
+  .reg__lien {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .9rem;
+    color: var(--accent); text-decoration: none;
+  }
+  .reg__lien:hover { text-decoration: underline; }
+  .reg__lien svg { width: 14px; height: 14px; }
+  .reg__src { font-size: .8rem; color: var(--ink-mute); }
+  .reg__src:hover { color: var(--accent); }
+
+  .note { margin-top: 1.6rem; font-size: .9rem; color: var(--ink-soft); max-width: 70ch; line-height: 1.7; }
+
+  .aide { text-align: center; max-width: 56ch; margin-inline: auto; }
+  .aide p { margin-top: 1rem; color: var(--ink-soft); line-height: 1.7; }
+  .aide__a { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: 1.6rem; }
+</style>
