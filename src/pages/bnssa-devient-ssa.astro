@@ -1,0 +1,208 @@
+---
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { arrete, changements, situations } from '../data/ssa';
+import { filAriane, questionsFrequentes } from '../lib/schema';
+
+/**
+ * « Le BNSSA devient le SSA ».
+ *
+ * POURQUOI CETTE PAGE. Un arrêté du 29 juillet 2026 remplace le BNSSA par le
+ * SSA au 1er octobre. Des milliers de titulaires vont chercher ce que ça change
+ * pour eux, et la réponse honnête tient en une ligne — il vous faut le PSE2 —
+ * qu'aucune fiche de formation ne pouvait porter.
+ *
+ * CE QU'ELLE NE FAIT PAS. Elle ne vend pas. Le lecteur arrive inquiet pour son
+ * diplôme ; lui répondre par un tarif serait le pire accueil possible. Les
+ * liens vers nos formations viennent après la réponse, jamais à sa place.
+ *
+ * ELLE CITE SA SOURCE ET S'Y TIENT. Tout vient de l'arrêté, lu sur Légifrance,
+ * et le lien y renvoie. Les chiffres qui circulent ailleurs sans être dans le
+ * texte n'y figurent pas.
+ */
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', url: '/' },
+    { nom: 'Formations', url: '/formations' },
+    { nom: 'Le BNSSA devient le SSA', url: '/bnssa-devient-ssa' },
+  ]),
+  questionsFrequentes([
+    {
+      q: 'Mon BNSSA est-il encore valable après le 1er octobre 2026 ?',
+      r: 'Votre diplôme ne disparaît pas. Pour obtenir l’équivalence du SSA, l’arrêté du 29 juillet 2026 demande d’être titulaire du PSE2 et d’avoir suivi une formation continue d’adaptation avant le 1er octobre 2029.',
+    },
+    {
+      q: 'Le PSE1 suffit-il encore pour être nageur sauveteur ?',
+      r: 'Non. Le BNSSA se présentait avec le PSE1 ; l’équivalence vers le SSA exige le PSE2, et l’employabilité est conditionnée à la formation continue annuelle de PSE2.',
+    },
+    {
+      q: 'Jusqu’à quand puis-je demander l’équivalence SSA ?',
+      r: 'Jusqu’au 1er octobre 2029, soit trois ans après l’entrée en vigueur de l’arrêté.',
+    },
+    {
+      q: 'Le BNSSA existe-t-il encore ?',
+      r: 'Non. L’arrêté substitue le certificat de compétences de surveillant sauveteur aquatique (SSA) au BNSSA dans tous les textes réglementaires, et abroge les deux arrêtés de 1979 qui le régissaient.',
+    },
+  ]),
+];
+---
+
+<Base
+  title="Le BNSSA devient le SSA au 1er octobre 2026 | Ce qui change"
+  description="Le BNSSA est remplacé par le SSA le 1er octobre 2026. Ce que dit l’arrêté du 29 juillet 2026, ce qu’il faut faire si vous êtes déjà titulaire, et pourquoi le PSE2 devient indispensable."
+  chemin="/bnssa-devient-ssa"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <a href="/formations">Formations</a><i aria-hidden="true">›</i>
+        <b>Le BNSSA devient le SSA</b>
+      </nav>
+      <p class="tete__d">Réforme applicable au {arrete.entreeEnVigueur}</p>
+      <h1 class="tete__h1">Le BNSSA devient<br />le SSA</h1>
+      <p class="tete__t">
+        Un arrêté du 29 juillet 2026 remplace le brevet national de sécurité et
+        de sauvetage aquatique par le certificat de compétences de surveillant
+        sauveteur aquatique. Votre diplôme ne disparaît pas — mais il faudra le
+        PSE2.
+      </p>
+    </div>
+  </header>
+
+  <section class="section" aria-labelledby="t-situations">
+    <div class="wrap">
+      <p class="eyebrow">L'essentiel</p>
+      <h2 class="h-section" id="t-situations">Ce que ça change pour vous</h2>
+
+      <div class="sit">
+        {situations.map((s) => (
+          <article class="sit__c">
+            <h3 class="sit__t">{s.titre}</h3>
+            <p class="sit__a">{s.accroche}</p>
+            <ol class="sit__l">
+              {s.etapes.map((e) => <li>{e}</li>)}
+            </ol>
+            <a class="sit__b" href={s.lien.url}>
+              {s.lien.texte}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sunk" aria-labelledby="t-texte">
+    <div class="wrap">
+      <p class="eyebrow">Ce que dit le texte</p>
+      <h2 class="h-section" id="t-texte">Trois changements, et une date</h2>
+
+      <ol class="chg">
+        {changements.map((c, i) => (
+          <li class="chg__i">
+            <span class="chg__n">{i + 1}</span>
+            <div class="chg__d">
+              <h3>{c.titre}</h3>
+              {c.texte.map((t) => <p>{t}</p>)}
+              {c.citation && <blockquote class="chg__q">{c.citation}</blockquote>}
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <p class="src">
+        Source&nbsp;: <a href={arrete.url} rel="noopener">{arrete.titre}</a>,
+        NOR {arrete.nor}, {arrete.publication}. Entrée en vigueur le
+        {' '}{arrete.entreeEnVigueur}, équivalences jusqu'au {arrete.finEquivalence}.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="t-aide">
+    <div class="wrap">
+      <div class="aide">
+        <h2 class="h-section" id="t-aide">Vous ne savez pas où vous en êtes&nbsp;?</h2>
+        <p>
+          Appelez-nous. On regarde ensemble ce que vous avez — BNSSA, PSE1, PSE2,
+          date de votre dernière formation continue — et ce qu'il vous manque.
+          C'est plus rapide qu'un formulaire, et ça ne coûte rien.
+        </p>
+        <div class="aide__a">
+          <a class="btn btn--primaire" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+          <a class="btn btn--fantome" href="/contact">Nous écrire</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Même bandeau sombre que les autres pages d'explication : la classe .tete
+     n'est pas globale, chaque page porte la sienne. */
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; line-height: 1.05; margin-bottom: .8rem; }
+  .tete__t { max-width: 60ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  .tete__d {
+    display: inline-block; margin-bottom: 1rem; padding: .3rem .8rem;
+    border-radius: 999px; background: rgba(255, 255, 255, .14); color: #fff;
+    font-family: 'Archivo', sans-serif; font-size: .75rem; font-weight: 800;
+    letter-spacing: .07em; text-transform: uppercase;
+  }
+
+  /* Deux situations, deux colonnes : le lecteur se reconnaît dans l'une ou
+     dans l'autre, et n'a pas à lire celle qui ne le concerne pas. */
+  .sit {
+    display: grid; gap: clamp(1rem, 2.4vw, 1.6rem); margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  }
+  .sit__c {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.3rem, 2.6vw, 1.8rem);
+    display: flex; flex-direction: column;
+  }
+  .sit__t { font-size: 1.2rem; font-weight: 800; }
+  .sit__a { margin-top: .4rem; color: var(--accent); font-weight: 700; }
+  .sit__l { margin: 1.2rem 0 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .sit__l li { color: var(--ink-soft); line-height: 1.65; }
+  .sit__b {
+    display: inline-flex; align-items: center; gap: .45rem; margin-top: auto; padding-top: 1.3rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem;
+    color: var(--accent); text-decoration: none;
+  }
+  .sit__b:hover { text-decoration: underline; }
+  .sit__b svg { width: 15px; height: 15px; }
+
+  .chg { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-direction: column; gap: 1.6rem; }
+  .chg__i { display: flex; gap: 1rem; align-items: flex-start; }
+  .chg__n {
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent-plein); color: var(--accent-encre);
+    font-family: 'Archivo', sans-serif; font-weight: 800; font-size: .95rem;
+  }
+  .chg__d h3 { font-size: 1.08rem; font-weight: 800; margin-bottom: .5rem; }
+  .chg__d p { color: var(--ink-soft); line-height: 1.7; max-width: 60ch; }
+  .chg__d p + p { margin-top: .7rem; }
+  /* La citation littérale : on la donne parce qu'elle tranche mieux que toute
+     reformulation, et parce qu'un lecteur méfiant a le droit de la vérifier. */
+  .chg__q {
+    margin-top: .9rem; padding: .8rem 1rem; border-left: 3px solid var(--accent);
+    background: var(--surface); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    font-size: .93rem; font-style: italic; color: var(--ink); max-width: 60ch;
+  }
+
+  .src { margin-top: 2rem; font-size: .87rem; color: var(--ink-mute); max-width: 72ch; line-height: 1.6; }
+  .src a { color: var(--accent); font-weight: 600; }
+
+  .aide { text-align: center; max-width: 58ch; margin-inline: auto; }
+  .aide p { margin-top: 1rem; color: var(--ink-soft); line-height: 1.7; }
+  .aide__a { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: 1.6rem; }
+</style>

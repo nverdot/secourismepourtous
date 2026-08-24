@@ -376,7 +376,7 @@ export const formations: Formation[] = [
     prerequis: 'Dès 17 ans',
     prerequisNote: 'PSE1 à jour requis',
     certification: 'BNSSA',
-    certificationNote: 'Diplôme d’État',
+    certificationNote: 'Devient le SSA au 1er octobre 2026',
     tarif: 'Nous consulter',
     aValider: true,
     objectifs: [

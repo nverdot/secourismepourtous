@@ -108,6 +108,31 @@ const balisages = [
     </section>
   )}
 
+  {/* Le BNSSA change de nom et de prérequis au 1er octobre 2026. Quelqu'un qui
+      arrive sur cette fiche a le droit de l'apprendre ici, pas six mois plus
+      tard. L'encart passe avant les autres : c'est l'information la plus
+      périssable de la page. */}
+  {['bnssa', 'pse-2'].includes(f.slug) && (
+    <section class="section">
+      <div class="wrap">
+        <a class="oblig oblig--reforme" href="/bnssa-devient-ssa">
+          <span class="oblig__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01" /><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></svg>
+          </span>
+          <span class="oblig__txt">
+            <strong>Le BNSSA devient le SSA au 1er octobre 2026</strong>
+            <span>
+              {f.slug === 'bnssa'
+                ? 'Ce que dit l’arrêté du 29 juillet 2026, et pourquoi le PSE2 devient indispensable.'
+                : 'Les titulaires du BNSSA ont désormais besoin du PSE2 pour obtenir l’équivalence SSA.'}
+            </span>
+          </span>
+          <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+    </section>
+  )}
+
   {/* Certains arrivent ici sans savoir si le diplôme leur est imposé : on le
       leur dit avant qu'ils ne s'inscrivent, pas après. */}
   {['psc', 'pse-1'].includes(f.slug) && (
@@ -239,6 +264,14 @@ const balisages = [
   .oblig--choix {
     background: var(--sunk); border-color: var(--line);
   }
+  /* L'encart de réforme se distingue : ce n'est pas une suggestion de lecture,
+     c'est une échéance. */
+  .oblig--reforme {
+    background: var(--secours-wash);
+    border-color: color-mix(in srgb, var(--secours) 30%, transparent);
+  }
+  .oblig--reforme .oblig__ic { background: var(--secours); color: #fff; }
+  .oblig--reforme .oblig__f { color: var(--secours); }
   .oblig--quiz {
     background: var(--secours); border-color: var(--secours); color: #fff;
   }

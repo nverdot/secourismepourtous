@@ -158,16 +158,19 @@ export const metiersPsc: Metier[] = [
 
 export const metiersPse1: Metier[] = [
   {
-    nom: 'Nageur sauveteur (BNSSA)',
+    nom: 'Nageur sauveteur (SSA, ex-BNSSA)',
     secteur: 'Sauvetage aquatique',
     nature: 'exige',
+    // L'arrêté du 23 janvier 1979, cité ici jusqu'à présent, est abrogé depuis
+    // le 1er octobre 2026. Le PSE1 ne suffit plus : l'équivalence vers le SSA
+    // demande le PSE2, et l'employabilité tient à sa formation continue.
     exigence:
-      'Le PSE1 en cours de validité est exigé pour se présenter à l’examen du brevet national de sécurité et de sauvetage aquatique.',
+      'Le PSE2 est désormais la référence : depuis le 1er octobre 2026, le BNSSA est remplacé par le certificat de surveillant sauveteur aquatique (SSA), dont l’équivalence exige le PSE2 et dont l’employabilité dépend de sa formation continue annuelle.',
     contexte:
-      'Une noyade ne laisse pas de marge : sortir la victime ne suffit pas, il faut savoir enchaîner bilan, oxygène et réanimation à plusieurs.',
+      'Une noyade ne laisse pas de marge : sortir la victime ne suffit pas, il faut savoir enchaîner bilan, oxygène et réanimation à plusieurs. C’est exactement ce que le PSE2 ajoute au PSE1, et ce que la réforme vient rendre obligatoire.',
     source: {
-      texte: 'Arrêté du 23 janvier 1979 modifié relatif au BNSSA — Légifrance',
-      url: 'https://www.legifrance.gouv.fr/loda/id/LEGITEXT000024449977/',
+      texte: 'Arrêté du 29 juillet 2026 relatif aux filières de sécurité civile — Légifrance',
+      url: 'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000054594151',
     },
   },
   {
