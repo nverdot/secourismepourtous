@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import Equipe from '../components/Equipe.astro';
 import Lieu from '../components/Lieu.astro';
 import { asso } from '../data/association';
+import {
+  bureau, formateursDeFormateurs, formateursPscPse, nombreFormateurs, versionnee,
+} from '../data/organigramme';
 ---
 
 <Base
@@ -128,56 +131,58 @@ import { asso } from '../data/association';
         formation et un responsable des dispositifs de secours.
       </p>
 
-      <div class="orga">
-        <figure class="orga__fig">
-          <img
-            src="/img/equipe/organigramme-bureau-2026.jpg"
-            alt="Organigramme du bureau 2026 : Raphaël Radier président, Aurélia Tardivat directrice, Jean-Michel Maillier secrétaire, Alexandra Boudon trésorière, Arthur Mollo pôle DPS, Matteo Chenu pôle piscine, Annabell Perez-Björkman pôle formation."
-            width="1800" height="1273" loading="lazy" decoding="async"
-          />
-          <figcaption>Le bureau, en 2026</figcaption>
-        </figure>
-
-        <div class="orga__liste">
-          <h3>Le bureau</h3>
-          <dl>
-            <div><dt>Président</dt><dd>Raphaël Radier</dd></div>
-            <div><dt>Directrice</dt><dd>Aurélia Tardivat</dd></div>
-            <div><dt>Secrétaire</dt><dd>Jean-Michel Maillier</dd></div>
-            <div><dt>Trésorière</dt><dd>Alexandra Boudon</dd></div>
-            <div><dt>Pôle dispositifs de secours</dt><dd>Arthur Mollo</dd></div>
-            <div><dt>Pôle piscine</dt><dd>Matteo Chenu</dd></div>
-            <div><dt>Pôle formation</dt><dd>Annabell Perez-Björkman</dd></div>
-          </dl>
-        </div>
+      {/* L'organigramme est du HTML, plus une image de diapositive : il se
+          lit à voix haute, se traduit, s'indexe, et se corrige sans rouvrir
+          une présentation. Les visages en sont extraits une fois pour toutes
+          par outils/organigramme.py. */}
+      <div class="orgn">
+        {bureau.map((niveau) => (
+          <div class="orgn__n">
+            <h3 class="orgn__t">{niveau.titre}</h3>
+            <ul class="orgn__l">
+              {niveau.postes.map((p) => (
+                <li class="orgn__i">
+                  <img class="orgn__ph" src={versionnee(p.photo)} alt="" width="200" height="200" loading="lazy" decoding="async" />
+                  <span class="orgn__f">{p.fonction}</span>
+                  <strong class="orgn__nom">{p.nom}</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
-      <div class="orga orga--inverse">
-        <figure class="orga__fig">
-          <img
-            src="/img/equipe/formateurs-2026.jpg"
-            alt="Trombinoscope des formateurs 2026 de Secourisme Pour Tous, formateurs de formateurs et formateurs PSC, PSE et BNSSA."
-            width="1800" height="1273" loading="lazy" decoding="async"
-          />
-          <figcaption>Nos formateurs, en 2026</figcaption>
-        </figure>
+      <div class="orgn__form">
+        <h3 class="orgn__t">
+          Nos formateurs
+          <span class="orgn__cpt">{nombreFormateurs}</span>
+        </h3>
+        <p class="orga__intro">
+          Dont {formateursDeFormateurs.length} formateurs de formateurs, qui
+          assurent les PAE&nbsp;FPSC et PAE&nbsp;FPS.
+        </p>
 
-        <div class="orga__liste">
-          <h3>Nos formateurs</h3>
-          <p class="orga__intro">
-            Dix-sept formateurs interviennent sur nos sessions, dont six formateurs
-            de formateurs.
-          </p>
-          <p class="orga__grp"><strong>Formateurs de formateurs</strong><br />
-            Annabell Perez-Björkman (responsable) · Guillaume Rizo · Raphaël Radier ·
-            Gilles Plasse · Matteo Chenu · Alexia Pires
-          </p>
-          <p class="orga__grp"><strong>Formateurs PSC et PSE</strong><br />
-            Thibaut Patell · Jean-Michel Maillier · Mathis Abreu · Anthony Del Aguila ·
-            Olivier Graglia · Elliesse Maroudin · Nicolas Verdot · Alexandra Boudon ·
-            Louis Rinaudo · Arthur Mollo · Floriano Pintus · Thibaut Lorenzetti
-          </p>
-        </div>
+        <p class="orgn__grp">Formateurs de formateurs</p>
+        <ul class="orgn__l orgn__l--tromb">
+          {formateursDeFormateurs.map((f) => (
+            <li class="orgn__i">
+              <img class="orgn__ph orgn__ph--s" src={versionnee(f.photo)} alt="" width="200" height="200" loading="lazy" decoding="async" />
+              <strong class="orgn__nom">{f.nom}</strong>
+              {f.mention && <span class="orgn__m">{f.mention}</span>}
+            </li>
+          ))}
+        </ul>
+
+        <p class="orgn__grp">Formateurs PSC et PSE</p>
+        <ul class="orgn__l orgn__l--tromb">
+          {formateursPscPse.map((f) => (
+            <li class="orgn__i">
+              <img class="orgn__ph orgn__ph--s" src={versionnee(f.photo)} alt="" width="200" height="200" loading="lazy" decoding="async" />
+              <strong class="orgn__nom">{f.nom}</strong>
+              {f.mention && <span class="orgn__m">{f.mention}</span>}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
@@ -232,48 +237,75 @@ import { asso } from '../data/association';
   .tete__eyebrow { color: var(--on-navy-soft) !important; }
 
   /* --- équipe --- */
-  .orga {
-    margin-top: 2.5rem;
-    display: grid; gap: clamp(1.25rem, 3vw, 2.25rem);
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-    align-items: center;
+  /* ── L'organigramme ──────────────────────────────────────────────────
+     Trois rangées plutôt qu'un arbre : le document ne décrit pas une chaîne
+     de commandement mais un partage de responsabilités, et un arbre aurait
+     inventé une hiérarchie que personne n'a posée. Chaque rangée se centre,
+     et se replie d'elle-même sur les petits écrans. */
+  .orgn { display: flex; flex-direction: column; gap: clamp(1.6rem, 3vw, 2.4rem); }
+  .orgn__n { text-align: center; }
+  .orgn__t {
+    font-family: 'Archivo', sans-serif; font-size: .78rem; font-weight: 800;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute);
+    margin-bottom: 1.1rem;
   }
-  .orga + .orga { margin-top: clamp(2rem, 4vw, 3rem); }
-  @media (max-width: 860px) { .orga { grid-template-columns: 1fr; } }
+  .orgn__l {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: clamp(1rem, 2.4vw, 2rem);
+  }
+  .orgn__i {
+    display: flex; flex-direction: column; align-items: center;
+    width: clamp(120px, 15vw, 150px); text-align: center;
+  }
+  .orgn__ph {
+    width: 92px; height: 92px; border-radius: 50%; object-fit: cover;
+    background: var(--sunk); margin-bottom: .6rem;
+    /* Un anneau clair : les visages détourés sur blanc et ceux photographiés
+       sur fond bleu se lisent sinon comme deux familles de vignettes. */
+    box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--line);
+  }
+  .orgn__ph--s { width: 74px; height: 74px; }
+  .orgn__f {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 800;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--accent);
+    line-height: 1.25;
+  }
+  .orgn__nom { font-size: .92rem; font-weight: 700; line-height: 1.3; margin-top: .15rem; }
+  .orgn__m {
+    margin-top: .2rem; font-size: .68rem; font-weight: 700;
+    letter-spacing: .05em; text-transform: uppercase; color: var(--ink-mute);
+  }
+
+  .orgn__form { margin-top: clamp(2.4rem, 5vw, 3.5rem); }
+  .orgn__form .orgn__t { text-align: center; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+  .orgn__cpt {
+    display: inline-grid; place-items: center; min-width: 1.9em; padding: .1em .5em;
+    border-radius: 999px; background: var(--accent-plein); color: var(--accent-encre);
+    font-size: .92rem; letter-spacing: 0;
+  }
+  .orgn__form .orga__intro { text-align: center; max-width: 46ch; margin-inline: auto; }
+  .orgn__grp {
+    margin: 1.6rem 0 1rem; text-align: center;
+    font-family: 'Archivo', sans-serif; font-size: .8rem; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .orgn__l--tromb .orgn__i { width: clamp(104px, 12vw, 124px); }
+
+  @media (max-width: 560px) {
+    .orgn__ph { width: 78px; height: 78px; }
+    .orgn__ph--s { width: 62px; height: 62px; }
+    /* Assez étroit pour que les trois pôles tiennent sur une ligne : à deux
+       lignes, le troisième semblait rattaché aux deux premiers. */
+    .orgn__i { width: clamp(84px, 24vw, 120px); }
+    .orgn__l { gap: 1rem .6rem; }
+  }
+
   /* On alterne le sens de lecture pour ne pas répéter deux fois la même page. */
   @media (min-width: 861px) {
-    .orga--inverse .orga__fig { order: 2; }
   }
 
-  .orga__fig { margin: 0; }
-  .orga__fig img {
-    display: block; width: 100%; height: auto;
-    background: #fff;
-    border: 1px solid var(--line); border-radius: var(--r-lg);
-  }
-  .orga__fig figcaption {
-    margin-top: .6rem; font-size: .85rem; color: var(--ink-mute);
-  }
-
-  .orga__liste h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: .9rem; }
-  .orga__liste dl { margin: 0; display: flex; flex-direction: column; gap: .5rem; }
-  .orga__liste dl > div {
-    display: flex; flex-wrap: wrap; gap: .3rem .7rem; align-items: baseline;
-    padding-bottom: .5rem; border-bottom: 1px solid var(--line);
-  }
-  .orga__liste dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
-  .orga__liste dt {
-    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
-    letter-spacing: .07em; text-transform: uppercase; color: var(--ink-mute);
-    flex: 1 1 12rem;
-  }
-  .orga__liste dd { margin: 0; font-weight: 600; }
   .orga__intro { font-size: .93rem; color: var(--ink-soft); margin-bottom: .9rem; }
-  .orga__grp { font-size: .9rem; color: var(--ink-soft); margin-bottom: .8rem; line-height: 1.65; }
-  .orga__grp strong {
-    font-family: 'Archivo', sans-serif; font-size: .72rem; font-weight: 700;
-    letter-spacing: .07em; text-transform: uppercase; color: var(--ink-mute);
-  }
   .tete__h1 { font-size: clamp(2.1rem,6vw,3.4rem); font-weight: 800; margin-block: .5rem .85rem; }
   .tete__t { max-width: 54ch; color: var(--on-navy-text); font-size: clamp(1rem,2.2vw,1.12rem); }
 
@@ -338,7 +370,6 @@ import { asso } from '../data/association';
   .pole p { font-size: .92rem; color: var(--ink-soft); }
   .pole__f { position: absolute; top: clamp(1.35rem,3vw,1.75rem); right: clamp(1.35rem,3vw,1.75rem); width: 22px; height: 22px; color: var(--secours); }
   .pole__f svg { width: 100%; height: 100%; }
-
 
   .partenaires {
     margin-top: 2rem; padding: 0; list-style: none;
