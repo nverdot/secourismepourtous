@@ -81,6 +81,18 @@ PORTRAITS = {
         # boîte de dialogue, qui ne montre que 54 % de la largeur.
         'boite': (200, 950, 840, 1803),
     },
+    'aaron': {
+        'fichier': 'IMG_3719.jpeg',
+        # Seul, bien cadré : on resserre simplement sur lui.
+        'boite': (746, 1266, 2746, 3933),
+    },
+    'kyllian': {
+        'fichier': 'IMG_20260824_110246.jpg',
+        # ⚠️ Source de 216 pixels de large seulement. La vignette est déjà à la
+        # limite, la grande image reste sous la définition des autres. Une
+        # photo prise autrement réglerait ça d'un coup.
+        'boite': (0, 230, 216, 518),
+    },
     'andrea': {
         'fichier': '29e5ff3b-9af8-4f3b-bbbd-0cc0b56dc712.jpeg',
         # ⚠️ Deux secouristes dans le véhicule, et on ne sait pas laquelle est

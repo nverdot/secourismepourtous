@@ -29,8 +29,9 @@
  * ⚠️ CONSENTEMENT. Le formulaire pose deux cases distinctes : l'autorisation
  * de publier, et le fait de savoir qu'on peut demander le retrait. Seule la
  * première autorise quoi que ce soit. Une réponse du 24 août n'avait coché que
- * la seconde : elle ne figure pas ici, ni son nom, ni sa photo, ni son texte.
- * Vérifier cette case avant d'ajouter quiconque.
+ * la seconde : elle est restée hors du site jusqu'à ce que son auteur renvoie
+ * le formulaire le lendemain, la case cochée. Vérifier cette case avant
+ * d'ajouter quiconque, à chaque export.
  */
 
 import empreintes from './empreintes-portraits.json';
@@ -871,6 +872,89 @@ export const membres: Membre[] = [
       },
     ],
   },
+  {
+    slug: 'aaron',
+    prenom: 'Aaron',
+    nom: 'Fauchon',
+    metier: 'Lycéen, réserviste de l’armée de l’air, photographe',
+    depuis: '2025',
+    roles: ['Secouriste'],
+    diplomes: ['PSC', 'PSE1'],
+    photo: '/img/equipe/aaron.jpg',
+    vignette: '/img/equipe/aaron-min.jpg',
+    alt: 'Aaron en polo de secouriste, bras croisés, devant la mer.',
+    citation:
+      'On ne peut pas dire qu’on n’aime pas tant qu’on n’a pas essayé.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: [
+          'En dehors du secourisme, je suis étudiant et je passe pas mal de temps dans la photographie et le monde de l’audiovisuel en général.',
+          'Je réalise des photos et des vidéos, notamment sur des événements militaires dans le cadre de mon engagement dans la réserve, mais aussi sur des événements sportifs dans le civil. Je m’intéresse beaucoup au monde de l’image et de la communication.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: [
+          'L’envie de mettre mon temps et mon énergie au service des autres, de me rendre utile et de vivre une expérience qui change. J’avais envie d’apprendre à réagir face à des situations concrètes, mais surtout de pouvoir être là quand quelqu’un en a besoin.',
+          'Le secourisme m’a aussi permis de sortir de mon quotidien, de rencontrer de nouvelles personnes et de vivre des moments qui ont du sens. Aujourd’hui, c’est cette envie d’aider, d’apprendre et de continuer à me rendre utile qui me pousse à m’investir au quotidien.',
+        ],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: [
+          'C’est avant tout le sentiment d’être utile. Chaque mission est différente et permet de vivre des situations qu’on ne rencontre pas forcément au quotidien.',
+          'J’aime aussi le fait d’être entouré d’une équipe, de pouvoir compter sur les autres et de continuer à apprendre à chaque fois. Au-delà du secourisme, ce sont les rencontres, les moments partagés et la satisfaction de savoir qu’on a pu aider quelqu’un qui me donnent envie de continuer.',
+        ],
+      },
+      {
+        question: 'Ce qui m’a surpris au début',
+        texte: [
+          'Je pensais surtout apprendre des gestes qui me serviraient pendant les interventions. Je ne pensais pas qu’ils deviendraient aussi utiles dans ma vie de tous les jours.',
+          'Savoir quoi faire face à une blessure, un malaise ou une situation inattendue, ça change complètement la façon dont on réagit. Avec le temps, j’ai compris que le secourisme ne reste pas sur les postes de secours : ce sont des connaissances que je peux réellement utiliser partout.',
+        ],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'À quelqu’un qui hésite à se former, je dirais de le faire. On ne sait jamais quand on pourra être confronté à une situation où ces quelques gestes peuvent réellement faire la différence. Et au-delà de la formation, c’est quelque chose qui reste utile dans la vie de tous les jours.',
+          'À quelqu’un qui hésite à devenir bénévole, je dirais de simplement essayer. Pas besoin de savoir à l’avance si on va aimer ou si on se sentira à sa place. Je dis souvent qu’on ne peut pas dire qu’on n’aime pas tant qu’on n’a pas essayé, alors il faut foncer ! Tester et se faire son propre avis.',
+          'On découvre, on apprend et on trouve progressivement sa manière de s’investir. C’est surtout une expérience qu’on ne peut vraiment comprendre qu’en la vivant.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'kyllian',
+    prenom: 'Kyllian',
+    nom: 'Carbone',
+    metier: 'Agent de sécurité',
+    depuis: '2026',
+    roles: ['Secouriste'],
+    diplomes: ['PSE1', 'SST'],
+    photo: '/img/equipe/kyllian.jpg',
+    vignette: '/img/equipe/kyllian-min.jpg',
+    alt: 'Kyllian en veste de secouriste, devant le véhicule de premiers secours.',
+    citation: 'De découvrir de nouvelles choses.',
+    reponses: [
+      {
+        question: 'Dans la vraie vie',
+        texte: ['Agent de sécurité chez Ciffreo Bona.'],
+      },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: ['M’informer sur les gestes qui sauvent la vie.'],
+      },
+      {
+        question: 'Ce qui me fait revenir',
+        texte: ['L’équipe est super sympa, pendant que j’ai passé ma formation.'],
+      },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: ['De découvrir de nouvelles choses.'],
+      },
+    ],
+  },
 ];
 
 /**
@@ -916,7 +1000,7 @@ export const FICHE_DIPLOME: Record<string, string> = {
 };
 
 /** Portraits recueillis à cette date, par questionnaire. */
-export const recueilliLe = '24 août 2026';
+export const recueilliLe = '25 août 2026';
 
 /**
  * Les appels glissés entre les visages, sur la page d'accueil.

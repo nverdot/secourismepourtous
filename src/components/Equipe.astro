@@ -191,9 +191,14 @@ const rangee = (source: typeof montres, decalage: number): Case[] => {
 const tiers = Math.floor(montres.length / 3);
 const rangees = mur
   ? [
+      // Décalages de quatre et non de trois : à quatre appels par demi-piste,
+      // un pas de trois faisait retomber deux rangées voisines sur le même
+      // message, visible à l'écran. Avec dix appels en réserve, un pas de
+      // quatre ne fait se rejoindre que la première et la troisième — celles
+      // qui ne se touchent pas.
       rangee(montres, 0),
-      rangee([...montres].reverse(), 3),
-      rangee([...montres.slice(tiers), ...montres.slice(0, tiers)], 6),
+      rangee([...montres].reverse(), 4),
+      rangee([...montres.slice(tiers), ...montres.slice(0, tiers)], 8),
     ]
   : [];
 
