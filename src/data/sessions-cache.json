@@ -220,28 +220,6 @@
     ]
   },
   {
-    "id": "af52f442-d74c-4f17-8452-31b41765f4ab",
-    "titre": "BNSSA",
-    "slug": "bnssa-2",
-    "debut": "2026-11-17T19:30:00Z",
-    "fin": "2027-01-14T21:00:00Z",
-    "lieu": "Piscine Jean Médecin",
-    "url": "https://reservation.secourismepourtous.org/event-details/bnssa-2",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-81bf4f9721a9c0a9",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "36a81a16-14a4-469b-b239-4b0be00dae69",
     "titre": "FC BNSSA - Recyclage",
     "slug": "fc-bnssa-recyclage-2",
@@ -253,6 +231,28 @@
     "champs": [
       {
         "nom": "custom-7fef3fca1e0938af",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "af52f442-d74c-4f17-8452-31b41765f4ab",
+    "titre": "BNSSA",
+    "slug": "bnssa-2",
+    "debut": "2026-11-17T19:30:00Z",
+    "fin": "2027-01-14T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://reservation.secourismepourtous.org/event-details/bnssa-2",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-81bf4f9721a9c0a9",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -396,28 +396,6 @@
     ]
   },
   {
-    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
-    "titre": "FC PSE1 - Formation",
-    "slug": "fc-pse1-formation-26",
-    "debut": "2027-01-09T08:00:00Z",
-    "fin": "2027-01-09T16:00:00.061Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-7892ed38993536b8",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "56dea5b6-dc4c-4584-a2f9-d127da5793fe",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-22",
@@ -429,6 +407,28 @@
     "champs": [
       {
         "nom": "custom-ceffd922ff194831",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-26",
+    "debut": "2027-01-09T08:00:00Z",
+    "fin": "2027-01-09T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7892ed38993536b8",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -462,28 +462,6 @@
     ]
   },
   {
-    "id": "3c533b4b-4d14-4314-ac88-c13e6cc3d4d7",
-    "titre": "BNSSA",
-    "slug": "bnssa-3",
-    "debut": "2027-01-19T19:30:00Z",
-    "fin": "2027-03-18T21:00:00Z",
-    "lieu": "Piscine Jean Médecin",
-    "url": "https://reservation.secourismepourtous.org/event-details/bnssa-3",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-150e03b373e8ac49",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "2bb12cab-2ff0-4c90-9a18-5999566c0482",
     "titre": "FC BNSSA - Recyclage",
     "slug": "fc-bnssa-recyclage-3",
@@ -495,6 +473,28 @@
     "champs": [
       {
         "nom": "custom-0a6b9cc08e1a031e",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "3c533b4b-4d14-4314-ac88-c13e6cc3d4d7",
+    "titre": "BNSSA",
+    "slug": "bnssa-3",
+    "debut": "2027-01-19T19:30:00Z",
+    "fin": "2027-03-18T21:00:00Z",
+    "lieu": "Piscine Jean Médecin",
+    "url": "https://reservation.secourismepourtous.org/event-details/bnssa-3",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-150e03b373e8ac49",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -572,28 +572,6 @@
     ]
   },
   {
-    "id": "7310cfa3-0125-481b-ab8e-00b34b9dbc3c",
-    "titre": "PSE2 - Formation",
-    "slug": "pse2-formation-16",
-    "debut": "2027-02-13T08:00:00Z",
-    "fin": "2027-02-14T16:00:00Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-16",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-07484b161b233bfb",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "a84e5475-2163-4efb-b1fd-e4df0c985989",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-23",
@@ -605,6 +583,28 @@
     "champs": [
       {
         "nom": "custom-347c940b0024d6fd",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "7310cfa3-0125-481b-ab8e-00b34b9dbc3c",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-16",
+    "debut": "2027-02-13T08:00:00Z",
+    "fin": "2027-02-14T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-16",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-07484b161b233bfb",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -682,28 +682,6 @@
     ]
   },
   {
-    "id": "66840a80-bbe4-40fd-b80f-76700be0f5bb",
-    "titre": "FC PSE2 - Formation",
-    "slug": "fc-pse2-formation-24",
-    "debut": "2027-03-20T08:00:00Z",
-    "fin": "2027-03-20T16:00:00.444Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse2-formation-24",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-34001b554b4f8bcf",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
     "titre": "FC PSE1 - Formation",
     "slug": "fc-pse1-formation-28",
@@ -715,6 +693,28 @@
     "champs": [
       {
         "nom": "custom-7ea84cebde0ee3a4",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "66840a80-bbe4-40fd-b80f-76700be0f5bb",
+    "titre": "FC PSE2 - Formation",
+    "slug": "fc-pse2-formation-24",
+    "debut": "2027-03-20T08:00:00Z",
+    "fin": "2027-03-20T16:00:00.444Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse2-formation-24",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-34001b554b4f8bcf",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
