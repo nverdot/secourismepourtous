@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Antirobot from '../components/Antirobot.astro';
 import { asso } from '../data/association';
 
 /**
@@ -29,8 +30,8 @@ const avantages = [
     icone: 'equipe',
   },
   {
-    titre: 'Vos formations continues assurées',
-    texte: 'Vos recyclages annuels sont réalisés au sein de l’association : votre diplôme reste valide sans démarche de votre côté.',
+    titre: 'De la pratique toute l’année',
+    texte: 'Des carrefours des pratiques pour entretenir vos gestes entre deux postes. Et sur les dates de recyclage, les membres de l’association sont prioritaires.',
     icone: 'diplome',
   },
   {
@@ -65,8 +66,8 @@ const etapes = [
 ---
 
 <Base
-  title="Devenir secouriste actif à Nice | Secourisme Pour Tous"
-  description="Rejoignez nos équipes de secouristes bénévoles à Nice et dans les Alpes-Maritimes. Postes de secours variés, formations continues assurées, tenue prêtée. Prérequis : PSE1."
+  title="Devenir secouriste bénévole à Nice | Rejoindre nos équipes"
+  description="Rejoignez nos équipes de secouristes bénévoles à Nice et dans le 06. Postes variés, carrefours des pratiques, tenue prêtée. Prérequis : PSE1."
   chemin="/secouriste-actif"
 >
   <header class="tete">
@@ -196,6 +197,7 @@ const etapes = [
           </span>
         </label>
 
+        <Antirobot action="secouriste-actif" />
         <button type="submit" class="btn btn--primaire fm__envoi">
           Envoyer ma demande
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>

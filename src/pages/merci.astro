@@ -7,6 +7,11 @@ import { asso } from '../data/association';
   title="Message envoyé | Secourisme Pour Tous"
   description="Votre demande a bien été transmise à Secourisme Pour Tous. Nous vous répondons sous 48 heures ouvrées."
   chemin="/merci"
+  {/* Une page de confirmation n'a rien à faire dans un moteur de recherche :
+      elle annonce « message bien reçu » à qui n'a rien envoyé, et elle capte
+      des visiteurs à la place de la page qui les intéressait. « follow »
+      reste, pour que les liens qu'elle porte gardent leur valeur. */}
+  noindex
 >
   <section class="merci">
     <div class="wrap wrap--etroit merci__in">

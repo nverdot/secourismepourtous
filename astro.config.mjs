@@ -13,6 +13,9 @@ export default defineConfig({
     format: 'file',
   },
   // Génère sitemap.xml : Google découvre les 13 pages sans attendre de les croiser.
-  integrations: [sitemap()],
+  // Le sitemap ne propose que des pages destinées aux moteurs. « /merci » est
+  // une confirmation d'envoi : elle porte « noindex », l'annoncer ici aurait
+  // valu un avertissement dans Search Console.
+  integrations: [sitemap({ filter: (page) => !/\/merci\/?$/.test(page) })],
   devToolbar: { enabled: false },
 });

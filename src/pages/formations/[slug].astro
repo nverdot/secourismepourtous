@@ -29,7 +29,7 @@ export async function getStaticPaths() {
     params: { slug: f.slug },
     // Une formation suspendue n'affiche aucune session, même si des dates
     // subsistent dans Wix : on ne propose pas de réserver ce qu'on n'assure pas.
-    props: { formation: f, sessions: f.suspendue ? [] : sessionsDe(toutes, f.wixEvent) },
+    props: { formation: f, sessions: f.suspendue || f.datesAVenir ? [] : sessionsDe(toutes, f.wixEvent) },
   }));
 }
 
@@ -48,6 +48,62 @@ const balisages = [
 
 <Base title={f.seo.title} description={f.seo.description} chemin={`/formations/${f.slug}`} filiere={f.filiere} schemas={balisages}>
   <HeroFormation formation={f} nbSessions={sessions.length} />
+
+  {f.datesAVenir?.raison && (
+    <div class="wrap">
+      <p class="suspendue">
+        <span class="suspendue__ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 7v5l3 2" /></svg>
+        </span>
+        <span><strong>Dates à venir.</strong> {f.datesAVenir.raison}</span>
+      </p>
+    </div>
+  )}
+
+  {f.testEntree && (
+    <section class="section" aria-labelledby="t-test">
+      <div class="wrap">
+        <p class="eyebrow">Avant de vous inscrire</p>
+        {/* Même en-tête que « Objectifs visés » : pastille d'accent, taille et
+            graisse identiques. Deux titres de même rang doivent se ressembler. */}
+        <div class="tnat__tete">
+          <span class="tnat__ic" aria-hidden="true">
+            {/* Le même tracé que « Modalités d'évaluation » dans le bloc des
+                modalités : une case cochée. Le site a déjà son vocabulaire de
+                pictogrammes, inutile d'en inventer un. */}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
+            </svg>
+          </span>
+          <h2 class="tnat__h" id="t-test">{f.testEntree.titre}</h2>
+        </div>
+
+        {/* Les deux chiffres qui décident si l'on est prêt : la distance et le
+            temps. Ils passent devant le détail — quelqu'un qui ne tient pas
+            100 mètres n'a pas besoin de lire les trois tronçons. */}
+        <p class="tnat__cle">
+          <b>{f.testEntree.distance}</b> en continu
+          <i>·</i>
+          <b>{f.testEntree.chrono}</b>
+        </p>
+        <p class="tnat__i">{f.testEntree.intro}</p>
+
+        {/* Un parcours se lit dans l'ordre : trois tronçons côte à côte, la
+            distance en tête. Les numéros seraient redondants — la lecture de
+            gauche à droite dit déjà l'enchaînement. */}
+        <ol class="tnat__l">
+          {f.testEntree.etapes.map((e) => (
+            <li class="tnat__e">
+              <span class="tnat__d">{e.d}</span>
+              <span class="tnat__t">{e.t}</span>
+            </li>
+          ))}
+        </ol>
+
+        <p class="tnat__note">{f.testEntree.note}</p>
+      </div>
+    </section>
+  )}
 
   {f.suspendue && (
     <div class="wrap">
@@ -122,7 +178,7 @@ const balisages = [
     </section>
   )}
 
-  {['bnssa', 'fc-bnssa', 'bsb', 'fc-bsb', 'pse-2'].includes(f.slug) && (
+  {['ssa', 'fc-bnssa', 'bsb', 'fc-bsb', 'pse-2'].includes(f.slug) && (
     <section class="section">
       <div class="wrap">
         <a class="oblig oblig--reforme" href="/bnssa-devient-ssa">
@@ -229,6 +285,44 @@ const balisages = [
 </Base>
 
 <style>
+  .tnat__tete { display: flex; align-items: center; gap: .85rem; margin-bottom: 1.1rem; }
+  .tnat__ic {
+    width: 42px; height: 42px; border-radius: 12px; flex: none;
+    display: grid; place-items: center;
+    background: var(--accent-plein); color: var(--accent-encre);
+  }
+  .tnat__ic svg { width: 21px; height: 21px; }
+  .tnat__h { font-size: clamp(1.5rem, 3.4vw, 1.95rem); font-weight: 700; margin: 0; }
+
+  .tnat__cle {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem;
+    margin: .2rem 0 1rem; font-size: 1.05rem; color: var(--ink-soft);
+  }
+  .tnat__cle b { font-size: 1.6rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .tnat__cle i { font-style: normal; color: var(--line); }
+  .tnat__i { margin: 0 0 1.5rem; color: var(--ink-soft); max-width: 53ch; }
+
+  .tnat__l {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    counter-reset: none;
+  }
+  /* Même habillage que les cartes d'objectifs, quelques centimètres plus haut
+     sur la page : fond gris, filet clair, mêmes rayons et rembourrage. */
+  .tnat__e {
+    display: grid; gap: .3rem; align-content: start;
+    padding: 1.05rem 1.2rem;
+    background: var(--sunk);
+    border: 1px solid var(--line); border-radius: var(--r-md);
+  }
+  .tnat__d {
+    font-family: 'Archivo', sans-serif; font-size: 1.5rem; font-weight: 800;
+    line-height: 1.05; color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .tnat__t { font-size: .93rem; color: var(--ink-soft); }
+  .tnat__note { margin: 1.4rem 0 0; font-size: .93rem; color: var(--ink-mute); max-width: 70ch; }
+
   .suspendue {
     margin-top: 2.25rem;
     display: flex; gap: .9rem; align-items: flex-start;

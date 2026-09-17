@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { dimensions } from '../lib/dimensions';
 import AvisGoogle from '../components/AvisGoogle.astro';
 import { asso } from '../data/association';
 import { formations, filieres, type Filiere } from '../data/formations';
@@ -16,7 +17,7 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
 
 <Base
   title="Formation secourisme à Nice | Secourisme Pour Tous"
-  description="Association affiliée FFSS, agréée sécurité civile et certifiée Qualiopi à Nice depuis 2008 : formations PSC, PSE1, PSE2, BNSSA, SST, postes de secours et sauvetage sportif dans le 06."
+  description="Formations PSC, PSE1, PSE2, SSA et SST à Nice, postes de secours et sauvetage sportif dans le 06. Affiliée FFSS, agréée sécurité civile, depuis 2008."
   chemin="/"
 >
   <!-- ============ HERO ============ -->
@@ -110,11 +111,28 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
         {asso.partenaires.map((p) => (
           <li class="partenaire">
             {p.logo
-              ? <img src={p.logo} alt={p.nom} loading="lazy" />
+              ? <img src={p.logo} alt={p.nom} loading="lazy" decoding="async" {...(dimensions(p.logo) ?? {})} />
               : <span class="partenaire__nom">{p.nom}</span>}
           </li>
         ))}
       </ul>
+    </div>
+  </section>
+
+  <!-- ============ DON ============ -->
+
+  {/* Placé après les avis et les partenaires : on ne demande pas d'argent à
+      quelqu'un qui n'a pas encore vu ce que fait l'association. */}
+  <section class="section section--appel" aria-labelledby="t-don">
+    <div class="wrap">
+      <p class="eyebrow">Soutenir l'association</p>
+      <h2 class="h-section" id="t-don">Chaque geste compte.<br />Chaque don sauve.</h2>
+      <p class="lede">
+        Nos secouristes et nos formateurs sont bénévoles. Votre don finance les
+        formations gratuites, le matériel de secours et la sensibilisation dans
+        les écoles. 66 % en est déductible de votre impôt sur le revenu.
+      </p>
+      <p class="don__a"><a class="btn btn--primaire" href="/faire-un-don">Faire un don</a></p>
     </div>
   </section>
 
@@ -141,6 +159,8 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
 </Base>
 
 <style>
+  .don__a { margin-top: 1.75rem; }
+
   /* --- hero --- */
   .hero {
     position: relative;

@@ -133,13 +133,19 @@ export function sessionsDe(toutes: Session[], titreWix: string): Session[] {
   const norm = (s: string) =>
     s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
+  // ⚠️ Un recyclage se reconnaît à « FC » OU à « recyclage » : dans Wix, la
+  // session du 13 octobre 2026 s'intitulait « Formations Recyclage BSB », sans
+  // le sigle. Avec « FC » seul, elle atterrissait sur la fiche du BSB initial.
+  const estRecyclage = (t: string) => /\b(fc|recyclage)\b/.test(t);
   const cible = norm(titreWix);
-  const cibleEstRecyclage = /\bfc\b/.test(cible);
+  const cibleEstRecyclage = estRecyclage(cible);
+  // « fc » sert au classement ci-dessus, pas à la comparaison des mots : un
+  // titre Wix peut dire « recyclage » sans jamais écrire « fc ».
+  const mots = cible.split(' ').filter((m) => m && m !== 'fc');
 
   return toutes.filter((s) => {
     const t = norm(s.titre);
-    if (/\bfc\b/.test(t) !== cibleEstRecyclage) return false;
-    const mots = cible.split(' ').filter(Boolean);
+    if (estRecyclage(t) !== cibleEstRecyclage) return false;
     return mots.every((m) => t.split(' ').includes(m));
   });
 }

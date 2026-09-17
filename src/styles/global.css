@@ -1,3 +1,5 @@
+@import './polices.css';
+
 /* ==========================================================================
    Secourisme Pour Tous — fondations
    Bleu nuit + rouge secours. Une seule famille de caractères (Archivo) portée
@@ -331,3 +333,15 @@ a.badge--qualiopi:focus-visible { outline: 3px solid var(--azur); outline-offset
 .filiere-pedagogique   { --accent: var(--ocre);    --accent-wash: var(--ocre-wash);
                          --accent-plein: var(--ocre-vif); --accent-encre: var(--ocre-encre); }
 .filiere-entreprise    { --accent: var(--navy);    --accent-wash: var(--azur-wash);    --accent-plein: var(--navy); }
+
+/* La page de don n'est pas une filière de formation, mais elle emprunte le
+   même mécanisme pour se teinter.
+   Pourquoi le jaune FFSS et pas le rouge : le rouge secours est la couleur de
+   l'urgence, et un bouton rouge qui demande de l'argent se lit comme une
+   alerte.
+   ⚠️ Même discipline que la filière pédagogique, et pour la même raison :
+   #f8c000 ne fait que 1,68:1 sur blanc, donc il ne sert QU'AUX APLATS, avec
+   l'encre sombre par-dessus (10,38:1). Le texte prend l'or foncé, 4,94:1.
+   Ne jamais écrire en ocre vif sur fond clair, ni en blanc sur l'ocre vif. */
+.filiere-don           { --accent: var(--ocre);    --accent-wash: var(--ocre-wash);
+                         --accent-plein: var(--ocre-vif); --accent-encre: var(--ocre-encre); }

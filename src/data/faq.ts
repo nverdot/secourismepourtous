@@ -145,6 +145,6 @@ export const faqBenevolat: QR[] = [
   {
     question: 'Mes formations continues sont-elles à ma charge ?',
     reponse:
-      'Non. Vos recyclages annuels sont réalisés au sein de l’association, ce qui maintient votre diplôme valide sans démarche ni frais de votre côté.',
+      'Oui. Vous vous inscrivez et vous réglez votre recyclage, comme pour toute formation. Ce qui change, c’est qu’il est organisé au sein de l’association : pas d’organisme à chercher, les membres sont prioritaires sur les dates, et les carrefours des pratiques permettent d’entretenir ses gestes entre deux échéances.',
   },
 ];

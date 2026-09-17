@@ -304,8 +304,12 @@ const v = niveauPse ? volume(niveauPse) : null;
   /* Placement explicite : le placement automatique aurait mis les modalités
      dans la colonne du programme. */
   .op > .buts-col { grid-column: 1; grid-row: 1; }
-  .op > .mods { grid-column: 1; grid-row: 2; }
-  .op > #programme { grid-column: 2; grid-row: 1 / span 2; }
+  /* Les modalités passent sous les deux colonnes plutôt que de rester coincées
+     à gauche : dans 430 pixels elles s'empilaient sur cinq à huit rangées, plus
+     long que le programme qu'elles accompagnent. En pleine largeur, elles
+     tiennent sur deux colonnes et deux fois moins de hauteur. */
+  .op > .mods { grid-column: 1 / -1; grid-row: 2; }
+  .op > #programme { grid-column: 2; grid-row: 1; }
   /* Sans objectifs ni programme, la grille à deux colonnes laisserait la
      moitié droite vide. La note passe en pleine largeur, les modalités
      dessous. */
@@ -460,6 +464,11 @@ const v = niveauPse ? volume(niveauPse) : null;
     letter-spacing: .06em; text-transform: uppercase; color: var(--accent);
   }
 
+  /* Une modalité par ligne, sur toute la largeur.
+     Le bloc a quitté la colonne de gauche (voir le placement plus haut) : dans
+     430 pixels il s'empilait sur cinq à huit rangées serrées. En pleine
+     largeur, la même liste respire sans qu'on ait besoin de la couper en
+     colonnes — c'est plus haut, mais ça se lit d'un trait. */
   .mods__l {
     margin: 1.25rem 0 0;
     border: 1px solid var(--line); border-radius: var(--r-lg);

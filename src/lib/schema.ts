@@ -41,6 +41,16 @@ export function organisation() {
     foundingDate: String(asso.fondation),
     founder: { '@type': 'Person', name: asso.fondateur },
     url: SITE,
+    /*
+     * Le lien vers la fiche Google Business.
+     *
+     * « sameAs » est ce qui dit à Google que ce site et cette fiche désignent
+     * la même association. Sans lui, il doit le déduire de l'adresse et du
+     * téléphone — ce qu'il fait souvent, mais pas toujours, et jamais vite.
+     * Le lien est le même que celui du plan d'accès, dans Carte.astro : s'il
+     * change un jour, les deux sont à mettre à jour ensemble.
+     */
+    sameAs: ['https://maps.app.goo.gl/yjoC7qbZCdGSKyXeA'],
     logo: `${SITE}/img/logo-spt.png`,
     image: `${SITE}/img/secours-mer.jpg`,
     email: asso.contact.email,

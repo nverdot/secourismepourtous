@@ -110,7 +110,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Quelqu’un s’étouffe : que faire ? | Gestes qui sauvent',
       description:
-        'Apprendre les gestes face à un étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2026.',
+        'Étouffement : reconnaître une obstruction partielle ou complète, la conduite à tenir officielle, les erreurs à éviter. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -233,7 +233,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Arrêt cardiaque d’un enfant ou d’un bébé : que faire ?',
       description:
-        'Apprendre la réanimation pédiatrique : 15 compressions pour 2 insufflations, contre 30 pour 2 chez l’adulte. D’après les références techniques nationales PSC de juillet 2026.',
+        'Réanimation pédiatrique : 15 compressions pour 2 insufflations, contre 30 pour 2 chez l’adulte. D’après les références nationales PSC de 2026.',
     },
   },
 
@@ -293,7 +293,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Plaie qui saigne beaucoup : que faire ? | Gestes qui sauvent',
       description:
-        'Apprendre les gestes face à une hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2026.',
+        'Hémorragie externe : comprimer, allonger, alerter. La conduite à tenir officielle et les erreurs qui aggravent. D’après le référentiel PSC 2026.',
     },
   },
 
@@ -354,7 +354,7 @@ export const situations: Situation[] = [
       alt: 'Dans un salon, une femme téléphone aux secours en gardant une main sur l’épaule d’un homme inconscient qu’elle a installé sur le côté.',
     },
     seo: {
-      title: 'Personne inconsciente qui respire : que faire ? | Gestes qui sauvent',
+      title: 'Personne inconsciente qui respire : que faire ?',
       description:
         'Perte de connaissance : vérifier la réponse, libérer les voies aériennes, contrôler la respiration, position latérale de sécurité. D’après le référentiel PSC 2026.',
     },
@@ -471,7 +471,7 @@ export const situations: Situation[] = [
     seo: {
       title: 'Malaise, AVC, douleur dans la poitrine : que faire ?',
       description:
-        'Les signes qui imposent d’appeler le 15 immédiatement : paralysie d’un bras, visage déformé, trouble de la parole, douleur thoracique. D’après le référentiel PSC 2026.',
+        'Les signes qui imposent d’appeler le 15 : paralysie d’un bras, visage déformé, trouble de la parole, douleur thoracique. Référentiel PSC 2026.',
     },
   },
 

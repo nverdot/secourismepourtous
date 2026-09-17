@@ -54,6 +54,15 @@ const actuel = Astro.url.pathname;
         </svg>
         {asso.contact.telephone}
       </a>
+      {/* Le don vit dans le bandeau de service, pas dans la navigation : il ne
+          doit pas concurrencer « S'engager », qui reste l'appel principal.
+          Discret, mais présent sur chaque page. */}
+      <a href="/faire-un-don" class="entete__don">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.7-7.7 1.1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+        Faire un don
+      </a>
     </div>
   </div>
 
@@ -176,6 +185,14 @@ const actuel = Astro.url.pathname;
     white-space: nowrap;
   }
   .entete__tel:hover { color: var(--secours-hi); }
+
+  .entete__don {
+    display: inline-flex; align-items: center; gap: .4rem;
+    color: var(--on-navy-soft); text-decoration: none;
+    font-weight: 600; white-space: nowrap;
+  }
+  .entete__don:hover { color: #fff; }
+  .entete__don svg { color: var(--secours-hi); }
 
   .entete__barre {
     display: flex;

@@ -8,6 +8,11 @@
 # un second et l'ancienne adresse continue de servir l'ancien code.
 
 name = "secourismepourtous"
+# ⚠️ Le compte Cloudflare de l'ASSOCIATION, épinglé. Sans cette ligne, wrangler
+# vise le compte de la session ouverte, et cette session a basculé à plusieurs
+# reprises vers un compte personnel. Avec elle, un déploiement lancé depuis le
+# mauvais compte échoue bruyamment au lieu de partir ailleurs sans prévenir.
+account_id = "beae0252f6c419df49c60d9a2060da2b"
 main = "worker/index.js"
 compatibility_date = "2026-08-21"
 
@@ -38,6 +43,12 @@ not_found_handling = "404-page"
 # seul le nombre de secrets à poser.
 [vars]
 WIX_SITE_ID = "c76f219b-29ee-4805-aae5-8f78da0f719f"
+
+# Les hôtes que Turnstile doit reconnaître dans le jeton. Ce n'est pas un
+# secret : c'est la liste des domaines depuis lesquels un envoi est légitime.
+# ⚠️ Ne JAMAIS y mettre localhost sur la production : un jeton obtenu en local
+# suffirait alors à poster sur le site en ligne.
+TURNSTILE_HOSTNAMES = "secourismepourtous.org,www.secourismepourtous.org"
 
 # WIX_API_KEY, en revanche, est une clé administrateur : elle n'a rien à faire
 # dans un fichier versionné. Elle se pose en secret d'exécution, par le tableau

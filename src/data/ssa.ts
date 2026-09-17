@@ -94,7 +94,8 @@ export const situations = [
 export const notreSituation = {
   titre: 'Où nous en sommes',
   texte: [
-    'Nous ne proposons pas encore de session SSA. Le référentiel officiel de la FFSS n’est pas publié : tant qu’il ne l’est pas, personne ne peut annoncer honnêtement une durée, un tarif ni un contenu de formation.',
-    'Nous le suivons de près, et nous ouvrirons les inscriptions dès qu’il sera paru. Écrivez-nous pour être prévenu — c’est la seule chose à faire aujourd’hui, et elle ne coûte rien.',
+    'Nous proposons le SSA. Le cursus complet — PSE1, PSE2 puis SSA — représente 98 heures et coûte 900 €. Le contenu et le tarif sont arrêtés ; les dates ouvriront dès la validation de la formation.',
+    'Attention au prérequis, sur lequel plusieurs organismes de la région se trompent : l’arrêté exige le PSE2, pas le PSE1. Comme le PSE2 suppose lui-même le PSE1, c’est tout l’enchaînement qu’il faut prévoir — d’où le cursus complet plutôt qu’une formation isolée.',
+    'S’ajoutent un certificat médical conforme au code du sport et un test de natation validé par un maître-nageur sauveteur, en bassin de 25 ou 50 mètres.',
   ],
 };

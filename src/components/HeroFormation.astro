@@ -12,7 +12,7 @@ const faits = [
   { label: 'Durée', valeur: f.duree, note: f.dureeNote, ton: 'azur', icone: 'horloge' },
   { label: 'Prérequis', valeur: f.prerequis, note: f.prerequisNote, ton: 'sage', icone: 'personne' },
   { label: 'Certification', valeur: f.certification, note: f.certificationNote, ton: 'gold', icone: 'medaille' },
-  { label: 'Tarif', valeur: f.tarif, note: f.tarifNote, ton: 'secours', icone: 'euro' },
+  { label: 'Tarif', valeur: f.tarif, note: f.tarifNote, ton: 'secours', icone: 'euro', lancement: f.lancement },
 ];
 ---
 
@@ -46,8 +46,13 @@ const faits = [
     <p class="hero__accroche">{f.accroche}</p>
 
     <div class="hero__actions">
-      {f.suspendue ? (
-        <a class="btn btn--primaire" href="/contact">Être prévenu de la réouverture</a>
+      {/* Sans dates ouvertes, « Voir les dates & s'inscrire » mène à une liste
+          vide : on demande à être prévenu, ce qui est la seule action possible
+          — et on récupère un contact au passage. */}
+      {f.suspendue || f.datesAVenir ? (
+        <a class="btn btn--primaire" href="/contact">
+          {f.datesAVenir ? 'Être prévenu de l’ouverture des dates' : 'Être prévenu de la réouverture'}
+        </a>
       ) : (
       <a class="btn btn--primaire" href="#sessions" data-ouvre-dates>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -88,8 +93,17 @@ const faits = [
           {x.icone === 'euro' && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.5 5.5a7.5 7.5 0 1 0 0 13" /><path d="M3.5 10.5h10M3.5 14h8" /></svg>}
         </span>
         <span class="fait__label">{x.label}</span>
-        <span class="fait__valeur">{x.valeur}</span>
+        <span class="fait__valeur">
+          {x.lancement && <s class="fait__barre">{x.lancement.normal}</s>}
+          {x.valeur}
+        </span>
         {x.note && <span class="fait__note">{x.note}</span>}
+        {x.lancement && (
+          <span class="fait__lancement">
+            Tarif de lancement · − {x.lancement.economie}
+            <i>jusqu'au {x.lancement.jusquau}</i>
+          </span>
+        )}
       </div>
     ))}
   </div>
@@ -215,7 +229,25 @@ const faits = [
     color: var(--ink);
     font-variant-numeric: tabular-nums;
   }
-  .fait__note { font-size: 0.86rem; color: var(--ink-soft); }
+  /* « pre-line » respecte les retours à la ligne écrits dans la donnée, sans
+     obliger à passer du HTML dans un champ de texte. */
+  .fait__note { font-size: 0.86rem; color: var(--ink-soft); white-space: pre-line; }
+  .fait__barre {
+    margin-right: .5rem;
+    color: var(--ink-mute); font-weight: 500;
+    text-decoration-thickness: 2px;
+  }
+  /* Une pastille a besoin d'air : la précédente collait son texte au bord et
+     se lisait comme une erreur de mise en page. */
+  .fait__lancement {
+    display: inline-flex; flex-wrap: wrap; align-items: baseline;
+    gap: .1rem .45rem;
+    margin-top: .7rem;
+    padding: .4rem .85rem; border-radius: var(--r-pill);
+    background: var(--gold-wash); color: var(--gold);
+    font-size: .8rem; font-weight: 700; line-height: 1.4;
+  }
+  .fait__lancement i { font-style: normal; font-weight: 500; opacity: .85; }
 
   /* Sous 700 px, minmax(210px) ne tient plus qu'une colonne : les quatre
      repères s'empilent sur toute la hauteur de l'écran et repoussent le

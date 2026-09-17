@@ -364,7 +364,7 @@ export const membres: Membre[] = [
     nom: 'Côte',
     metier: 'Entraîneur de natation artistique',
     depuis: '2026',
-    roles: ['Formateur', 'Équipier secouriste', 'Secouriste', 'Nageur sauveteur'],
+    roles: ['Équipier secouriste', 'Secouriste', 'Nageur sauveteur'],
     diplomes: ['PSE1', 'PSE2', 'BNSSA'],
     photo: '/img/equipe/anne-sophie.jpg',
     vignette: '/img/equipe/anne-sophie-min.jpg',
@@ -702,15 +702,15 @@ export const membres: Membre[] = [
     ],
   },
   {
-    slug: 'manon',
+    slug: 'manon-dewaest-faure',
     prenom: 'Manon',
     nom: 'Dewaest-Faure',
     metier: 'Conseillère de vente, bientôt pisteuse secouriste',
     depuis: '2026',
     roles: ['Secouriste', 'Nageur sauveteur'],
     diplomes: ['PSE1', 'BNSSA'],
-    photo: '/img/equipe/manon.jpg',
-    vignette: '/img/equipe/manon-min.jpg',
+    photo: '/img/equipe/manon-dewaest-faure.jpg',
+    vignette: '/img/equipe/manon-dewaest-faure-min.jpg',
     alt: 'Manon, souriante, lunettes et bandeau, en portrait.',
     citation: 'Ce n’est pas si compliqué que ça. On n’est jamais seul, toujours accompagné.',
     reponses: [
@@ -955,7 +955,60 @@ export const membres: Membre[] = [
       },
     ],
   },
+
+{
+    slug: 'manon-rinaudo',
+    prenom: 'Manon',
+    nom: 'Rinaudo',
+    metier: 'Infirmière',
+    depuis: '2008',
+    roles: ['Chef de poste', 'Chef d’équipe', 'Équipier secouriste', 'Secouriste'],
+    diplomes: ['PSE1', 'PSE2'],
+    photo: '/img/equipe/manon-rinaudo.jpg',
+    vignette: '/img/equipe/manon-rinaudo-min.jpg',
+    alt: 'Manon en tenue FFSS, en portrait.',
+    citation: 'Depuis mon enfance, je suis là-dedans.',
+    reponses: [
+      { question: 'Dans la vraie vie', texte: ['Infirmière.'] },
+      {
+        question: 'Ce qui m’a amené au secourisme',
+        texte: ['Depuis mon enfance, je suis là-dedans.'],
+      },
+      { question: 'Ce qui me fait revenir', texte: ['Le terrain.'] },
+      {
+        question: 'Ce que je dirais à quelqu’un qui hésite',
+        texte: [
+          'Que ces formations sont tellement reconnues et importantes.',
+          'Et qu’elles peuvent t’apprendre beaucoup pour la vie de tous les jours, face à une situation d’urgence.',
+        ],
+      },
+    ],
+  },
 ];
+
+/**
+ * ⚠️ LE RÔLE « FORMATEUR » NE SE SAISIT PAS À LA MAIN.
+ *
+ * Est formateur celui qui détient un PAE : FPSC pour enseigner le PSC, FPS
+ * pour enseigner le PSE. Rien d'autre n'y autorise, et c'est ce que vérifie
+ * l'autorité qui délivre l'agrément.
+ *
+ * Le questionnaire, lui, laisse chacun cocher les rôles qu'il s'attribue.
+ * Anne Sophie Côte s'est ainsi retrouvée annoncée comme formatrice en bas de
+ * toutes les fiches de formation avec un PSE1, un PSE2 et un BNSSA — sans
+ * figurer dans aucune des deux listes du document interne. Annoncer un
+ * formateur qui n'en est pas engage l'agrément de l'association.
+ *
+ * Le rôle est donc dérivé des diplômes, dans les deux sens : ajouté à qui
+ * porte un PAE, retiré à qui n'en porte pas. Ne le réintroduisez pas à la
+ * main dans les blocs ci-dessus, il serait effacé au chargement suivant.
+ */
+const PAE = ['PAE FPSC', 'PAE FPS'];
+
+for (const m of membres) {
+  const autres = m.roles.filter((r) => r !== 'Formateur');
+  m.roles = m.diplomes.some((d) => PAE.includes(d)) ? ['Formateur', ...autres] : autres;
+}
 
 /**
  * Ordre d'affichage des questions, quel que soit celui du questionnaire.
@@ -992,7 +1045,7 @@ export const FICHE_DIPLOME: Record<string, string> = {
   'PSC': 'psc',
   'PSE1': 'pse-1',
   'PSE2': 'pse-2',
-  'BNSSA': 'bnssa',
+  'BNSSA': 'ssa',
   'BSB': 'bsb',
   'SST': 'sst',
   'PAE FPSC': 'pae-f-psc',

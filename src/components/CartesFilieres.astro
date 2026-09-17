@@ -1,5 +1,6 @@
 ---
 import { filieres, formations, type Filiere } from '../data/formations';
+import { dimensions } from '../lib/dimensions';
 
 /**
  * Orientation par filière sur la page d'accueil.
@@ -48,7 +49,7 @@ const cartes = ordre.map((cle) => ({
         <article id={c.cle} class:list={['cf', `cf--${c.couleur}`, { 'cf--large': c.cle === 'pedagogique' }]}>
           <div class="cf__visuel">
             {c.image
-              ? <img src={c.image} alt="" loading="lazy" />
+              ? <img src={c.image} alt="" loading="lazy" decoding="async" {...(dimensions(c.image) ?? {})} />
               : <span class="cf__degrade" aria-hidden="true"></span>}
           </div>
 
@@ -110,7 +111,15 @@ const cartes = ordre.map((cle) => ({
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
                   Formation initiale
                 </a>
-                <a class="fitem__b fitem__b--creux" href={f.recyclage ? `/formations/${f.recyclage}` : '/contact'}>
+                {/* On ne renvoie jamais vers une page suspendue. Le recyclage du
+                    SSA pointait vers la fiche FC, marquée « suspendue » et encore
+                    rédigée selon l'ancienne règle des cinq ans : la fiche SSA,
+                    elle, décrit déjà les recyclages annuels. */}
+                <a class="fitem__b fitem__b--creux" href={
+                  !f.recyclage ? '/contact'
+                  : formations.find((x) => x.slug === f.recyclage)?.suspendue ? `/formations/${f.slug}#programme`
+                  : `/formations/${f.recyclage}`
+                }>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8" /><path d="M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16" /><path d="M3 21v-5h5" /></svg>
                   Recyclage
                 </a>

@@ -10,7 +10,11 @@
 /psc                    /formations/psc            301
 /pse-1                  /formations/pse-1          301
 /pse-2                  /formations/pse-2          301
-/bnssa                  /formations/bnssa          301
+/bnssa                  /formations/ssa            301
+# Le diplôme a été renommé le 1er octobre 2026. L'ancienne adresse est notre
+# meilleure page dans Google : cette redirection porte son référencement vers
+# la nouvelle. Ne pas la supprimer.
+/formations/bnssa       /formations/ssa            301
 /fc-bnssa               /formations/fc-bnssa       301
 /bsb-et-fc-bsb          /formations/bsb            301
 /fc-pse1-ou-pse2        /formations/fc-pse-1       301
@@ -27,3 +31,11 @@
 # ⚠️ Ne prend effet qu'une fois « reservation » défini comme domaine principal
 # du site Wix. Dans l'autre ordre, Wix renvoie vers www et la boucle se ferme.
 /event-details/*  https://reservation.secourismepourtous.org/event-details/:splat  301
+
+# ---- Adresses que les robots demandent par convention ----
+# Google signalait un 404 dans son rapport de couverture. « /sitemap.xml » est
+# le nom que cherchent la plupart des explorateurs ; le nôtre s'appelle
+# « sitemap-index.xml », engendré par Astro. Le favicon ICO est réclamé par
+# quelques robots anciens, même quand la page déclare ses icônes en PNG.
+/sitemap.xml   /sitemap-index.xml   301
+/favicon.ico   /favicon-32.png      301

@@ -1,0 +1,28 @@
+---
+/**
+ * Le widget Turnstile, posé dans chaque formulaire.
+ *
+ * ⚠️ CE COMPOSANT NE PROTÈGE RIEN À LUI SEUL. Un robot qui poste directement
+ * sur /api/contact ne charge jamais cette page. La protection réelle est la
+ * vérification côté serveur, dans worker/contact.js : c'est elle qui interroge
+ * Cloudflare pour savoir si le jeton est authentique, non rejoué, et émis pour
+ * cette action-ci. Retirer l'un sans l'autre laisse le formulaire ouvert.
+ *
+ * La clé de site est PUBLIQUE : elle voyage dans le HTML, c'est prévu. La clé
+ * secrète, elle, vit uniquement dans les secrets du Worker.
+ */
+const CLE_PUBLIQUE = '0x4AAAAAAEjF2A-IMZO_E2hd';
+
+interface Props {
+  /** Doit valoir le « name » du formulaire : le serveur compare les deux. */
+  action: string;
+}
+const { action } = Astro.props;
+---
+
+<div class="cf-turnstile antirobot" data-sitekey={CLE_PUBLIQUE} data-action={action}></div>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+  .antirobot { margin: 1.1rem 0; }
+</style>

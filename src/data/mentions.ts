@@ -156,8 +156,10 @@ export const confidentialite: Bloc[] = [
     paragraphes: [
       'Ce site ne dépose aucun cookie publicitaire et n’utilise aucun outil de profilage. Il n’y a pas de bandeau de consentement parce qu’il n’y a rien à consentir.',
       'Le plan d’accès est fourni par OpenStreetMap, qui ne dépose pas de traceur. Les liens vers Google Maps, Instagram ou Facebook ne transmettent rien tant que vous ne cliquez pas dessus.',
-      'Les polices de caractères sont chargées depuis Google Fonts : votre adresse IP est alors transmise à Google. Nous étudions leur hébergement sur nos propres serveurs pour supprimer cet appel.',
+      'Les polices de caractères sont hébergées sur nos propres serveurs. Elles étaient auparavant chargées depuis Google Fonts, ce qui transmettait votre adresse IP à Google : ce n’est plus le cas depuis septembre 2026.',
       'Lorsque vous réglez une formation, vous êtes redirigé vers la page de paiement sécurisée de Wix, qui applique sa propre politique de confidentialité.',
+      'Nos formulaires sont protégés par Turnstile, le dispositif anti-robots de Cloudflare, qui héberge déjà ce site. Il analyse le comportement de votre navigateur pour distinguer un humain d’un automate, sans vous poser d’énigme et sans construire de profil publicitaire. C’est une mesure de sécurité, pas un traceur : sans elle, votre formulaire de contact sert de boîte à courrier indésirable.',
+      'La page de don n’affiche aucun formulaire tiers : elle vous renvoie, par un lien, vers HelloAsso, qui recueille votre don et vous adresse votre reçu fiscal. Rien n’est transmis tant que vous n’avez pas cliqué. HelloAsso applique alors sa propre politique de confidentialité.',
     ],
   },
   {

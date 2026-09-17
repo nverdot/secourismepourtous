@@ -32,6 +32,62 @@ const DESTINATAIRE = 'secourismepourtous@gmail.com';
 const ENVOI = 'https://api.resend.com/emails';
 
 
+/**
+ * Vérification Turnstile, côté serveur.
+ *
+ * ⚠️ LE WIDGET SEUL NE PROTÈGE RIEN. Un robot qui poste directement sur
+ * /api/contact ne voit jamais la page. C'est CE contrôle qui filtre, parce
+ * qu'il interroge Cloudflare pour savoir si le jeton reçu est authentique,
+ * non rejoué, émis pour cette action et depuis nos domaines.
+ *
+ * Tant que TURNSTILE_SECRET n'est pas posé sur le Worker, la fonction laisse
+ * passer et le dit dans le diagnostic. C'est délibéré : refuser tout en
+ * l'absence de clé transformerait un oubli de configuration en formulaire
+ * mort, sans que personne s'en aperçoive avant de perdre des demandes.
+ * Une fois la clé posée, plus rien ne passe sans jeton valide.
+ */
+async function turnstile(jeton, action, req, env) {
+  const secret = env.TURNSTILE_SECRET;
+  if (!secret) return { ok: true, actif: false, raison: 'secret absent' };
+
+  // Un jeton Turnstile ne dépasse jamais 2048 caractères. Au-delà, on refuse
+  // sans appeler Cloudflare : inutile de lui faire analyser un envoi absurde.
+  if (typeof jeton !== 'string' || !jeton || jeton.length > 2048) {
+    return { ok: false, actif: true, raison: 'jeton absent ou aberrant' };
+  }
+
+  const attendus = (env.TURNSTILE_HOSTNAMES || '')
+    .split(',').map((h) => h.trim()).filter(Boolean);
+  if (!attendus.length) return { ok: false, actif: true, raison: 'hôtes non déclarés' };
+
+  let r;
+  try {
+    const rep = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      signal: AbortSignal.timeout(10_000),
+      body: new URLSearchParams({
+        secret,
+        response: jeton,
+        remoteip: req.headers.get('CF-Connecting-IP') || '',
+      }),
+    });
+    if (!rep.ok) throw new Error(`siteverify ${rep.status}`);
+    r = await rep.json();
+  } catch (e) {
+    // Panne réseau, réponse illisible : on refuse. Un anti-robot qui s'ouvre
+    // quand il tombe en panne ne protège rien.
+    return { ok: false, actif: true, raison: 'siteverify injoignable' };
+  }
+
+  if (!r.success) return { ok: false, actif: true, raison: (r['error-codes'] || []).join(',') };
+  if (!attendus.includes(r.hostname)) return { ok: false, actif: true, raison: 'hôte inattendu' };
+  // L'action lie le jeton au formulaire qui l'a produit : un jeton obtenu sur
+  // la page contact ne peut pas servir à poster une demande de financement.
+  if (action && r.action !== action) return { ok: false, actif: true, raison: 'action discordante' };
+  return { ok: true, actif: true };
+}
+
 /** Regroupe les champs du formulaire en un message lisible pour la notification. */
 function resume(d) {
   const lignes = [];
@@ -88,6 +144,11 @@ export async function contactPost(request, env) {
   // Piège à robots : rempli = on accepte sans rien enregistrer, pour ne pas
   // renseigner l'émetteur sur la détection.
   if (d['bot-field']) return Response.redirect(new URL('/merci', req.url), 303);
+
+  const verdict = await turnstile(d['cf-turnstile-response'], d['form-name'], req, env);
+  if (!verdict.ok) {
+    return new Response('Vérification anti-robot échouée', { status: 403 });
+  }
 
   const prenom = d.prenom || d.stagiaire_prenom || '';
   const nom = d.nom || d.stagiaire_nom || '';
@@ -395,6 +456,11 @@ async function diagnostic(env) {
   etat.alerteConfiguree = Boolean(resend);
   etat.alerteDestinataire = env.NOTIF_EMAIL || DESTINATAIRE;
   etat.alerteExpediteur = env.RESEND_FROM || 'onboarding@resend.dev (domaine non vérifié)';
+
+  // Sans cette ligne, un secret oublié rendrait le formulaire ouvert en
+  // silence : la protection existerait dans le code et nulle part ailleurs.
+  etat.antirobotActif = Boolean(env.TURNSTILE_SECRET);
+  etat.antirobotHotes = env.TURNSTILE_HOSTNAMES || '(non déclarés)';
 
   return new Response(JSON.stringify(etat, null, 2), {
     status: 200,

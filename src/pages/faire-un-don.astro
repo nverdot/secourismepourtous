@@ -1,0 +1,743 @@
+---
+/**
+ * La page de don.
+ *
+ * Le widget HelloAsso est un iframe tiers : il charge du contenu de
+ * helloasso.com dès l'ouverture de la page. C'est la raison pour laquelle la
+ * politique de confidentialité le nomme désormais, aux côtés d'OpenStreetMap.
+ * Un formulaire de paiement que le visiteur est venu chercher n'est pas un
+ * traceur, mais il doit être annoncé.
+ */
+import Base from '../layouts/Base.astro';
+import { asso } from '../data/association';
+import { emplois, fiscalite, helloasso, paliersMensuel, paliersPonctuel } from '../data/dons';
+import { filAriane } from '../lib/schema';
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Faire un don', chemin: '/faire-un-don' },
+  ]),
+];
+
+const formes = asso.chiffres.find((c) => c.label.includes('personnes'));
+---
+
+<Base
+  title="Faire un don à Secourisme Pour Tous | 66 % déductible"
+  description="Soutenez une association agréée de sécurité civile à Nice : formations gratuites, matériel des bénévoles, écoles. 66 % déductible de votre impôt."
+  chemin="/faire-un-don"
+  filiere="don"
+  schemas={balisages}
+>
+  <header class="tete">
+    {/* Quatre bénévoles sous le poste de secours, sur les galets de Nice.
+        C'est le dernier paragraphe de la page mis en image : « des voisins,
+        des collègues, des parents ». Un visage vaut mieux qu'un symbole quand
+        on demande de l'argent. */}
+    <div class="tete__photo" aria-hidden="true"></div>
+    <div class="tete__voile" aria-hidden="true"></div>
+    <div class="wrap tete__in">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i>
+        <b>Faire un don</b>
+      </nav>
+      <h1 class="tete__h1">Chaque geste compte.<br />Chaque don sauve.</h1>
+      <p class="tete__t">
+        Un accident survient en quelques secondes. Une vie peut basculer en un
+        instant. Pourtant, dans notre pays, trop peu de personnes savent encore
+        réagir face à un malaise, une hémorragie, un arrêt cardiaque ou un
+        simple étouffement.
+      </p>
+      <p class="tete__t">
+        Secourisme Pour Tous, association agréée de sécurité civile et affiliée
+        à la FFSS, agit chaque jour pour changer cette réalité. Notre
+        mission : former le plus grand nombre aux gestes qui sauvent, et
+        intervenir sur le terrain pour protéger les populations lors
+        d'événements, de crises ou de situations d'urgence.
+      </p>
+      <p class="tete__a"><a class="btn btn--primaire" href="#donner">Faire un don</a></p>
+    </div>
+  </header>
+
+  <section class="section section--sunk" aria-labelledby="t-pourquoi">
+    <div class="wrap">
+      <p class="eyebrow">Pourquoi votre don change tout</p>
+      <h2 class="h-section" id="t-pourquoi">Votre soutien nous permet de :</h2>
+      <ul class="dn__l">
+        {emplois.map((e) => (
+          <li class="dn__e">
+            <h3 class="dn__et">{e.titre}</h3>
+            <p class="dn__ex">{e.texte}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="donner" aria-labelledby="t-donner">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Un don, un impact concret</p>
+      <h2 class="h-section" id="t-donner">
+        Chaque don, quel que soit son montant, est un maillon essentiel de la
+        chaîne de secours
+      </h2>
+
+      {/* Le repère fiscal se lit AVANT le formulaire : c'est l'information qui
+          décide du montant, pas celle qu'on découvre après avoir donné. */}
+      <p class="dn__fisc">
+        <b>66 % de votre don est déductible de votre impôt sur le revenu</b>,
+        dans la limite prévue par la loi, grâce à notre statut d'association
+        agréée de sécurité civile et reconnue d'intérêt général.
+      </p>
+      {/* Le simulateur. Les taux et plafonds viennent de dons.ts, jamais du
+          gabarit : ils changent avec les lois de finances, et il ne doit y
+          avoir qu'un seul endroit à corriger. */}
+      {/* Le montant se choisit ICI, une seule fois : ce qui est saisi alimente
+          l'estimation et se recopie dans le formulaire HelloAsso par
+          « postMessage ». Deux saisies pour un même chiffre, c'est un
+          abandon de plus à chaque étape. */}
+      <form class="sim" id="sim" data-fisc={JSON.stringify(fiscalite)}>
+        <p class="sim__eyebrow">Simulateur</p>
+        <h3 class="sim__h">Combien votre don vous coûte-t-il vraiment ?</h3>
+        <p class="sim__intro">
+          Choisissez un montant : le calcul se fait aussitôt, et vous saurez
+          exactement ce que votre générosité vous coûtera.
+        </p>
+
+        {/* ⚠️ Ce sélecteur ne pilote QUE la simulation. Le postMessage de
+            HelloAsso n'accepte que le montant et l'identité : la fréquence ne
+            se transmet pas. D'où le renvoi explicite vers l'onglet du
+            formulaire quand le mensuel est choisi — promettre autrement serait
+            mentir au donateur. */}
+        <div class="sim__reglages">
+          <fieldset class="sim__qui">
+            <legend class="sim__lg">Je souhaite donner</legend>
+            <label class="sim__r"><input type="radio" name="freq" value="ponctuel" checked /><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>Une fois</span></label>
+            <label class="sim__r"><input type="radio" name="freq" value="mensuel" /><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Chaque mois</span></label>
+          </fieldset>
+
+        {/* Le régime se choisit AVANT le montant : c'est lui qui détermine le
+            taux, donc tout ce qui suit. Le lire en dernier obligeait à relire
+            le résultat une seconde fois. */}
+          <fieldset class="sim__qui">
+            <legend class="sim__lg">Simulation établie pour un</legend>
+            <label class="sim__r"><input type="radio" name="qui" value="particulier" checked /><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Particulier</span></label>
+            <label class="sim__r"><input type="radio" name="qui" value="entreprise" /><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Entreprise</span></label>
+          </fieldset>
+        </div>
+
+        {/* ⚠️ LES DEUX GRILLES SONT ÉCRITES ICI, PAS EN JAVASCRIPT.
+            Les engendrer avec « innerHTML » les privait de l'attribut de
+            portée qu'Astro pose sur chaque élément du fichier : le CSS de la
+            page ne les atteignait plus et les boutons s'affichaient bruts,
+            fond gris système et texte de 13 pixels. On rend donc les deux
+            barèmes et on masque celui qui ne sert pas. */}
+        {[
+          { cle: 'ponctuel', liste: paliersPonctuel },
+          { cle: 'mensuel', liste: paliersMensuel },
+        ].map(({ cle, liste }) => (
+          <ul class="sim__vite" data-vite data-freq={cle} hidden={cle === 'mensuel'}>
+            {liste.map((p) => (
+              <li><button type="button" value={p.montant}>{p.montant}&#8239;€</button></li>
+            ))}
+          </ul>
+        ))}
+
+        <div class="sim__champs">
+          <p class="sim__c">
+            <label for="sim-don">Ou un autre montant</label>
+            <span class="sim__saisie">
+              <input id="sim-don" name="don" type="number" min="1" step="1" value="50" inputmode="numeric" />
+              <i aria-hidden="true">€</i>
+            </span>
+          </p>
+          <p class="sim__c" data-si="particulier">
+            <label for="sim-revenu">Votre revenu imposable <small>facultatif</small></label>
+            <span class="sim__saisie">
+              <input id="sim-revenu" name="revenu" type="number" min="0" step="100" placeholder="ex. 30 000" inputmode="numeric" />
+              <i aria-hidden="true">€</i>
+            </span>
+          </p>
+          <p class="sim__c" data-si="entreprise" hidden>
+            <label for="sim-ca">Chiffre d'affaires <small>facultatif</small></label>
+            <span class="sim__saisie">
+              <input id="sim-ca" name="ca" type="number" min="0" step="1000" placeholder="ex. 800 000" inputmode="numeric" />
+              <i aria-hidden="true">€</i>
+            </span>
+          </p>
+        </div>
+
+        {/* Le plafond s'affiche comme un seuil, pas comme une recommandation :
+            « vous pouvez donner jusqu'à » et non « donnez ». Suggérer à
+            quelqu'un de verser un cinquième de son revenu imposable, ce serait
+            passer d'une information fiscale à une pression. */}
+        <p class="sim__plafond" data-plafond hidden>
+          <span data-plafond-t></span>
+          <button type="button" data-plafond-b>Utiliser ce montant</button>
+        </p>
+
+        {/* Le résultat se lit comme une opération posée : deux lignes, un
+            trait, un total. Une phrase se survole ; un calcul se comprend. */}
+        <output class="sim__out" for="sim-don sim-revenu sim-ca" aria-live="polite">
+          <span class="sim__l"><span data-l-don-t>Votre don</span><b data-l-don>50 €</b></span>
+          <span class="sim__l"><span data-l-red-t>Réduction d'impôt (66 %)</span><b data-l-red>− 33 €</b></span>
+          <span class="sim__l sim__l--total"><span>Coût réel pour vous</span><b data-cout>17 €</b></span>
+          <span class="sim__eq" data-eq hidden></span>
+          <span class="sim__alerte" data-alerte hidden></span>
+        </output>
+
+        {/* Le bouton porte le montant simulé : « faire mon don de 20 € par
+            mois » dit ce qui va se passer, là où « faire un don » demande au
+            visiteur de se souvenir de ce qu'il vient de régler.
+
+            Il descend au formulaire au lieu d'ouvrir HelloAsso : leur page
+            n'accepte aucun paramètre d'URL — vérifié, « ?amount=75 » est
+            ignoré — alors que le cadre intégré, lui, reçoit le montant par
+            postMessage. Rediriger perdrait à la fois le montant et des
+            donateurs. */}
+        {/* Le don se règle chez HelloAsso, dans un nouvel onglet.
+            Pourquoi pas un formulaire intégré : leur cadre ne reçoit que le
+            montant — ni la fréquence, ni le jour de prélèvement — si bien
+            qu'un visiteur ayant simulé un don mensuel arrivait sur un
+            formulaire réglé sur « ponctuel ». Mieux vaut une saisie honnête
+            qu'un pré-remplissage à moitié juste. Le nouvel onglet garde la
+            simulation ouverte derrière, pour la recopier. */}
+        <p class="sim__go">
+          <a class="btn btn--primaire" href={helloasso.page} target="_blank" rel="noopener" data-go>
+            Faire mon don
+          </a>
+        </p>
+
+        <p class="sim__loi">
+          Estimation d'après l'<span data-loi>{fiscalite.particulier.reference}</span>. Seul
+          l'avis d'imposition fait foi.
+        </p>
+      </form>
+
+      <p class="dn__ex dn__ex--note">
+        Le reçu fiscal vous est adressé par HelloAsso dès le paiement validé.
+      </p>
+
+      {/* Cette ligne est contre le formulaire, pas sous le simulateur.
+          L'endroit est le tout : posée un écran plus haut, elle se lit trop
+          tôt et s'oublie ; posée ici, elle arrive quand les yeux y sont.
+          Elle existe parce que notre sélecteur de fréquence ne se transmet
+          pas à HelloAsso — sans elle, quelqu'un qui a simulé un don mensuel
+          verse une fois. */}
+    </div>
+  </section>
+
+  <section class="section section--navy" aria-labelledby="t-ensemble">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Ensemble</p>
+      <h2 class="h-section" id="t-ensemble">
+        Faisons de chaque citoyen un maillon de la chaîne des secours
+      </h2>
+      <p class="dn__fin">
+        Les secouristes et formateurs de Secourisme Pour Tous sont des
+        bénévoles : des voisins, des collègues, des parents, qui donnent de
+        leur temps pour que personne ne reste seul face à l'urgence. Mais sans
+        moyens, pas de formation, pas de matériel, pas de dispositifs de
+        secours.
+      </p>
+      <p class="dn__fin">
+        Faites un don aujourd'hui. Donnez à d'autres les moyens d'agir, et
+        peut-être, un jour, de vous sauver la vie à vous aussi.
+      </p>
+      <p class="dn__actions">
+        <a class="btn btn--primaire" href={helloasso.page} target="_blank" rel="noopener">Je fais un don</a>
+        <a class="btn btn--sobre" href="/secouriste-actif">Donner de mon temps</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  /*
+   * Le simulateur de réduction d'impôt.
+   *
+   * Les taux ne sont PAS écrits ici : ils arrivent par l'attribut data-fisc,
+   * qui vient de src/data/dons.ts, lui-même sourcé et daté. Une loi de
+   * finances ne doit obliger à corriger qu'un seul fichier.
+   *
+   * Le calcul reste une estimation et la page le dit : le plafond des 20 %
+   * porte sur le revenu imposable, que le visiteur connaît rarement au
+   * centime, et l'excédent se reporte sur cinq ans — donc rien n'est perdu,
+   * seulement décalé.
+   */
+  const sim = document.getElementById('sim') as HTMLFormElement | null;
+
+  if (sim) {
+    const f = JSON.parse(sim.dataset.fisc!);
+    const euro = (n: number) =>
+      new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+    // Un coût mensuel de 6,80 € arrondi à 7 € se lit comme une approximation
+    // douteuse : sur les petits montants, les centimes rassurent.
+    const euroCts = (n: number) =>
+      new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2 }).format(n);
+
+    const val = (id: string) => {
+      const e = document.getElementById(id) as HTMLInputElement | null;
+      const n = Number(e?.value);
+      return Number.isFinite(n) && n > 0 ? n : 0;
+    };
+    const el = (s: string) => sim.querySelector(s) as HTMLElement;
+
+    const grilles = [...sim.querySelectorAll('[data-vite]')] as HTMLElement[];
+    const grille = () => grilles.find((g) => !g.hidden)!;
+    const lus = (g: HTMLElement) =>
+      [...g.querySelectorAll('button')].map((b) => ({ montant: Number(b.value) }));
+    let paliers = lus(grilles[0]);
+
+    /** Le palier le plus proche d'une somme : sert au message et à l'intensité. */
+    const rangDe = (v: number) => {
+      let proche = 0;
+      paliers.forEach((p, i) => {
+        if (Math.abs(p.montant - v) < Math.abs(paliers[proche].montant - v)) proche = i;
+      });
+      return proche;
+    };
+
+    /*
+     * Redessine la grille des montants quand la fréquence change.
+     *
+     * On garde le montant courant si le nouveau barème le propose, sinon on
+     * retombe sur le palier le plus proche : passer du ponctuel au mensuel ne
+     * doit pas remettre brutalement la personne à zéro.
+     */
+    /* ⚠️ Le garde-fou porte sur le MODE, pas sur le tableau.
+       Il comparait deux résultats de « JSON.parse », qui ne sont jamais le
+       même objet : la fonction s'exécutait donc à chaque frappe et réécrivait
+       le montant saisi par le visiteur. Taper 750 € donnait 500 €. */
+    let modeCourant: boolean | null = null;
+
+    /** Redessine la grille des montants quand la fréquence change. */
+    function posePaliers(mensuel: boolean) {
+      if (modeCourant === mensuel) return;
+      const premier = modeCourant === null;
+      modeCourant = mensuel;
+      const courant = val('sim-don');
+      grilles.forEach((g) => { g.hidden = (g.dataset.freq === 'mensuel') !== mensuel; });
+      paliers = lus(grille());
+
+      // Changer de fréquence ne remet pas la personne à zéro : on retombe sur
+      // le palier le plus proche de ce qu'elle avait choisi.
+      if (!premier && courant) {
+        (document.getElementById('sim-don') as HTMLInputElement).value = String(paliers[rangDe(courant)].montant);
+      }
+    }
+
+    sim.querySelectorAll<HTMLButtonElement>('[data-vite] button').forEach((b) =>
+      b.addEventListener('click', () => {
+        (document.getElementById('sim-don') as HTMLInputElement).value = b.value;
+        calcule();
+      })
+    );
+
+    function calcule() {
+      const entreprise = (sim!.querySelector('input[name="qui"]:checked') as HTMLInputElement).value === 'entreprise';
+      const mensuel = (sim!.querySelector('input[name="freq"]:checked') as HTMLInputElement).value === 'mensuel';
+      const p = entreprise ? f.entreprise : f.particulier;
+
+      /* ⚠️ LA GRILLE D'ABORD, LE MONTANT ENSUITE.
+         Changer de fréquence ramène la somme dans la nouvelle échelle — 750 €
+         ponctuels deviennent 250 € par mois. Lire le montant avant cette
+         remise à l'échelle laissait le bouton annoncer « 750 € par mois »
+         pendant que la pastille affichait 250. */
+      posePaliers(mensuel);
+
+      // Le montant saisi est celui d'un versement. Ce qui est déductible, et
+      // donc calculé, c'est le total de l'année.
+      const versement = val('sim-don');
+      const don = mensuel ? versement * 12 : versement;
+
+      // La pastille du montant courant s'allume ; une saisie libre n'en
+      // allume aucune, ce qui est juste : elle ne correspond à aucun palier.
+      sim!.querySelectorAll('[data-vite] button').forEach((b) =>
+        b.toggleAttribute('data-actif', Number((b as HTMLButtonElement).value) === versement)
+      );
+
+      // Bascule des champs propres à chaque régime.
+      sim!.querySelectorAll<HTMLElement>('[data-si]').forEach((c) => {
+        c.hidden = (c.dataset.si === 'entreprise') !== entreprise;
+      });
+      el('[data-loi]').textContent = p.reference;
+
+      if (!don) {
+        el('[data-l-don]').textContent = '—';
+        el('[data-l-red]').textContent = '—';
+        el('[data-cout]').textContent = '—';
+        el('[data-go]').textContent = 'Faire mon don';
+        el('[data-alerte]').hidden = true;
+        return;
+      }
+
+      // Le plafond : part du revenu pour un particulier, le plus élevé des
+      // deux bornes pour une entreprise. Sans chiffre saisi, pas de plafond
+      // affiché — on ne devine pas les revenus de quelqu'un.
+      let plafond = Infinity;
+      if (entreprise) {
+        const ca = val('sim-ca');
+        if (ca) plafond = Math.max(p.plafondFixe, ca * p.plafondChiffreAffaires);
+      } else {
+        const revenu = val('sim-revenu');
+        if (revenu) plafond = revenu * p.plafondRevenu;
+      }
+
+      const retenu = Math.min(don, plafond);
+      const reporte = don - retenu;
+
+      // Au-delà de deux millions, la fraction supérieure passe à 40 %.
+      let reduction: number;
+      if (entreprise && retenu > p.seuilTauxReduit) {
+        reduction = p.seuilTauxReduit * p.taux + (retenu - p.seuilTauxReduit) * p.tauxReduit;
+      } else {
+        reduction = retenu * p.taux;
+      }
+
+      // Le seuil au-delà duquel la réduction n'est plus immédiate.
+      const ligne = el('[data-plafond]');
+      if (Number.isFinite(plafond)) {
+        ligne.hidden = false;
+        el('[data-plafond-t]').textContent = entreprise
+          ? `Votre plafond de cet exercice : ${euro(plafond)}.`
+          : `Votre plafond pour cette année : ${euro(plafond)}.`;
+        (el('[data-plafond-b]') as HTMLButtonElement).dataset.montant = String(Math.floor(plafond));
+      } else {
+        ligne.hidden = true;
+      }
+
+      el('[data-l-don]').textContent = mensuel
+        ? `${euro(don)} par an`
+        : euro(don);
+      el('[data-l-don-t]').textContent = mensuel
+        ? `Votre don (${euro(versement)} par mois)`
+        : 'Votre don';
+      // En mensuel, les centimes sont affichés : sans eux, 81,60 € arrondi à
+      // 82 € ne se divise plus par douze pour retomber sur les 6,80 € annoncés
+      // juste en dessous, et le calcul paraît faux.
+      const somme = mensuel ? euroCts : euro;
+      el('[data-l-red]').textContent = `\u2212\u00a0${somme(reduction)}`;
+      el('[data-cout]').textContent = somme(don - reduction);
+
+      // Le taux n'est affiché que s'il est unique : au-delà de deux millions,
+      // l'entreprise cumule 60 % puis 40 %, et annoncer un seul chiffre
+      // serait faux.
+      const taux = entreprise && retenu > p.seuilTauxReduit
+        ? "Réduction d'impôt"
+        : `Réduction d'impôt (${Math.round(p.taux * 100)}\u00a0%)`;
+      el('[data-l-red-t]').textContent = taux;
+
+      // L'équivalent par mois : c'est le chiffre que le donateur compare à son
+      // budget, pas le total annuel.
+      el('[data-go]').textContent = mensuel
+        ? `Faire mon don de ${euro(versement)} par mois`
+        : `Faire mon don de ${euro(versement)}`;
+
+      const eq = el('[data-eq]');
+      if (mensuel && don) {
+        eq.hidden = false;
+        eq.textContent = `Soit ${euroCts((don - reduction) / 12)} par mois.`;
+      } else {
+        eq.hidden = true;
+      }
+
+      const alerte = el('[data-alerte]');
+      if (reporte > 0) {
+        alerte.hidden = false;
+        alerte.textContent = entreprise
+          ? `${euro(reporte)} dépassent le plafond de cet exercice. Rien n'est perdu : l'excédent se reporte sur les ${p.reportAns} exercices suivants.`
+          : `${euro(reporte)} dépassent le plafond de ${Math.round(p.plafondRevenu * 100)}\u00a0% de votre revenu imposable. Rien n'est perdu : l'excédent se reporte sur les ${p.reportAns} années suivantes.`;
+      } else {
+        alerte.hidden = true;
+      }
+    }
+
+    /* Le bouton du plafond reporte la somme dans le champ.
+       ⚠️ Il avait disparu : supprimé par mégarde avec les écouteurs du
+       curseur. Le bouton restait affiché et portait bien son montant, mais
+       cliquer dessus ne faisait rien. */
+    (el('[data-plafond-b]') as HTMLButtonElement).addEventListener('click', (e) => {
+      const m = (e.currentTarget as HTMLButtonElement).dataset.montant;
+      if (!m) return;
+      (document.getElementById('sim-don') as HTMLInputElement).value = m;
+      calcule();
+    });
+
+    sim.addEventListener('input', calcule);
+    sim.addEventListener('change', calcule);
+    sim.addEventListener('submit', (e) => e.preventDefault());
+    calcule();
+  }
+
+</script>
+
+<style>
+  /* « .btn--primaire » est figé sur le rouge secours dans la feuille globale,
+     et il l'est pour tout le site — on ne touche pas à ça ici. On surcharge
+     seulement les boutons écrits dans cette page : le style d'Astro étant
+     porté par un attribut propre au fichier, l'en-tête et le pied de page
+     gardent leur rouge. */
+  .btn--primaire {
+    background: var(--accent-plein);
+    color: var(--accent-encre);
+    box-shadow: 0 6px 20px rgb(248 192 0 / .35);
+  }
+  .btn--primaire:hover { background: #ffd42e; color: var(--accent-encre); }
+
+  /* Le bouton secondaire prend la teinte de la page sans devenir un second
+     appel principal : « donner de son temps » est une autre action, elle ne
+     doit pas concurrencer le don. Bordure et texte à l'or foncé — le jaune vif
+     ne fait que 1,68:1, il ne peut pas servir de texte. */
+  .btn--sobre {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn--sobre:hover {
+    background: var(--accent-plein);
+    border-color: var(--accent-plein);
+    color: var(--accent-encre);
+  }
+
+  .tete { position: relative; background: var(--navy-deep); color: var(--on-navy); overflow: hidden; }
+  .tete__photo {
+    position: absolute; inset: 0;
+    background: url('/img/poste-de-secours.jpg') center 42%/cover;
+  }
+  /* Le voile porte le texte. Dense à gauche où il se lit, transparent à
+     droite pour laisser les visages apparaître. */
+  .tete__voile {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(97deg, rgba(7,23,38,.96) 0%, rgba(7,23,38,.9) 34%, rgba(9,32,54,.62) 68%, rgba(11,37,64,.44) 100%),
+      linear-gradient(180deg, rgba(7,23,38,.55) 0%, rgba(7,23,38,0) 28%);
+  }
+  @media (max-width: 860px) {
+    /* Sur un écran étroit le texte passe par-dessus les visages : le voile
+       devient uniforme, sinon la lecture se perd dans la photo. */
+    .tete__voile { background: linear-gradient(180deg, rgba(7,23,38,.9) 0%, rgba(7,23,38,.94) 60%, rgba(7,23,38,.96) 100%); }
+  }
+  /* La bande respire : sans cette réserve, la photo n'est plus qu'un liseré
+     derrière le texte et les visages disparaissent. */
+  .tete__in { position: relative; z-index: 1; padding-block: clamp(1.5rem,4vw,2.25rem) clamp(2.75rem,6vw,4rem); }
+  /* Le gabarit ne prévoit qu'un paragraphe d'accroche ; il y en a deux ici, et
+     sans cette marge ils se lisent comme un seul bloc. */
+  .tete__in .tete__t + .tete__t { margin-top: 1rem; }
+  .tete__in .fil a, .tete__in .fil b, .tete__in .fil i { color: var(--on-navy-soft); }
+  .tete__in .tete__t { color: var(--on-navy-text); }
+
+  .tete__a { margin-top: 1.75rem; }
+
+  .dn__l {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+  .dn__e {
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 1.4rem;
+  }
+  .dn__et {
+    margin: 0 0 .5rem;
+    font-size: 1.05rem;
+    color: var(--navy);
+  }
+  .dn__ex {
+    margin: 0;
+    color: var(--ink-soft);
+    max-width: 53ch;
+  }
+  .dn__ex--note {
+    font-size: .93rem;
+    color: var(--ink-mute);
+    margin-top: .9rem;
+  }
+  .dn__ex--note a { color: inherit; }
+
+  /* Le repère fiscal : un aplat discret, pas une promotion. */
+  /* Ce rappel n'est pas du texte courant : c'est une mention légale mise en
+     évidence. Elle prend toute la largeur du bloc, sans la mesure de lecture
+     appliquée aux paragraphes.
+     ⚠️ Surtout PAS d'aplat d'accent ici : sur cette page l'accent est le rouge
+     secours, et un fond rouge bordé de rouge se lit comme un avertissement.
+     C'est une bonne nouvelle qu'on annonce, pas un danger. La mise en valeur
+     passe donc par la taille et le gras, jamais par la couleur. */
+  .dn__fisc {
+    margin: 1.75rem 0 0;
+    padding: 1.1rem 1.3rem;
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+  }
+  .dn__fisc b { color: var(--ink); }
+
+  /* ---------- simulateur ---------- */
+  .sim {
+    margin-top: 1.5rem;
+    padding: 1.4rem;
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .sim__h { margin: 0 0 .35rem; font-size: 1.15rem; }
+  .sim__intro { margin: 0 0 1.1rem; font-size: .93rem; color: var(--ink-soft); }
+  .sim__lg { font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: .6rem; }
+  /* Les deux réglages se lisent ensemble — « chaque mois, pour un
+     particulier » est une seule phrase — donc ils tiennent sur une ligne, et
+     ne se superposent que faute de place. */
+  .sim__reglages {
+    display: grid; gap: 1.1rem 1.6rem; margin-bottom: 1.3rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  }
+  .sim__qui { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .sim__qui .sim__lg { flex-basis: 100%; }
+  /* Le bouton radio disparaît : c'est l'étiquette entière qui devient la
+     cible, plus facile à viser au doigt qu'un cercle de 14 pixels. */
+  .sim__r input { position: absolute; opacity: 0; pointer-events: none; }
+  .sim__r span {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .5rem 1.1rem;
+    border: 1px solid var(--line); border-radius: var(--r-pill);
+    font-weight: 600; font-size: .95rem; cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+  }
+  /* L'icône reste plus discrète que le mot : elle aide à repérer, elle ne
+     remplace pas la lecture. */
+  .sim__r span svg { width: 16px; height: 16px; flex: none; opacity: .65; }
+  /* L'aplat vif, jamais l'ocre foncé : l'encre sombre sur #996600 tombe sous
+     2:1. Sur #f8c000 elle atteint 10,38:1. */
+  .sim__r input:checked + span {
+    background: var(--accent-plein);
+    border-color: var(--accent-plein);
+    color: var(--accent-encre, #fff);
+  }
+  .sim__r input:checked + span svg { opacity: 1; }
+  .sim__r input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .sim__champs { display: grid; gap: .9rem; grid-template-columns: repeat(auto-fit, minmax(min(13rem,100%),1fr)); }
+  .sim__c { margin: 0; display: grid; gap: .35rem; }
+  /* « display: grid » l'emporte sur la règle « [hidden] { display: none } »
+     du navigateur, qui n'est qu'un sélecteur d'attribut. Sans cette ligne, le
+     champ masqué reste affiché. */
+  .sim__c[hidden] { display: none; }
+  .sim__c label { font-size: .9rem; font-weight: 600; }
+  .sim__c label small { font-weight: 400; color: var(--ink-mute); }
+  .sim__saisie { position: relative; display: block; }
+  .sim__saisie input {
+    width: 100%; padding: .7rem 2.2rem .7rem .8rem;
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    background: var(--surface, #fff); color: var(--ink);
+    font: inherit; font-variant-numeric: tabular-nums;
+  }
+  .sim__saisie i { position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); color: var(--ink-mute); font-style: normal; }
+
+
+  .sim__plafond {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem;
+    margin: .9rem 0 0; font-size: .92rem; color: var(--ink-soft);
+  }
+  .sim__plafond[hidden] { display: none; }
+  /* Même famille que les montants : aplat jaune, encre sombre. Le contour
+     seul le faisait passer pour un lien désactivé. */
+  .sim__plafond button {
+    padding: .3rem .8rem;
+    border: 2px solid var(--accent-plein); border-radius: var(--r-pill);
+    background: var(--accent-plein); color: var(--accent-encre, #fff);
+    font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease;
+  }
+  .sim__plafond button:hover { background: #ffd42e; border-color: #ffd42e; }
+  .sim__plafond button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  /* Les montants sont le geste principal du bloc : ils méritent d'être vus
+     comme des cartes qu'on choisit, pas comme quatre cases grises. Quatre
+     colonnes tant que la place le permet, deux ensuite — jamais une seule,
+     un montant seul sur sa ligne n'a plus l'air d'un choix. */
+  .sim__vite {
+    list-style: none; margin: 0 0 1.1rem; padding: 0;
+    display: grid; gap: .6rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .sim__vite[hidden] { display: none; }
+  @media (max-width: 30rem) { .sim__vite { grid-template-columns: repeat(2, 1fr); } }
+
+  .sim__vite button {
+    width: 100%; padding: 1rem .5rem;
+    border: 2px solid var(--line); border-radius: var(--r-md);
+    background: var(--surface, #fff); color: var(--ink);
+    font: inherit; font-size: 1.15rem; font-weight: 800;
+    font-variant-numeric: tabular-nums; line-height: 1;
+    cursor: pointer;
+    transition: border-color .16s ease, background-color .16s ease,
+                color .16s ease, transform .16s ease, box-shadow .16s ease;
+  }
+  .sim__vite button:hover {
+    border-color: var(--accent-plein);
+    transform: translateY(-2px);
+  }
+  .sim__vite button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .sim__vite button[data-actif] {
+    background: var(--accent-plein);
+    border-color: var(--accent-plein);
+    color: var(--accent-encre, #fff);
+    box-shadow: 0 6px 18px rgb(248 192 0 / .35);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sim__vite button:hover { transform: none; }
+  }
+
+  .sim__eyebrow {
+    margin: 0 0 .4rem; font-size: .75rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--accent);
+  }
+  .sim__out { display: grid; gap: .45rem; margin-top: 1.3rem; }
+  .sim__l { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .sim__l b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sim__l--total {
+    margin-top: .35rem; padding-top: .7rem; border-top: 1px solid var(--line);
+    font-weight: 700;
+  }
+  .sim__l--total b { font-size: 1.6rem; color: var(--accent); }
+  .sim__eq { font-size: .93rem; color: var(--ink-mute); text-align: right; }
+  .sim__eq[hidden] { display: none; }
+  /* Même raison que pour la mention fiscale : « votre excédent se reporte sur
+     cinq ans » est une précision rassurante, pas une alerte. Fond neutre. */
+  .sim__alerte {
+    font-size: .93rem; color: var(--ink-soft);
+    background: var(--sunk); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: .6rem .8rem; margin-top: .6rem;
+  }
+  .sim__go { margin: 1.3rem 0 0; text-align: center; }
+  .sim__loi { margin: .9rem 0 0; font-size: .82rem; color: var(--ink-mute); }
+
+
+
+  .dn__fin {
+    max-width: 53ch;
+    margin: 0 0 1rem;
+  }
+
+  /* Deux appels côte à côte, à la largeur de leur texte.
+     ⚠️ Ne pas utiliser « btn__pile » ici : malgré son nom, cette classe sert
+     À L'INTÉRIEUR d'un bouton, pour empiler un libellé et sa précision. Posée
+     autour de deux boutons, elle les étire sur toute la largeur du bloc. */
+  .dn__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    margin-top: 1.75rem;
+  }
+</style>

@@ -53,12 +53,14 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
     <meta property="og:image:alt" content="Secouristes de l'association en intervention" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&display=swap"
-    />
+    {/* Les deux seules fontes présentes dès le premier écran : le texte
+        courant et les grands titres. Précharger les sept graisses ferait
+        concurrence au HTML lui-même — le navigateur ira chercher les autres
+        quand il en aura besoin. */}
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="/fonts/public-sans-400-latin.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="/fonts/archivo-800-latin.woff2" />
 
     <script type="application/ld+json" set:html={JSON.stringify(organisation())} />
     {schemas.map((sc) => (

@@ -72,7 +72,16 @@ PORTRAITS = {
     },
     'julien': {'fichier': 'IMG-20260510-WA0006.jpg', 'ancre': (.5, .5)},
     'yaad': {'fichier': 'IMG_6770.jpeg', 'ancre': (.5, .03)},
-    'manon': {'fichier': 'IMG_3475.jpeg', 'ancre': (.5, .0)},
+    # Deux Manon dans l'équipe : chacune porte son nom, comme les deux Raphaël.
+    'manon-dewaest-faure': {'fichier': 'IMG_3475.jpeg', 'ancre': (.5, .0)},
+    'manon-rinaudo': {
+        'fichier': 'IMG_9663.png',
+        # Elles sont deux sur la photo, joue contre joue. L'accord de Manon ne
+        # vaut que pour elle : la boîte s'arrête avant le visage de l'autre
+        # personne, dont il ne reste qu'une mèche dans l'angle. NE PAS ÉLARGIR
+        # vers la gauche sans son accord à elle aussi.
+        'boite': (238, 500, 1284, 1895),
+    },
     'romain': {
         'fichier': 'Screenshot_2026-08-24-11-15-08-728_com.miui.gallery.jpg',
         # Capture d'écran très haute : sans boîte il n'est qu'une silhouette

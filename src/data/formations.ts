@@ -103,6 +103,53 @@ export interface Formation {
    * l'inscription sont masquées, et un bandeau l'annonce.
    */
   suspendue?: { raison: string };
+  /**
+   * Formation bien proposée, mais dont les dates ne sont pas encore ouvertes.
+   *
+   * Différent de « suspendue » : là, on n'assure plus la formation ; ici, on
+   * l'assure et le calendrier suit. Annoncer « suspendue » à quelqu'un qui
+   * vient s'inscrire le ferait partir pour rien.
+   */
+  /**
+   * Le « raison » est facultatif : sans lui, aucun bandeau ne s'affiche, mais
+   * l'état continue de masquer les sessions et de changer l'appel à l'action.
+   * Le bouton « Être prévenu de l'ouverture des dates » dit déjà l'essentiel.
+   */
+  datesAVenir?: { raison?: string };
+  /**
+   * Épreuve à réussir AVANT l'entrée en formation.
+   *
+   * Elle a son bloc à elle, haut dans la page : c'est une condition d'accès,
+   * pas un détail de programme. Quelqu'un qui ne tient pas 100 mètres en
+   * 2 min 45 doit le savoir avant de se projeter, pas après avoir payé.
+   */
+  testEntree?: {
+    titre: string;
+    /** La distance totale et le chrono : les deux chiffres qui décident. */
+    distance: string;
+    chrono: string;
+    intro: string;
+    /** Chaque tronçon du parcours : la distance, puis ce qu'on y fait. */
+    etapes: { d: string; t: string }[];
+    note: string;
+  };
+  /**
+   * Tarif de lancement, valable jusqu'à une date.
+   *
+   * POURQUOI PAS UN PRIX BARRÉ. L'article L112-1-1 du code de la consommation
+   * impose, pour toute annonce de réduction, d'afficher comme prix de
+   * référence le prix le plus bas qu'on a soi-même pratiqué dans les trente
+   * jours précédents, et de pouvoir le justifier sur pièces. Le SSA n'ayant
+   * jamais été vendu, aucun prix barré n'est licite ici.
+   *
+   * Un tarif valable jusqu'à une date n'est pas une réduction : il n'annonce
+   * aucun rabais, seulement une échéance. Rien à justifier.
+   *
+   * ⚠️ MAIS IL ENGAGE. Annoncer un lancement et ne jamais augmenter serait
+   * une pratique trompeuse au sens de l'article L121-2. Le tarif d'après doit
+   * être décidé AVANT l'échéance, et appliqué le lendemain.
+   */
+  lancement?: { normal: string; economie: string; jusquau: string };
 
   seo: { title: string; description: string };
 }
@@ -148,10 +195,14 @@ export const filieres: Record<Filiere, InfoFiliere> = {
   },
   aquatique: {
     nom: 'Filière sauvetage aquatique',
-    titre: 'BNSSA, BSB & recyclages',
-    texte: 'Surveiller les baignades et les plages, du BSB au BNSSA.',
+    // « ex-BNSSA » reste affiché : le sigle a changé le 1er octobre 2026, mais
+    // c'est encore celui que les gens tapent — « bnssa nice » nous vaut notre
+    // meilleure position dans Google. On l'abandonnera quand les recherches
+    // auront basculé, pas avant.
+    titre: 'SSA — ex-BNSSA, BSB & recyclages',
+    texte: 'Surveiller les baignades et les plages, du BSB au SSA.',
     jeSuis: 'Je travaille en milieu aquatique',
-    contenu: 'BNSSA et son recyclage, BSB et FC BSB pour les accueils de loisirs.',
+    contenu: 'SSA — ex-BNSSA — et son recyclage, BSB et FC BSB pour les accueils de loisirs.',
     couleur: 'ocean',
     icone: 'nage',
     image: '/img/filiere-aquatique.jpg',
@@ -261,7 +312,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation PSC1 à Nice | Prix, dates et inscription',
       description:
-        'Le PSC, anciennement PSC1, à Nice : prix 50 €, 7 h en une journée, dès 10 ans, sans prérequis. Calendrier des sessions et inscription en ligne. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Le PSC, ex-PSC1, à Nice : 50 €, 7 h en une journée, dès 10 ans, sans prérequis. Calendrier des sessions et inscription. Organisme certifié Qualiopi.',
     },
   },
 
@@ -319,7 +370,7 @@ export const formations: Formation[] = [
     wixEvent: 'PSE1 - Formation',
     recyclage: 'fc-pse-1',
     seo: {
-      title: 'Formation PSE1 à Nice | Secourisme Pour Tous',
+      title: 'Formation PSE1 à Nice | Prix, dates et inscription',
       description:
         'Devenez secouriste avec le PSE1 à Nice. Formation agréée sécurité civile pour intervenir en équipe sur les postes de secours. Organisme Qualiopi.',
     },
@@ -360,9 +411,9 @@ export const formations: Formation[] = [
     wixEvent: 'PSE2 - Formation',
     recyclage: 'fc-pse-2',
     seo: {
-      title: 'Formation PSE2 à Nice | Secourisme Pour Tous',
+      title: 'Formation PSE2 à Nice | Prix, dates et prérequis',
       description:
-        'Devenez équipier secouriste avec le PSE2 à Nice, accessible après le PSE1. Formation agréée sécurité civile, organisme certifié Qualiopi. Dates et inscription en ligne.',
+        'Devenez équipier secouriste avec le PSE2 à Nice, après le PSE1. Formation agréée sécurité civile. Dates, prix et inscription en ligne.',
     },
   },
 
@@ -370,7 +421,11 @@ export const formations: Formation[] = [
     // Le slug reste « bnssa » : c'est l'adresse de la page, et les liens qui
     // pointent dessus n'ont pas à casser parce qu'un diplôme change de nom.
     // Ce que le visiteur lit, en revanche, est le nom en vigueur.
-    slug: 'bnssa',
+    // Le diplôme s'appelle SSA depuis le 1er octobre 2026, l'adresse aussi.
+    // ⚠️ /formations/bnssa reste redirigée en 301 : c'est notre meilleure page
+    // dans Google — première position sur « bnssa nice », 75 % de taux de clic
+    // — et le sigle qu'on tape encore. Ne pas supprimer cette redirection.
+    slug: 'ssa',
     sigle: 'SSA',
     intitule: 'Surveillant Sauveteur Aquatique — ex-BNSSA',
     filiere: 'aquatique',
@@ -378,31 +433,85 @@ export const formations: Formation[] = [
     accroche:
       "Surveillez les piscines, les plages et les plans d'eau. Le SSA, qui remplace le BNSSA depuis le 1er octobre 2026, est le diplôme de référence du sauvetage aquatique, et le premier pas vers un métier.",
     resume: 'Le diplôme national pour devenir sauveteur aquatique.',
-    programmeEnAttente: true,
-    duree: 'Nous consulter',
-    // L'âge et le prérequis de secourisme du SSA ne sont pas repris ici tant
-    // que le référentiel FFSS n'est pas publié. Les chiffres qui circulent —
-    // 35 heures, dès 17 ans — ne figurent pas dans l'arrêté du 29 juillet 2026,
-    // et annoncer un prérequis faux ferait venir des gens pour rien.
-    prerequis: 'Nous consulter',
-    prerequisNote: 'Référentiel FFSS en attente',
+    // Toutes les valeurs ci-dessous sont tirées de l'arrêté du 29 juillet 2026,
+    // vérifiées article par article le 7 septembre 2026 :
+    //   · 35 h minimum en présentiel, réductibles de 7 h avec des outils
+    //     numériques — article 2, § 2.2
+    //   · 17 ans au moins — article 3
+    //   · PSE2, certificat médical et test de natation validé par un
+    //     maître-nageur sauveteur — article 2, § 2.5
+    // ⚠️ Le prérequis est le PSE2, PAS le PSE1 : plusieurs organismes de la
+    // région annoncent le contraire. Le PSE2 suppose lui-même le PSE1, d'où le
+    // cursus complet vendu ici.
+    duree: '35 heures',
+    dureeNote: '98 h avec le PSE1 et le PSE2',
+    // Le prérequis réglementaire est le PSE2 (arrêté, art. 2 § 2.5), mais la
+    // formule le contient : pour le candidat, la seule condition d'entrée est
+    // l'âge. Afficher « PSE2 » ici ferait renoncer ceux qui n'ont aucun
+    // secourisme — c'est-à-dire précisément ceux à qui le cursus s'adresse.
+    prerequis: '17 ans',
+    prerequisNote: 'PSE1 et PSE2 compris\nCertificat médical et test natatoire d’entrée',
     certification: 'SSA',
     certificationNote: 'Remplace le BNSSA depuis le 1er octobre 2026',
-    tarif: 'Nous consulter',
+    tarif: '900 €',
+    tarifNote: 'Cursus complet : PSE1, PSE2 et SSA\nSSA seul : 420 €',
+    // ⚠️ « normal » EST UN ENGAGEMENT, pas un artifice d'affichage. Annoncer un
+    // tarif de lancement puis ne jamais appliquer le tarif normal serait une
+    // pratique commerciale trompeuse (article L121-2 du code de la
+    // consommation). Le 1er janvier 2027, le tarif doit passer à 990 €.
+    lancement: { normal: '990 €', economie: '90 €', jusquau: '31 décembre 2026' },
+    testEntree: {
+      titre: 'Le test natatoire d’entrée',
+      distance: '100 m',
+      chrono: '2 min 45 maximum',
+      intro: 'Un parcours continu, sans interruption, enchaînant trois tronçons :',
+      etapes: [
+        { d: '25 m', t: 'Départ plongé, puis au moins 15 m parcourus en apnée' },
+        { d: '50 m', t: 'En crawl, en surface' },
+        { d: '25 m', t: 'En nage dorsale, les deux mains hors de l’eau, poignets au-dessus de la surface' },
+      ],
+      note: 'En piscine de 25 ou 50 mètres, sans accessoire, sous le contrôle d’un maître-nageur sauveteur habilité à le valider. L’attestation obtenue est valable un an.',
+    },
+    // Le SSA se déroule sur deux lieux et deux rythmes : la piscine pour la
+    // pratique aquatique, le local pour le secourisme. Les valeurs communes de
+    // l'association ne conviennent pas ici, on les remplace.
+    modalites: {
+      effectif: 'Jusqu’à 20 candidats par session.',
+      lieu: 'Piscine Jean Médecin pour la pratique aquatique, les mardi et jeudi soir de 20 h 30 à 22 h. Le PSE1 et le PSE2 se déroulent au 31 boulevard Impératrice Eugénie.',
+      pedagogie: 'Formation en présentiel alternant apports théoriques, démonstrations techniques et mises en situation pratiques. La formation privilégie l’apprentissage par la pratique : exercices de natation et de sauvetage aquatique, techniques de dégagement et de sortie d’eau, conduite à tenir face à une victime, surveillance, prévention et mises en situation simulant des interventions réelles. Les stagiaires sont placés progressivement dans des situations proches des conditions d’exercice du surveillant-sauveteur.',
+      evaluation: 'Deux épreuves à réussir pendant la formation. Un parcours de sauvetage aquatique en 2 min 30 maximum — nage, apnées, recherche d’un mannequin immergé puis remorquage jusqu’au bord de départ. Puis 300 m nage libre avec palmes en 4 min 30 maximum, le chronomètre étant déclenché avant la mise en place des palmes : le temps de les chausser compte. Au moins 10 minutes de récupération séparent les deux épreuves.',
+    },
+    // Le contenu, le prix et les prérequis sont arrêtés ; seul le calendrier
+    // attend la validation. On garde donc toute l'information et on retire la
+    // seule chose qu'on ne peut pas tenir : la réservation.
+    datesAVenir: {},
     objectifs: [
-      { titre: 'Surveiller un bassin', texte: 'Prévenir les risques, repérer les comportements à risque et intervenir vite.', icone: 'eau' },
-      { titre: 'Sauver en milieu aquatique', texte: 'Techniques d’approche, de dégagement et de remorquage d’une victime.', icone: 'eau' },
-      { titre: 'Secourir hors de l’eau', texte: 'Sortie de l’eau, bilan et gestes de secours jusqu’à l’arrivée des renforts.', icone: 'coeur' },
+      { titre: 'Prévenir avant de sauver', texte: 'Repérer les signes avant-coureurs d’une noyade et agir avant l’accident, plutôt que pendant.', icone: 'bouclier' },
+      { titre: 'Tenir un poste de surveillance', texte: 'Organiser la sécurité d’un bassin ou d’une plage, gérer le public et rendre compte.', icone: 'eau' },
+      { titre: 'Sauver en équipe', texte: 'Prise en charge dans l’eau, sortie sécurisée et gestes de secours jusqu’aux renforts.', icone: 'coeur' },
     ],
+    // Les cinq modules reprennent les cinq domaines de compétences du
+    // paragraphe 1.2 de l'arrêté du 29 juillet 2026, que l'article 3 rend
+    // obligatoires pour la délivrance du certificat. Ce sont eux qui font foi,
+    // pas les découpages commerciaux qu'on trouve ailleurs.
     modules: [
-      { titre: 'Épreuves de nage', texte: 'Préparation physique et technique aux épreuves chronométrées du diplôme.' },
-      { titre: 'Sauvetage avec matériel', texte: 'Utilisation du matériel de sauvetage et parcours de sauvetage aquatique.' },
-      { titre: 'Réglementation', texte: 'Cadre légal de la surveillance des baignades et responsabilités du BNSSA.' },
-      { titre: 'Secourisme appliqué', texte: 'Mise en pratique des gestes de secours en contexte aquatique.' },
+      { titre: 'Rôle, mission et responsabilités', texte: 'Prérogatives du surveillant sauveteur, responsabilités civile et pénale, organisation des secours, réglementation de l’accueil du public et rédaction des actes administratifs — rapport d’accident, main courante.' },
+      { titre: 'Analyse des risques', texte: 'Hygiène et sécurité, risques liés à l’environnement — soleil, chlore, configuration des lieux — dangers de l’apnée, traumatisme du rachis, et les quatre stades de la noyade.' },
+      { titre: 'Actions de prévention', texte: 'Mise en œuvre des moyens de prévention directs et indirects, ceux qui évitent l’accident avant qu’il n’arrive.' },
+      { titre: 'Dispositif de surveillance', texte: 'Organisation du poste, analyse des comportements et détection des signes avant-coureurs de noyade, gestion du public et des conflits.' },
+      { titre: 'Sauvetage coordonné', texte: 'Prise en charge d’une victime dans l’eau, techniques de sauvetage avec et sans matériel, sortie de l’eau sécurisée.' },
     ],
-    suites: ['Formation continue BNSSA tous les 5 ans', 'Le BSB pour les accueils collectifs de mineurs'],
+    // ⚠️ Le SSA n'a pas de durée de validité propre : l'arrêté ne lui en fixe
+    // aucune. C'est la formation continue ANNUELLE de PSE2 qui conditionne
+    // l'employabilité. L'ancienne règle des cinq ans du BNSSA ne s'applique
+    // plus, et la répéter tromperait le candidat sur ses obligations.
+    suites: [
+      'Exercice immédiat de la profession de surveillant-sauveteur',
+      'Accès aux qualifications SSA L et SSA EI',
+      'Recyclage annuel obligatoire du SSA pour le maintien des acquis',
+      'Recyclage annuel du PSE2, dont dépend votre employabilité',
+    ],
     image: '/img/filiere-aquatique.jpg',
-    suspendue: { raison: "Le BNSSA n'est pas proposé actuellement. Nous ouvrirons prochainement la formation SSA (Surveillant Sauveteur Aquatique) : contactez-nous pour être prévenu de l'ouverture des inscriptions." },
     wixEvent: 'BNSSA',
     recyclage: 'fc-bnssa',
     seo: {
@@ -490,7 +599,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSC1 à Nice | Prix, dates et inscription',
       description:
-        'Remettez à jour vos gestes de premiers secours avec la formation continue PSC à Nice. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile. Dates et inscription.',
+        'Remettez à jour vos gestes de premiers secours avec la formation continue PSC à Nice. Dates, prix et inscription. Organisme certifié Qualiopi.',
     },
   },
 
@@ -568,7 +677,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Recyclage PSE2 à Nice | Formation continue',
       description:
-        'Maintenez vos compétences d’équipier secouriste PSE2 à Nice. Formation continue annuelle obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Dates en ligne.',
+        'Maintenez vos compétences d’équipier secouriste PSE2 à Nice. Formation continue annuelle obligatoire pour rester en poste. Dates et inscription.',
     },
   },
 
@@ -580,13 +689,16 @@ export const formations: Formation[] = [
     certifiante: false,
     estRecyclage: true,
     accroche:
-      "Votre BNSSA se recycle tous les cinq ans. Sans ce recyclage, vous ne pouvez plus surveiller une baignade.",
+      "Le recyclage du SSA est en cours de définition depuis la réforme du 1er octobre 2026. Écrivez-nous pour être prévenu dès que son programme sera arrêté.",
     resume: 'Le maintien de la qualification de sauveteur aquatique.',
     duree: 'Nous consulter',
-    prerequis: 'BNSSA obtenu',
-    prerequisNote: 'PSE1 à jour requis',
-    certification: 'SSA prolongé',
-    certificationNote: 'Tous les 5 ans',
+    prerequis: 'SSA ou ex-BNSSA',
+    // ⚠️ L'ancienne règle du BNSSA — un recyclage tous les cinq ans — ne vaut
+    // plus depuis le 1er octobre 2026. Seul le caractère annuel est confirmé ;
+    // durée, tarif et contenu restent à définir. Ne rien afficher de plus tant
+    // que l'association ne l'a pas arrêté.
+    certification: 'Recyclage SSA',
+    certificationNote: 'Annuel',
     tarif: 'Nous consulter',
     objectifs: [
       { titre: 'Prolonger le diplôme', texte: 'Conserver le droit de surveiller les baignades et les plans d’eau.', icone: 'eau' },
@@ -601,12 +713,12 @@ export const formations: Formation[] = [
     ],
     suites: ['Le BSB pour encadrer en accueil collectif de mineurs'],
     image: '/img/sauvetage-bassin.jpg',
-    suspendue: { raison: "Le recyclage BNSSA n'est pas proposé actuellement. Contactez-nous pour connaître les prochaines sessions." },
+    suspendue: { raison: "Le programme du recyclage SSA est en cours de définition. Contactez-nous pour être prévenu de l'ouverture des sessions." },
     wixEvent: 'FC BNSSA - Recyclage',
     seo: {
-      title: 'Recyclage SSA — ex-FC BNSSA à Nice | Dates et tarif',
+      title: 'Recyclage SSA — ex-FC BNSSA à Nice | Programme à venir',
       description:
-        'Recyclez votre BNSSA à Nice pour rester opérationnel. Formation continue obligatoire, affiliée FFSS et agréée sécurité civile et certifiée Qualiopi. Consultez les dates.',
+        'Le recyclage du SSA, ex-BNSSA, à Nice : programme en cours de définition depuis la réforme. Écrivez-nous pour être prévenu de l’ouverture.',
     },
   },
 
@@ -647,7 +759,7 @@ export const formations: Formation[] = [
     seo: {
       title: 'Formation BSB à Nice | Surveillant de baignade',
       description:
-        'Obtenez le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Organisme certifié Qualiopi, affilié FFSS et agréé sécurité civile.',
+        'Le BSB à Nice pour surveiller les baignades en accueil de loisirs et colonies : 35 h, 290 €. Dates et inscription. Organisme certifié Qualiopi.',
     },
   },
 
