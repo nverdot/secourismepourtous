@@ -11,17 +11,18 @@
  *    d'affichage (212 Ko à sept), et seul l'avatar du lanceur — 6 Ko — part
  *    avec la page. Les poses ne sont cherchées qu'à l'approche du lanceur.
  *
- * 2. « speaking » est écartée, faute d'emploi. Les huit autres ont été
- *    remises à la même hauteur de tête, faute de quoi « idle » (plan en pied)
- *    et « think » (plan poitrine) faisaient sauter le personnage du simple au
+ * 2. Cinq poses sur neuf sont retenues, remises à la même hauteur de tête et
+ *    à la même ligne des yeux — faute de quoi « idle » (plan en pied) et
+ *    « think » (plan poitrine) faisaient sauter le personnage du simple au
  *    double d'un écran à l'autre.
  *
- *    Sept d'entre elles partagent aussi la même ligne des yeux. « alert », le
- *    seul visage inquiet du jeu, est un gros plan qui s'arrête sous le col :
- *    il n'a pas de buste à montrer. Il est donc posé sur la même ligne de sol
- *    que les autres, mais plus bas dans le cadre — la tête garde sa taille,
- *    seule la quantité de corps visible diminue. C'est la pose de l'écran
- *    d'urgence, la seule qui ne sourie pas.
+ *    Les quatre écartées le sont pour une raison de place ou de cadrage :
+ *    « point-left » et « point-right » demandent 186 px de large pour une tête
+ *    de 38 px, et le bras tendu sortait toujours de l'écran sur un téléphone ;
+ *    « alert » et « speaking » sont des gros plans qui s'arrêtent sous le col,
+ *    sans buste à montrer, et donnaient un personnage tronqué au ras du sol.
+ *    L'écran d'urgence prend donc « idle », la seule pose en pied — et un
+ *    secouriste calme, debout, y vaut mieux qu'un visage inquiet.
  */
 
 /*
@@ -115,7 +116,7 @@ const ECRANS: Ecran[] = [
       { texte: 'Pour intervenir en équipe sur le terrain', icone: 'equipe', ecran: 'terrain' },
       { texte: 'Pour surveiller une piscine ou une plage', icone: 'eau', ecran: 'aquatique' },
       { texte: 'Pour enseigner les premiers secours', icone: 'diplome', ecran: 'pedagogique' },
-      { texte: 'Je préfère parcourir les seize formations', icone: 'liste', vers: '/formations' },
+      { texte: 'Je préfère parcourir les 16 formations', icone: 'liste', vers: '/formations' },
     ],
   },
   {
@@ -134,14 +135,20 @@ const ECRANS: Ecran[] = [
   },
   {
     id: 'pro',
-    pose: 'point-left',
+    pose: 'idle',
     oeil: 'Pour le travail',
     titre: 'Ce que votre employeur attend',
-    message: 'Le code du travail impose un secouriste formé dans de nombreux ateliers et bureaux.',
+    /*
+     * Formulation calée sur l'article R4224-15 du code du travail, qui vise
+     * les ateliers où s'accomplissent des travaux dangereux et les chantiers
+     * d'au moins vingt personnes — pas « les entreprises » en général.
+     */
+    message: 'Ateliers de travaux dangereux, chantiers de vingt personnes et plus : le code du travail y impose un secouriste formé. Ailleurs — commerce, entrepôt, crèche, salle de sport, bureau — beaucoup d’employeurs le demandent quand même.',
     actions: [
       { texte: 'Devenir sauveteur secouriste du travail', icone: 'trousse', vers: '/formations/sst', note: 'SST · 14 heures · 190 €' },
       { texte: 'Maintenir mon SST à jour', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · 90 €' },
       { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: 'Souvent demandé à l’embauche · 50 €' },
+      { texte: 'Je travaille auprès d’enfants', icone: 'coeur', vers: '/premiers-secours-bebe-enfant' },
       { texte: 'Qui peut financer ma formation ?', icone: 'euro', vers: '/financement' },
       { texte: 'Former toute mon équipe', icone: 'equipe', vers: '/contact' },
     ],
@@ -162,7 +169,7 @@ const ECRANS: Ecran[] = [
   },
   {
     id: 'aquatique',
-    pose: 'point-right',
+    pose: 'idle',
     oeil: 'Surveillance des baignades',
     titre: 'Piscines, plages et plans d’eau',
     message: 'Deux diplômes selon le lieu que vous surveillerez, et la saison où vous travaillerez.',
@@ -194,7 +201,7 @@ const ECRANS: Ecran[] = [
    */
   {
     id: 'recyclage',
-    pose: 'point-left',
+    pose: 'search',
     oeil: 'Formation continue',
     titre: 'Quel diplôme avez-vous ?',
     message: 'Je vous emmène directement sur la bonne session de recyclage.',
@@ -240,7 +247,7 @@ const ECRANS: Ecran[] = [
   },
   {
     id: 'dispositif',
-    pose: 'point-right',
+    pose: 'idle',
     oeil: 'Sécuriser votre événement',
     titre: 'Un dispositif prévisionnel de secours',
     message: 'Le nombre de secouristes découle de votre affluence et de vos risques : nous le calculons avec vous.',
@@ -252,7 +259,7 @@ const ECRANS: Ecran[] = [
   },
   {
     id: 'urgence',
-    pose: 'alert',
+    pose: 'idle',
     oeil: 'Appelez, ne cherchez pas',
     titre: 'Une personne est en danger ?',
     message: 'Ce compagnon ne donne aucun conseil médical et ne remplace pas les secours. Appelez immédiatement.',
@@ -278,6 +285,10 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 ---
 
 <div class="compagnon" id="compagnon" data-ecran="accueil" data-poses={POSES.join(' ')}>
+  {/* Sur téléphone, le lanceur se réduit à un rond : la bulle dit une fois
+      par session ce que ce rond propose. */}
+  <span class="compagnon__bulle" aria-hidden="true">Besoin d’aide&nbsp;?</span>
+
   <button
     class="compagnon__lanceur"
     id="compagnon-lanceur"
@@ -304,8 +315,6 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       <img
         id="compagnon-perso"
         src={`/compagnon/${accueil.pose}.webp`}
-        width="440"
-        height="475"
         alt=""
         loading="lazy"
         decoding="async"
@@ -425,11 +434,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       lanceur.setAttribute('aria-expanded', 'true');
       afficher('accueil');
       fermer.focus({ preventScroll: true });
-      try {
-        localStorage.setItem('compagnon-vu', '1');
-      } catch {
-        /* navigation privée, stockage refusé : sans conséquence ici */
-      }
+      delete racine.dataset.salut;
     }
 
     function refermer() {
@@ -454,10 +459,19 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       if (ev.key === 'Escape' && !boite.hidden) refermer();
     });
 
-    /* Première visite : un salut discret sur le lanceur, une seule fois, et
-       jamais d'ouverture automatique — la page appartient au visiteur. */
+    /*
+     * Un salut discret à l'ouverture de la session : la main qui s'agite sur
+     * le lanceur, et sur téléphone la bulle « Besoin d'aide ? », puisque le
+     * rond y perd son libellé. Une fois par session, jamais deux — et jamais
+     * d'ouverture automatique : la page appartient au visiteur. Le drapeau vit
+     * dans sessionStorage, rien n'est conservé d'une visite à l'autre.
+     */
     try {
-      if (!localStorage.getItem('compagnon-vu')) racine.dataset.salut = '1';
+      if (!sessionStorage.getItem('compagnon-salut')) {
+        sessionStorage.setItem('compagnon-salut', '1');
+        racine.dataset.salut = '1';
+        setTimeout(() => delete racine.dataset.salut, 8000);
+      }
     } catch {
       /* stockage refusé : pas de salut, pas de gêne */
     }
@@ -469,6 +483,8 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 <style>
   .compagnon {
     --compagnon-marge: max(1rem, env(safe-area-inset-bottom));
+    --perso-h: 238px;   /* hauteur commune à toutes les poses */
+    --perso-x: 110px;   /* où retombe le milieu de la tête */
     position: fixed;
     z-index: 900;
     right: max(1rem, env(safe-area-inset-right));
@@ -477,28 +493,40 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
   /* --- le lanceur --- */
 
+  /*
+   * Le jaune fédéral, et pas le marine : le lanceur traverse des sections
+   * blanches et des sections marine, et un pastille marine disparaissait
+   * purement et simplement sur le héros. Le jaune tient sur les deux fonds —
+   * c'est d'ailleurs la haute visibilité du polo. Il ne porte que de l'encre
+   * sombre : à 1,68:1 sur blanc, il ne peut pas servir de couleur de texte.
+   */
   .compagnon__lanceur {
     display: flex;
     align-items: center;
     gap: 0.6rem;
     padding: 0.35rem 1.15rem 0.35rem 0.35rem;
-    border: 1px solid var(--navy-deep);
+    border: 1px solid rgba(34, 25, 0, 0.25);
     border-radius: var(--r-pill);
-    background: var(--navy);
+    background: var(--ocre-vif);
     box-shadow: var(--sh-md);
-    color: var(--on-navy);
+    color: var(--ocre-encre);
     font-family: 'Archivo', sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.16s ease, background-color 0.16s ease;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
   }
 
   .compagnon__lanceur[hidden] { display: none; }
-  .compagnon__lanceur:hover { transform: translateY(-2px); background: var(--navy-lift); }
+
+  .compagnon__lanceur:hover {
+    transform: translateY(-2px);
+    border-color: var(--ocre-encre);
+    box-shadow: var(--sh-lg);
+  }
 
   .compagnon__lanceur:focus-visible {
-    outline: 3px solid var(--ocre-vif);
+    outline: 3px solid var(--navy-deep);
     outline-offset: 2px;
   }
 
@@ -510,10 +538,21 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     object-fit: cover;
   }
 
-  /* Le salut de première visite : deux oscillations, puis plus rien. */
+  /* Le rond blanc du téléphone se passe du liseré, qui l'épaissirait. */
+  .compagnon__lanceur:focus-visible img { background: var(--surface); }
+
+  /* La bulle ne sert que sur téléphone, où le lanceur perd son libellé. */
+  .compagnon__bulle { display: none; }
+
+  /* Le salut d'ouverture de session : deux oscillations, puis plus rien. */
   .compagnon[data-salut] .compagnon__lanceur img {
     animation: compagnon-salut 1.6s ease-in-out 1.2s 2;
     transform-origin: 50% 85%;
+  }
+
+  @keyframes compagnon-bulle {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
   }
 
   @keyframes compagnon-salut {
@@ -539,25 +578,31 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
    * les pieds sur le bord de l'écran, sans bande vide dessous, pendant que le
    * panneau, lui, garde sa respiration.
    */
+  /*
+   * Chaque pose a sa propre largeur de toile — le « bonjour » a besoin d'une
+   * main levée, le « bravo » d'un pouce — mais toutes ont la même hauteur et
+   * la tête centrée. C'est donc la hauteur qui fixe l'échelle, et la tête
+   * retombe toujours sur --perso-x, quelle que soit la largeur de l'image.
+   * La marge basse négative annule le retrait du widget : le personnage pose
+   * les pieds sur le bord de l'écran pendant que le panneau garde son air.
+   */
   .compagnon__perso {
     position: relative;
     z-index: 2;
-    margin-right: -35px;
-    margin-bottom: calc(-1 * var(--compagnon-marge));
-    margin-left: -15px;
+    height: var(--perso-h);
     pointer-events: none;
   }
 
-  /*
-   * 250 px pour une toile de 500 : la tête fait donc 75 px à l'écran. La toile
-   * a été élargie de 440 à 500 px parce que la main levée du « bonjour » et le
-   * pouce du « bravo » sortaient du cadre ; les 15 px de marge gauche négative
-   * annulent l'élargissement et laissent le buste exactement où il était.
-   */
   .compagnon__perso img {
-    display: block;
-    width: 250px;
-    height: auto;
+    position: absolute;
+    bottom: calc(-1 * var(--compagnon-marge));
+    left: var(--perso-x);
+    transform: translateX(-50%);
+    width: auto;
+    /* « max-width: 100% » du style global rabattait l'image sur la largeur de
+       la colonne et l'écrasait : 254 px de dessin comprimés en 200. */
+    max-width: none;
+    height: var(--perso-h);
     filter: drop-shadow(0 8px 18px rgba(11, 37, 64, 0.18));
   }
 
@@ -693,8 +738,25 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
   .compagnon__action:focus-visible { box-shadow: 0 0 0 3px var(--ocre-vif); }
 
-  .compagnon[data-ecran='urgence'] .compagnon__action { background: var(--secours-wash); }
-  .compagnon[data-ecran='urgence'] .compagnon__action:hover { background: var(--surface); border-color: var(--secours); }
+  /*
+   * Le choix « j'ai besoin des secours » porte le rouge dès l'accueil : c'est
+   * le seul de la liste qui ne peut pas attendre qu'on le lise.
+   */
+  .compagnon__action[data-ecran='urgence'],
+  .compagnon[data-ecran='urgence'] .compagnon__action {
+    border-color: rgba(216, 56, 42, 0.35);
+    background: var(--secours-wash);
+  }
+
+  .compagnon__action[data-ecran='urgence'] .compagnon__action-texte,
+  .compagnon__action[data-ecran='urgence'] .compagnon__icone,
+  .compagnon__action[data-ecran='urgence'] .compagnon__chevron { color: var(--secours); }
+
+  .compagnon__action[data-ecran='urgence']:hover,
+  .compagnon[data-ecran='urgence'] .compagnon__action:hover {
+    border-color: var(--secours);
+    background: var(--surface);
+  }
 
   .compagnon__retour {
     display: inline-flex;
@@ -749,11 +811,40 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     .compagnon__lanceur span { display: none; }
     .compagnon__lanceur { padding: 0.35rem; }
 
-    /* 18 px de débord, 1.6rem de retrait : le texte reste à droite du
-       personnage au lieu de lui passer dessous. */
+    .compagnon[data-salut] .compagnon__bulle {
+      position: absolute;
+      right: 4px;
+      bottom: calc(100% + 0.6rem);
+      display: block;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: var(--r-pill);
+      background: var(--surface);
+      box-shadow: var(--sh-md);
+      color: var(--navy-deep);
+      font-family: 'Archivo', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      animation: compagnon-bulle 0.45s ease-out 0.9s both;
+    }
+
+    .compagnon[data-salut] .compagnon__bulle::after {
+      position: absolute;
+      right: 18px;
+      top: 100%;
+      width: 10px;
+      height: 10px;
+      margin-top: -5px;
+      border: 1px solid var(--line);
+      border-width: 0 1px 1px 0;
+      background: var(--surface);
+      content: '';
+      transform: rotate(45deg);
+    }
+
+    .compagnon { --perso-h: 122px; --perso-x: 56px; }
     .compagnon__boite { grid-template-columns: 102px minmax(0, 1fr); }
-    .compagnon__perso { margin-right: -18px; margin-left: -8px; }
-    .compagnon__perso img { width: 128px; }
     .compagnon__panneau { padding: 1.2rem 0.85rem 1.1rem 1.6rem; }
 
     .compagnon__action { padding: 0.5rem 0.6rem; font-size: 0.84rem; }
@@ -764,5 +855,6 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     .compagnon__lanceur { transition: none; }
     .compagnon__lanceur:hover { transform: none; }
     .compagnon[data-salut] .compagnon__lanceur img { animation: none; }
+    .compagnon[data-salut] .compagnon__bulle { animation: none; opacity: 1; }
   }
 </style>
