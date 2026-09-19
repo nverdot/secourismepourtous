@@ -492,6 +492,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       fermer.focus({ preventScroll: true });
       delete racine.dataset.salut;
       delete racine.dataset.bulle;
+      bulles = BULLES;
     }
 
     function refermer() {
@@ -524,9 +525,11 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
      * Le petit salut de la main rejoue à chaque page : il dure trois secondes,
      * ne déplace rien, et c'est lui qui fait remarquer le lanceur.
      *
-     * La bulle « Besoin d'aide ? » paraît elle aussi à chaque page : le rond
-     * n'a plus de libellé, et c'est elle qui dit ce qu'il propose. Elle
-     * s'efface d'elle-même au bout de cinq secondes.
+     * La bulle « Besoin d'aide ? » revient trois fois par page, cinq secondes
+     * à chaque passage, puis se tait. Une seule apparition se rate : on est en
+     * train de lire ailleurs. Trois, espacées d'une demi-minute, se
+     * remarquent sans occuper l'écran — et la troisième est la dernière, parce
+     * qu'au-delà ce n'est plus une proposition, c'est du harcèlement.
      *
      * Jamais d'ouverture automatique dans les deux cas : la page appartient au
      * visiteur. Rien n'est stocké, ni d'une page à l'autre ni d'une visite à
@@ -535,8 +538,21 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     racine.dataset.salut = '1';
     setTimeout(() => delete racine.dataset.salut, 6000);
 
-    racine.dataset.bulle = '1';
-    setTimeout(() => delete racine.dataset.bulle, 7000);
+    const BULLES = 3;
+    let bulles = 0;
+
+    function proposer() {
+      /* Rien pendant que le panneau est ouvert : la question est déjà posée. */
+      if (bulles >= BULLES || !boite.hidden) return;
+      bulles += 1;
+      racine.dataset.bulle = '1';
+      setTimeout(() => {
+        delete racine.dataset.bulle;
+        if (bulles < BULLES) setTimeout(proposer, 26000);
+      }, 5200);
+    }
+
+    setTimeout(proposer, 1200);
 
     window.Compagnon = Object.freeze({ ouvrir, fermer: refermer, afficher });
   })();
@@ -617,7 +633,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     font-size: 0.85rem;
     font-weight: 700;
     white-space: nowrap;
-    animation: compagnon-bulle 5.6s ease-out 0.9s both;
+    animation: compagnon-bulle 5.2s ease-out both;
   }
 
   .compagnon[data-bulle] .compagnon__bulle::after {
@@ -664,7 +680,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
   @keyframes compagnon-bulle {
     0% { opacity: 0; transform: translateY(6px); }
-    8%, 88% { opacity: 1; transform: none; }
+    9%, 86% { opacity: 1; transform: none; }
     100% { opacity: 0; transform: translateY(4px); }
   }
 
