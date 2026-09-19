@@ -176,8 +176,8 @@ const ECRANS: Ecran[] = [
     actions: [
       { texte: 'SSA — surveiller une piscine ou une plage', icone: 'eau', vers: '/formations/ssa', note: 'Ex-BNSSA · 35 heures · 900 €' },
       { texte: 'BSB — surveiller une colonie, un centre aéré', icone: 'eau', vers: '/formations/bsb', note: '35 heures · 290 €' },
-      { texte: 'Le BNSSA devient le SSA : ce qui change', icone: 'question', vers: '/bnssa-devient-ssa' },
-      { texte: 'Recycler mon BSB ou mon BNSSA', icone: 'recyclage', ecran: 'recyclage' },
+      { texte: 'J’ai déjà le BNSSA', icone: 'question', ecran: 'bnssa' },
+      { texte: 'Recycler mon BSB', icone: 'recyclage', vers: '/formations/fc-bsb' },
     ],
   },
   {
@@ -212,10 +212,57 @@ const ECRANS: Ecran[] = [
       { texte: 'J’ai un PSE2', icone: 'recyclage', vers: '/formations/fc-pse-2', note: '8 heures · 70 € · chaque année' },
       { texte: 'J’ai un SST', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · 90 €' },
       { texte: 'J’ai un BSB', icone: 'recyclage', vers: '/formations/fc-bsb', note: '10 heures · 240 €' },
-      { texte: 'J’ai un BNSSA ou un SSA', icone: 'recyclage', vers: '/formations/fc-bnssa', note: 'Programme à venir' },
+      { texte: 'J’ai un BNSSA', icone: 'question', ecran: 'bnssa', note: 'Le BNSSA devient le SSA' },
+      { texte: 'J’ai un SSA', icone: 'recyclage', vers: '/formations/fc-bnssa', note: 'Programme à venir' },
       { texte: 'Je suis formateur PSC', icone: 'recyclage', vers: '/formations/fc-pae-f-psc', note: '7,5 heures · 90 €' },
       { texte: 'Je suis formateur PSE', icone: 'recyclage', vers: '/formations/fc-pae-f-ps', note: '7,5 heures · 90 €' },
       { texte: 'Nos carrefours des pratiques', icone: 'equipe', vers: '/secouriste-actif', note: 'Pour continuer à pratiquer entre deux recyclages' },
+    ],
+  },
+
+  /*
+   * Le passage du BNSSA au SSA. L'arrêté du 29 juillet 2026 fait dépendre
+   * l'équivalence d'un seul critère — PSE1 ou PSE2 — et c'est la question que
+   * personne ne pense à se poser. Les quatre entrées mènent donc à deux
+   * réponses : le maître nageur avec un PSE1 est dans le même cas que le
+   * nageur sauveteur avec un PSE1.
+   */
+  {
+    id: 'bnssa',
+    pose: 'think',
+    oeil: 'Le BNSSA devient le SSA',
+    titre: 'Où en êtes-vous en secourisme ?',
+    message: 'Le SSA exige le niveau PSE2. Votre parcours dépend donc du diplôme que vous détenez déjà.',
+    actions: [
+      { texte: 'J’ai le BNSSA et le PSE1', icone: 'diplome', ecran: 'bnssa-pse1' },
+      { texte: 'J’ai le BNSSA et le PSE2', icone: 'diplome', ecran: 'bnssa-pse2' },
+      { texte: 'Je suis MNS avec le PSE1', icone: 'eau', ecran: 'bnssa-pse1' },
+      { texte: 'Je suis MNS avec le PSE2', icone: 'eau', ecran: 'bnssa-pse2' },
+      { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
+    ],
+  },
+  {
+    id: 'bnssa-pse1',
+    pose: 'search',
+    oeil: 'Parcours : PSE2 puis FCA',
+    titre: 'Il vous manque le PSE2',
+    message: 'Le SSA exige le niveau PSE2. Vous devez :\n1. Passer le PSE2\n2. Valider la FCA SSA.',
+    actions: [
+      { texte: 'Passer le PSE2', icone: 'equipe', vers: '/formations/pse-2', note: '28 heures · 280 €' },
+      { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
+      { texte: 'Nous écrire pour la FCA', icone: 'bulle', vers: '/contact', note: 'À valider avant le 1er octobre 2029' },
+    ],
+  },
+  {
+    id: 'bnssa-pse2',
+    pose: 'success',
+    oeil: 'Parcours : FCA SSA',
+    titre: 'Vous avez le niveau requis',
+    message: 'Puisque vous possédez le PSE2, vous devez uniquement valider une formation continue d’adaptation (FCA).',
+    actions: [
+      { texte: 'Nous écrire pour la FCA', icone: 'bulle', vers: '/contact', note: 'À valider avant le 1er octobre 2029' },
+      { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
+      { texte: 'Garder mon PSE2 à jour', icone: 'recyclage', vers: '/formations/fc-pse-2', note: 'Chaque année · 8 heures · 70 €' },
     ],
   },
 
@@ -505,7 +552,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     align-items: center;
     gap: 0.6rem;
     padding: 0.35rem 1.15rem 0.35rem 0.35rem;
-    border: 1px solid rgba(34, 25, 0, 0.25);
+    border: 0;
     border-radius: var(--r-pill);
     background: var(--ocre-vif);
     box-shadow: var(--sh-md);
@@ -514,14 +561,13 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
   }
 
   .compagnon__lanceur[hidden] { display: none; }
 
   .compagnon__lanceur:hover {
     transform: translateY(-2px);
-    border-color: var(--ocre-encre);
     box-shadow: var(--sh-lg);
   }
 
@@ -661,6 +707,9 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
   .compagnon__message {
     margin: 0 0 0.9rem;
+    /* Deux écrans portent une liste numérotée : les retours à la ligne sont
+       dans la donnée, pas dans le balisage. */
+    white-space: pre-line;
     color: var(--ink-soft);
     font-size: 0.86rem;
     line-height: 1.45;
