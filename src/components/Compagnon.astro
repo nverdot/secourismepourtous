@@ -333,11 +333,8 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
 <div class="compagnon" id="compagnon" data-ecran="accueil" data-poses={POSES.join(' ')}>
   {/*
-    Le voile ne sert que sur téléphone, où le panneau couvre presque l'écran :
-    il détache le menu de la page et donne surtout une cible pour refermer, qui
-    manquait au pouce. Sur ordinateur le panneau tient dans un coin, et voiler
-    toute la page pour un assistant de coin le ferait passer pour une fenêtre
-    modale qu'il n'est pas.
+    Le voile détache le menu de la page et donne une cible pour refermer :
+    cliquer dans le vide referme, ce qui est le geste qu'on essaie d'abord.
   */}
   <div class="compagnon__voile" id="compagnon-voile"></div>
 
@@ -352,9 +349,9 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     aria-haspopup="dialog"
     aria-controls="compagnon-boite"
     aria-expanded="false"
+    aria-label="Besoin d’aide ?"
   >
     <img src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
-    <span>Besoin d’aide&nbsp;?</span>
   </button>
 
   <section
@@ -571,18 +568,12 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
    * sombre : à 1,68:1 sur blanc, il ne peut pas servir de couleur de texte.
    */
   .compagnon__lanceur {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.35rem 1.15rem 0.35rem 0.35rem;
+    display: block;
+    padding: 0.32rem;
     border: 0;
-    border-radius: var(--r-pill);
+    border-radius: 50%;
     background: var(--ocre-vif);
     box-shadow: var(--sh-md);
-    color: var(--ocre-encre);
-    font-family: 'Archivo', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
     cursor: pointer;
     transition: transform 0.16s ease, box-shadow 0.16s ease;
   }
@@ -600,8 +591,8 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   }
 
   .compagnon__lanceur img {
-    width: 46px;
-    height: 46px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: var(--surface);
     object-fit: cover;
@@ -610,9 +601,60 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   /* Le rond blanc du téléphone se passe du liseré, qui l'épaissirait. */
   .compagnon__lanceur:focus-visible img { background: var(--surface); }
 
-  /* Bulle et voile ne servent que sur téléphone. */
-  .compagnon__bulle,
+  /*
+   * Le rond n'affiche plus de libellé : c'est la bulle qui dit, une fois par
+   * session, ce qu'il propose.
+   */
+  .compagnon__bulle { display: none; }
+
+  .compagnon[data-bulle] .compagnon__bulle {
+    position: absolute;
+    right: 6px;
+    bottom: calc(100% + 0.6rem);
+    display: block;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    box-shadow: var(--sh-md);
+    color: var(--navy-deep);
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    animation: compagnon-bulle 0.45s ease-out 0.9s both;
+  }
+
+  .compagnon[data-bulle] .compagnon__bulle::after {
+    position: absolute;
+    right: 24px;
+    top: 100%;
+    width: 10px;
+    height: 10px;
+    margin-top: -5px;
+    border: 1px solid var(--line);
+    border-width: 0 1px 1px 0;
+    background: var(--surface);
+    content: '';
+    transform: rotate(45deg);
+  }
+
+  /*
+   * Le voile détache le menu de la page, et cliquer dedans referme. Le z-index
+   * négatif le place derrière le panneau sans le sortir de la pile du
+   * compagnon : il reste donc au-dessus de la page.
+   */
   .compagnon__voile { display: none; }
+
+  .compagnon[data-ouvert] .compagnon__voile {
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    display: block;
+    background: rgba(7, 23, 38, 0.22);
+    backdrop-filter: blur(2px);
+    animation: compagnon-voile 0.2s ease-out both;
+  }
 
   /* Le salut d'ouverture de session : deux oscillations, puis plus rien. */
   .compagnon[data-salut] .compagnon__lanceur img {
@@ -884,51 +926,13 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   /* --- téléphone --- */
 
   @media (max-width: 640px) {
-    .compagnon__lanceur span { display: none; }
-    .compagnon__lanceur { padding: 0.35rem; }
+    .compagnon__lanceur img { width: 48px; height: 48px; }
+    .compagnon__bulle { font-size: 0.8rem; }
 
+    /* Le panneau couvre presque l'écran : le voile y travaille plus fort. */
     .compagnon[data-ouvert] .compagnon__voile {
-      /* Le z-index négatif le place derrière le panneau sans le sortir de la
-         pile du compagnon : il reste donc au-dessus de la page. */
-      position: fixed;
-      z-index: -1;
-      inset: 0;
-      display: block;
       background: rgba(7, 23, 38, 0.3);
       backdrop-filter: blur(2.5px);
-      animation: compagnon-voile 0.2s ease-out both;
-    }
-
-    .compagnon[data-bulle] .compagnon__bulle {
-      position: absolute;
-      right: 4px;
-      bottom: calc(100% + 0.6rem);
-      display: block;
-      padding: 0.4rem 0.75rem;
-      border: 1px solid var(--line);
-      border-radius: var(--r-pill);
-      background: var(--surface);
-      box-shadow: var(--sh-md);
-      color: var(--navy-deep);
-      font-family: 'Archivo', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      white-space: nowrap;
-      animation: compagnon-bulle 0.45s ease-out 0.9s both;
-    }
-
-    .compagnon[data-bulle] .compagnon__bulle::after {
-      position: absolute;
-      right: 18px;
-      top: 100%;
-      width: 10px;
-      height: 10px;
-      margin-top: -5px;
-      border: 1px solid var(--line);
-      border-width: 0 1px 1px 0;
-      background: var(--surface);
-      content: '';
-      transform: rotate(45deg);
     }
 
     .compagnon { --perso-h: 122px; --perso-x: 56px; }
