@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Compagnon from '../components/Compagnon.astro';
 import { asso } from '../data/association';
 import { organisation } from '../lib/schema';
 
@@ -75,5 +76,6 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
       <slot />
     </main>
     <Footer />
+    <Compagnon />
   </body>
 </html>

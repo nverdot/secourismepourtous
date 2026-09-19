@@ -1,0 +1,768 @@
+---
+/**
+ * Compagnon d'orientation, ancré en bas à droite de chaque page.
+ *
+ * Le personnage et les poses viennent du paquet FFSS « compagnon statique ».
+ * Deux écarts assumés par rapport à sa spécification :
+ *
+ * 1. Les neuf PNG d'origine pèsent 5,4 Mo et la spécification demande de tous
+ *    les précharger. L'accueil du site fait 9,5 Ko : on aurait multiplié son
+ *    poids par cinq cents. Les poses sont donc converties en WebP au format
+ *    d'affichage (212 Ko à sept), et seul l'avatar du lanceur — 6 Ko — part
+ *    avec la page. Les poses ne sont cherchées qu'à l'approche du lanceur.
+ *
+ * 2. « speaking » est écartée, faute d'emploi. Les huit autres ont été
+ *    remises à la même hauteur de tête, faute de quoi « idle » (plan en pied)
+ *    et « think » (plan poitrine) faisaient sauter le personnage du simple au
+ *    double d'un écran à l'autre.
+ *
+ *    Sept d'entre elles partagent aussi la même ligne des yeux. « alert », le
+ *    seul visage inquiet du jeu, est un gros plan qui s'arrête sous le col :
+ *    il n'a pas de buste à montrer. Il est donc posé sur la même ligne de sol
+ *    que les autres, mais plus bas dans le cadre — la tête garde sa taille,
+ *    seule la quantité de corps visible diminue. C'est la pose de l'écran
+ *    d'urgence, la seule qui ne sourie pas.
+ */
+
+/*
+ * Icônes au trait, dessinées sur la grille 24 et rendues par « currentColor » :
+ * elles prennent donc le rouge secours sur l'écran d'urgence sans un octet de
+ * CSS supplémentaire.
+ */
+const ICONES: Record<string, string> = {
+  croix: 'M12 6v12M6 12h12',
+  bouclier: 'M12 3.2l7 2.8v5.4c0 4.2-2.9 7.3-7 9.4-4.1-2.1-7-5.2-7-9.4V6z',
+  flamme: 'M12.6 2c.2 3-1.4 4.4-3 5.9-1.5 1.5-2.6 2.9-2.6 4.9a5 5 0 0 0 10 0c0-2.3-1.2-3.8-2.3-5.1-.3 1.1-.9 1.7-1.6 1.7-1 0-1.5-.9-1.2-2.2.4-1.6.7-3.4.7-5.2z',
+  telephone: 'M6.8 3.5h2.9l1.4 3.8-2 1.5a12.6 12.6 0 0 0 6.1 6.1l1.5-2 3.8 1.4v2.9a1.9 1.9 0 0 1-2.1 1.9A16.6 16.6 0 0 1 4.9 5.6a1.9 1.9 0 0 1 1.9-2.1z',
+  bulle: 'M4.5 5.5h15v10h-9l-6 4.5z',
+  diplome: 'M3.2 9.2L12 5.3l8.8 3.9L12 13.1zM7.2 11.2v4.4c0 1.4 2.1 2.5 4.8 2.5s4.8-1.1 4.8-2.5v-4.4',
+  equipe: 'M9 11.2a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zM3.5 19.5c0-3 2.5-5.1 5.5-5.1s5.5 2.1 5.5 5.1M16.2 5.4a3.1 3.1 0 0 1 0 6M17.2 14.7c2 .5 3.3 2.2 3.3 4.4',
+  trousse: 'M4 8.2h16v11.3H4zM8.8 8.2V5.4a1 1 0 0 1 1-1h4.4a1 1 0 0 1 1 1v2.8M12 11.6v4.6M9.7 13.9h4.6',
+  coeur: 'M12 20.3S4.6 15.6 4.6 10.6a4.1 4.1 0 0 1 7.4-2.5 4.1 4.1 0 0 1 7.4 2.5c0 5-7.4 9.7-7.4 9.7z',
+  alerte: 'M12 4.2l8.6 15.3H3.4zM12 10.2v4M12 17.4h.01',
+  recyclage: 'M20.3 12a8.3 8.3 0 1 1-2.4-5.9M20.5 4v4.3h-4.3',
+  liste: 'M5 7h14M5 12h14M5 17h9',
+  comparer: 'M4.5 6.5h6M4.5 12h6M4.5 17.5h6M13.5 6.5h6M13.5 12h6M13.5 17.5h6',
+  horloge: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM12 7.4V12l3 1.8',
+  calendrier: 'M4.5 6.5h15v13h-15zM8.5 4v4M15.5 4v4M4.5 11h15',
+  eau: 'M3 6c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0M3 12c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0M3 18c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0',
+  medaille: 'M12 13.6a4.6 4.6 0 1 0 0-9.2 4.6 4.6 0 0 0 0 9.2zM9.2 12.8L7.6 20.6l4.4-2.4 4.4 2.4-1.6-7.8',
+  euro: 'M17.6 6.4a6.6 6.6 0 1 0 0 11.2M4.8 10h7.4M4.8 14h7.4',
+  lieu: 'M12 21s6.5-6.2 6.5-10.6a6.5 6.5 0 1 0-13 0C5.5 14.8 12 21 12 21zM12 12.4a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z',
+  question: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM9.6 9.5a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.8-.9 1.4v.4M12 16.8h.01',
+};
+
+/*
+ * Une flamme au trait redevient une goutte à 19 px : ni la pointe ni la langue
+ * intérieure ne survivent. Celle-ci est donc pleine, et elle seule.
+ */
+const PLEINES = new Set(['flamme']);
+
+interface Action {
+  texte: string;
+  /** Clé du jeu d'icônes ci-dessus. */
+  icone: string;
+  /** Destination finale. */
+  vers?: string;
+  /** Écran suivant, pour les questions intermédiaires. */
+  ecran?: string;
+  note?: string;
+}
+
+interface Ecran {
+  id: string;
+  pose: string;
+  oeil: string;
+  titre: string;
+  message: string;
+  actions: Action[];
+}
+
+const ECRANS: Ecran[] = [
+  {
+    id: 'accueil',
+    pose: 'wave',
+    oeil: 'Je suis là pour vous orienter',
+    titre: 'Bonjour !',
+    message: 'Dites-moi ce qui vous amène, je vous mène à la bonne page.',
+    actions: [
+      { texte: 'Je veux apprendre les premiers secours', icone: 'croix', ecran: 'formation' },
+      { texte: 'Je viens recycler mon diplôme', icone: 'recyclage', ecran: 'recyclage' },
+      { texte: 'Je cherche des secouristes pour mon événement', icone: 'trousse', ecran: 'dispositif' },
+      { texte: 'Je veux devenir bénévole', icone: 'equipe', ecran: 'benevolat' },
+      { texte: 'Je nage, je fais du sauvetage sportif', icone: 'medaille', ecran: 'sport' },
+      { texte: 'Je veux soutenir l’association', icone: 'coeur', vers: '/faire-un-don' },
+      { texte: 'J’ai besoin des secours maintenant', icone: 'alerte', ecran: 'urgence' },
+    ],
+  },
+
+  /*
+   * Le catalogue est rangé par filière sur le site, parce que c'est ainsi que
+   * l'État le range. Personne n'arrive en cherchant « la filière
+   * opérationnelle » : on cherche à savoir quoi faire chez soi, à satisfaire
+   * son employeur, ou à passer le diplôme d'un métier. L'arbre part donc de
+   * l'usage, et c'est lui qui désigne la formation.
+   */
+  {
+    id: 'formation',
+    pose: 'search',
+    oeil: 'Première question',
+    titre: 'Se former, pour quoi faire ?',
+    message: 'L’usage décide du diplôme. Dites-moi le vôtre.',
+    actions: [
+      { texte: 'Pour savoir réagir dans ma vie de tous les jours', icone: 'coeur', ecran: 'perso' },
+      { texte: 'Parce que mon travail le demande', icone: 'trousse', ecran: 'pro' },
+      { texte: 'Pour intervenir en équipe sur le terrain', icone: 'equipe', ecran: 'terrain' },
+      { texte: 'Pour surveiller une piscine ou une plage', icone: 'eau', ecran: 'aquatique' },
+      { texte: 'Pour enseigner les premiers secours', icone: 'diplome', ecran: 'pedagogique' },
+      { texte: 'Je préfère parcourir les seize formations', icone: 'liste', vers: '/formations' },
+    ],
+  },
+  {
+    id: 'perso',
+    pose: 'think',
+    oeil: 'Pour soi, pour ses proches',
+    titre: 'Savoir quoi faire, chez soi',
+    message: 'Sept minutes séparent l’appel des secours de leur arrivée. Ces sept minutes vous appartiennent.',
+    actions: [
+      { texte: 'Découvrir les gestes qui sauvent', icone: 'croix', vers: '/gestes-qui-sauvent', note: 'Sans diplôme, pour commencer' },
+      { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: 'Le diplôme de base · 7 heures · 50 €' },
+      { texte: 'Les gestes pour un bébé ou un enfant', icone: 'coeur', vers: '/premiers-secours-bebe-enfant' },
+      { texte: 'PSC1 ou PSE1, lequel me faut-il ?', icone: 'comparer', vers: '/psc-ou-pse1' },
+      { texte: 'Tester mes connaissances', icone: 'question', vers: '/gestes-qui-sauvent/quiz' },
+    ],
+  },
+  {
+    id: 'pro',
+    pose: 'point-left',
+    oeil: 'Pour le travail',
+    titre: 'Ce que votre employeur attend',
+    message: 'Le code du travail impose un secouriste formé dans de nombreux ateliers et bureaux.',
+    actions: [
+      { texte: 'Devenir sauveteur secouriste du travail', icone: 'trousse', vers: '/formations/sst', note: 'SST · 14 heures · 190 €' },
+      { texte: 'Maintenir mon SST à jour', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · 90 €' },
+      { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: 'Souvent demandé à l’embauche · 50 €' },
+      { texte: 'Qui peut financer ma formation ?', icone: 'euro', vers: '/financement' },
+      { texte: 'Former toute mon équipe', icone: 'equipe', vers: '/contact' },
+    ],
+  },
+  {
+    id: 'terrain',
+    pose: 'success',
+    oeil: 'Secouriste en équipe',
+    titre: 'Tenir un poste de secours',
+    message: 'Les PSE sont les diplômes qui autorisent à intervenir en équipe, sur un dispositif.',
+    actions: [
+      { texte: 'PSE1 — entrer dans l’équipe', icone: 'equipe', vers: '/formations/pse-1', note: '35 heures · 280 €' },
+      { texte: 'PSE2 — conduire l’intervention', icone: 'equipe', vers: '/formations/pse-2', note: '28 heures · 280 €' },
+      { texte: 'À quoi ressemble le métier', icone: 'question', vers: '/metiers/pse-1' },
+      { texte: 'Intervenir avec nous comme bénévole', icone: 'coeur', vers: '/secouriste-actif' },
+      { texte: 'Qui peut financer ma formation ?', icone: 'euro', vers: '/financement' },
+    ],
+  },
+  {
+    id: 'aquatique',
+    pose: 'point-right',
+    oeil: 'Surveillance des baignades',
+    titre: 'Piscines, plages et plans d’eau',
+    message: 'Deux diplômes selon le lieu que vous surveillerez, et la saison où vous travaillerez.',
+    actions: [
+      { texte: 'SSA — surveiller une piscine ou une plage', icone: 'eau', vers: '/formations/ssa', note: 'Ex-BNSSA · 35 heures · 900 €' },
+      { texte: 'BSB — surveiller une colonie, un centre aéré', icone: 'eau', vers: '/formations/bsb', note: '35 heures · 290 €' },
+      { texte: 'Le BNSSA devient le SSA : ce qui change', icone: 'question', vers: '/bnssa-devient-ssa' },
+      { texte: 'Recycler mon BSB ou mon BNSSA', icone: 'recyclage', ecran: 'recyclage' },
+    ],
+  },
+  {
+    id: 'pedagogique',
+    pose: 'think',
+    oeil: 'Devenir formateur',
+    titre: 'Transmettre à votre tour',
+    message: 'Les PAE forment celles et ceux qui formeront les secouristes.',
+    actions: [
+      { texte: 'Enseigner le PSC1', icone: 'diplome', vers: '/formations/pae-f-psc', note: 'PAE F PSC · 50 heures · 1 000 €' },
+      { texte: 'Enseigner le PSE1 et le PSE2', icone: 'diplome', vers: '/formations/pae-f-ps', note: 'PAE F PS · 70 heures · 1 000 €' },
+      { texte: 'Le parcours complet, étape par étape', icone: 'question', vers: '/devenir-formateur' },
+      { texte: 'Recycler mon PAE', icone: 'recyclage', ecran: 'recyclage' },
+    ],
+  },
+
+  /*
+   * Le recyclage est la moitié de nos inscriptions : on arrive en sachant
+   * déjà quel diplôme on détient, jamais en sachant qu'il faut chercher
+   * « FC PAE F PS ». L'écran demande donc le diplôme, pas le sigle.
+   */
+  {
+    id: 'recyclage',
+    pose: 'point-left',
+    oeil: 'Formation continue',
+    titre: 'Quel diplôme avez-vous ?',
+    message: 'Je vous emmène directement sur la bonne session de recyclage.',
+    actions: [
+      { texte: 'Mon diplôme est-il encore valable ?', icone: 'horloge', vers: '/validite-recyclage' },
+      { texte: 'J’ai un PSC1', icone: 'recyclage', vers: '/formations/fc-psc', note: '4 heures · 30 €' },
+      { texte: 'J’ai un PSE1', icone: 'recyclage', vers: '/formations/fc-pse-1', note: '7 heures · 70 € · chaque année' },
+      { texte: 'J’ai un PSE2', icone: 'recyclage', vers: '/formations/fc-pse-2', note: '8 heures · 70 € · chaque année' },
+      { texte: 'J’ai un SST', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · 90 €' },
+      { texte: 'J’ai un BSB', icone: 'recyclage', vers: '/formations/fc-bsb', note: '10 heures · 240 €' },
+      { texte: 'J’ai un BNSSA ou un SSA', icone: 'recyclage', vers: '/formations/fc-bnssa', note: 'Programme à venir' },
+      { texte: 'Je suis formateur PSC', icone: 'recyclage', vers: '/formations/fc-pae-f-psc', note: '7,5 heures · 90 €' },
+      { texte: 'Je suis formateur PSE', icone: 'recyclage', vers: '/formations/fc-pae-f-ps', note: '7,5 heures · 90 €' },
+      { texte: 'Nos carrefours des pratiques', icone: 'equipe', vers: '/secouriste-actif', note: 'Pour continuer à pratiquer entre deux recyclages' },
+    ],
+  },
+
+  /* --- les autres portes d'entrée --- */
+  {
+    id: 'sport',
+    pose: 'success',
+    oeil: 'Sauvetage sportif',
+    titre: 'Le secours devient un sport',
+    message: 'Courir, nager, ramener une victime : la compétition entretient les gestes.',
+    actions: [
+      { texte: 'Découvrir le sauvetage sportif', icone: 'medaille', vers: '/sauvetage-sportif' },
+      { texte: 'Inscrire mon enfant à l’école de natation', icone: 'eau', vers: '/ecole-de-natation' },
+      { texte: 'Nous écrire', icone: 'bulle', vers: '/contact' },
+    ],
+  },
+  {
+    id: 'benevolat',
+    pose: 'success',
+    oeil: 'Rejoindre l’équipe',
+    titre: 'Deux chemins, une même porte',
+    message: 'On entre par le terrain, on y reste souvent par la transmission.',
+    actions: [
+      { texte: 'Devenir secouriste actif', icone: 'trousse', vers: '/secouriste-actif' },
+      { texte: 'Devenir formateur', icone: 'diplome', vers: '/devenir-formateur' },
+      { texte: 'Je n’ai aucun diplôme, par où commencer ?', icone: 'question', ecran: 'terrain' },
+      { texte: 'Qui sommes-nous', icone: 'equipe', vers: '/qui-sommes-nous' },
+    ],
+  },
+  {
+    id: 'dispositif',
+    pose: 'point-right',
+    oeil: 'Sécuriser votre événement',
+    titre: 'Un dispositif prévisionnel de secours',
+    message: 'Le nombre de secouristes découle de votre affluence et de vos risques : nous le calculons avec vous.',
+    actions: [
+      { texte: 'Comment se prépare un poste de secours', icone: 'trousse', vers: '/postes-de-secours' },
+      { texte: 'Nos agréments', icone: 'diplome', vers: '/nos-agrements' },
+      { texte: 'Demander un devis', icone: 'bulle', vers: '/contact' },
+    ],
+  },
+  {
+    id: 'urgence',
+    pose: 'alert',
+    oeil: 'Appelez, ne cherchez pas',
+    titre: 'Une personne est en danger ?',
+    message: 'Ce compagnon ne donne aucun conseil médical et ne remplace pas les secours. Appelez immédiatement.',
+    actions: [
+      { texte: '15', icone: 'croix', vers: 'tel:15', note: 'SAMU — urgence médicale' },
+      { texte: '17', icone: 'bouclier', vers: 'tel:17', note: 'Police secours' },
+      { texte: '18', icone: 'flamme', vers: 'tel:18', note: 'Pompiers' },
+      { texte: '112', icone: 'telephone', vers: 'tel:112', note: 'Numéro d’urgence européen' },
+      { texte: '114', icone: 'bulle', vers: 'sms:114', note: 'Par SMS · sourds et malentendants' },
+    ],
+  },
+];
+
+const POSES = [...new Set(ECRANS.map((e) => e.pose))];
+const accueil = ECRANS[0];
+
+/*
+ * Le script n'a besoin que de l'en-tête de chaque écran : les listes de choix
+ * sont déjà dans le HTML. Sans ce tri, les treize écrans voyageaient deux fois
+ * dans la page — 2 Ko compressés pour rien.
+ */
+const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, oeil, titre, message }));
+---
+
+<div class="compagnon" id="compagnon" data-ecran="accueil" data-poses={POSES.join(' ')}>
+  <button
+    class="compagnon__lanceur"
+    id="compagnon-lanceur"
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls="compagnon-boite"
+    aria-expanded="false"
+  >
+    <img src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
+    <span>Besoin d’aide&nbsp;?</span>
+  </button>
+
+  <section
+    class="compagnon__boite"
+    id="compagnon-boite"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="compagnon-titre"
+    hidden
+  >
+    <div class="compagnon__perso" aria-hidden="true">
+      {/* « lazy » sur une image cachée : le navigateur ne la cherche qu'à
+          l'ouverture. Le script la devance dès que la souris approche. */}
+      <img
+        id="compagnon-perso"
+        src={`/compagnon/${accueil.pose}.webp`}
+        width="440"
+        height="475"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <div class="compagnon__panneau">
+      <button class="compagnon__fermer" id="compagnon-fermer" type="button" aria-label="Fermer le compagnon">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none"
+             stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+
+      <p class="compagnon__oeil" id="compagnon-oeil">{accueil.oeil}</p>
+      <h2 class="compagnon__titre" id="compagnon-titre" tabindex="-1">{accueil.titre}</h2>
+      <p class="compagnon__message" id="compagnon-message">{accueil.message}</p>
+
+      {/*
+        Les listes d'actions sont rendues au build, une par écran, puis
+        montrées à tour de rôle. Les fabriquer en JavaScript les priverait du
+        style : Astro porte ses règles par un attribut « data-astro-cid-… »
+        qu'un élément créé par script n'a pas.
+      */}
+      {ECRANS.map((e) => (
+        <div class="compagnon__actions" data-actions={e.id} hidden={e.id !== 'accueil'}>
+          {e.actions.map((a) => {
+            const contenu = (
+              <>
+                <svg class="compagnon__icone" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"
+                     fill={PLEINES.has(a.icone) ? 'currentColor' : 'none'}
+                     stroke={PLEINES.has(a.icone) ? 'none' : 'currentColor'}
+                     stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={ICONES[a.icone]} />
+                </svg>
+                <span class="compagnon__action-texte">{a.texte}</span>
+                {a.note && <small>{a.note}</small>}
+              </>
+            );
+            return a.vers ? (
+              <a class="compagnon__action" href={a.vers}>{contenu}</a>
+            ) : (
+              <button class="compagnon__action" type="button" data-ecran={a.ecran}>
+                {contenu}
+                <svg class="compagnon__chevron" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+      ))}
+
+      <button class="compagnon__retour" id="compagnon-retour" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+          <path d="M15 5l-7 7 7 7" />
+        </svg>
+        Revenir au début
+      </button>
+    </div>
+  </section>
+</div>
+
+<script is:inline define:vars={{ ENTETES }}>
+  (() => {
+    const racine = document.getElementById('compagnon');
+    if (!racine) return;
+
+    const lanceur = document.getElementById('compagnon-lanceur');
+    const boite = document.getElementById('compagnon-boite');
+    const perso = document.getElementById('compagnon-perso');
+    const oeil = document.getElementById('compagnon-oeil');
+    const titre = document.getElementById('compagnon-titre');
+    const message = document.getElementById('compagnon-message');
+    const retour = document.getElementById('compagnon-retour');
+    const fermer = document.getElementById('compagnon-fermer');
+    const groupes = [...racine.querySelectorAll('[data-actions]')];
+
+    const parId = Object.fromEntries(ENTETES.map((e) => [e.id, e]));
+    let precharge = false;
+
+    /* Les poses ne partent qu'à l'approche : survol, focus clavier, ou à
+       défaut l'ouverture elle-même. Le premier écran est donc déjà en cache
+       au moment où le panneau s'ouvre. */
+    function prechargerPoses() {
+      if (precharge) return;
+      precharge = true;
+      racine.dataset.poses.split(' ').forEach((p) => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = `/compagnon/${p}.webp`;
+      });
+    }
+
+    /* « focus » n'est vrai que sur une navigation voulue : l'écran d'accueil
+       rendu au build ne doit pas voler le focus au chargement de la page.
+       Sans cela, cliquer un choix détruit le bouton qui portait le focus et
+       le clavier repart à zéro sur le document. */
+    function afficher(id, focus) {
+      const e = parId[id] || parId.accueil;
+      racine.dataset.ecran = e.id;
+      oeil.textContent = e.oeil;
+      titre.textContent = e.titre;
+      message.textContent = e.message;
+      perso.src = `/compagnon/${e.pose}.webp`;
+      groupes.forEach((g) => (g.hidden = g.dataset.actions !== e.id));
+      retour.hidden = e.id === 'accueil';
+      if (focus) titre.focus({ preventScroll: true });
+    }
+
+    function ouvrir() {
+      prechargerPoses();
+      boite.hidden = false;
+      lanceur.hidden = true;
+      lanceur.setAttribute('aria-expanded', 'true');
+      afficher('accueil');
+      fermer.focus({ preventScroll: true });
+      try {
+        localStorage.setItem('compagnon-vu', '1');
+      } catch {
+        /* navigation privée, stockage refusé : sans conséquence ici */
+      }
+    }
+
+    function refermer() {
+      boite.hidden = true;
+      lanceur.hidden = false;
+      lanceur.setAttribute('aria-expanded', 'false');
+      lanceur.focus({ preventScroll: true });
+    }
+
+    lanceur.addEventListener('click', ouvrir);
+    lanceur.addEventListener('pointerenter', prechargerPoses, { once: true });
+    lanceur.addEventListener('focus', prechargerPoses, { once: true });
+    fermer.addEventListener('click', refermer);
+    retour.addEventListener('click', () => afficher('accueil', true));
+
+    racine.addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-ecran]');
+      if (b) afficher(b.dataset.ecran, true);
+    });
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && !boite.hidden) refermer();
+    });
+
+    /* Première visite : un salut discret sur le lanceur, une seule fois, et
+       jamais d'ouverture automatique — la page appartient au visiteur. */
+    try {
+      if (!localStorage.getItem('compagnon-vu')) racine.dataset.salut = '1';
+    } catch {
+      /* stockage refusé : pas de salut, pas de gêne */
+    }
+
+    window.Compagnon = Object.freeze({ ouvrir, fermer: refermer, afficher });
+  })();
+</script>
+
+<style>
+  .compagnon {
+    --compagnon-marge: max(1rem, env(safe-area-inset-bottom));
+    position: fixed;
+    z-index: 900;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: var(--compagnon-marge);
+  }
+
+  /* --- le lanceur --- */
+
+  .compagnon__lanceur {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 1.15rem 0.35rem 0.35rem;
+    border: 1px solid var(--navy-deep);
+    border-radius: var(--r-pill);
+    background: var(--navy);
+    box-shadow: var(--sh-md);
+    color: var(--on-navy);
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.16s ease, background-color 0.16s ease;
+  }
+
+  .compagnon__lanceur[hidden] { display: none; }
+  .compagnon__lanceur:hover { transform: translateY(-2px); background: var(--navy-lift); }
+
+  .compagnon__lanceur:focus-visible {
+    outline: 3px solid var(--ocre-vif);
+    outline-offset: 2px;
+  }
+
+  .compagnon__lanceur img {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--surface);
+    object-fit: cover;
+  }
+
+  /* Le salut de première visite : deux oscillations, puis plus rien. */
+  .compagnon[data-salut] .compagnon__lanceur img {
+    animation: compagnon-salut 1.6s ease-in-out 1.2s 2;
+    transform-origin: 50% 85%;
+  }
+
+  @keyframes compagnon-salut {
+    0%, 60%, 100% { transform: rotate(0); }
+    70% { transform: rotate(-7deg); }
+    80% { transform: rotate(6deg); }
+    90% { transform: rotate(-4deg); }
+  }
+
+  /* --- le panneau --- */
+
+  .compagnon__boite {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 340px);
+    align-items: end;
+    width: min(540px, calc(100vw - 2rem));
+  }
+
+  .compagnon__boite[hidden] { display: none; }
+
+  /*
+   * La marge basse négative annule le retrait du widget : le personnage pose
+   * les pieds sur le bord de l'écran, sans bande vide dessous, pendant que le
+   * panneau, lui, garde sa respiration.
+   */
+  .compagnon__perso {
+    position: relative;
+    z-index: 2;
+    margin-right: -35px;
+    margin-bottom: calc(-1 * var(--compagnon-marge));
+    margin-left: -15px;
+    pointer-events: none;
+  }
+
+  /*
+   * 250 px pour une toile de 500 : la tête fait donc 75 px à l'écran. La toile
+   * a été élargie de 440 à 500 px parce que la main levée du « bonjour » et le
+   * pouce du « bravo » sortaient du cadre ; les 15 px de marge gauche négative
+   * annulent l'élargissement et laissent le buste exactement où il était.
+   */
+  .compagnon__perso img {
+    display: block;
+    width: 250px;
+    height: auto;
+    filter: drop-shadow(0 8px 18px rgba(11, 37, 64, 0.18));
+  }
+
+  /*
+   * Le retrait gauche doit dépasser le débord du personnage, sinon le texte
+   * passe sous lui : 2.7rem contre 35 px de débord.
+   */
+  .compagnon__panneau {
+    position: relative;
+    z-index: 1;
+    padding: 1.35rem 1.35rem 1.2rem 2.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg) var(--r-lg) var(--r-sm) var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--sh-lg);
+  }
+
+  .compagnon__fermer {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--sunk);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .compagnon__fermer:hover { color: var(--ink); border-color: var(--ink-mute); }
+
+  .compagnon__oeil {
+    margin: 0 2.2rem 0.25rem 0;
+    color: var(--navy-lift);
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .compagnon__titre:focus { outline: none; }
+
+  .compagnon__titre {
+    margin: 0 2.2rem 0.35rem 0;
+    color: var(--navy-deep);
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.22rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .compagnon__message {
+    margin: 0 0 0.9rem;
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  /* --- les choix --- */
+
+  .compagnon__actions {
+    display: grid;
+    gap: 0.35rem;
+    max-height: min(52vh, 420px);
+    overflow-y: auto;
+  }
+
+  .compagnon__actions[hidden] { display: none; }
+
+  .compagnon__action {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.6rem;
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    /*
+     * Blanc sur blanc, les choix se confondaient avec le panneau. Le fond
+     * creusé du site les détache sans les alourdir ; le survol fait l'inverse,
+     * il les soulève en blanc. Le jaune fédéral reste réservé au focus : à
+     * 1,68:1 sur blanc il ne peut pas porter de texte.
+     */
+    background: var(--sunk);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.88rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.14s ease, background-color 0.14s ease;
+  }
+
+  .compagnon__icone {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    color: var(--navy-lift);
+  }
+
+  .compagnon__action-texte {
+    grid-column: 2;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .compagnon__action small {
+    grid-column: 2;
+    color: var(--ink-mute);
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .compagnon__chevron {
+    grid-column: 3;
+    grid-row: 1 / -1;
+    color: var(--ink-mute);
+  }
+
+  .compagnon__action:hover,
+  .compagnon__action:focus-visible {
+    border-color: var(--navy-lift);
+    background: var(--surface);
+    box-shadow: var(--sh-sm);
+    outline: none;
+  }
+
+  .compagnon__action:focus-visible { box-shadow: 0 0 0 3px var(--ocre-vif); }
+
+  .compagnon[data-ecran='urgence'] .compagnon__action { background: var(--secours-wash); }
+  .compagnon[data-ecran='urgence'] .compagnon__action:hover { background: var(--surface); border-color: var(--secours); }
+
+  .compagnon__retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.7rem;
+    padding: 0.2rem 0;
+    border: 0;
+    background: none;
+    color: var(--navy-lift);
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .compagnon__retour[hidden] { display: none; }
+  .compagnon__retour:hover { color: var(--navy-deep); text-decoration: underline; }
+
+  /* --- l'urgence : pas de personnage, les numéros et rien d'autre --- */
+
+  .compagnon[data-ecran='urgence'] .compagnon__panneau {
+    border: 2px solid var(--secours);
+  }
+
+  .compagnon[data-ecran='urgence'] .compagnon__oeil,
+  .compagnon[data-ecran='urgence'] .compagnon__titre,
+  .compagnon[data-ecran='urgence'] .compagnon__icone { color: var(--secours); }
+
+  .compagnon[data-ecran='urgence'] .compagnon__action {
+    grid-template-columns: auto 2.9rem minmax(0, 1fr);
+  }
+
+  .compagnon[data-ecran='urgence'] .compagnon__action-texte {
+    grid-column: 2;
+    color: var(--secours);
+    font-size: 1.45rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .compagnon[data-ecran='urgence'] .compagnon__action small {
+    grid-column: 3;
+    grid-row: 1;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+  }
+
+  /* --- téléphone --- */
+
+  @media (max-width: 640px) {
+    .compagnon__lanceur span { display: none; }
+    .compagnon__lanceur { padding: 0.35rem; }
+
+    /* 18 px de débord, 1.6rem de retrait : le texte reste à droite du
+       personnage au lieu de lui passer dessous. */
+    .compagnon__boite { grid-template-columns: 102px minmax(0, 1fr); }
+    .compagnon__perso { margin-right: -18px; margin-left: -8px; }
+    .compagnon__perso img { width: 128px; }
+    .compagnon__panneau { padding: 1.2rem 0.85rem 1.1rem 1.6rem; }
+
+    .compagnon__action { padding: 0.5rem 0.6rem; font-size: 0.84rem; }
+    .compagnon__actions { max-height: min(46vh, 360px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .compagnon__lanceur { transition: none; }
+    .compagnon__lanceur:hover { transform: none; }
+    .compagnon[data-salut] .compagnon__lanceur img { animation: none; }
+  }
+</style>
