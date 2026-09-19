@@ -232,7 +232,7 @@ const ECRANS: Ecran[] = [
     pose: 'think',
     oeil: 'Le BNSSA devient le SSA',
     titre: 'Où en êtes-vous en secourisme ?',
-    message: 'Le SSA exige le niveau PSE2. Votre parcours dépend donc du diplôme que vous détenez déjà.',
+    message: 'L’équivalence se joue sur un seul point, le PSE2. Dites-moi ce que vous avez déjà.',
     actions: [
       { texte: 'J’ai le BNSSA et le PSE1', icone: 'diplome', ecran: 'bnssa-pse1' },
       { texte: 'J’ai le BNSSA et le PSE2', icone: 'diplome', ecran: 'bnssa-pse2' },
@@ -244,9 +244,9 @@ const ECRANS: Ecran[] = [
   {
     id: 'bnssa-pse1',
     pose: 'search',
-    oeil: 'Parcours : PSE2 puis FCA',
-    titre: 'Il vous manque le PSE2',
-    message: 'Le SSA exige le niveau PSE2. Vous devez :\n1. Passer le PSE2\n2. Valider la FCA SSA.',
+    oeil: 'Une marche à monter',
+    titre: 'Le PSE2 d’abord',
+    message: 'Le PSE1 ouvrait le BNSSA. Il ne suffit plus : l’équivalence demande le PSE2, puis une formation continue d’adaptation, à suivre avant le 1er octobre 2029.',
     actions: [
       { texte: 'Passer le PSE2', icone: 'equipe', vers: '/formations/pse-2', note: '28 heures · 280 €' },
       { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
@@ -256,9 +256,9 @@ const ECRANS: Ecran[] = [
   {
     id: 'bnssa-pse2',
     pose: 'success',
-    oeil: 'Parcours : FCA SSA',
-    titre: 'Vous avez le niveau requis',
-    message: 'Puisque vous possédez le PSE2, vous devez uniquement valider une formation continue d’adaptation (FCA).',
+    oeil: 'Vous avez le niveau',
+    titre: 'Une adaptation, et c’est tout',
+    message: 'Le PSE2 est la condition de l’équivalence, et vous l’avez. Reste la formation continue d’adaptation, à suivre avant le 1er octobre 2029.',
     actions: [
       { texte: 'Nous écrire pour la FCA', icone: 'bulle', vers: '/contact', note: 'À valider avant le 1er octobre 2029' },
       { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
@@ -332,6 +332,15 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 ---
 
 <div class="compagnon" id="compagnon" data-ecran="accueil" data-poses={POSES.join(' ')}>
+  {/*
+    Le voile ne sert que sur téléphone, où le panneau couvre presque l'écran :
+    il détache le menu de la page et donne surtout une cible pour refermer, qui
+    manquait au pouce. Sur ordinateur le panneau tient dans un coin, et voiler
+    toute la page pour un assistant de coin le ferait passer pour une fenêtre
+    modale qu'il n'est pas.
+  */}
+  <div class="compagnon__voile" id="compagnon-voile"></div>
+
   {/* Sur téléphone, le lanceur se réduit à un rond : la bulle dit une fois
       par session ce que ce rond propose. */}
   <span class="compagnon__bulle" aria-hidden="true">Besoin d’aide&nbsp;?</span>
@@ -440,6 +449,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     const message = document.getElementById('compagnon-message');
     const retour = document.getElementById('compagnon-retour');
     const fermer = document.getElementById('compagnon-fermer');
+    const voile = document.getElementById('compagnon-voile');
     const groupes = [...racine.querySelectorAll('[data-actions]')];
 
     const parId = Object.fromEntries(ENTETES.map((e) => [e.id, e]));
@@ -478,15 +488,18 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       prechargerPoses();
       boite.hidden = false;
       lanceur.hidden = true;
+      racine.dataset.ouvert = '1';
       lanceur.setAttribute('aria-expanded', 'true');
       afficher('accueil');
       fermer.focus({ preventScroll: true });
       delete racine.dataset.salut;
+      delete racine.dataset.bulle;
     }
 
     function refermer() {
       boite.hidden = true;
       lanceur.hidden = false;
+      delete racine.dataset.ouvert;
       lanceur.setAttribute('aria-expanded', 'false');
       lanceur.focus({ preventScroll: true });
     }
@@ -495,6 +508,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     lanceur.addEventListener('pointerenter', prechargerPoses, { once: true });
     lanceur.addEventListener('focus', prechargerPoses, { once: true });
     fermer.addEventListener('click', refermer);
+    voile.addEventListener('click', refermer);
     retour.addEventListener('click', () => afficher('accueil', true));
 
     racine.addEventListener('click', (ev) => {
@@ -507,20 +521,29 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     });
 
     /*
-     * Un salut discret à l'ouverture de la session : la main qui s'agite sur
-     * le lanceur, et sur téléphone la bulle « Besoin d'aide ? », puisque le
-     * rond y perd son libellé. Une fois par session, jamais deux — et jamais
-     * d'ouverture automatique : la page appartient au visiteur. Le drapeau vit
-     * dans sessionStorage, rien n'est conservé d'une visite à l'autre.
+     * Deux gestes, deux rythmes.
+     *
+     * Le petit salut de la main rejoue à chaque page : il dure trois secondes,
+     * ne déplace rien, et c'est lui qui fait remarquer le lanceur.
+     *
+     * La bulle « Besoin d'aide ? » ne paraît qu'une fois par session. Elle
+     * n'existe que sur téléphone, où le lanceur perd son libellé, et répéter à
+     * chaque page un texte qu'on a déjà lu, c'est harceler.
+     *
+     * Jamais d'ouverture automatique dans les deux cas : la page appartient au
+     * visiteur. Rien n'est conservé d'une visite à l'autre.
      */
+    racine.dataset.salut = '1';
+    setTimeout(() => delete racine.dataset.salut, 6000);
+
     try {
-      if (!sessionStorage.getItem('compagnon-salut')) {
-        sessionStorage.setItem('compagnon-salut', '1');
-        racine.dataset.salut = '1';
-        setTimeout(() => delete racine.dataset.salut, 8000);
+      if (!sessionStorage.getItem('compagnon-bulle')) {
+        sessionStorage.setItem('compagnon-bulle', '1');
+        racine.dataset.bulle = '1';
+        setTimeout(() => delete racine.dataset.bulle, 8000);
       }
     } catch {
-      /* stockage refusé : pas de salut, pas de gêne */
+      /* stockage refusé : pas de bulle, pas de gêne */
     }
 
     window.Compagnon = Object.freeze({ ouvrir, fermer: refermer, afficher });
@@ -587,13 +610,19 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   /* Le rond blanc du téléphone se passe du liseré, qui l'épaissirait. */
   .compagnon__lanceur:focus-visible img { background: var(--surface); }
 
-  /* La bulle ne sert que sur téléphone, où le lanceur perd son libellé. */
-  .compagnon__bulle { display: none; }
+  /* Bulle et voile ne servent que sur téléphone. */
+  .compagnon__bulle,
+  .compagnon__voile { display: none; }
 
   /* Le salut d'ouverture de session : deux oscillations, puis plus rien. */
   .compagnon[data-salut] .compagnon__lanceur img {
-    animation: compagnon-salut 1.6s ease-in-out 1.2s 2;
-    transform-origin: 50% 85%;
+    animation: compagnon-salut 1.5s ease-in-out 1s 2;
+    transform-origin: 50% 88%;
+  }
+
+  @keyframes compagnon-voile {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes compagnon-bulle {
@@ -602,10 +631,11 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   }
 
   @keyframes compagnon-salut {
-    0%, 60%, 100% { transform: rotate(0); }
-    70% { transform: rotate(-7deg); }
-    80% { transform: rotate(6deg); }
-    90% { transform: rotate(-4deg); }
+    0%, 55%, 100% { transform: rotate(0); }
+    65% { transform: rotate(-10deg); }
+    75% { transform: rotate(9deg); }
+    85% { transform: rotate(-5deg); }
+    93% { transform: rotate(3deg); }
   }
 
   /* --- le panneau --- */
@@ -707,9 +737,6 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
   .compagnon__message {
     margin: 0 0 0.9rem;
-    /* Deux écrans portent une liste numérotée : les retours à la ligne sont
-       dans la donnée, pas dans le balisage. */
-    white-space: pre-line;
     color: var(--ink-soft);
     font-size: 0.86rem;
     line-height: 1.45;
@@ -860,7 +887,19 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     .compagnon__lanceur span { display: none; }
     .compagnon__lanceur { padding: 0.35rem; }
 
-    .compagnon[data-salut] .compagnon__bulle {
+    .compagnon[data-ouvert] .compagnon__voile {
+      /* Le z-index négatif le place derrière le panneau sans le sortir de la
+         pile du compagnon : il reste donc au-dessus de la page. */
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      display: block;
+      background: rgba(7, 23, 38, 0.3);
+      backdrop-filter: blur(2.5px);
+      animation: compagnon-voile 0.2s ease-out both;
+    }
+
+    .compagnon[data-bulle] .compagnon__bulle {
       position: absolute;
       right: 4px;
       bottom: calc(100% + 0.6rem);
@@ -878,7 +917,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       animation: compagnon-bulle 0.45s ease-out 0.9s both;
     }
 
-    .compagnon[data-salut] .compagnon__bulle::after {
+    .compagnon[data-bulle] .compagnon__bulle::after {
       position: absolute;
       right: 18px;
       top: 100%;
@@ -904,6 +943,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     .compagnon__lanceur { transition: none; }
     .compagnon__lanceur:hover { transform: none; }
     .compagnon[data-salut] .compagnon__lanceur img { animation: none; }
-    .compagnon[data-salut] .compagnon__bulle { animation: none; opacity: 1; }
+    .compagnon[data-bulle] .compagnon__bulle { animation: none; opacity: 1; }
+    .compagnon[data-ouvert] .compagnon__voile { animation: none; }
   }
 </style>
