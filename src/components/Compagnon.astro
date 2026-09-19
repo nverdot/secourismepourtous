@@ -143,11 +143,12 @@ const ECRANS: Ecran[] = [
      * les ateliers où s'accomplissent des travaux dangereux et les chantiers
      * d'au moins vingt personnes — pas « les entreprises » en général.
      */
-    message: 'Ateliers de travaux dangereux, chantiers de vingt personnes et plus : le code du travail y impose un secouriste formé. Ailleurs — commerce, entrepôt, crèche, salle de sport, bureau — beaucoup d’employeurs le demandent quand même.',
+    message: 'Ateliers de travaux dangereux, chantiers de vingt personnes et plus : le code du travail y impose un secouriste formé. Ailleurs, c’est le métier qui décide — enseignement, petite enfance, sport, sécurité, transport.',
     actions: [
       { texte: 'Devenir sauveteur secouriste du travail', icone: 'trousse', vers: '/formations/sst', note: 'SST · 14 heures · 190 €' },
       { texte: 'Maintenir mon SST à jour', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · 90 €' },
-      { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: 'Souvent demandé à l’embauche · 50 €' },
+      { texte: 'Mon métier exige-t-il le PSC1 ?', icone: 'question', vers: '/metiers/psc', note: 'Professeur des écoles, assistant maternel, BAFA, taxi, VTC, sécurité privée, sapeur-pompier volontaire, éducateur sportif' },
+      { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: '7 heures · 50 €' },
       { texte: 'Je vais surveiller une piscine ou une plage', icone: 'eau', ecran: 'aquatique', note: 'Le SSA y est exigé' },
       { texte: 'Qui peut financer ma formation ?', icone: 'euro', vers: '/financement' },
       { texte: 'Former toute mon équipe', icone: 'equipe', vers: '/contact' },
@@ -246,7 +247,7 @@ const ECRANS: Ecran[] = [
     pose: 'search',
     oeil: 'Une marche à monter',
     titre: 'Le PSE2 d’abord',
-    message: 'Le PSE1 ouvrait le BNSSA. Il ne suffit plus : l’équivalence demande le PSE2, puis une formation continue d’adaptation, à suivre avant le 1er octobre 2029.',
+    message: 'Le PSE1 ouvrait le BNSSA. Il ne suffit plus : l’équivalence demande le PSE2, puis une formation continue d’adaptation, à suivre avant le 1er octobre 2029.',
     actions: [
       { texte: 'Passer le PSE2', icone: 'equipe', vers: '/formations/pse-2', note: '28 heures · 280 €' },
       { texte: 'Ce que dit l’arrêté', icone: 'question', vers: '/bnssa-devient-ssa' },
@@ -272,7 +273,7 @@ const ECRANS: Ecran[] = [
     pose: 'success',
     oeil: 'Sauvetage sportif',
     titre: 'Le secours devient un sport',
-    message: 'Courir, nager, ramener une victime : la compétition entretient les gestes.',
+    message: 'Courir, nager, ramener une victime : la compétition entretient les gestes.',
     actions: [
       { texte: 'Découvrir le sauvetage sportif', icone: 'medaille', vers: '/sauvetage-sportif' },
       { texte: 'Inscrire mon enfant à l’école de natation', icone: 'eau', vers: '/ecole-de-natation' },
@@ -297,7 +298,7 @@ const ECRANS: Ecran[] = [
     pose: 'idle',
     oeil: 'Sécuriser votre événement',
     titre: 'Un dispositif prévisionnel de secours',
-    message: 'Le nombre de secouristes découle de votre affluence et de vos risques : nous le calculons avec vous.',
+    message: 'Le nombre de secouristes découle de votre affluence et de vos risques : nous le calculons avec vous.',
     actions: [
       { texte: 'Comment se prépare un poste de secours', icone: 'trousse', vers: '/postes-de-secours' },
       { texte: 'Nos agréments', icone: 'diplome', vers: '/nos-agrements' },
@@ -523,25 +524,19 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
      * Le petit salut de la main rejoue à chaque page : il dure trois secondes,
      * ne déplace rien, et c'est lui qui fait remarquer le lanceur.
      *
-     * La bulle « Besoin d'aide ? » ne paraît qu'une fois par session. Elle
-     * n'existe que sur téléphone, où le lanceur perd son libellé, et répéter à
-     * chaque page un texte qu'on a déjà lu, c'est harceler.
+     * La bulle « Besoin d'aide ? » paraît elle aussi à chaque page : le rond
+     * n'a plus de libellé, et c'est elle qui dit ce qu'il propose. Elle
+     * s'efface d'elle-même au bout de cinq secondes.
      *
      * Jamais d'ouverture automatique dans les deux cas : la page appartient au
-     * visiteur. Rien n'est conservé d'une visite à l'autre.
+     * visiteur. Rien n'est stocké, ni d'une page à l'autre ni d'une visite à
+     * l'autre.
      */
     racine.dataset.salut = '1';
     setTimeout(() => delete racine.dataset.salut, 6000);
 
-    try {
-      if (!sessionStorage.getItem('compagnon-bulle')) {
-        sessionStorage.setItem('compagnon-bulle', '1');
-        racine.dataset.bulle = '1';
-        setTimeout(() => delete racine.dataset.bulle, 8000);
-      }
-    } catch {
-      /* stockage refusé : pas de bulle, pas de gêne */
-    }
+    racine.dataset.bulle = '1';
+    setTimeout(() => delete racine.dataset.bulle, 7000);
 
     window.Compagnon = Object.freeze({ ouvrir, fermer: refermer, afficher });
   })();
@@ -622,7 +617,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     font-size: 0.85rem;
     font-weight: 700;
     white-space: nowrap;
-    animation: compagnon-bulle 0.45s ease-out 0.9s both;
+    animation: compagnon-bulle 5.6s ease-out 0.9s both;
   }
 
   .compagnon[data-bulle] .compagnon__bulle::after {
@@ -668,8 +663,9 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   }
 
   @keyframes compagnon-bulle {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: none; }
+    0% { opacity: 0; transform: translateY(6px); }
+    8%, 88% { opacity: 1; transform: none; }
+    100% { opacity: 0; transform: translateY(4px); }
   }
 
   @keyframes compagnon-salut {
