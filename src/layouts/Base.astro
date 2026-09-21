@@ -65,6 +65,24 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
     <link rel="preload" as="font" type="font/woff2" crossorigin
           href="/fonts/archivo-800-latin.woff2" />
 
+    {/*
+      Le Compagnon a deux visages, un homme et une femme : tiré au sort à la
+      première page de la visite, gardé ensuite pour toute la visite (le
+      personnage ne change pas en cours de route). Posé sur <html> avant que la
+      page s'affiche, pour que chaque image parte directement du bon dossier.
+    */}
+    <script is:inline>
+      (function () {
+        var g;
+        try { g = sessionStorage.getItem('spt-compagnon'); } catch (e) {}
+        if (g !== 'femme' && g !== 'homme') {
+          g = Math.random() < 0.5 ? 'femme' : 'homme';
+          try { sessionStorage.setItem('spt-compagnon', g); } catch (e) {}
+        }
+        document.documentElement.dataset.compagnon = g;
+      })();
+    </script>
+
     <script type="application/ld+json" set:html={JSON.stringify(organisation())} />
     {schemas.map((sc) => (
       <script type="application/ld+json" set:html={JSON.stringify(sc)} />

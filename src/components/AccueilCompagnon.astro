@@ -8,7 +8,7 @@
  * personnage, les choix — est donc désormais un bloc de la page, que tout le
  * monde voit, visiteurs venus de Google compris, et qui ne cache rien.
  *
- * Version compacte, en « message » : un petit avatar, une bulle claire — le
+ * Version compacte, en « message » : le personnage debout, une bulle claire — le
  * titre de la page reste le seul bloc sombre, la hiérarchie se lit d'un coup
  * d'œil — et les trois premiers choix du Compagnon (src/data/compagnon.ts),
  * plus « Autre chose… » qui ouvre le Compagnon complet. Un choix qui pose une
@@ -25,7 +25,16 @@ const principaux = accueil.actions.slice(0, 3);
 
 <section class="acp" aria-labelledby="acp-titre">
   <div class="acp__dialogue">
-    <img class="acp__avatar" src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
+    {/* Le personnage debout, en entier : l'homme ou la femme tiré au sort pour
+        la visite (voir Base.astro). */}
+    <img class="acp__perso" src="/compagnon/debout.webp" width="324" height="360" alt="" decoding="async" />
+    <script is:inline>
+      if (document.documentElement.dataset.compagnon === 'femme') {
+        var i = document.currentScript.previousElementSibling;
+        i.src = '/compagnon/femme/debout.webp';
+        i.width = 360;
+      }
+    </script>
     <div class="acp__bulle">
       <h2 class="acp__titre" id="acp-titre">{accueil.titre}</h2>
       {/* Le texte est dans le HTML : Google le lit, et il s'affiche sans script.
@@ -133,24 +142,39 @@ const principaux = accueil.actions.slice(0, 3);
        titre juste au-dessus, et les deux blocs se lisaient au même niveau. */
     .acp__dialogue {
       display: grid;
-      grid-template-columns: 52px minmax(0, 1fr);
-      align-items: end;
-      gap: 0.6rem;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 0.4rem;
     }
-    .acp__avatar {
-      width: 52px;
-      height: 52px;
-      padding: 3px;
-      border-radius: 50%;
-      background: var(--ocre-vif);
+    /* Debout à gauche de sa bulle, les pieds calés sur la ligne des choix. */
+    .acp__perso {
+      width: auto;
+      height: 170px;
+      max-width: 38vw;
+      object-fit: contain;
+      object-position: bottom;
+      filter: drop-shadow(0 10px 14px rgba(7, 23, 38, 0.14));
     }
     .acp__bulle {
       position: relative;
       padding: 0.75rem 0.9rem 0.8rem;
       border: 1px solid var(--line);
-      border-radius: 18px 18px 18px 4px;
+      border-radius: 18px 18px 18px 18px;
       background: var(--surface);
       box-shadow: 0 6px 18px rgba(7, 23, 38, 0.07);
+    }
+    .acp__bulle::before {
+      position: absolute;
+      top: 38%;
+      right: 100%;
+      width: 12px;
+      height: 12px;
+      border: 1px solid var(--line);
+      border-width: 0 0 1px 1px;
+      background: var(--surface);
+      content: '';
+      translate: 7px 0;
+      rotate: 45deg;
     }
     .acp__titre {
       margin: 0 0 0.15rem;
@@ -173,7 +197,7 @@ const principaux = accueil.actions.slice(0, 3);
     .acp__choix {
       display: grid;
       gap: 0.45rem;
-      margin: 0.7rem 0 0 calc(52px + 0.6rem);
+      margin-top: 0.6rem;
     }
     .acp__c {
       display: grid;

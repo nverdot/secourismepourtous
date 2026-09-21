@@ -23,6 +23,13 @@
  *    sans buste à montrer, et donnaient un personnage tronqué au ras du sol.
  *    L'écran d'urgence prend donc « idle », la seule pose en pied — et un
  *    secouriste calme, debout, y vaut mieux qu'un visage inquiet.
+ *
+ * 3. Deux visages, tirés au sort à chaque visite (Base.astro) : l'homme
+ *    (public/compagnon/) et la femme (public/compagnon/femme/, paquet
+ *    « Compagnon FFSS femme, 9 poses », septembre 2026). Les poses de la femme
+ *    reprennent exactement le cadrage de celles de l'homme — même taille de
+ *    tête, même ligne du haut, tête centrée —, mesuré sur les originaux : le
+ *    personnage garde sa place quel que soit le visage tiré.
  */
 
 import { ICONES, PLEINES, ECRANS } from '../data/compagnon';
@@ -59,6 +66,10 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     aria-label="Besoin d’aide ?"
   >
     <img src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
+    <script is:inline>
+      if (document.documentElement.dataset.compagnon === 'femme')
+        document.currentScript.previousElementSibling.src = '/compagnon/femme/lanceur.webp';
+    </script>
   </button>
 
   <section
@@ -178,6 +189,8 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     const groupes = [...racine.querySelectorAll('[data-actions]')];
 
     const parId = Object.fromEntries(ENTETES.map((e) => [e.id, e]));
+    /* Le visage tiré au sort pour la visite (voir Base.astro). */
+    const dossier = document.documentElement.dataset.compagnon === 'femme' ? '/compagnon/femme/' : '/compagnon/';
     let precharge = false;
 
     /* Les poses ne partent qu'à l'approche : survol, focus clavier, ou à
@@ -189,7 +202,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       racine.dataset.poses.split(' ').forEach((p) => {
         const img = new Image();
         img.decoding = 'async';
-        img.src = `/compagnon/${p}.webp`;
+        img.src = `${dossier}${p}.webp`;
       });
     }
 
@@ -255,7 +268,7 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
       oeil.textContent = e.oeil;
       titre.textContent = e.titre;
       taper(e.message);
-      perso.src = `/compagnon/${e.pose}.webp`;
+      perso.src = `${dossier}${e.pose}.webp`;
       groupes.forEach((g) => (g.hidden = g.dataset.actions !== e.id));
       retour.hidden = e.id === 'accueil';
 
