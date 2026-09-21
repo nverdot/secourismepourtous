@@ -52,7 +52,14 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:site_name" content={asso.nom} />
-    <meta property="og:image" content={new URL('/img/equipe.jpg', Astro.site).href} />
+    {/* Image d'aperçu des partages (WhatsApp, Facebook, LinkedIn…) : au format
+        1200 × 630 qu'ils attendent, légère (WhatsApp ignore les images de plus
+        d'environ 300 Ko), et ses dimensions annoncées — sans elles, les
+        premiers partages d'une page s'affichent souvent sans image. */}
+    <meta property="og:image" content={new URL('/img/partage.jpg', Astro.site).href} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Secouristes de l'association en intervention" />
     <meta name="twitter:card" content="summary_large_image" />
 
