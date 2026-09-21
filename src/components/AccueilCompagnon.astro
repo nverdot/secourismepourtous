@@ -25,13 +25,13 @@ const principaux = accueil.actions.slice(0, 3);
 
 <section class="acp" aria-labelledby="acp-titre">
   <div class="acp__dialogue">
-    {/* Le personnage debout, en entier : l'un des trois visages tiré au sort pour
+    {/* Le personnage debout, en entier : l'un des quatre visages tiré au sort pour
         la visite (voir Base.astro). */}
     <img class="acp__perso" src="/compagnon/debout.webp" width="324" height="360" alt="" decoding="async" />
     <script is:inline>
       (function () {
         var v = document.documentElement.dataset.compagnon;
-        var largeur = { femme: 360, homme2: 348 }[v];
+        var largeur = { femme: 360, homme2: 348, femme2: 318 }[v];
         if (!largeur) return;
         var i = document.currentScript.previousElementSibling;
         i.src = '/compagnon/' + v + '/debout.webp';
