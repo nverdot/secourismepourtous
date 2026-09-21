@@ -24,10 +24,12 @@
  *    L'écran d'urgence prend donc « idle », la seule pose en pied — et un
  *    secouriste calme, debout, y vaut mieux qu'un visage inquiet.
  *
- * 3. Deux visages, tirés au sort à chaque visite (Base.astro) : l'homme
- *    (public/compagnon/) et la femme (public/compagnon/femme/, paquet
- *    « Compagnon FFSS femme, 9 poses », septembre 2026). Les poses de la femme
- *    reprennent exactement le cadrage de celles de l'homme — même taille de
+ * 3. Trois visages, tirés au sort à chaque visite (Base.astro) : l'homme
+ *    (public/compagnon/), la femme (public/compagnon/femme/, paquet
+ *    « Compagnon FFSS femme, 9 poses ») et un second homme
+ *    (public/compagnon/homme2/, paquet « Compagnon FFSS homme noir, 9 poses »),
+ *    septembre 2026. Les poses des deux derniers reprennent exactement le
+ *    cadrage de celles du premier — même taille de
  *    tête, même ligne du haut, tête centrée —, mesuré sur les originaux : le
  *    personnage garde sa place quel que soit le visage tiré.
  */
@@ -67,8 +69,9 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
   >
     <img src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
     <script is:inline>
-      if (document.documentElement.dataset.compagnon === 'femme')
-        document.currentScript.previousElementSibling.src = '/compagnon/femme/lanceur.webp';
+      var v = document.documentElement.dataset.compagnon;
+      if (v && v !== 'homme')
+        document.currentScript.previousElementSibling.src = '/compagnon/' + v + '/lanceur.webp';
     </script>
   </button>
 
@@ -190,7 +193,8 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
 
     const parId = Object.fromEntries(ENTETES.map((e) => [e.id, e]));
     /* Le visage tiré au sort pour la visite (voir Base.astro). */
-    const dossier = document.documentElement.dataset.compagnon === 'femme' ? '/compagnon/femme/' : '/compagnon/';
+    const visage = document.documentElement.dataset.compagnon;
+    const dossier = visage && visage !== 'homme' ? `/compagnon/${visage}/` : '/compagnon/';
     let precharge = false;
 
     /* Les poses ne partent qu'à l'approche : survol, focus clavier, ou à

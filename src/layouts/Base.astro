@@ -66,7 +66,7 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
           href="/fonts/archivo-800-latin.woff2" />
 
     {/*
-      Le Compagnon a deux visages, un homme et une femme : tiré au sort à la
+      Le Compagnon a trois visages, deux hommes et une femme : tiré au sort à la
       première page de la visite, gardé ensuite pour toute la visite (le
       personnage ne change pas en cours de route). Posé sur <html> avant que la
       page s'affiche, pour que chaque image parte directement du bon dossier.
@@ -75,8 +75,9 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
       (function () {
         var g;
         try { g = sessionStorage.getItem('spt-compagnon'); } catch (e) {}
-        if (g !== 'femme' && g !== 'homme') {
-          g = Math.random() < 0.5 ? 'femme' : 'homme';
+        var visages = ['homme', 'femme', 'homme2'];
+        if (visages.indexOf(g) < 0) {
+          g = visages[Math.floor(Math.random() * visages.length)];
           try { sessionStorage.setItem('spt-compagnon', g); } catch (e) {}
         }
         document.documentElement.dataset.compagnon = g;
