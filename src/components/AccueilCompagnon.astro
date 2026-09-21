@@ -8,36 +8,38 @@
  * personnage, les choix — est donc désormais un bloc de la page, que tout le
  * monde voit, visiteurs venus de Google compris, et qui ne cache rien.
  *
- * Les choix sont ceux du Compagnon (src/data/compagnon.ts). Un choix qui mène
- * à une page est un lien ; un choix qui pose une nouvelle question ouvre le
- * Compagnon sur cet écran — c'est alors le visiteur qui l'a demandé.
+ * Version compacte, en « message » : un petit avatar, une bulle claire — le
+ * titre de la page reste le seul bloc sombre, la hiérarchie se lit d'un coup
+ * d'œil — et les trois premiers choix du Compagnon (src/data/compagnon.ts),
+ * plus « Autre chose… » qui ouvre le Compagnon complet. Un choix qui pose une
+ * nouvelle question ouvre le Compagnon sur cet écran : c'est alors le
+ * visiteur qui l'a demandé.
  *
  * Absent sur ordinateur, où le Compagnon reste le lanceur du coin de l'écran.
  */
 import { ICONES, PLEINES, ECRANS } from '../data/compagnon';
 
 const accueil = ECRANS[0];
+const principaux = accueil.actions.slice(0, 3);
 ---
 
 <section class="acp" aria-labelledby="acp-titre">
-  <div class="acp__bulle">
-    <p class="acp__oeil">{accueil.oeil}</p>
-    <h2 class="acp__titre" id="acp-titre">{accueil.titre}</h2>
-    {/* Le texte est dans le HTML : Google le lit, et il s'affiche sans script.
-        Le script ne fait que le rejouer lettre à lettre. */}
-    <p class="acp__message" data-frappe>{accueil.message}</p>
-  </div>
-
-  <div class="acp__perso" aria-hidden="true">
-    <img src={`/compagnon/${accueil.pose}.webp`} width="508" height="475" alt="" decoding="async" />
+  <div class="acp__dialogue">
+    <img class="acp__avatar" src="/compagnon/lanceur.webp" width="128" height="128" alt="" decoding="async" />
+    <div class="acp__bulle">
+      <h2 class="acp__titre" id="acp-titre">{accueil.titre}</h2>
+      {/* Le texte est dans le HTML : Google le lit, et il s'affiche sans script.
+          Le script ne fait que le rejouer lettre à lettre. */}
+      <p class="acp__message" data-frappe>{accueil.message}</p>
+    </div>
   </div>
 
   <div class="acp__choix">
-    {accueil.actions.map((a, i) => {
+    {principaux.map((a, i) => {
       const contenu = (
         <>
           <span class="acp__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="19" height="19"
+            <svg viewBox="0 0 24 24" width="18" height="18"
                  fill={PLEINES.has(a.icone) ? 'currentColor' : 'none'}
                  stroke={PLEINES.has(a.icone) ? 'none' : 'currentColor'}
                  stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -51,11 +53,14 @@ const accueil = ECRANS[0];
           </svg>
         </>
       );
-      const classes = ['acp__c', { 'acp__c--premier': i === 0, 'acp__c--urgence': a.ecran === 'urgence' }];
+      const classes = ['acp__c', { 'acp__c--premier': i === 0 }];
       return a.vers
         ? <a class:list={classes} href={a.vers}>{contenu}</a>
         : <button type="button" class:list={classes} data-ecran={a.ecran}>{contenu}</button>;
     })}
+    <button type="button" class="acp__autre" data-ecran="accueil">
+      Autre chose… bénévolat, sauvetage sportif, don, urgence
+    </button>
   </div>
 </section>
 
@@ -121,43 +126,40 @@ const accueil = ECRANS[0];
   .acp { display: none; }
 
   @media (max-width: 720px) {
-    .acp { display: block; padding: 1.1rem var(--pad) 0.4rem; }
+    .acp { display: block; padding: 1.2rem var(--pad) 0.4rem; }
 
-    /* La bulle : ce que le personnage dit, pointe vers sa tête. */
+    /* Le Compagnon « écrit » au visiteur : avatar à gauche, bulle claire à
+       droite. Claire exprès — sombre, elle se confondait avec le bandeau du
+       titre juste au-dessus, et les deux blocs se lisaient au même niveau. */
+    .acp__dialogue {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      align-items: end;
+      gap: 0.6rem;
+    }
+    .acp__avatar {
+      width: 52px;
+      height: 52px;
+      padding: 3px;
+      border-radius: 50%;
+      background: var(--ocre-vif);
+    }
     .acp__bulle {
       position: relative;
-      padding: 0.85rem 1rem 0.95rem;
-      border-radius: 20px;
-      background: var(--navy-deep);
-      box-shadow: 0 14px 28px rgba(7, 23, 38, 0.16);
-      color: var(--on-navy-text);
-    }
-    .acp__bulle::after {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      border: 11px solid transparent;
-      border-top-color: var(--navy-deep);
-      border-bottom: 0;
-      content: '';
-      translate: -50% 0;
-    }
-    .acp__oeil {
-      margin: 0 0 0.1rem;
-      color: #ff8a80;
-      font: 700 0.72rem 'Archivo', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      padding: 0.75rem 0.9rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 18px 18px 18px 4px;
+      background: var(--surface);
+      box-shadow: 0 6px 18px rgba(7, 23, 38, 0.07);
     }
     .acp__titre {
-      margin: 0 0 0.2rem;
-      color: #fff;
-      font-size: 1.3rem;
+      margin: 0 0 0.15rem;
+      color: var(--navy-deep);
+      font-size: 1.1rem;
       font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
+      line-height: 1.2;
     }
-    .acp__message { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+    .acp__message { margin: 0; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.45; }
     :global(.acp__reste) { color: transparent; }
     :global(.acp__frappe:not(.est-fini))::after {
       position: absolute;
@@ -167,55 +169,25 @@ const accueil = ECRANS[0];
     }
     @keyframes acp-curseur { 50% { opacity: 0; } }
 
-    /* Le personnage, debout derrière le premier choix. */
-    .acp__perso {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      height: 180px;
-      margin-top: 0.35rem;
-    }
-    .acp__perso::before {
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      width: min(280px, 80%);
-      height: 80%;
-      border-radius: 48% 52% 44% 56%;
-      background: linear-gradient(145deg, #dcecf5, #f7fbfd);
-      content: '';
-      translate: -50% 0;
-    }
-    .acp__perso img {
-      position: relative;
-      width: auto;
-      height: 180px;
-      max-width: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 18px 22px rgba(7, 23, 38, 0.16));
-    }
-
+    /* Les choix, alignés sous la bulle, comme des réponses proposées. */
     .acp__choix {
-      position: relative;
-      z-index: 1;
       display: grid;
-      gap: 0.5rem;
-      margin-top: -0.7rem;
+      gap: 0.45rem;
+      margin: 0.7rem 0 0 calc(52px + 0.6rem);
     }
     .acp__c {
       display: grid;
-      grid-template-columns: 38px minmax(0, 1fr) auto;
+      grid-template-columns: 32px minmax(0, 1fr) auto;
       align-items: center;
-      gap: 0.7rem;
+      gap: 0.6rem;
       width: 100%;
-      min-height: 58px;
-      padding: 0.5rem 0.75rem;
+      min-height: 50px;
+      padding: 0.45rem 0.65rem;
       border: 1px solid #d8e3ea;
-      border-radius: 15px;
+      border-radius: 14px;
       background: var(--surface);
-      box-shadow: 0 7px 18px rgba(7, 23, 38, 0.06);
       color: var(--ink);
-      font: 700 0.95rem/1.25 'Archivo', sans-serif;
+      font: 700 0.9rem/1.25 'Archivo', sans-serif;
       text-align: left;
       text-decoration: none;
       cursor: pointer;
@@ -223,19 +195,28 @@ const accueil = ECRANS[0];
     .acp__ic {
       display: grid;
       place-items: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
       background: var(--secours-wash);
       color: var(--secours);
     }
     .acp__chev { color: var(--ink-mute); }
-
     .acp__c--premier { border-color: transparent; background: var(--secours); color: #fff; }
     .acp__c--premier .acp__ic { background: rgba(255, 255, 255, 0.16); color: #fff; }
     .acp__c--premier .acp__chev { color: #fff; }
 
-    .acp__c--urgence { border-color: rgba(216, 56, 42, 0.35); background: var(--secours-wash); color: var(--secours); }
+    .acp__autre {
+      justify-self: start;
+      min-height: 40px;
+      padding: 0.3rem 0.1rem;
+      border: 0;
+      background: none;
+      color: var(--azur);
+      font: 700 0.85rem 'Archivo', sans-serif;
+      text-align: left;
+      cursor: pointer;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
