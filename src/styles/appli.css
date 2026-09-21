@@ -262,8 +262,11 @@
   body[data-appli] .sess__info { display: flex; flex-direction: column; align-items: center; gap: 0; font-size: 0.72rem; line-height: 1.3; }
   body[data-appli] .sess__info strong { text-transform: capitalize; font-size: 0.8rem; }
   body[data-appli] .sess__lieu { display: none; }
+  /* « margin-left: auto » de la ligne d'ordinateur poussait le bouton à
+     droite de la tuile : on le recentre. */
   body[data-appli] .sess__cta {
-    margin-top: 0.25rem;
+    align-self: center;
+    margin: 0.25rem auto 0;
     padding: 0.28rem 0.55rem;
     border-radius: 999px;
     background: var(--secours);
