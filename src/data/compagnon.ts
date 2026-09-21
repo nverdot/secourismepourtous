@@ -18,7 +18,7 @@ export const ICONES: Record<string, string> = {
   flamme: 'M12.6 2c.2 3-1.4 4.4-3 5.9-1.5 1.5-2.6 2.9-2.6 4.9a5 5 0 0 0 10 0c0-2.3-1.2-3.8-2.3-5.1-.3 1.1-.9 1.7-1.6 1.7-1 0-1.5-.9-1.2-2.2.4-1.6.7-3.4.7-5.2z',
   telephone: 'M6.8 3.5h2.9l1.4 3.8-2 1.5a12.6 12.6 0 0 0 6.1 6.1l1.5-2 3.8 1.4v2.9a1.9 1.9 0 0 1-2.1 1.9A16.6 16.6 0 0 1 4.9 5.6a1.9 1.9 0 0 1 1.9-2.1z',
   bulle: 'M4.5 5.5h15v10h-9l-6 4.5z',
-  diplome: 'M3.2 9.2L12 5.3l8.8 3.9L12 13.1zM7.2 11.2v4.4c0 1.4 2.1 2.5 4.8 2.5s4.8-1.1 4.8-2.5v-4.4',
+  diplome: 'M3.2 9.2L12 5.3l8.8 3.9L12 13.1zM7.2 11.2v4.4c0 1.4 2.1 2.5 4.8 2.5s4.8-1.1 4.8-2.5v-4.4M20.8 9.2v5',
   equipe: 'M9 11.2a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zM3.5 19.5c0-3 2.5-5.1 5.5-5.1s5.5 2.1 5.5 5.1M16.2 5.4a3.1 3.1 0 0 1 0 6M17.2 14.7c2 .5 3.3 2.2 3.3 4.4',
   trousse: 'M4 8.2h16v11.3H4zM8.8 8.2V5.4a1 1 0 0 1 1-1h4.4a1 1 0 0 1 1 1v2.8M12 11.6v4.6M9.7 13.9h4.6',
   coeur: 'M12 20.3S4.6 15.6 4.6 10.6a4.1 4.1 0 0 1 7.4-2.5 4.1 4.1 0 0 1 7.4 2.5c0 5-7.4 9.7-7.4 9.7z',
@@ -69,7 +69,7 @@ export const ECRANS: Ecran[] = [
     titre: 'Bonjour !',
     message: 'Bienvenue chez Secourisme Pour Tous, l’association de secourisme et de sauvetage de la Côte d’Azur. En quoi puis-je vous aider\u202f?',
     actions: [
-      { texte: 'Je veux apprendre les premiers secours', icone: 'croix', ecran: 'formation' },
+      { texte: 'Je veux apprendre les premiers secours', icone: 'diplome', ecran: 'formation' },
       { texte: 'Je viens recycler mon diplôme', icone: 'recyclage', ecran: 'recyclage' },
       { texte: 'Je cherche des secouristes pour mon événement', icone: 'trousse', ecran: 'dispositif' },
       { texte: 'Je veux devenir bénévole', icone: 'equipe', ecran: 'benevolat' },
