@@ -1,0 +1,244 @@
+---
+/**
+ * L'accueil du Compagnon, posé dans la page d'accueil du téléphone.
+ *
+ * Il ouvrait autrefois le Compagnon en plein écran à l'arrivée. Google
+ * pénalise les fenêtres qui masquent le contenu juste après l'arrivée
+ * (« interstitiels intrusifs ») : le même premier écran — la bulle, le
+ * personnage, les choix — est donc désormais un bloc de la page, que tout le
+ * monde voit, visiteurs venus de Google compris, et qui ne cache rien.
+ *
+ * Les choix sont ceux du Compagnon (src/data/compagnon.ts). Un choix qui mène
+ * à une page est un lien ; un choix qui pose une nouvelle question ouvre le
+ * Compagnon sur cet écran — c'est alors le visiteur qui l'a demandé.
+ *
+ * Absent sur ordinateur, où le Compagnon reste le lanceur du coin de l'écran.
+ */
+import { ICONES, PLEINES, ECRANS } from '../data/compagnon';
+
+const accueil = ECRANS[0];
+---
+
+<section class="acp" aria-labelledby="acp-titre">
+  <div class="acp__bulle">
+    <p class="acp__oeil">{accueil.oeil}</p>
+    <h2 class="acp__titre" id="acp-titre">{accueil.titre}</h2>
+    {/* Le texte est dans le HTML : Google le lit, et il s'affiche sans script.
+        Le script ne fait que le rejouer lettre à lettre. */}
+    <p class="acp__message" data-frappe>{accueil.message}</p>
+  </div>
+
+  <div class="acp__perso" aria-hidden="true">
+    <img src={`/compagnon/${accueil.pose}.webp`} width="508" height="475" alt="" decoding="async" />
+  </div>
+
+  <div class="acp__choix">
+    {accueil.actions.map((a, i) => {
+      const contenu = (
+        <>
+          <span class="acp__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="19" height="19"
+                 fill={PLEINES.has(a.icone) ? 'currentColor' : 'none'}
+                 stroke={PLEINES.has(a.icone) ? 'none' : 'currentColor'}
+                 stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d={ICONES[a.icone]} />
+            </svg>
+          </span>
+          <span class="acp__t">{a.texte}</span>
+          <svg class="acp__chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+               fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </>
+      );
+      const classes = ['acp__c', { 'acp__c--premier': i === 0, 'acp__c--urgence': a.ecran === 'urgence' }];
+      return a.vers
+        ? <a class:list={classes} href={a.vers}>{contenu}</a>
+        : <button type="button" class:list={classes} data-ecran={a.ecran}>{contenu}</button>;
+    })}
+  </div>
+</section>
+
+<script>
+  const bloc = document.querySelector<HTMLElement>('.acp');
+  if (bloc) {
+    /* Un choix qui pose une nouvelle question : le Compagnon s'ouvre sur cet
+       écran-là, la conversation continue. */
+    bloc.querySelectorAll<HTMLButtonElement>('[data-ecran]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const c = (window as any).Compagnon;
+        if (!c) return;
+        c.ouvrir();
+        c.afficher(b.dataset.ecran, true);
+      })
+    );
+
+    /* La réplique s'écrit lettre à lettre, comme dans le Compagnon. Le texte
+       entier reste lu par les lecteurs d'écran ; rien ne bouge pour qui a
+       demandé à limiter les animations ; et sur ordinateur, où le bloc est
+       masqué, on ne fait rien. */
+    const message = bloc.querySelector<HTMLElement>('[data-frappe]');
+    const etroit = matchMedia('(max-width: 720px)').matches;
+    const sobre = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (message && etroit && !sobre) {
+      const texte = message.textContent || '';
+      const lu = document.createElement('span');
+      lu.className = 'vh';
+      lu.textContent = texte;
+      const vu = document.createElement('span');
+      vu.setAttribute('aria-hidden', 'true');
+      const ecrit = document.createElement('span');
+      ecrit.className = 'acp__frappe';
+      const reste = document.createElement('span');
+      reste.className = 'acp__reste';
+      reste.textContent = texte;
+      vu.append(ecrit, reste);
+      message.replaceChildren(lu, vu);
+
+      let i = 0;
+      let minuterie = 0;
+      const finir = () => {
+        clearTimeout(minuterie);
+        ecrit.textContent = texte;
+        reste.textContent = '';
+        ecrit.classList.add('est-fini');
+      };
+      const pas = () => {
+        i += 1;
+        ecrit.textContent = texte.slice(0, i);
+        reste.textContent = texte.slice(i);
+        if (i >= texte.length) return finir();
+        const c = texte[i - 1];
+        minuterie = window.setTimeout(pas, '.?!…'.includes(c) ? 260 : ',:;'.includes(c) ? 130 : 28);
+      };
+      message.addEventListener('click', finir);
+      minuterie = window.setTimeout(pas, 400);
+    }
+  }
+</script>
+
+<style>
+  .acp { display: none; }
+
+  @media (max-width: 720px) {
+    .acp { display: block; padding: 1.1rem var(--pad) 0.4rem; }
+
+    /* La bulle : ce que le personnage dit, pointe vers sa tête. */
+    .acp__bulle {
+      position: relative;
+      padding: 0.85rem 1rem 0.95rem;
+      border-radius: 20px;
+      background: var(--navy-deep);
+      box-shadow: 0 14px 28px rgba(7, 23, 38, 0.16);
+      color: var(--on-navy-text);
+    }
+    .acp__bulle::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      border: 11px solid transparent;
+      border-top-color: var(--navy-deep);
+      border-bottom: 0;
+      content: '';
+      translate: -50% 0;
+    }
+    .acp__oeil {
+      margin: 0 0 0.1rem;
+      color: #ff8a80;
+      font: 700 0.72rem 'Archivo', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .acp__titre {
+      margin: 0 0 0.2rem;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .acp__message { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+    :global(.acp__reste) { color: transparent; }
+    :global(.acp__frappe:not(.est-fini))::after {
+      position: absolute;
+      margin-left: 1px;
+      content: '▍';
+      animation: acp-curseur 0.8s steps(1) infinite;
+    }
+    @keyframes acp-curseur { 50% { opacity: 0; } }
+
+    /* Le personnage, debout derrière le premier choix. */
+    .acp__perso {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      height: 180px;
+      margin-top: 0.35rem;
+    }
+    .acp__perso::before {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: min(280px, 80%);
+      height: 80%;
+      border-radius: 48% 52% 44% 56%;
+      background: linear-gradient(145deg, #dcecf5, #f7fbfd);
+      content: '';
+      translate: -50% 0;
+    }
+    .acp__perso img {
+      position: relative;
+      width: auto;
+      height: 180px;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 22px rgba(7, 23, 38, 0.16));
+    }
+
+    .acp__choix {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 0.5rem;
+      margin-top: -0.7rem;
+    }
+    .acp__c {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.7rem;
+      width: 100%;
+      min-height: 58px;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d8e3ea;
+      border-radius: 15px;
+      background: var(--surface);
+      box-shadow: 0 7px 18px rgba(7, 23, 38, 0.06);
+      color: var(--ink);
+      font: 700 0.95rem/1.25 'Archivo', sans-serif;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .acp__ic {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--secours-wash);
+      color: var(--secours);
+    }
+    .acp__chev { color: var(--ink-mute); }
+
+    .acp__c--premier { border-color: transparent; background: var(--secours); color: #fff; }
+    .acp__c--premier .acp__ic { background: rgba(255, 255, 255, 0.16); color: #fff; }
+    .acp__c--premier .acp__chev { color: #fff; }
+
+    .acp__c--urgence { border-color: rgba(216, 56, 42, 0.35); background: var(--secours-wash); color: var(--secours); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.acp__frappe)::after { display: none; }
+  }
+</style>

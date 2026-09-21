@@ -6,6 +6,7 @@ import { asso } from '../data/association';
 import { formations, filieres, type Filiere } from '../data/formations';
 import { sessionsAVenir, sessionsDe } from '../lib/wix';
 import CartesFilieres from '../components/CartesFilieres.astro';
+import AccueilCompagnon from '../components/AccueilCompagnon.astro';
 
 const sessions = await sessionsAVenir();
 const prochaines = sessions.slice(0, 3);
@@ -82,6 +83,10 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
     </svg>
   </header>
 
+  {/* Téléphone : le Compagnon accueille le visiteur dans la page, avant les
+      formations — sans fenêtre par-dessus le contenu. */}
+  <AccueilCompagnon />
+
   <!-- ============ CHIFFRES ============ -->
   <section class="wrap chiffres" aria-label="L'association en chiffres">
     <div class="chiffres__grille">
@@ -101,7 +106,8 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
     déroule déjà tout cela en grand. Ils s'intercalent entre les sections
     communes pour que l'accueil se lise dans l'ordre des questions du
     visiteur (voir l'ordre dans les styles) :
-      qui sommes-nous → se former (filières, puis prochaines dates) →
+      qui sommes-nous → l'accueil du Compagnon → se former (filières, puis
+      prochaines dates) →
       nos activités → les bons réflexes (urgence, quiz) → la confiance
       (chiffres, partenaires) → le don.
     Pas de raccourcis vers les rubriques ni de barre de recherche : la barre
@@ -480,16 +486,17 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
      * sans rien changer sur ordinateur ni pour Google.
      */
     :global(main:has(.appli)) { display: flex; flex-direction: column; }
-    :global(main:has(.appli) > *) { order: 10; }
+    :global(main:has(.appli) > *) { order: 20; }
     .hero { order: 1; }
-    :global(main:has(.appli) > section[aria-labelledby='t-filieres']) { order: 2; }
-    .appli--dates { order: 3; }
-    :global(main:has(.appli) > section[aria-labelledby='t-poles']) { order: 4; }
-    .appli--gestes { order: 5; }
-    .appli--chiffres { order: 6; }
-    :global(main:has(.appli) > section[aria-labelledby='t-partenaires']) { order: 7; }
-    :global(main:has(.appli) > .avg) { order: 8; }
-    :global(main:has(.appli) > section[aria-labelledby='t-don']) { order: 9; }
+    :global(main:has(.appli) > .acp) { order: 2; }
+    :global(main:has(.appli) > section[aria-labelledby='t-filieres']) { order: 3; }
+    .appli--dates { order: 4; }
+    :global(main:has(.appli) > section[aria-labelledby='t-poles']) { order: 5; }
+    .appli--gestes { order: 6; }
+    .appli--chiffres { order: 7; }
+    :global(main:has(.appli) > section[aria-labelledby='t-partenaires']) { order: 8; }
+    :global(main:has(.appli) > .avg) { order: 9; }
+    :global(main:has(.appli) > section[aria-labelledby='t-don']) { order: 10; }
 
     /* Un même fond et un même rythme pour toutes les sections : ce sont les
        rubriques d'un seul écran, pas des bandeaux de site qui alternent. */
