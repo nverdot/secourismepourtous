@@ -140,16 +140,22 @@ const principaux = accueil.actions.slice(0, 3);
     /* Le Compagnon « écrit » au visiteur : avatar à gauche, bulle claire à
        droite. Claire exprès — sombre, elle se confondait avec le bandeau du
        titre juste au-dessus, et les deux blocs se lisaient au même niveau. */
+    /* Le personnage se tient en bas, derrière le premier choix ; la bulle
+       reste en haut, à hauteur de sa tête. Centré, il laissait un vide entre
+       ses pieds et le premier bouton. */
     .acp__dialogue {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
+      align-items: start;
       gap: 0.4rem;
     }
-    /* Debout à gauche de sa bulle, les pieds calés sur la ligne des choix. */
+    /* Seul le personnage déborde sous le premier choix (marge basse
+       négative) : la bulle, elle, garde son espace au-dessus des boutons. */
     .acp__perso {
+      align-self: end;
+      margin-bottom: -1.1rem;
       width: auto;
-      height: 170px;
+      height: 185px;
       max-width: 38vw;
       object-fit: contain;
       object-position: bottom;
@@ -165,7 +171,7 @@ const principaux = accueil.actions.slice(0, 3);
     }
     .acp__bulle::before {
       position: absolute;
-      top: 38%;
+      top: 1.4rem;
       right: 100%;
       width: 12px;
       height: 12px;
@@ -197,7 +203,9 @@ const principaux = accueil.actions.slice(0, 3);
     .acp__choix {
       display: grid;
       gap: 0.45rem;
-      margin-top: 0.6rem;
+      position: relative;
+      z-index: 1;
+      margin-top: 0.55rem;
     }
     .acp__c {
       display: grid;
