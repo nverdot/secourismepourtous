@@ -23,6 +23,22 @@
 /pae-f-ps               /formations/pae-f-ps       301
 /pae-f-ps-ou-fo-ps      /formations/pae-f-ps       301
 
+# ---- Anciennes adresses encore visitées depuis Google ----
+# Relevées dans la Search Console le 21 septembre 2026 (3 derniers mois) :
+# elles tombaient sur la page 404. « /psc-1 » à elle seule y amenait près de
+# 200 visiteurs par trimestre.
+/psc-1                                               /formations/psc              301
+/bnssa/*                                             /formations/ssa              301
+/formations-secourisme-nice/formation-psc-nice       /formations/psc              301
+/formations-secourisme-nice/formation-pse1-nice      /formations/pse-1            301
+/formations-secourisme-nice/formation-pse2-nice      /formations/pse-2            301
+/formations-secourisme-nice/formation-bnssa-nice     /formations/ssa              301
+/formations-secourisme-nice/fc-pse1-pse2-nice        /formations/fc-pse-1         301
+/formations-secourisme-nice/postes-de-secours-nice   /postes-de-secours/nice      301
+/perte-de-connaissance                               /gestes-qui-sauvent/perte-de-connaissance  301
+/validite-reactualisation                            /validite-recyclage          301
+/sport-adapte                                        /sauvetage-sportif           301
+
 # ---- Pages renommées ----
 /formateur                  /devenir-formateur   301
 /copie-de-sauvetage-sportif /sauvetage-sportif   301
