@@ -629,7 +629,25 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
      * retenu, et seulement le temps de l'onglet (sessionStorage).
      */
     const ACCUEILLI = 'spt-compagnon-accueil';
-    if (location.pathname === '/' && matchMedia('(max-width: 720px)').matches) {
+
+    /*
+     * Pas d'accueil plein écran pour qui arrive d'un moteur de recherche.
+     * Google pénalise les fenêtres qui masquent le contenu juste après un
+     * clic depuis ses résultats (« interstitiels intrusifs ») — et ce
+     * visiteur-là a déjà dit ce qu'il cherchait : il doit tomber sur la page.
+     * Le Compagnon reste à un toucher, dans la barre d'onglets.
+     */
+    const depuisMoteur = (() => {
+      try {
+        const h = new URL(document.referrer).hostname;
+        return /(^|\.)(google|bing|yahoo|duckduckgo|qwant|ecosia|yandex|baidu|startpage|lilo|ask)\.[a-z.]+$/i.test(h)
+          || h === 'search.brave.com';
+      } catch {
+        return false;
+      }
+    })();
+
+    if (location.pathname === '/' && !depuisMoteur && matchMedia('(max-width: 720px)').matches) {
       let deja = false;
       try {
         deja = sessionStorage.getItem(ACCUEILLI) === '1';
