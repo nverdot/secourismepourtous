@@ -499,7 +499,52 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
     :global(main:has(.appli) > .section) { padding-block: 1.1rem 0.6rem; background: transparent; }
     :global(main:has(.appli) > .section--appel) { padding-block: 1.2rem 1.6rem; }
     :global(main:has(.appli) .filieres__tete .lede) { display: none; }
-    :global(main:has(.appli) .filieres__tete > p:not(.eyebrow):not(.lede)) { margin: 0.3rem 0 0; font-size: 0.85rem; line-height: 1.45; }
+
+    /*
+     * L'enchaînement accueil → formations. Un filet sous l'accueil du
+     * Compagnon marque la fin de la conversation ; les filières suivent
+     * directement leur titre ; les deux questions « Vous hésitez… » et
+     * « Vous avez déjà un diplôme… » passent sous la liste, en deux cartes
+     * qu'on touche entières. L'en-tête du composant devient transparent
+     * (« display: contents ») pour que ses éléments se rangent avec la liste.
+     */
+    :global(main:has(.appli) > section[aria-labelledby='t-filieres']) { padding-top: 1.5rem; }
+    :global(main:has(.appli) > section[aria-labelledby='t-filieres'] > .wrap) { display: flex; flex-direction: column; }
+    :global(main:has(.appli) .filieres__tete) { display: contents; }
+    :global(main:has(.appli) .filieres__tete .h-section) { order: 1; margin-bottom: 0; }
+    :global(main:has(.appli) > section[aria-labelledby='t-filieres'] .cartes) { order: 2; }
+    :global(main:has(.appli) .filieres__aide) {
+      position: relative;
+      order: 3;
+      margin: 0.5rem 0 0;
+      padding: 0.65rem 2.2rem 0.65rem 0.85rem;
+      border-radius: 14px;
+      background: var(--sunk);
+      color: var(--ink-mute);
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+    /* « .section » en plus : la règle du composant (« .filieres__aide a » et
+       ses attributs Astro) pèse sinon davantage, et le lien restait rouge
+       souligné. */
+    :global(main:has(.appli) .section .filieres__aide a) {
+      display: block;
+      margin-top: 0.1rem;
+      color: var(--azur);
+      font: 700 0.9rem 'Archivo', sans-serif;
+      text-decoration: none;
+    }
+    /* Toute la carte se touche ; la flèche dit que c'est un lien. */
+    :global(main:has(.appli) .filieres__aide a)::after { position: absolute; inset: 0; content: ''; }
+    :global(main:has(.appli) .filieres__aide)::after {
+      position: absolute;
+      top: 50%;
+      right: 0.9rem;
+      translate: 0 -50%;
+      color: var(--ink-mute);
+      font-size: 1.4rem;
+      content: '›';
+    }
     :global(main:has(.appli) .cartes) { margin-top: 0.8rem; }
     :global(main:has(.appli) :is(.poles, .partenaires)) { margin-top: 0.7rem; }
 

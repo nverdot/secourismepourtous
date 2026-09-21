@@ -135,7 +135,14 @@ const principaux = accueil.actions.slice(0, 3);
   .acp { display: none; }
 
   @media (max-width: 720px) {
-    .acp { display: block; padding: 1.2rem var(--pad) 0.4rem; }
+    /* Un filet sous l'accueil : la conversation s'arrête là, les formations
+       commencent. */
+    .acp {
+      display: block;
+      margin-inline: var(--pad);
+      padding: 1.2rem 0 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
 
     /* Le Compagnon « écrit » au visiteur : avatar à gauche, bulle claire à
        droite. Claire exprès — sombre, elle se confondait avec le bandeau du
