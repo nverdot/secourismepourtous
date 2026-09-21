@@ -527,13 +527,17 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
         ecrit.classList.add('est-fini');
       };
       if (sobre.matches) return finir();
+      /* Une lettre toutes les 28 ms, soit le rythme d'une réplique qu'on lit
+         en même temps qu'elle s'écrit ; un temps après la ponctuation, comme
+         une voix qui reprend son souffle. */
       let i = 0;
       const pas = () => {
-        i += 2;
+        i += 1;
         ecrit.textContent = texte.slice(0, i);
         reste.textContent = texte.slice(i);
-        if (i < texte.length) frappe = setTimeout(pas, 22);
-        else finir();
+        if (i >= texte.length) return finir();
+        const c = texte[i - 1];
+        frappe = setTimeout(pas, '.?!…'.includes(c) ? 260 : ',:;'.includes(c) ? 130 : 28);
       };
       pas();
     }
