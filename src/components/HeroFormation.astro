@@ -109,6 +109,44 @@ const faits = [
   </div>
 </section>
 
+{/*
+  La barre d'inscription du téléphone : le prix et le bouton restent sous le
+  pouce pendant qu'on lit la fiche, comme dans une application de
+  réservation. Elle n'apparaît qu'une fois l'en-tête dépassé, et s'efface
+  quand la liste des dates est à l'écran — elle ferait alors doublon.
+*/}
+{!f.suspendue && !f.datesAVenir && nbSessions > 0 && (
+  <div class="collant" data-collant hidden>
+    <span class="collant__prix">
+      <small>{f.sigle} · {f.duree}</small>
+      <strong>{f.tarif}</strong>
+    </span>
+    <a class="collant__btn" href="#sessions" data-ouvre-dates>Choisir une date</a>
+  </div>
+)}
+
+<script>
+  const barre = document.querySelector<HTMLElement>('[data-collant]');
+  const hero = document.querySelector('.hero');
+  const dates = document.getElementById('sessions');
+  if (barre && hero) {
+    /* Une lecture de position par image, pas plus : le défilement peut
+       émettre des dizaines d'événements par seconde. */
+    let prevu = false;
+    const maj = () => {
+      prevu = false;
+      const heroVu = hero.getBoundingClientRect().bottom > 0;
+      const r = dates?.getBoundingClientRect();
+      const datesVues = !!r && r.top < innerHeight && r.bottom > 0;
+      barre.hidden = heroVu || datesVues;
+    };
+    addEventListener('scroll', () => {
+      if (!prevu) { prevu = true; requestAnimationFrame(maj); }
+    }, { passive: true });
+    maj();
+  }
+</script>
+
 <style>
   .hero {
     position: relative;
@@ -261,5 +299,57 @@ const faits = [
     .fait__label { font-size: .62rem; letter-spacing: .1em; }
     .fait__valeur { font-size: 1.15rem; }
     .fait__note { font-size: .76rem; }
+  }
+
+  /* --- barre d'inscription collante (téléphone) --- */
+  .collant { display: none; }
+  @media (max-width: 720px) {
+    .collant:not([hidden]) {
+      position: fixed;
+      z-index: 39;
+      inset-inline: 0.6rem;
+      bottom: calc(5.9rem + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.55rem 0.55rem 0.95rem;
+      /* Blanche, et pas marine : la fiche alterne fonds clairs et sections
+         marine (« Qui vous formera », accessibilité), et une barre marine
+         s'y fondait. Le blanc se détache sur le marine ; le filet et l'ombre
+         la séparent des fonds clairs. */
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: 0 10px 30px rgba(7, 23, 38, 0.28), 0 2px 6px rgba(7, 23, 38, 0.12);
+      color: var(--ink);
+      animation: collant-entre 0.22s ease-out both;
+    }
+    .collant__prix { display: flex; flex-direction: column; line-height: 1.15; }
+    .collant__prix small { color: var(--ink-mute); font-size: 0.72rem; font-weight: 600; }
+    .collant__prix strong { font-family: 'Archivo', sans-serif; font-size: 1.15rem; font-weight: 800; }
+    .collant__btn {
+      display: inline-grid;
+      place-items: center;
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      border-radius: 13px;
+      background: var(--secours);
+      color: #fff;
+      font-family: 'Archivo', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+  }
+  /* Tant que la barre est là, la bulle « Besoin d'aide ? » du Compagnon se
+     tait : elle tombait pile sur le bouton « Choisir une date ». */
+  @media (max-width: 720px) {
+    :global(body:has([data-collant]:not([hidden])) .compagnon[data-bulle] .compagnon__bulle) { display: none; }
+  }
+
+  @keyframes collant-entre {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
 </style>

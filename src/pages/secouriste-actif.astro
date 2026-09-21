@@ -288,4 +288,22 @@ const etapes = [
   .fm__envoi { align-self: flex-start; margin-top: .3rem; }
   .fm__direct { margin-top: 1.5rem; font-size: .9rem; color: var(--ink-mute); }
   .fm__direct a { color: var(--azur); }
+
+  /* Téléphone : les quatre engagements en liste, icône à gauche, comme les
+     réglages d'une application. En rangée à faire glisser, la carte suivante
+     dépassait de l'écran et se lisait comme un défaut. */
+  @media (max-width: 720px) {
+    .atouts { grid-template-columns: 1fr; gap: 0.5rem; }
+    .atout {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      column-gap: 0.8rem;
+      align-items: start;
+      padding: 0.9rem;
+      border-radius: 16px;
+    }
+    .atout__ic { grid-row: 1 / span 2; margin: 0; }
+    .atout h3 { font-size: 0.98rem; margin-bottom: 0.2rem; }
+    .atout p { font-size: 0.86rem; line-height: 1.45; }
+  }
 </style>

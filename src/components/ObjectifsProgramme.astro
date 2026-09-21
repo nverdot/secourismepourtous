@@ -89,7 +89,20 @@ const v = niveauPse ? volume(niveauPse) : null;
 ---
 
 <section class="section" aria-label="Contenu de la formation">
-  <div class="wrap op">
+  <div class="wrap op" data-op>
+    {/*
+      Sur téléphone, les trois volets deviennent des onglets : on lit l'un,
+      puis l'autre, au lieu de faire défiler 2 500 pixels. Les onglets
+      n'existent que si le script tourne — sans lui, tout reste affiché. Les
+      trois volets restent dans le HTML : Google les lit tous.
+    */}
+    {!f.programmeEnAttente && (
+      <div class="op__onglets" role="tablist" aria-label="Contenu de la formation" hidden>
+        <button type="button" role="tab" data-vue="buts" aria-selected="true">Objectifs</button>
+        <button type="button" role="tab" data-vue="programme" aria-selected="false">Programme</button>
+        <button type="button" role="tab" data-vue="mods" aria-selected="false">Modalités</button>
+      </div>
+    )}
     {/* Tant que le référentiel n'est pas paru, on ne publie ni objectifs ni
         programme : ce serait promettre un contenu qu'on ne peut pas tenir, et
         quelqu'un s'inscrirait dessus. Les modalités restent — elles n'en
@@ -120,7 +133,7 @@ const v = niveauPse ? volume(niveauPse) : null;
 
     <!-- Objectifs -->
     {!f.programmeEnAttente && (
-    <div class="buts-col">
+    <div class="buts-col" data-volet="buts">
       <div class="op__tete">
         <span class="op__ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -155,7 +168,7 @@ const v = niveauPse ? volume(niveauPse) : null;
     <!-- Modalités : ce que l'en-tête de page ne dit pas déjà. Qualiopi impose
          de les publier ; les répéter ailleurs ferait doublon. -->
     {!f.programmeEnAttente && (
-    <div class="mods">
+    <div class="mods" data-volet="mods">
       <div class="op__tete">
         <span class="op__ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -190,7 +203,7 @@ const v = niveauPse ? volume(niveauPse) : null;
 
     <!-- Programme -->
     {!f.programmeEnAttente && (
-    <div id="programme">
+    <div id="programme" data-volet="programme">
       <div class="op__tete">
         <span class="op__ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -290,6 +303,34 @@ const v = niveauPse ? volume(niveauPse) : null;
     </div>
   )}
 </section>
+
+
+<script>
+  /* Les onglets du téléphone. Sous 720 px seulement : au-delà, les trois
+     volets tiennent côte à côte et n'ont rien à cacher. Un lien vers
+     « #programme » (le bouton de l'en-tête) ouvre le bon onglet. */
+  document.querySelectorAll<HTMLElement>('[data-op]').forEach((op) => {
+    const barre = op.querySelector<HTMLElement>('.op__onglets');
+    if (!barre) return;
+    const onglets = [...barre.querySelectorAll<HTMLButtonElement>('[data-vue]')];
+    const etroit = matchMedia('(max-width: 720px)');
+
+    const montrer = (vue: string) => {
+      op.dataset.vue = vue;
+      onglets.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.vue === vue)));
+    };
+    const appliquer = () => {
+      barre.hidden = !etroit.matches;
+      if (etroit.matches) montrer(location.hash === '#programme' ? 'programme' : op.dataset.vue || 'buts');
+      else delete op.dataset.vue;
+    };
+
+    onglets.forEach((b) => b.addEventListener('click', () => montrer(b.dataset.vue!)));
+    addEventListener('hashchange', () => { if (location.hash === '#programme' && etroit.matches) montrer('programme'); });
+    etroit.addEventListener('change', appliquer);
+    appliquer();
+  });
+</script>
 
 <style>
   /* Colonne gauche : objectifs puis modalités, l'un sous l'autre.
@@ -509,5 +550,47 @@ const v = niveauPse ? volume(niveauPse) : null;
   .apres ul {
     display: grid; gap: .8rem;
     grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  }
+
+  /* --- les onglets du téléphone --- */
+  .op__onglets { display: none; }
+  @media (max-width: 720px) {
+    .op__onglets:not([hidden]) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.25rem;
+      padding: 0.25rem;
+      border-radius: 14px;
+      background: var(--sunk);
+    }
+    .op__onglets button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 11px;
+      background: none;
+      color: var(--ink-mute);
+      font: 700 0.88rem 'Archivo', sans-serif;
+      cursor: pointer;
+    }
+    .op__onglets button[aria-selected='true'] {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: var(--sh-sm);
+    }
+    .op[data-vue] { display: block; }
+    .op[data-vue] > [data-volet] { display: none; margin-top: 1rem; }
+    .op[data-vue='buts'] > [data-volet='buts'],
+    .op[data-vue='mods'] > [data-volet='mods'],
+    .op[data-vue='programme'] > [data-volet='programme'] { display: block; }
+    /* L'onglet dit déjà le titre du volet : l'en-tête du volet passerait en
+       doublon. Masqué à l'œil seulement, il reste lu par les lecteurs d'écran. */
+    .op[data-vue] .op__tete {
+      position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+    }
+
+    /* Objectifs en fiches serrées. */
+    .but { padding: 0.8rem; gap: 0.7rem; }
+    .but h3 { font-size: 0.95rem; }
+    .but p { font-size: 0.86rem; line-height: 1.45; }
   }
 </style>

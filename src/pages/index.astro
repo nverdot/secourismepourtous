@@ -4,11 +4,28 @@ import { dimensions } from '../lib/dimensions';
 import AvisGoogle from '../components/AvisGoogle.astro';
 import { asso } from '../data/association';
 import { formations, filieres, type Filiere } from '../data/formations';
-import { sessionsAVenir } from '../lib/wix';
+import { sessionsAVenir, sessionsDe } from '../lib/wix';
 import CartesFilieres from '../components/CartesFilieres.astro';
 
 const sessions = await sessionsAVenir();
 const prochaines = sessions.slice(0, 3);
+
+/*
+ * Les prochaines sessions ouvertes, et la fiche qui présente chacune : c'est
+ * la liste « prochaines sessions » de l'accueil mobile, trois au plus. On saute les sessions
+ * complètes — les annoncer en vitrine serait promettre une place qu'on n'a plus.
+ */
+const aVenir = sessions
+  .filter((s) => !s.complet)
+  .map((s) => ({ s, f: formations.find((f) => !f.suspendue && sessionsDe([s], f.wixEvent).length > 0) }))
+  .filter((x): x is { s: typeof x.s; f: NonNullable<typeof x.f> } => !!x.f)
+  .slice(0, 3);
+
+/* En heure de Paris, quel que soit le fuseau de la machine qui construit le
+   site : chez Cloudflare, c'est UTC, et 9 h y devient 7 h. */
+const enParis = (d: Date, o: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', ...o }).format(d);
+const heure = (d: Date) => enParis(d, { hour: 'numeric', minute: '2-digit' }).replace(':', 'h').replace('h00', 'h');
 
 const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as Filiere[])
   .map((f) => ({ cle: f, ...filieres[f], items: formations.filter((x) => x.filiere === f) }))
@@ -76,6 +93,77 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
         </div>
       ))}
     </div>
+  </section>
+
+  {/*
+    ============ ACCUEIL DE L'APPLICATION (téléphone) ============
+    Trois blocs propres au téléphone, absents sur ordinateur, où la page
+    déroule déjà tout cela en grand. Ils s'intercalent entre les sections
+    communes pour que l'accueil se lise dans l'ordre des questions du
+    visiteur (voir l'ordre dans les styles) :
+      qui sommes-nous → se former (filières, puis prochaines dates) →
+      nos activités → les bons réflexes (urgence, quiz) → la confiance
+      (chiffres, partenaires) → le don.
+    Pas de raccourcis vers les rubriques ni de barre de recherche : la barre
+    d'onglets et le Compagnon, toujours visibles, les donnent déjà. Rien
+    n'est caché à Google : ce sont des liens vers des pages qu'il connaît.
+  */}
+  {aVenir.length > 0 && (
+    <section class="appli appli--dates" aria-labelledby="t-dates">
+      <div class="rail__tete">
+        <h2 class="rail__h" id="t-dates">Prochaines sessions</h2>
+        <a href="/formations" class="rail__tout">Tout voir</a>
+      </div>
+      <ul class="rail__l">
+        {aVenir.map(({ s: x, f }) => (
+          <li>
+            <a class="date" href={`/formations/${f.slug}`}>
+              <span class="date__j">
+                <strong>{enParis(x.debut, { day: '2-digit' })}</strong>
+                {enParis(x.debut, { month: 'short' })}
+              </span>
+              <span class="date__f">{f.sigle}</span>
+              <span class="date__d">
+                <span class="date__jour">{enParis(x.debut, { weekday: 'long' })}</span>
+                {x.fin && <> · {heure(x.debut)}–{heure(x.fin)}</>}
+              </span>
+              <span class="date__p">{f.tarif}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="appli appli--gestes" aria-labelledby="t-reflexes">
+    <div class="rail__tete">
+      <h2 class="rail__h" id="t-reflexes">Les bons réflexes</h2>
+      <a href="/gestes-qui-sauvent" class="rail__tout">Les gestes</a>
+    </div>
+    {/* Les numéros d'urgence, un toucher pour appeler : sur un site de
+        secourisme, c'est la seule action qui ne peut pas attendre. */}
+    <div class="urgence">
+      <span class="urgence__t"><strong>Une urgence&nbsp;?</strong> Appelez&nbsp;:</span>
+      <a href="tel:15" aria-label="Appeler le 15, SAMU">15</a>
+      <a href="tel:18" aria-label="Appeler le 18, pompiers">18</a>
+      <a href="tel:112" aria-label="Appeler le 112, numéro d'urgence européen">112</a>
+    </div>
+    <a class="quiz-carte" href="/gestes-qui-sauvent/quiz">
+      <span class="quiz-carte__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM9.6 9.5a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.8-.9 1.4v.4M12 16.8h.01" /></svg>
+      </span>
+      <span class="quiz-carte__txt"><strong>Testez vos réflexes</strong><small>12 questions, 5 minutes</small></span>
+      <svg class="quiz-carte__chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+    </a>
+  </section>
+
+  <section class="appli appli--chiffres" aria-labelledby="t-confiance">
+    <h2 class="rail__h" id="t-confiance">Ils nous font confiance</h2>
+    <ul class="pastilles" aria-label="L'association en chiffres">
+      {asso.chiffres.map((c) => (
+        <li><strong>{c.valeur}{c.suffixe}</strong> {c.label}</li>
+      ))}
+    </ul>
   </section>
 
   <CartesFilieres />
@@ -157,6 +245,8 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
     }
   </script>
 </Base>
+
+
 
 <style>
   .don__a { margin-top: 1.75rem; }
@@ -351,5 +441,182 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
   .partenaire__nom {
     font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 0.9rem;
     color: var(--ink-soft); text-align: center;
+  }
+
+  /* ============ accueil de l'application (téléphone) ============ */
+  .appli { display: none; }
+
+  @media (max-width: 720px) {
+    /* Le hero devient une carte : la photo, une mention, le titre et deux
+       lignes d'accroche. Le bouton cède la place à la barre d'onglets ; les
+       chiffres, aux pastilles plus bas. Tout reste dans le HTML. */
+    .hero {
+      margin: 0.8rem var(--pad) 0;
+      border-radius: 22px;
+    }
+    .hero .hero__in { padding: 1.1rem 1.1rem 1.2rem; }
+    .hero__voile {
+      background: linear-gradient(100deg, rgba(7,23,38,.95) 0%, rgba(7,23,38,.82) 55%, rgba(7,23,38,.35) 100%);
+    }
+    .hero .hero__badges { margin-bottom: 0.6rem; }
+    .hero__badges .badge--contour { display: none; }
+    .hero .hero__h1 { font-size: 1.6rem; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 0.45rem; }
+    .hero .hero__accroche {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+    .hero .hero__actions { display: none; }
+    .chiffres { display: none; }
+
+    /*
+     * L'ordre de lecture du téléphone. Les sections communes (filières,
+     * activités, partenaires, don) et les blocs propres au téléphone sont
+     * frères dans <main> : « order » les range sans toucher au HTML, donc
+     * sans rien changer sur ordinateur ni pour Google.
+     */
+    :global(main:has(.appli)) { display: flex; flex-direction: column; }
+    :global(main:has(.appli) > *) { order: 10; }
+    .hero { order: 1; }
+    :global(main:has(.appli) > section[aria-labelledby='t-filieres']) { order: 2; }
+    .appli--dates { order: 3; }
+    :global(main:has(.appli) > section[aria-labelledby='t-poles']) { order: 4; }
+    .appli--gestes { order: 5; }
+    .appli--chiffres { order: 6; }
+    :global(main:has(.appli) > section[aria-labelledby='t-partenaires']) { order: 7; }
+    :global(main:has(.appli) > .avg) { order: 8; }
+    :global(main:has(.appli) > section[aria-labelledby='t-don']) { order: 9; }
+
+    /* Un même fond et un même rythme pour toutes les sections : ce sont les
+       rubriques d'un seul écran, pas des bandeaux de site qui alternent. */
+    :global(main:has(.appli) > .section) { padding-block: 1.1rem 0.6rem; background: transparent; }
+    :global(main:has(.appli) > .section--appel) { padding-block: 1.2rem 1.6rem; }
+    :global(main:has(.appli) .filieres__tete .lede) { display: none; }
+    :global(main:has(.appli) .filieres__tete > p:not(.eyebrow):not(.lede)) { margin: 0.3rem 0 0; font-size: 0.85rem; line-height: 1.45; }
+    :global(main:has(.appli) .cartes) { margin-top: 0.8rem; }
+    :global(main:has(.appli) :is(.poles, .partenaires)) { margin-top: 0.7rem; }
+
+    .appli { display: block; padding: 1.1rem var(--pad) 0.6rem; }
+    .appli .urgence { margin-top: 0; }
+
+    .urgence {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+      border-radius: 16px;
+      background: var(--secours);
+      color: #fff;
+    }
+    .urgence__t { flex: 1; font-size: 0.86rem; line-height: 1.25; }
+    .urgence a {
+      display: grid;
+      place-items: center;
+      min-width: 44px;
+      height: 40px;
+      padding: 0 0.5rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      font: 800 1rem 'Archivo', sans-serif;
+      text-decoration: none;
+    }
+
+    .rail__tete { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.6rem; }
+    .rail__h { margin: 0; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
+    .rail__tout { color: var(--secours); font-size: 0.86rem; font-weight: 700; text-decoration: none; }
+    /* Les trois prochaines dates, en liste : la date à gauche, la formation
+       et l'horaire au centre, le prix à droite. En rangée, la troisième
+       carte dépassait de l'écran. */
+    .rail__l { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+
+    .date {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) auto;
+      grid-template-rows: auto auto;
+      align-items: center;
+      column-gap: 0.75rem;
+      padding: 0.6rem 0.8rem 0.6rem 0.6rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--ink-mute);
+      text-decoration: none;
+    }
+    .date__j {
+      grid-row: 1 / span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.35rem 0;
+      border-radius: 12px;
+      background: var(--secours-wash);
+      color: var(--secours);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .date__j strong { color: var(--secours); font: 800 1.35rem/1 'Archivo', sans-serif; }
+    .date__f { color: var(--ink); font: 800 1rem 'Archivo', sans-serif; }
+    .date__d { grid-column: 2; font-size: 0.8rem; line-height: 1.3; }
+    .date__jour { text-transform: capitalize; }
+    .date__p { grid-column: 3; grid-row: 1 / span 2; color: var(--ink); font-weight: 800; font-size: 0.95rem; }
+
+    .quiz-carte {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.9rem;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .quiz-carte__ic {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: var(--azur-wash);
+      color: var(--azur);
+    }
+    .quiz-carte__ic svg { width: 22px; height: 22px; }
+    .quiz-carte__txt { flex: 1; min-width: 0; }
+    .quiz-carte strong { display: block; font-family: 'Archivo', sans-serif; font-size: 0.95rem; }
+    .quiz-carte small { display: block; margin-top: 0.1rem; color: var(--ink-mute); font-size: 0.8rem; }
+    .quiz-carte__chev { color: var(--ink-mute); }
+
+    /* Les chiffres en quatre tuiles, deux par rangée. */
+    .pastilles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      margin: 0.6rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .pastilles li {
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+    .pastilles strong { display: block; color: var(--azur); font: 800 1.35rem/1.1 'Archivo', sans-serif; }
+
+    /* Les sections suivantes prennent des titres d'application : plus
+       courts, plus serrés, sans surtitre. */
+    :global(main:has(.appli) .h-section) { font-size: 1.2rem !important; }
+    :global(main:has(.appli) .section .eyebrow) { display: none; }
   }
 </style>

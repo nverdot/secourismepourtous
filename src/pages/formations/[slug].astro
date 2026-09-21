@@ -355,18 +355,24 @@ const balisages = [
     display: grid; gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   }
-  .oblig--choix {
+  /*
+   * Les variantes portent « .oblig » en plus : écrites avant la règle de base,
+   * elles perdaient contre elle à spécificité égale, et le fond bleu pâle de
+   * base revenait. L'encart du quiz affichait alors du texte blanc et une
+   * icône blanchie sur ce bleu pâle — illisibles (signalé sur la FC PSC).
+   */
+  .oblig.oblig--choix {
     background: var(--sunk); border-color: var(--line);
   }
   /* L'encart de réforme se distingue : ce n'est pas une suggestion de lecture,
      c'est une échéance. */
-  .oblig--reforme {
+  .oblig.oblig--reforme {
     background: var(--secours-wash);
     border-color: color-mix(in srgb, var(--secours) 30%, transparent);
   }
   .oblig--reforme .oblig__ic { background: var(--secours); color: #fff; }
   .oblig--reforme .oblig__f { color: var(--secours); }
-  .oblig--quiz {
+  .oblig.oblig--quiz {
     background: var(--secours); border-color: var(--secours); color: #fff;
   }
   .oblig--quiz .oblig__ic { background: rgba(255,255,255,.2); }

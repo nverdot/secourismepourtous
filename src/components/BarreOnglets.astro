@@ -1,0 +1,146 @@
+---
+/**
+ * Barre d'onglets du téléphone : ce pour quoi on vient, sous le pouce.
+ *
+ * Elle n'existe qu'en dessous de 720 px. Chaque onglet est un vrai lien vers
+ * une vraie page : Google les suit, le bouton retour fonctionne, et rien ne
+ * dépend de JavaScript — sauf l'emplacement central, qui n'est qu'un repère
+ * sous le lanceur du Compagnon (c'est lui, déplacé ici par sa propre feuille
+ * de style, qui reste le bouton).
+ *
+ * Le menu complet s'ouvre par le burger de l'en-tête, en haut à droite, là
+ * où on le cherche. La cinquième case revient à « S'engager » : recruter des
+ * secouristes bénévoles est la troisième raison d'être du site.
+ */
+const actuel = Astro.url.pathname;
+const estActif = (href: string) => actuel === href || actuel.startsWith(href + '/');
+
+/* À gauche du Compagnon, les deux raisons de venir qui font vivre
+   l'association : se former, faire sécuriser un événement. À droite, les
+   gestes et l'engagement bénévole. */
+const onglets: { href: string; texte: string; trace: string; titre?: string }[] = [
+  {
+    href: '/formations',
+    texte: 'Formations',
+    trace: 'M3.2 9.2L12 5.3l8.8 3.9L12 13.1zM7.2 11.2v4.4c0 1.4 2.1 2.5 4.8 2.5s4.8-1.1 4.8-2.5v-4.4M20.8 9.2v5',
+  },
+  {
+    href: '/postes-de-secours',
+    /* « DPS » : le mot des organisateurs, celui que la préfecture exige. Le
+       nom complet est donné aux lecteurs d'écran. */
+    texte: 'DPS',
+    titre: 'DPS — postes de secours pour vos événements',
+    trace: 'M4 8.2h16v11.3H4zM8.8 8.2V5.4a1 1 0 0 1 1-1h4.4a1 1 0 0 1 1 1v2.8M12 11.6v4.6M9.7 13.9h4.6',
+  },
+];
+
+const apres: typeof onglets = [
+  {
+    href: '/gestes-qui-sauvent',
+    texte: 'Gestes',
+    titre: 'Gestes qui sauvent',
+    trace: 'M12 20.3S4.6 15.6 4.6 10.6a4.1 4.1 0 0 1 7.4-2.5 4.1 4.1 0 0 1 7.4 2.5c0 5-7.4 9.7-7.4 9.7zM8 12h2l1-2 2 4 1-2h2',
+  },
+];
+---
+
+<nav class="onglets" aria-label="Navigation rapide">
+  {onglets.map((o) => (
+    <a href={o.href} class:list={['onglet', { 'est-actif': estActif(o.href) }]}
+       aria-current={estActif(o.href) ? 'page' : undefined} aria-label={o.titre}>
+      <svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" fill="none"
+           stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d={o.trace} />
+      </svg>
+      <span>{o.texte}</span>
+    </a>
+  ))}
+
+  {/* Le lanceur du Compagnon flotte au-dessus de cette case. Elle n'est pas
+      un second bouton pour les lecteurs d'écran : le lanceur l'est déjà. */}
+  <span class="onglet onglet--aide" aria-hidden="true" data-onglet-aide>
+    <span>Aide</span>
+  </span>
+
+  {apres.map((o) => (
+    <a href={o.href} class:list={['onglet', { 'est-actif': estActif(o.href) }]}
+       aria-current={estActif(o.href) ? 'page' : undefined} aria-label={o.titre}>
+      <svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" fill="none"
+           stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d={o.trace} />
+      </svg>
+      <span>{o.texte}</span>
+    </a>
+  ))}
+
+  <a href="/secouriste-actif" class:list={['onglet', { 'est-actif': estActif('/secouriste-actif') }]}
+     aria-current={estActif('/secouriste-actif') ? 'page' : undefined}>
+    <svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" fill="none"
+         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 11.2a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2zM3.5 19.5c0-3 2.5-5.1 5.5-5.1s5.5 2.1 5.5 5.1M16.2 5.4a3.1 3.1 0 0 1 0 6M17.2 14.7c2 .5 3.3 2.2 3.3 4.4" />
+    </svg>
+    <span>S’engager</span>
+  </a>
+</nav>
+
+<script>
+  /* Le libellé « Aide » sous le lanceur ouvre lui aussi le Compagnon : on
+     vise le mot autant que le rond. */
+  document.querySelector('[data-onglet-aide]')?.addEventListener('click', () => {
+    (window as any).Compagnon?.ouvrir();
+  });
+</script>
+
+<style is:global>
+  .onglets { display: none; }
+
+  @media (max-width: 720px) {
+    .onglets {
+      position: fixed;
+      z-index: 40;
+      inset-inline: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      padding: 0.35rem 0.25rem calc(0.35rem + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* La barre ne doit rien cacher : le bas de page glisse au-dessus. */
+    body { padding-bottom: calc(4.1rem + env(safe-area-inset-bottom)); }
+
+    .onglet {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.2rem;
+      min-height: 3.25rem;
+      padding: 0.3rem 0.1rem 0.2rem;
+      border-radius: var(--r-sm);
+      color: var(--ink-mute);
+      font-family: 'Archivo', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .onglet span { white-space: nowrap; }
+
+    .onglet.est-actif {
+      color: var(--secours);
+      background: color-mix(in srgb, var(--secours) 9%, var(--surface));
+    }
+    .onglet.est-actif svg { stroke-width: 2.2; }
+
+    .onglet:focus-visible { outline: 3px solid var(--azur); outline-offset: -3px; }
+
+    .onglet--aide { color: var(--navy-deep); }
+  }
+</style>

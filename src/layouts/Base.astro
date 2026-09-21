@@ -1,8 +1,10 @@
 ---
 import '../styles/global.css';
+import '../styles/appli.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Compagnon from '../components/Compagnon.astro';
+import BarreOnglets from '../components/BarreOnglets.astro';
 import { asso } from '../data/association';
 import { organisation } from '../lib/schema';
 
@@ -33,7 +35,7 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -69,13 +71,14 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
     ))}
   </head>
 
-  <body class={filiere ? `filiere-${filiere}` : undefined}>
+  <body class={filiere ? `filiere-${filiere}` : undefined} data-appli>
     <a class="saut-contenu" href="#contenu">Aller au contenu</a>
     <Header />
     <main id="contenu">
       <slot />
     </main>
     <Footer />
+    <BarreOnglets />
     <Compagnon />
   </body>
 </html>

@@ -26,6 +26,34 @@ const groupes = ordre
       .map((f) => ({ f, nb: sessionsDe(toutes, f.wixEvent).length })),
   }))
   .filter((g) => g.items.length > 0);
+
+/*
+ * Le catalogue de l'application (téléphone), rangé par filière : chaque
+ * filière se déplie sur place et montre ses formations — initiales d'abord,
+ * recyclages ensuite — avec durée, prix et dates ouvertes.
+ */
+const aDates = (f: (typeof formations)[number]) =>
+  f.suspendue || f.datesAVenir ? 0 : sessionsDe(toutes, f.wixEvent).length;
+const catalogue = ordre
+  .map((cle) => ({
+    cle,
+    ...filieres[cle],
+    items: [
+      ...formations.filter((f) => f.filiere === cle && !f.estRecyclage),
+      ...formations.filter((f) => f.filiere === cle && f.estRecyclage),
+    ].map((f) => ({ f, nb: aDates(f) })),
+  }))
+  .filter((g) => g.items.length > 0);
+const total = catalogue.reduce((n, g) => n + g.items.length, 0);
+
+/* Les pictogrammes des filières, les mêmes que dans le menu. */
+const PICTO: Record<string, string> = {
+  coeur: 'M3 12h4l2-6 4 12 2-6h6',
+  ambulance: 'M2 7.5A1.5 1.5 0 0 1 3.5 6h9A1.5 1.5 0 0 1 14 7.5V17H2zM14 10h3.6a2 2 0 0 1 1.6.8l2.2 2.9a2 2 0 0 1 .4 1.2V17h-8zM6 9.5v4M4 11.5h4',
+  nage: 'M3 6c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0M3 12c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0M3 18c2-1.6 3.2-1.6 5.2 0s3.2 1.6 5.2 0 3.2-1.6 5.2 0',
+  pedagogie: 'M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5',
+  mallette: 'M2 7h20v14H2zM16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16',
+};
 ---
 
 <Base
@@ -89,7 +117,73 @@ const groupes = ordre
       </div>
   </header>
 
+
   <CartesFilieres />
+
+  {/*
+    ============ CATALOGUE DE L'APPLICATION (téléphone) ============
+    Les filières en couleur, les mêmes que sur l'accueil ; chacune se déplie
+    sur place et liste ses formations — sigle, durée, âge ou prérequis, prix,
+    dates ouvertes — avec la fiche au toucher. Une seule entrée, là où il y
+    avait les cartes de filières puis une liste complète qui les répétait.
+    Absent sur ordinateur, où les grandes cartes de filières suffisent.
+  */}
+  <section class="cat" aria-labelledby="t-cat">
+    <h2 class="cat__h" id="t-cat">Quelle formation est faite pour vous&nbsp;?</h2>
+    <p class="cat__sous">{total} formations en {catalogue.length} filières. Touchez une filière pour voir ses formations.</p>
+
+    {/* <details> natifs : ils s'ouvrent sans script, se lisent au clavier et
+        au lecteur d'écran, et leur contenu reste dans la page pour Google.
+        « name » commun : ouvrir une filière referme la précédente. */}
+    <div class="catg-l">
+      {catalogue.map((g) => (
+        <details class={`catg catg--${g.couleur}`} name="filiere">
+          <summary>
+            <span class="catg__ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d={PICTO[g.icone]} /></svg>
+            </span>
+            <span class="catg__txt">
+              <strong>{g.titre}</strong>
+              <span>{g.jeSuis}</span>
+            </span>
+            <span class="catg__nb">{g.items.length}</span>
+            <svg class="catg__chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </summary>
+          <ul class="cat__l">
+            {g.items.map(({ f, nb }) => (
+              <li>
+                <a class={`cat__i cat__i--${g.couleur}`} href={`/formations/${f.slug}`}>
+                  <span class="cat__txt">
+                    <strong>{f.sigle}</strong>
+                    <span class="cat__nom">{f.intitule.split(' — ')[0]}</span>
+                    <span class="cat__meta">{f.duree} · {f.prerequis} · {f.tarif}</span>
+                  </span>
+                  {nb > 0
+                    ? <span class="cat__dates">{nb} date{nb > 1 ? 's' : ''}</span>
+                    : (f.suspendue || f.datesAVenir) && <span class="cat__dates cat__dates--attente">À venir</span>}
+                  <svg class="cat__chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+    </div>
+
+    <div class="cat__aide">
+      <strong>Vous hésitez entre le PSC et le PSE1&nbsp;?</strong>
+      <p>Quelques questions suffisent pour trouver le bon niveau.</p>
+      <div class="cat__aide-b">
+        <button type="button" class="cat__aide-btn" data-compagnon>Être orienté</button>
+        <a class="cat__aide-lien" href="/psc-ou-pse1">Comparer PSC et PSE1</a>
+      </div>
+    </div>
+
+    <a class="cat__pdf" href="/documents/catalogue-formations.pdf" target="_blank" rel="noopener">
+      Télécharger le catalogue complet (PDF)
+    </a>
+  </section>
+
 
   {/* Un titulaire dont le recyclage approche n'a pas besoin qu'on lui vante
       la formation : il a besoin de constater lui-même ce qu'il a oublié. */}
@@ -106,7 +200,11 @@ const groupes = ordre
         {Object.keys(quizParFormation).map((slug) => {
           const fc = parSlug(slug)!;
           return (
-            <a class="test" href={`/quiz/${slug}`}>
+            <a class={`test test--${filieres[fc.filiere].couleur}`} href={`/quiz/${slug}`}>
+              {/* Pastille propre au téléphone, où la carte devient une ligne. */}
+              <span class="test__ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /><circle cx="12" cy="12" r="10" /></svg>
+              </span>
               <span class="test__e">{quizParFormation[slug].length} questions</span>
               <strong>Quiz {fc.sigle}</strong>
               <span class="test__x">{fc.intitule}</span>
@@ -137,11 +235,13 @@ const groupes = ordre
         Vérifiez si le vôtre en fait partie.
       </p>
       <div class="voies">
-        <a class="voie" href="/metiers/psc">
+        <a class="voie voie--azur" href="/metiers/psc">
+          <span class="voie__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg></span>
           <strong>Les métiers qui exigent le PSC</strong>
           <span>Professeur des écoles, assistant maternel, éducateur sportif, agent de sécurité…</span>
         </a>
         <a class="voie" href="/metiers/pse-1">
+          <span class="voie__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg></span>
           <strong>Les métiers qui exigent le PSE1</strong>
           <span>BNSSA, maître-nageur, moniteur de plongée, équipier secouriste…</span>
         </a>
@@ -184,6 +284,14 @@ const groupes = ordre
   </section>
 
 </Base>
+
+
+<script>
+  const cat = document.querySelector<HTMLElement>('.cat');
+  if (cat) {
+    cat.querySelector('[data-compagnon]')?.addEventListener('click', () => (window as any).Compagnon?.ouvrir());
+  }
+</script>
 
 <style>
   .tete {
@@ -321,6 +429,48 @@ const groupes = ordre
   .voie:hover { box-shadow: var(--sh-md); border-color: var(--secours); }
   .voie strong { font-family: 'Archivo', sans-serif; font-size: 1.02rem; font-weight: 700; }
   .voie span { font-size: .89rem; color: var(--ink-mute); }
+  .voie__ic { display: none; }
+
+  /* Téléphone : les deux listes de métiers en lignes d'application —
+     pastille à la couleur de la formation, titre, métiers en une ligne. */
+  @media (max-width: 720px) {
+    .voies { gap: 0.55rem; margin-top: 0.9rem; }
+    .voie {
+      --c: var(--secours);
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      grid-template-areas: 'ic t f' 'ic x f';
+      align-items: center;
+      column-gap: 0.75rem;
+      row-gap: 0.1rem;
+      padding: 0.75rem 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .voie--azur { --c: var(--azur); }
+    /* « .voie » en tête : la règle « .voie span » grisait sinon la pastille. */
+    .voie .voie__ic {
+      grid-area: ic;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--c);
+      color: #fff;
+    }
+    .voie__ic svg { width: 21px; height: 21px; }
+    .voie strong { grid-area: t; font-size: 0.95rem; line-height: 1.25; }
+    .voie > span:not(.voie__ic) {
+      grid-area: x;
+      overflow: hidden;
+      font-size: 0.8rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* La flèche des lignes d'application. */
+    .voie::after { grid-area: f; color: var(--ink-mute); font-size: 1.5rem; line-height: 1; content: '›'; }
+  }
 
   .tests {
     margin-top: 2rem; display: grid; gap: 1rem;
@@ -346,6 +496,226 @@ const groupes = ordre
     font-family: 'Archivo', sans-serif; font-size: .84rem; font-weight: 600; color: var(--azur);
   }
   .test__f svg { width: 15px; height: 15px; }
+  .test__ic { display: none; }
+
+  /* Téléphone : les trois quiz en lignes d'application — pastille à la
+     couleur de la filière, nom, intitulé, nombre de questions, flèche. */
+  @media (max-width: 720px) {
+    .tests { gap: 0.55rem; margin-top: 0.9rem; }
+    .test {
+      --c: var(--secours);
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      grid-template-areas: 'ic nom nb' 'ic x nb';
+      align-items: center;
+      column-gap: 0.75rem;
+      row-gap: 0.1rem;
+      padding: 0.75rem 0.85rem;
+      border-top: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .test--azur { --c: var(--azur); }
+    .test--ocean { --c: var(--ocean); }
+    .test--navy { --c: var(--navy); }
+    .test__ic {
+      grid-area: ic;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--c);
+      color: #fff;
+    }
+    .test__ic svg { width: 22px; height: 22px; }
+    .test strong { grid-area: nom; font-size: 1rem; }
+    .test__x {
+      grid-area: x;
+      overflow: hidden;
+      font-size: 0.8rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .test__e {
+      grid-area: nb;
+      margin: 0;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--c) 12%, var(--surface));
+      color: var(--c);
+      font-size: 0.72rem;
+      letter-spacing: 0;
+      text-transform: none;
+      white-space: nowrap;
+    }
+    /* Toute la ligne se touche : « Tester mes acquis » est sous-entendu. */
+    .test__f { display: none; }
+    .tests__n { font-size: 0.8rem; }
+  }
   .tests__n { margin-top: 1.25rem; font-size: .9rem; color: var(--ink-mute); }
   .tests__n a { color: var(--azur); font-weight: 600; }
+
+  /* ============ catalogue de l'application (téléphone) ============ */
+  .cat { display: none; }
+
+  @media (max-width: 720px) {
+    /* Les deux raccourcis de l'en-tête (catalogue PDF, quiz) cèdent la place :
+       le PDF est en bas de la liste, le quiz plus bas dans la page. */
+    .tete__cartes { display: none; }
+    /* Les cartes de filières et leur fenêtre cèdent la place aux filières qui
+       se déplient : même contenu, une seule entrée. Elles restent dans le
+       HTML, où Google les lit. */
+    :global(main:has(.cat) > section[aria-labelledby='t-filieres']) { display: none; }
+
+    .cat { display: block; padding: 0.9rem 0 1.6rem; }
+
+    .cat__h {
+      margin: 0 var(--pad);
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .cat__sous { margin: 0.25rem var(--pad) 0.8rem; color: var(--ink-mute); font-size: 0.85rem; }
+
+    .catg-l { display: grid; gap: 0.55rem; padding: 0 var(--pad); }
+    .catg {
+      --c: var(--secours);
+      --c-plein: var(--secours);
+      --c-encre: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+    }
+    .catg--azur { --c: var(--azur); --c-plein: var(--azur); }
+    .catg--ocean { --c: var(--ocean); --c-plein: var(--ocean); }
+    .catg--navy { --c: var(--navy); --c-plein: var(--navy); }
+    /* Le jaune fédéral ne porte que de l'encre sombre, et l'or foncé écrit. */
+    .catg--ocre { --c: var(--gold); --c-plein: var(--ocre-vif); --c-encre: var(--ocre-encre); }
+
+    .catg > summary {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.75rem 0.8rem;
+      list-style: none;
+      cursor: pointer;
+    }
+    .catg > summary::-webkit-details-marker { display: none; }
+    .catg__ic {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--c-plein);
+      color: var(--c-encre);
+    }
+    .catg__ic svg { width: 22px; height: 22px; }
+    .catg__txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .catg__txt strong { color: var(--c); font: 800 1rem 'Archivo', sans-serif; }
+    .catg__txt span { color: var(--ink-soft); font-size: 0.8rem; }
+    .catg__nb {
+      min-width: 1.6rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: var(--sunk);
+      color: var(--ink-mute);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-align: center;
+    }
+    .catg__chev { color: var(--ink-mute); transition: transform 0.18s ease; }
+    .catg[open] > summary .catg__chev { transform: rotate(180deg); }
+    .catg[open] { border-color: var(--c); }
+
+    /* Les formations de la filière ouverte, sous son en-tête. */
+    .catg .cat__l { padding: 0 0.6rem 0.6rem; gap: 0.4rem; }
+    .catg .cat__i { grid-template-columns: minmax(0, 1fr) auto auto; min-height: 0; padding: 0.6rem 0.7rem; border-radius: 12px; background: var(--ground); }
+
+    .cat__l {
+      display: grid;
+      gap: 0.55rem;
+      margin: 0.3rem 0 0;
+      padding: 0 var(--pad);
+      list-style: none;
+    }
+
+    .cat__i {
+      --c: var(--secours);
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 0.7rem;
+      min-height: 80px;
+      padding: 0.7rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .cat__i--azur { --c: var(--azur); }
+    .cat__i--ocean { --c: var(--ocean); }
+    .cat__i--ocre { --c: var(--gold); }
+    .cat__i--navy { --c: var(--navy); }
+
+    .cat__ic {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--c) 11%, var(--surface));
+      color: var(--c);
+    }
+    .cat__ic svg { width: 23px; height: 23px; }
+
+    .cat__txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .cat__txt strong { font-family: 'Archivo', sans-serif; font-size: 1.05rem; font-weight: 800; }
+    .cat__nom { overflow: hidden; color: var(--ink-soft); font-size: 0.82rem; text-overflow: ellipsis; white-space: nowrap; }
+    .cat__meta { margin-top: 0.2rem; color: var(--ink-mute); font-size: 0.78rem; }
+
+    .cat__dates {
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: var(--sage-wash);
+      color: var(--sage);
+      font-size: 0.72rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .cat__dates--attente { background: var(--sunk); color: var(--ink-mute); }
+    .cat__chev { color: var(--ink-mute); }
+
+    .cat__aide {
+      margin: 1rem var(--pad) 0;
+      padding: 1rem;
+      border-radius: 18px;
+      background: var(--navy);
+      color: var(--on-navy);
+    }
+    .cat__aide strong { display: block; color: #fff; font-family: 'Archivo', sans-serif; font-size: 1rem; }
+    .cat__aide p { margin: 0.25rem 0 0.8rem; color: var(--on-navy-text); font-size: 0.86rem; }
+    .cat__aide-b { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+    .cat__aide-btn {
+      min-height: 42px;
+      padding: 0.5rem 0.95rem;
+      border: 0;
+      border-radius: 12px;
+      background: var(--secours);
+      color: #fff;
+      font: 800 0.88rem 'Archivo', sans-serif;
+      cursor: pointer;
+    }
+    .cat__aide-lien { color: #fff; font-size: 0.86rem; font-weight: 700; }
+
+    .cat__pdf {
+      display: block;
+      margin: 0.9rem var(--pad) 0;
+      color: var(--azur);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+  }
 </style>

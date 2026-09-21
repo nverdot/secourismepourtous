@@ -72,12 +72,28 @@ const actuel = Astro.url.pathname;
       <span class="marque__mots">
         <strong>Secourisme</strong>
         <em>Pour Tous</em>
+        <span class="marque__lieu">Nice · Côte d’Azur</span>
       </span>
     </a>
 
     <img class="entete__ffss" src="/img/logo-ffss.png"
          alt="Association affiliée à la Fédération Française de Sauvetage et de Secourisme"
          width="52" height="52" />
+
+    {/* Sur téléphone, le bandeau marine disparaît : le don et l'appel qu'il
+        portait passent ici, en deux boutons ronds sous le pouce. */}
+    <div class="entete__raccourcis">
+      <a href="/faire-un-don" class="entete__rond entete__rond--don" aria-label="Faire un don">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.7-7.7 1.1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+      </a>
+      <a href={`tel:${asso.contact.telephoneLien}`} class="entete__rond" aria-label={`Appeler le ${asso.contact.telephone}`}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+      </a>
+    </div>
 
     <nav class="nav" aria-label="Navigation principale">
       {liens.map((l) => (
@@ -130,6 +146,12 @@ const actuel = Astro.url.pathname;
       {liens.filter((l) => l.href !== '/formations').map((l) => <a href={l.href}>{l.texte}</a>)}
       {/* Le bouton d'en-tête disparaît en mode compact : il doit se retrouver
           ici, sinon l'appel à l'engagement n'existe plus sur mobile. */}
+      <a href="/faire-un-don" class="nav-mobile__don">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.7-7.7 1.1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        </svg>
+        Faire un don
+      </a>
       <a href="/secouriste-actif" class="btn btn--primaire nav-mobile__cta">S'engager</a>
       <a href={`tel:${asso.contact.telephoneLien}`} class="nav-mobile__tel">{asso.contact.telephone}</a>
     </nav>
@@ -394,5 +416,82 @@ const actuel = Astro.url.pathname;
   @media (max-width: 720px) {
     .entete__lieu { display: none; }
     .entete__bandeau-in { justify-content: flex-end; }
+
+    /* Le burger reste en haut, à côté du don et de l'appel, au même format
+       que ces deux boutons. Le panneau défile dans l'espace laissé entre
+       l'en-tête et la barre d'onglets, sinon son bas passait dessous. */
+    .entete__burger {
+      margin-left: 0 !important;
+      width: 44px !important;
+      height: 44px !important;
+      padding: 0 11px !important;
+      border-radius: 14px !important;
+    }
+
+    /* L'en-tête de l'application : la marque et sa ville à gauche, le don
+       et l'appel à droite. Le bandeau marine, qui ne portait plus que ces
+       deux liens, et le logo fédéral, repris par l'écran d'accueil du
+       Compagnon, cèdent la hauteur à la page. */
+    .entete__bandeau, .entete__ffss { display: none; }
+    .entete__barre { gap: 0.5rem; padding-block: 0.7rem; }
+    .marque__logo { height: 44px; }
+    .marque__mots strong { font-size: 0.95rem; text-transform: uppercase; }
+    .marque__mots em { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.02em; }
+    .marque__lieu {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--ink-mute);
+      font-family: 'Public Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .entete__raccourcis { display: flex; gap: 0.5rem; margin-left: auto; }
+    .marque__mots strong, .marque__mots em { white-space: nowrap; }
+    .entete__rond {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: var(--sunk);
+      color: var(--ink);
+    }
+    .entete__rond--don { color: var(--secours); }
+    .entete__barre { flex-wrap: nowrap; }
+    /* L'en-tête tient sur une ligne ; le menu ouvert se déroule dessous,
+       en panneau, au lieu de pousser la marque et les boutons. */
+    .entete__barre > .nav-mobile {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 0;
+      padding: 0.4rem var(--pad) 0.9rem;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: 0 18px 30px rgba(7, 23, 38, 0.14);
+    }
+  }
+
+  /* Sur les plus petits écrans (iPhone SE, 320 px), trois boutons plus la
+     marque ne tiennent pas sur une ligne : le burger passait dessous. Le don
+     cède sa place ; il reste dans le menu. */
+  @media (max-width: 359px) {
+    .entete__rond--don { display: none; }
+    .nav-mobile {
+      max-height: calc(100dvh - 9rem - 4.1rem - env(safe-area-inset-bottom));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  /* Propres au téléphone. « :where » ramène la règle à une spécificité nulle :
+     écrite après la requête média, elle l'aurait sinon écrasée. */
+  :where(.marque__lieu, .entete__raccourcis) { display: none; }
+
+  .nav-mobile__don {
+    display: flex; align-items: center; gap: .5rem;
+    color: var(--secours) !important;
   }
 </style>

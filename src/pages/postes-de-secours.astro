@@ -475,4 +475,119 @@ const etapes = [
     .fait__valeur { font-size: 1.15rem; }
     .fait__note { font-size: .76rem; }
   }
+
+  /* ================= téléphone : la page en mode application ================= */
+  @media (max-width: 720px) {
+    /* Les chiffres en pastilles, qui passent à la ligne plutôt que de
+       dépasser de l'écran. */
+    /* Les listes suivent leur introduction de près : 2 rem de marge étaient
+       taillés pour un écran large. */
+    .types, .etapes, .villes, .moyens, .renforts { margin-top: 0.9rem; }
+
+    /* Les trois chiffres en trois tuiles d'une rangée. */
+    .faits { margin-top: 0.9rem; }
+    .faits__grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
+    .fait {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      padding: 0.65rem 0.6rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: none;
+    }
+    .fait__v { font-size: 1.3rem; line-height: 1.1; }
+    .fait__l { font-size: 0.74rem; line-height: 1.25; margin: 0; }
+
+    /* L'en-tête : trois lignes d'accroche au plus, le reste est dans la page. */
+    .tete__t {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+    .fait__d { display: none; }
+
+    /* Les types d'événements : des tuiles, deux par rangée. */
+    .types { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .type { padding: 0.8rem; border-radius: 16px; }
+    .type h3 { font-size: 0.92rem; line-height: 1.2; margin-bottom: 0.25rem; }
+    .type p {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    /* Les étapes : une frise numérotée, sans cartes. */
+    .etapes { gap: 0; }
+    .etape {
+      position: relative;
+      gap: 0.8rem;
+      padding: 0 0 1rem;
+      border: 0;
+      border-radius: 0;
+      background: none;
+    }
+    .etape:not(:last-child)::before {
+      position: absolute;
+      top: 2.2rem;
+      bottom: 0.2rem;
+      left: 1rem;
+      width: 2px;
+      background: var(--line);
+      content: '';
+    }
+    .etape h3 { font-size: 0.95rem; }
+    .etape p { font-size: 0.86rem; line-height: 1.45; }
+
+    /* Le second carrousel doublait le premier : un seul suffit au pouce. */
+    .terrain + :global(.car) { display: none; }
+
+    /* Les villes : des cartes compactes, deux par rangée. */
+    .villes { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .ville { padding: 0.75rem; border-radius: 16px; }
+    .ville strong { font-size: 0.95rem; }
+    .ville span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    /* Les vidéos : une grille de trois vignettes verticales, comme un mur
+       de « reels ». Tout tient dans l'écran, rien ne dépasse à droite. */
+    .terrain {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+    .clip video {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .clip figcaption { margin-top: 0.35rem; }
+    .clip figcaption strong { font-size: 0.74rem; line-height: 1.2; }
+    .clip figcaption span { display: none; }
+
+    /* Moyens et renforts : des listes serrées, l'une sous l'autre. Deux
+       cartes seulement ne justifient pas une rangée qu'on fait glisser. */
+    .moyens { grid-template-columns: 1fr; gap: 0.55rem; }
+    .moyen { padding: 0.9rem; border-radius: 16px; }
+    .moyen h3 { font-size: 0.98rem; }
+    .moyen p { font-size: 0.86rem; line-height: 1.45; }
+    .renforts { grid-template-columns: 1fr; gap: 0.45rem; }
+    .renforts li { padding: 0.7rem 0.85rem; border-radius: 14px; gap: 0.1rem; }
+    .renforts strong { font-size: 0.92rem; }
+    .renforts span { font-size: 0.8rem; line-height: 1.35; }
+  }
 </style>
