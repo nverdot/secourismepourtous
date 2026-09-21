@@ -109,7 +109,7 @@ const ECRANS: Ecran[] = [
     pose: 'search',
     oeil: 'Première question',
     titre: 'Se former, pour quoi faire ?',
-    message: 'L’usage décide du diplôme. Dites-moi le vôtre.',
+    message: 'Le bon diplôme dépend de ce que vous voulez en faire. Dites-moi ce qui vous amène.',
     actions: [
       { texte: 'Pour savoir réagir dans ma vie de tous les jours', icone: 'coeur', ecran: 'perso' },
       { texte: 'Parce que mon travail le demande', icone: 'trousse', ecran: 'pro' },
@@ -124,7 +124,7 @@ const ECRANS: Ecran[] = [
     pose: 'think',
     oeil: 'Pour soi, pour ses proches',
     titre: 'Savoir quoi faire, chez soi',
-    message: 'Sept minutes séparent l’appel des secours de leur arrivée. Ces sept minutes vous appartiennent.',
+    message: 'Avant l’arrivée des secours, ce sont les gestes des personnes présentes qui comptent. Voici par où commencer.',
     actions: [
       { texte: 'Découvrir les gestes qui sauvent', icone: 'croix', vers: '/gestes-qui-sauvent', note: 'Sans diplôme, pour commencer' },
       { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: 'Le diplôme de base · 7 heures · 50 €' },
@@ -284,8 +284,8 @@ const ECRANS: Ecran[] = [
     id: 'benevolat',
     pose: 'success',
     oeil: 'Rejoindre l’équipe',
-    titre: 'Deux chemins, une même porte',
-    message: 'On entre par le terrain, on y reste souvent par la transmission.',
+    titre: 'Nous rejoindre comme bénévole',
+    message: 'Deux façons de vous engager : tenir des postes de secours avec nos équipes, ou former à votre tour. Aucun diplôme ? On vous dit par où commencer.',
     actions: [
       { texte: 'Devenir secouriste actif', icone: 'trousse', vers: '/secouriste-actif' },
       { texte: 'Devenir formateur', icone: 'diplome', vers: '/devenir-formateur' },
@@ -491,16 +491,78 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
        rendu au build ne doit pas voler le focus au chargement de la page.
        Sans cela, cliquer un choix détruit le bouton qui portait le focus et
        le clavier repart à zéro sur le document. */
+    /*
+     * Le message s'écrit lettre à lettre, comme la réplique d'un personnage
+     * de jeu : d'un écran à l'autre la bulle et les boutons se ressemblent,
+     * et sans ce mouvement on ne voyait pas que la réponse avait changé.
+     *
+     * Les lecteurs d'écran n'entendent pas la frappe : le texte entier est
+     * posé d'emblée dans une copie masquée (« vh »), la frappe visible leur
+     * est cachée. Toucher la bulle termine la phrase d'un coup. Et qui a
+     * demandé à limiter les animations lit le texte entier, tout de suite.
+     */
+    const sobre = matchMedia('(prefers-reduced-motion: reduce)');
+    let frappe = 0;
+    let finir = () => {};
+
+    function taper(texte) {
+      clearTimeout(frappe);
+      const lu = document.createElement('span');
+      lu.className = 'vh';
+      lu.textContent = texte;
+      /* Le reste de la phrase est déjà là, transparent : la bulle prend
+         d'emblée sa taille finale, et rien ne saute pendant la frappe. */
+      const vu = document.createElement('span');
+      vu.setAttribute('aria-hidden', 'true');
+      const ecrit = document.createElement('span');
+      ecrit.className = 'compagnon__frappe';
+      const reste = document.createElement('span');
+      reste.className = 'compagnon__reste';
+      vu.append(ecrit, reste);
+      message.replaceChildren(lu, vu);
+      finir = () => {
+        clearTimeout(frappe);
+        ecrit.textContent = texte;
+        reste.textContent = '';
+        ecrit.classList.add('est-fini');
+      };
+      if (sobre.matches) return finir();
+      let i = 0;
+      const pas = () => {
+        i += 2;
+        ecrit.textContent = texte.slice(0, i);
+        reste.textContent = texte.slice(i);
+        if (i < texte.length) frappe = setTimeout(pas, 22);
+        else finir();
+      };
+      pas();
+    }
+    message.addEventListener('click', () => finir());
+
     function afficher(id, focus) {
       const e = parId[id] || parId.accueil;
       racine.dataset.ecran = e.id;
       oeil.textContent = e.oeil;
       titre.textContent = e.titre;
-      message.textContent = e.message;
+      taper(e.message);
       perso.src = `/compagnon/${e.pose}.webp`;
       groupes.forEach((g) => (g.hidden = g.dataset.actions !== e.id));
       retour.hidden = e.id === 'accueil';
-      if (focus) titre.focus({ preventScroll: true });
+
+      /* La bulle « rebondit » à chaque nouvel écran : on retire l'attribut,
+         on force le navigateur à en prendre acte, et on le remet — sans quoi
+         l'animation ne rejouerait pas. */
+      delete racine.dataset.change;
+      void racine.offsetWidth;
+      racine.dataset.change = '1';
+
+      /* Sur téléphone, le choix se fait en bas de l'écran : l'écran suivant
+         repart du haut, sur la bulle, pour qu'on voie la nouvelle réplique. */
+      if (focus) {
+        racine.scrollTo({ top: 0, behavior: sobre.matches ? 'auto' : 'smooth' });
+        groupes.forEach((g) => (g.scrollTop = 0));
+        titre.focus({ preventScroll: true });
+      }
     }
 
     /* « accueil » vaut vrai pour l'ouverture d'arrivée : le visiteur n'a rien
@@ -1288,5 +1350,53 @@ const ENTETES = ECRANS.map(({ id, pose, oeil, titre, message }) => ({ id, pose, 
     .compagnon[data-salut] .compagnon__lanceur img { animation: none; }
     .compagnon[data-bulle] .compagnon__bulle { animation: none; opacity: 1; }
     .compagnon[data-ouvert] .compagnon__voile { animation: none; }
+  }
+
+  /* --- la réplique qui s'écrit, et l'écran qui change --- */
+  :global(.compagnon__frappe:not(.est-fini))::after {
+    content: '▍';
+    position: absolute;
+    margin-left: 1px;
+    animation: compagnon-curseur 0.8s steps(1) infinite;
+  }
+  @keyframes compagnon-curseur {
+    50% { opacity: 0; }
+  }
+  .compagnon__message { cursor: default; }
+  :global(.compagnon__reste) { color: transparent; }
+
+  .compagnon[data-change] :is(.compagnon__oeil, .compagnon__titre) {
+    animation: compagnon-pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+  }
+  /* Le personnage ne fait que fondre : sur ordinateur, sa place est tenue
+     par un « transform », qu'une animation d'échelle écraserait. */
+  .compagnon[data-change] .compagnon__perso img { animation: compagnon-fondu 0.35s ease-out both; }
+  .compagnon[data-change] .compagnon__actions:not([hidden]) > * {
+    animation: compagnon-entree 0.3s ease-out both;
+  }
+  .compagnon[data-change] .compagnon__actions > :nth-child(2) { animation-delay: 0.05s; }
+  .compagnon[data-change] .compagnon__actions > :nth-child(3) { animation-delay: 0.1s; }
+  .compagnon[data-change] .compagnon__actions > :nth-child(4) { animation-delay: 0.15s; }
+  .compagnon[data-change] .compagnon__actions > :nth-child(5) { animation-delay: 0.2s; }
+  .compagnon[data-change] .compagnon__actions > :nth-child(6) { animation-delay: 0.25s; }
+  .compagnon[data-change] .compagnon__actions > :nth-child(n + 7) { animation-delay: 0.3s; }
+
+  @keyframes compagnon-pop {
+    from { opacity: 0; transform: scale(0.94) translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes compagnon-fondu {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes compagnon-entree {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .compagnon[data-change] :is(.compagnon__oeil, .compagnon__titre, .compagnon__perso img),
+    .compagnon[data-change] .compagnon__actions > * { animation: none; }
+    :global(.compagnon__frappe)::after { display: none; }
   }
 </style>
