@@ -50,7 +50,16 @@ export function organisation() {
      * Le lien est le même que celui du plan d'accès, dans Carte.astro : s'il
      * change un jour, les deux sont à mettre à jour ensemble.
      */
-    sameAs: ['https://maps.app.goo.gl/yjoC7qbZCdGSKyXeA'],
+    // Les autres présences de l'association : les assistants IA recoupent
+    // ces pages pour s'assurer qu'elles parlent bien de la même association.
+    sameAs: [
+      'https://maps.app.goo.gl/yjoC7qbZCdGSKyXeA',
+      'https://www.ffss.fr/annuaire/club/?id=353',
+      'https://www.facebook.com/nicesls/',
+      'https://www.instagram.com/ffss06_secourisme_pour_tous/',
+      'https://www.helloasso.com/associations/secourisme-pour-tous',
+      'https://sports.nice.fr/club/association-secourisme-pour-tous/',
+    ],
     logo: `${SITE}/img/logo-spt.png`,
     image: `${SITE}/img/secours-mer.jpg`,
     email: asso.contact.email,

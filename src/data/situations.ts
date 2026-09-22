@@ -539,4 +539,7 @@ export const referentiel = {
   nom: 'Références techniques nationales relatives à l’unité d’enseignement « Premiers Secours Citoyen »',
   edition: 'édition juillet 2026',
   auteur: 'Direction générale de la Sécurité civile et de la gestion des crises',
+  date: '2026-07',
+  /** Le document officiel, publié par le ministère de l'Intérieur. */
+  url: 'https://www.securite-civile.interieur.gouv.fr/sites/securitecivile/files/medias/documents/2026-07/References-techniques-nationales-PSC_juillet-2026.pdf',
 };

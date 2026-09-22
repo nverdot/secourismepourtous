@@ -41,7 +41,13 @@ const faits = [
       <span class="badge badge--contour">Affiliée FFSS · Agréée sécurité civile</span>
     </div>
 
-    <h1 class="hero__sigle">{f.sigle}</h1>
+    {/* Le titre se lit « Formation PSE1 à Nice » : c'est la formulation des
+        recherches, et celle que reprennent les assistants IA pour citer la
+        page. Le sigle garde toute la place à l'écran. */}
+    <h1 class="hero__sigle">
+      <span class="hero__sur">Formation</span>
+      {f.sigle}<span class="hero__ville"> à Nice</span>
+    </h1>
     <p class="hero__intitule">{f.intitule}</p>
     <p class="hero__accroche">{f.accroche}</p>
 
@@ -204,6 +210,22 @@ const faits = [
     line-height: 0.92;
     letter-spacing: -0.03em;
     margin-bottom: 0.1rem;
+  }
+  .hero__sur {
+    display: block;
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-navy-soft);
+    margin-bottom: 0.5rem;
+  }
+  .hero__ville {
+    font-size: 0.34em;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--on-navy-soft);
+    white-space: nowrap;
   }
   .hero__intitule {
     font-family: 'Archivo', sans-serif;

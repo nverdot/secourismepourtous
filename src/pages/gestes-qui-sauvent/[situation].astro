@@ -46,6 +46,17 @@ const balisages = [
     name: s.titre,
     description: s.accroche,
     totalTime: 'PT5M',
+    // La source, lisible par les moteurs et les assistants IA : une conduite
+    // à tenir adossée au référentiel officiel est citée plus volontiers
+    // qu'un conseil sans origine.
+    publisher: { '@id': 'https://www.secourismepourtous.org/#organisation' },
+    isBasedOn: {
+      '@type': 'CreativeWork',
+      name: `${referentiel.nom} — fiche ${s.fiche.ref} « ${s.fiche.nom} »`,
+      datePublished: referentiel.date,
+      url: referentiel.url,
+      author: { '@type': 'GovernmentOrganization', name: referentiel.auteur },
+    },
     step: s.faire.map((e, i) => ({
       '@type': 'HowToStep',
       position: i + 1,
@@ -133,7 +144,8 @@ const balisages = [
 
         <p class="source">
           D’après la fiche <strong>{s.fiche.ref} — {s.fiche.nom}</strong>,
-          actualisée en {s.fiche.maj}. Source&nbsp;: {referentiel.nom},
+          actualisée en {s.fiche.maj}. Source&nbsp;:
+          {' '}<a href={referentiel.url} target="_blank" rel="noopener">{referentiel.nom}</a>,
           {' '}{referentiel.edition}, {referentiel.auteur}.
         </p>
       </div>
