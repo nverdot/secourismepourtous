@@ -28,7 +28,7 @@ binding = "ASSETS"
 # la main au Worker. Or un formulaire HTML soumis normalement EST une
 # navigation — contrairement à un fetch ou à curl, ce qui rend la panne
 # invisible aux tests en ligne de commande.
-run_worker_first = ["/api/*"]
+run_worker_first = ["/api/*", "/event-details/*"]
 
 # Astro produit des fichiers plats (`build.format: 'file'`) : /formations doit
 # résoudre vers formations.html. C'est ce que fait « auto-trailing-slash ».

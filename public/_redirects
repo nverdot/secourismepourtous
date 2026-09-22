@@ -44,9 +44,8 @@
 /copie-de-sauvetage-sportif /sauvetage-sportif   301
 
 # ---- Billetterie : elle reste chez Wix, sur son sous-domaine ----
-# ⚠️ Ne prend effet qu'une fois « reservation » défini comme domaine principal
-# du site Wix. Dans l'autre ordre, Wix renvoie vers www et la boucle se ferme.
-/event-details/*  https://reservation.secourismepourtous.org/event-details/:splat  301
+# Les anciennes adresses /event-details/… sont traitées par le Worker
+# (worker/index.js) : il les renvoie vers la fiche de la formation.
 
 # ---- Adresses que les robots demandent par convention ----
 # Google signalait un 404 dans son rapport de couverture. « /sitemap.xml » est
