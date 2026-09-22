@@ -29,7 +29,7 @@
     "fin": "2026-10-04T15:00:00.783Z",
     "lieu": "31 Boulevard Impératrice Eugénie",
     "url": "https://reservation.secourismepourtous.org/event-details/psc-formation-23",
-    "complet": false,
+    "complet": true,
     "champs": [
       {
         "nom": "custom-50af34299949036c",
