@@ -44,28 +44,6 @@
     ]
   },
   {
-    "id": "eee576e2-d428-49a5-8c42-1fe6396a8b08",
-    "titre": "PSE2 - Formation",
-    "slug": "pse2-formation-14",
-    "debut": "2026-10-10T07:00:00Z",
-    "fin": "2026-10-11T15:00:00Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-14",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-c06fb1316c427242",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "96d45598-a16d-4dd2-abb8-ebc3c8e52add",
     "titre": "FC PSE1 - Formation",
     "slug": "fc-pse1-formation-23",
@@ -88,15 +66,26 @@
     ]
   },
   {
-    "id": "a96f9554-071f-46d5-9439-dc55377c3665",
-    "titre": "Formations Recyclage BSB - 18h",
-    "slug": "formations-recyclage-bsb-18h-9",
-    "debut": "2026-10-13T18:30:00Z",
-    "fin": "2026-12-03T20:00:00Z",
+    "id": "eee576e2-d428-49a5-8c42-1fe6396a8b08",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-14",
+    "debut": "2026-10-10T07:00:00Z",
+    "fin": "2026-10-11T15:00:00Z",
     "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/formations-recyclage-bsb-18h-9",
+    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-14",
     "complet": false,
-    "champs": []
+    "champs": [
+      {
+        "nom": "custom-c06fb1316c427242",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
   },
   {
     "id": "a45208af-6bc7-43b0-9bea-b2cabd38f6f9",
@@ -106,6 +95,17 @@
     "fin": "2026-12-03T20:00:00Z",
     "lieu": "31 Boulevard Impératrice Eugénie",
     "url": "https://reservation.secourismepourtous.org/event-details/formations-bsb-35h-9",
+    "complet": false,
+    "champs": []
+  },
+  {
+    "id": "a96f9554-071f-46d5-9439-dc55377c3665",
+    "titre": "Formations Recyclage BSB - 18h",
+    "slug": "formations-recyclage-bsb-18h-9",
+    "debut": "2026-10-13T18:30:00Z",
+    "fin": "2026-12-03T20:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/formations-recyclage-bsb-18h-9",
     "complet": false,
     "champs": []
   },
@@ -594,28 +594,6 @@
     ]
   },
   {
-    "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
-    "titre": "FC PSE1 - Formation",
-    "slug": "fc-pse1-formation-28",
-    "debut": "2027-03-20T08:00:00Z",
-    "fin": "2027-03-20T16:00:00.061Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-28",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-7ea84cebde0ee3a4",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "66840a80-bbe4-40fd-b80f-76700be0f5bb",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-24",
@@ -627,6 +605,28 @@
     "champs": [
       {
         "nom": "custom-34001b554b4f8bcf",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-28",
+    "debut": "2027-03-20T08:00:00Z",
+    "fin": "2027-03-20T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-28",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7ea84cebde0ee3a4",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
