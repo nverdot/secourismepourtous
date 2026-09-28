@@ -34,8 +34,10 @@ export interface Session {
   /** Identifiant d'URL de l'événement chez Wix, exigé pour ouvrir le paiement. */
   slug: string;
   /**
-   * Vrai quand Wix n'accepte plus de réservation : session pleine ou fermée.
-   * À vérifier explicitement — `registration.status` reste à « OPEN_TICKETS »
+   * Vrai quand Wix n'accepte plus de réservation : session pleine ou
+   * billetterie fermée. Ces sessions ne sortent pas de `sessionsAVenir()` :
+   * afficher une date où l'on ne peut plus s'inscrire, c'est promettre une place
+   * qu'on n'a plus. À vérifier explicitement — `registration.status` reste à « OPEN_TICKETS »
    * même lorsque toutes les places sont vendues, et la réservation échoue alors
    * au dernier moment, après que le visiteur a tout saisi.
    */
@@ -124,7 +126,9 @@ export function sessionsAVenir(): Promise<Session[]> {
       complet: Boolean(e.complet),
       champs: e.champs ?? [],
     }))
-    .filter((s) => s.debut > maintenant)
+    // Une session pleine ou fermée n'est affichée nulle part : ni fiche, ni
+    // accueil, ni compte de sessions dans le catalogue.
+    .filter((s) => s.debut > maintenant && !s.complet)
     .sort((a, b) => a.debut.getTime() - b.debut.getTime());
   return Promise.resolve(sessions);
 }

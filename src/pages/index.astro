@@ -13,11 +13,10 @@ const prochaines = sessions.slice(0, 3);
 
 /*
  * Les prochaines sessions ouvertes, et la fiche qui présente chacune : c'est
- * la liste « prochaines sessions » de l'accueil mobile, trois au plus. On saute les sessions
- * complètes — les annoncer en vitrine serait promettre une place qu'on n'a plus.
+ * la liste « prochaines sessions » de l'accueil mobile, trois au plus. Les
+ * sessions complètes ou fermées sont déjà écartées par sessionsAVenir().
  */
 const aVenir = sessions
-  .filter((s) => !s.complet)
   .map((s) => ({ s, f: formations.find((f) => !f.suspendue && sessionsDe([s], f.wixEvent).length > 0) }))
   .filter((x): x is { s: typeof x.s; f: NonNullable<typeof x.f> } => !!x.f)
   .slice(0, 3);

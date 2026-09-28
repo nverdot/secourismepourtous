@@ -115,6 +115,22 @@ async function placesDe(client, id) {
   }
 }
 
+/**
+ * Vrai quand Wix a fermé la billetterie, quel que soit le nombre de places :
+ * fermeture à la main dans le tableau de bord (« CLOSED_MANUALLY », la vente
+ * mise en pause) ou fermeture automatique (date limite passée, session pleine).
+ * Les billets, eux, peuvent encore annoncer des places : le 28/09/2026, le
+ * PSE1 du 19 octobre était fermé à la main alors que ses billets en
+ * proposaient cinq.
+ */
+function fermee(e) {
+  const r = e?.registration ?? {};
+  return String(r.status ?? '').startsWith('CLOSED')
+    || Boolean(r.registrationPaused)
+    || Boolean(r.registrationDisabled)
+    || Boolean(r.tickets?.soldOut);
+}
+
 const { createClient, OAuthStrategy } = await import('@wix/sdk');
 const ev = await import('@wix/events');
 const visiteur = createClient({
@@ -143,7 +159,7 @@ for (let i = 0; i < bruts.length; i += PAQUET) {
       url: e?.eventPageUrl?.base && e?.eventPageUrl?.path
         ? e.eventPageUrl.base + e.eventPageUrl.path
         : null,
-      complet: dispo === 0,
+      complet: dispo === 0 || fermee(e),
       champs: await champsDe(e.id),
     });
   }));
@@ -156,4 +172,4 @@ writeFileSync(SORTIE, JSON.stringify(sessions, null, 2) + '\n', 'utf-8');
 const avecChamps = sessions.filter((s) => s.champs.length).length;
 const complets = sessions.filter((s) => s.complet).length;
 console.log(`\n✓ ${sessions.length} sessions écrites dans src/data/sessions-cache.json`);
-console.log(`  ${avecChamps} avec question supplémentaire · ${complets} complètes`);
+console.log(`  ${avecChamps} avec question supplémentaire · ${complets} complètes ou fermées (masquées sur le site)`);
