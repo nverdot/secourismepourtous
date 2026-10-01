@@ -22,7 +22,7 @@ const reste = sessions.length - visibles.length;
   <div class="wrap">
     <div class="sessions__tete">
       <div>
-        <p class="eyebrow">Inscriptions ouvertes</p>
+        <p class="eyebrow">{visibles.length > 0 ? 'Inscriptions ouvertes' : 'Dates sur demande'}</p>
         <h2 class="h-section" id="t-sessions">Prochaines sessions {sigle}</h2>
       </div>
       <p class="sessions__lieu">

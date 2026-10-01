@@ -1,9 +1,16 @@
 ---
 import { temoignagesDe, satisfaction } from '../data/temoignages';
+import { formations } from '../data/formations';
 
 interface Props { slug: string; sigle: string }
 const { slug, sigle } = Astro.props;
 const avis = temoignagesDe(slug);
+
+// Une formation sans avis à elle emprunte ceux d'une autre (voir temoignages.ts).
+// L'étiquette dit alors la formation réellement suivie, pas celle de la page :
+// un stagiaire PSC n'a jamais rien dit du SST.
+const sigleDe = (cible: string) => formations.find((f) => f.slug === cible)?.sigle ?? sigle;
+const empruntes = !avis.some((a) => a.cible === slug);
 ---
 
 {avis.length > 0 && (
@@ -11,7 +18,7 @@ const avis = temoignagesDe(slug);
   <div class="wrap">
     <div class="preuve__tete">
       <div>
-        <p class="eyebrow">Ils l'ont suivie</p>
+        <p class="eyebrow">{empruntes ? 'Ils se sont formés chez nous' : "Ils l'ont suivie"}</p>
         <h2 class="h-section" id="t-avis">Ce que disent nos stagiaires</h2>
         <p class="lede">
           Retours recueillis auprès de nos stagiaires ayant répondu
@@ -35,7 +42,7 @@ const avis = temoignagesDe(slug);
               <path d="M7.5 5C5 5 3 7 3 9.5S5 14 7.5 14c.3 0 .6 0 .9-.1-.6 2-2.2 3.4-4.4 3.9v1.6c4.4-.6 7.5-4.2 7.5-9.2C11.5 7 9.9 5 7.5 5zm10 0C15 5 13 7 13 9.5s2 4.5 4.5 4.5c.3 0 .6 0 .9-.1-.6 2-2.2 3.4-4.4 3.9v1.6c4.4-.6 7.5-4.2 7.5-9.2C21.5 7 19.9 5 17.5 5z" />
             </svg>
             <p>{a.texte}</p>
-            <footer><cite>{a.auteur}</cite><span>Stagiaire {sigle}</span></footer>
+            <footer><cite>{a.auteur}</cite><span>Stagiaire {sigleDe(a.cible)}</span></footer>
           </blockquote>
         </li>
       ))}

@@ -170,9 +170,13 @@ export function coursFormation(f: Formation, sessions: Session[]) {
         price: prix,
         priceCurrency: 'EUR',
         category: 'Frais de formation',
+        // Sans date publiée, on n'annonce pas de disponibilité : rien n'est
+        // réservable en ligne à cet instant.
         availability: f.suspendue
           ? 'https://schema.org/Discontinued'
-          : 'https://schema.org/InStock',
+          : sessions.length > 0
+            ? 'https://schema.org/InStock'
+            : undefined,
         url: `${SITE}/formations/${f.slug}`,
       },
     }),
