@@ -93,10 +93,17 @@ const balisages = [
         {v.risques.map((r) => {
           const s = r.geste && situations.find((x) => x.slug === r.geste);
           return (
-            <li>
-              <h3>{r.titre}</h3>
-              <p>{r.texte}</p>
-              {s && <a href={`/gestes-qui-sauvent/${s.slug}`}>{s.court} : la conduite à tenir →</a>}
+            <li class:list={{ 'carte--img': s && s.image }}>
+              {/* La photo est celle de la page du geste : elle montre la
+                  situation, pas l'entreprise. On ne prétend pas le contraire. */}
+              {s && s.image && (
+                <img src={s.image.fichier} alt={s.image.alt} width="1800" height="1013" loading="lazy" decoding="async" />
+              )}
+              <div class="carte__corps">
+                <h3>{r.titre}</h3>
+                <p>{r.texte}</p>
+                {s && <a href={`/gestes-qui-sauvent/${s.slug}`}>{s.court} : la conduite à tenir →</a>}
+              </div>
             </li>
           );
         })}
@@ -204,4 +211,8 @@ const balisages = [
 
   .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
   .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .carte__corps { display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+  .cartes > li.carte--img { padding: 0; overflow: hidden; gap: 0; }
+  .carte--img img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%; }
+  .carte--img .carte__corps { padding: 1.3rem 1.5rem 1.4rem; }
 </style>

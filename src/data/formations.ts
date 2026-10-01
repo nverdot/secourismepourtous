@@ -160,6 +160,8 @@ export interface Formation {
     titre: string;
     intro: string;
     points: { titre: string; texte: string; lien?: { href: string; libelle: string } }[];
+    /** Ce que le SST change selon l'activité, dans la ville de la fiche. */
+    secteurs?: { titre: string; items: { titre: string; texte: string; lien?: { href: string; libelle: string } }[] };
   };
   /** Questions propres à cette formation, balisées en FAQPage sur sa fiche. */
   faq?: { question: string; reponse: string }[];
@@ -596,6 +598,29 @@ export const formations: Formation[] = [
           lien: { href: '/formations/mac-sst', libelle: 'Voir le MAC SST' },
         },
       ],
+      secteurs: {
+        titre: 'À Nice, selon votre activité',
+        items: [
+          {
+            titre: 'Bureaux et sociétés de services',
+            texte:
+              'De l’Arénas à Nice Méridia, on travaille surtout assis. Peu d’accidents, mais des malaises et des arrêts cardiaques, comme partout : il faut quelqu’un qui sache réagir à chaque étage.',
+            lien: { href: '/gestes-qui-sauvent/malaise', libelle: 'Malaise : la conduite à tenir' },
+          },
+          {
+            titre: 'Commerces et points de vente',
+            texte:
+              'En magasin, le sauveteur secouriste du travail est formé pour ses collègues. Il est aussi, de fait, le premier auprès d’un client qui s’effondre dans un rayon.',
+            lien: { href: '/gestes-qui-sauvent/arret-cardiaque', libelle: 'Arrêt cardiaque : la conduite à tenir' },
+          },
+          {
+            titre: 'Hôtels et restaurants',
+            texte:
+              'Couteaux, friteuses, fours, sols glissants : coupures et brûlures font partie du métier. Avec des services du matin, du soir et de nuit, il faut des SST dans chaque équipe.',
+            lien: { href: '/gestes-qui-sauvent/brulure', libelle: 'Brûlure : la conduite à tenir' },
+          },
+        ],
+      },
     },
     faq: [
       {

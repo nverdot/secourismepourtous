@@ -29,6 +29,21 @@ const { entreprise: e } = Astro.props;
       ))}
     </ul>
 
+    {e.secteurs && (
+      <>
+        <h3 class="ent__h">{e.secteurs.titre}</h3>
+        <ul class="ent ent--secteurs">
+          {e.secteurs.items.map((p) => (
+            <li class="ent__c">
+              <h4>{p.titre}</h4>
+              <p>{p.texte}</p>
+              {p.lien && <a href={p.lien.href}>{p.lien.libelle} →</a>}
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+
     <p class="ent__plus">
       <a href="/sst-en-entreprise">Pourquoi former vos salariés au SST</a>
       {sstVilles.map((v) => <> · <a href={`/sst-en-entreprise/${v.slug}`}>SST {v.article}</a></>)}
@@ -49,6 +64,9 @@ const { entreprise: e } = Astro.props;
     padding: 1.4rem 1.5rem;
     display: flex; flex-direction: column;
   }
+  .ent__h { font-size: 1.3rem; font-weight: 700; margin: 2.25rem 0 0; }
+  .ent--secteurs { margin-top: 1rem; }
+  .ent__c h4 { font-size: 1.08rem; font-weight: 700; margin: 0 0 .55rem; }
   .ent__c h3 { font-size: 1.08rem; font-weight: 700; margin: 0 0 .55rem; }
   .ent__c p { font-size: 1rem; color: var(--ink-soft); line-height: 1.65; margin: 0; }
   .ent__c a {
