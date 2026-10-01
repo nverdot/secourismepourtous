@@ -350,4 +350,54 @@ export const sstVilles: SstVille[] = [
         'Formation SST et MAC SST à Saint-Laurent-du-Var : commerces, entrepôts, ateliers. Dans votre entreprise, ou à Nice à 10 minutes. Certifié Qualiopi.',
     },
   },
+  {
+    slug: 'grasse',
+    nom: 'Grasse',
+    article: 'à Grasse',
+    communeAcces: 'Grasse',
+    secteur: 'Grasse, Mouans-Sartoux, Pégomas et Le Bar-sur-Loup',
+    contexte:
+      'À Grasse, on fabrique : parfums, arômes, cosmétiques. Dans les usines et les laboratoires du pays grassois, on manipule des produits, de la chaleur et de la verrerie, souvent en petites équipes.',
+    risques: [
+      {
+        titre: 'La brûlure à l’atelier ou au laboratoire',
+        texte: 'Un liquide chaud, de la vapeur, un produit qui éclabousse. Ce qu’on fait dans les premières minutes change la suite.',
+        geste: 'brulure',
+      },
+      {
+        titre: 'La coupure',
+        texte: 'Du verre qui casse, une lame de conditionnement, une machine. Il faut savoir arrêter un saignement avant l’arrivée des secours.',
+        geste: 'saignement-abondant',
+      },
+      {
+        titre: 'Le malaise en production',
+        texte: 'Un collègue qui se sent mal à son poste, dans un atelier chaud ou une odeur forte. Reconnaître les signes qui imposent d’appeler le 15.',
+        geste: 'malaise',
+      },
+    ],
+    loi:
+      'Dans un atelier de production où sont accomplis des travaux dangereux, l’article R4224-15 du Code du travail exige un membre du personnel formé aux premiers secours. L’article R4224-14 demande aussi un matériel de premiers secours adapté à la nature des risques : avec des produits chimiques, cela se décide avec le médecin du travail.',
+    faq: [
+      {
+        question: 'Y a-t-il des formations SST à Grasse ?',
+        reponse:
+          `Oui, dans votre entreprise. ${GROUPE} Les mises en situation partent de vos postes de travail et de vos risques.`,
+      },
+      {
+        question: 'Le SST traite-t-il des risques propres à mon usine ?',
+        reponse:
+          'Le SST apprend les gestes de secours et la prévention des risques de l’entreprise. Quand la formation a lieu dans vos locaux, les mises en situation partent de vos postes de travail. Pour des risques particuliers, le contenu se prépare avec vous et votre médecin du travail.',
+      },
+      {
+        question: 'Peut-on venir se former à Nice depuis Grasse ?',
+        reponse:
+          'Oui, pour un ou deux salariés : nos sessions au calendrier ont lieu à Nice. En train, comptez environ 1 h 10 avec un changement à Cannes. Pour un groupe de 4 à 10, il est plus simple que nous venions chez vous.',
+      },
+    ],
+    seo: {
+      title: 'Formation SST à Grasse | Industrie, dans vos locaux',
+      description:
+        'Formation SST et MAC SST à Grasse : nous formons vos équipes dans votre usine ou votre laboratoire, sur vos risques. Organisme certifié Qualiopi.',
+    },
+  },
 ];

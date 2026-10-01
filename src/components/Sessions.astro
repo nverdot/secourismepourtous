@@ -11,7 +11,9 @@ interface Props {
 const { sessions, sigle } = Astro.props;
 
 // Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
-const masques = formations.find((f) => f.sigle === sigle)?.billetsMasques ?? [];
+const fiche = formations.find((f) => f.sigle === sigle);
+const masques = fiche?.billetsMasques ?? [];
+const entreprise = Boolean(fiche?.entreprise);
 
 // Au-delà de 12 dates la liste devient illisible ; le lien vers l'agenda prend le relais.
 const visibles = sessions.slice(0, 12);
@@ -70,7 +72,9 @@ const reste = sessions.length - visibles.length;
           programmons régulièrement de nouvelles sessions et pouvons organiser
           une formation sur mesure pour votre groupe ou votre entreprise.
         </p>
-        <a class="btn btn--primaire" href="/contact">Nous contacter</a>
+        <a class="btn btn--primaire" href={entreprise ? `/contact?motif=entreprise&formation=${encodeURIComponent(sigle)}` : '/contact'}>
+          {entreprise ? 'Demander un devis' : 'Nous contacter'}
+        </a>
       </div>
     )}
   </div>

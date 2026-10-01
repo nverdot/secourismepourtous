@@ -1,11 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
+import GrilleGestes from '../../components/GrilleGestes.astro';
 import { parSlug } from '../../data/formations';
 import { sstVilles, type SstVille } from '../../data/sst-villes';
 import { acces } from '../../data/acces-communes';
 import { asso } from '../../data/association';
-import { situations } from '../../data/situations';
 import { parVille } from '../../data/villes';
 import { filAriane, questionsFrequentes } from '../../lib/schema';
 
@@ -45,7 +45,7 @@ const balisages = [
       <h1 class="tete__h1">Formation SST {v.article}</h1>
       <p class="tete__t">{v.contexte}</p>
       <div class="tete__actions">
-        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--primaire" href="/contact?motif=entreprise&formation=SST">Demander un devis</a>
         <a class="btn btn--fantome" href="/formations/sst">Voir la formation SST</a>
       </div>
     </div>
@@ -63,7 +63,7 @@ const balisages = [
             dans votre entreprise : {v.secteur}. Les mises en situation partent
             de vos postes de travail. La date se fixe avec vous.
           </p>
-          <a href="/contact">Demander un devis →</a>
+          <a href="/contact?motif=entreprise&formation=SST">Demander un devis →</a>
         </li>
         <li>
           <h3>Dans nos locaux à Nice</h3>
@@ -91,25 +91,7 @@ const balisages = [
     <div class="wrap">
       <p class="eyebrow">Vos risques</p>
       <h2 class="h-section">Ce qui arrive vraiment, {v.article}</h2>
-      <ul class="cartes">
-        {v.risques.map((r) => {
-          const s = r.geste && situations.find((x) => x.slug === r.geste);
-          return (
-            <li class:list={{ 'carte--img': s && s.image }}>
-              {/* La photo est celle de la page du geste : elle montre la
-                  situation, pas l'entreprise. On ne prétend pas le contraire. */}
-              {s && s.image && (
-                <img src={s.image.fichier} alt={s.image.alt} width="1800" height="1013" loading="lazy" decoding="async" />
-              )}
-              <div class="carte__corps">
-                <h3>{r.titre}</h3>
-                <p>{r.texte}</p>
-                {s && <a href={`/gestes-qui-sauvent/${s.slug}`}>{s.court} : la conduite à tenir →</a>}
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      <GrilleGestes cartes={v.risques.filter((r) => r.geste).map((r) => ({ geste: r.geste!, titre: r.titre, texte: r.texte }))} />
     </div>
   </section>
 
@@ -150,7 +132,7 @@ const balisages = [
         compétences peuvent prendre en charge la formation.
       </p>
       <div class="form__actions">
-        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--primaire" href="/contact?motif=entreprise&formation=SST">Demander un devis</a>
         <a class="btn btn--fantome" href="/financement">Faire financer</a>
         <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
       </div>
@@ -228,8 +210,4 @@ const balisages = [
 
   .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
   .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
-  .carte__corps { display: flex; flex-direction: column; gap: .55rem; flex: 1; }
-  .cartes > li.carte--img { padding: 0; overflow: hidden; gap: 0; }
-  .carte--img img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%; }
-  .carte--img .carte__corps { padding: 1.3rem 1.5rem 1.4rem; }
 </style>

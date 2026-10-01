@@ -175,6 +175,10 @@ const motifs = [
     const choix = RACCOURCIS[cle];
     const champ = document.getElementById('motif');
     if (choix && champ) champ.value = choix;
+    // Même logique pour la formation : venu d'une fiche SST, on ne redemande pas laquelle.
+    const sigle = new URLSearchParams(location.search).get('formation');
+    const liste = document.querySelector('select[name="formation"]');
+    if (sigle && liste && [...liste.options].some((o) => o.value === sigle)) liste.value = sigle;
   </script>
 </Base>
 

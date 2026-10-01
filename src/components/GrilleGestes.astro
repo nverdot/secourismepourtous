@@ -1,0 +1,74 @@
+---
+import { situations } from '../data/situations';
+
+/**
+ * Une grille de situations qui mènent chacune à sa page « geste ».
+ *
+ * Mêmes vignettes que le sommaire /gestes-qui-sauvent — mêmes classes, donc
+ * même rendu en mode appli sur téléphone (appli.css) : une urgence doit se
+ * reconnaître d'une page à l'autre. Le titre et le texte peuvent être
+ * réécrits pour situer l'accident (au travail, dans une ville) ; la photo et
+ * la destination restent celles du geste.
+ */
+interface Props {
+  cartes: { geste: string; titre?: string; texte?: string }[];
+}
+const { cartes } = Astro.props;
+const liste = cartes
+  .map((c) => ({ ...c, s: situations.find((x) => x.slug === c.geste) }))
+  .filter((c) => c.s);
+---
+
+<div class="grille">
+  {liste.map((c) => (
+    <a class="sit" href={`/gestes-qui-sauvent/${c.s!.slug}`}>
+      {c.s!.image && (
+        <img class="sit__img" src={c.s!.image.fichier} alt="" width="1800" height="1013" loading="lazy" decoding="async" />
+      )}
+      <span class="sit__corps">
+        <span class="sit__e">{c.s!.court}</span>
+        <strong>{c.titre ?? c.s!.titre}</strong>
+        <span class="sit__x">{c.texte ?? c.s!.accroche}</span>
+        <span class="sit__f" aria-hidden="true">
+          Lire la conduite à tenir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </span>
+      </span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .grille {
+    margin-top: 1.75rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .sit {
+    display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 0; overflow: hidden;
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .sit__img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 16 / 9; object-fit: cover; object-position: center 38%;
+  }
+  .sit__corps {
+    display: flex; flex-direction: column; gap: .5rem; flex: 1;
+    padding: clamp(1.15rem, 2.6vw, 1.45rem);
+  }
+  .sit:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
+  .sit__e {
+    font-family: 'Archivo', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--secours);
+  }
+  .sit strong { font-size: 1.08rem; font-weight: 700; line-height: 1.3; }
+  .sit__x { font-size: .9rem; color: var(--ink-soft); }
+  .sit__f {
+    display: flex; align-items: center; gap: .4rem; margin-top: auto; padding-top: .5rem;
+    font-family: 'Archivo', sans-serif; font-size: .82rem; font-weight: 600; color: var(--azur);
+  }
+  .sit__f svg { width: 15px; height: 15px; }
+</style>

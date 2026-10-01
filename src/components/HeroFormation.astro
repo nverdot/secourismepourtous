@@ -59,6 +59,12 @@ const faits = [
         <a class="btn btn--primaire" href="/contact">
           {f.datesAVenir ? 'Être prévenu de l’ouverture des dates' : 'Être prévenu de la réouverture'}
         </a>
+      ) : f.entreprise && nbSessions === 0 ? (
+        /* Formation d'entreprise sans date au calendrier : l'action utile est
+           le devis pour un groupe, pas une liste de dates vide. */
+        <a class="btn btn--primaire" href={`/contact?motif=entreprise&formation=${encodeURIComponent(f.sigle)}`}>
+          Demander un devis pour votre équipe
+        </a>
       ) : (
       <a class="btn btn--primaire" href="#sessions" data-ouvre-dates>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

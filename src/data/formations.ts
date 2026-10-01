@@ -161,7 +161,7 @@ export interface Formation {
     intro: string;
     points: { titre: string; texte: string; lien?: { href: string; libelle: string } }[];
     /** Ce que le SST change selon l'activité, dans la ville de la fiche. */
-    secteurs?: { titre: string; items: { titre: string; texte: string; lien?: { href: string; libelle: string } }[] };
+    secteurs?: { titre: string; items: { titre: string; texte: string; geste: string }[] };
   };
   /** Questions propres à cette formation, balisées en FAQPage sur sa fiche. */
   faq?: { question: string; reponse: string }[];
@@ -583,7 +583,7 @@ export const formations: Formation[] = [
           titre: 'Dans vos locaux, pour votre équipe',
           texte:
             'Pour un groupe constitué de 4 à 10 salariés, la formation SST se tient dans votre entreprise, à Nice et dans les Alpes-Maritimes. Les mises en situation partent alors de vos postes de travail et de vos risques.',
-          lien: { href: '/contact', libelle: 'Demander un devis' },
+          lien: { href: '/contact?motif=entreprise', libelle: 'Demander un devis' },
         },
         {
           titre: 'Une formation finançable',
@@ -605,19 +605,19 @@ export const formations: Formation[] = [
             titre: 'Bureaux et sociétés de services',
             texte:
               'De l’Arénas à Nice Méridia, on travaille surtout assis. Peu d’accidents, mais des malaises et des arrêts cardiaques, comme partout : il faut quelqu’un qui sache réagir à chaque étage.',
-            lien: { href: '/gestes-qui-sauvent/malaise', libelle: 'Malaise : la conduite à tenir' },
+            geste: 'malaise',
           },
           {
             titre: 'Commerces et points de vente',
             texte:
               'En magasin, le sauveteur secouriste du travail est formé pour ses collègues. Il est aussi, de fait, le premier auprès d’un client qui s’effondre dans un rayon.',
-            lien: { href: '/gestes-qui-sauvent/arret-cardiaque', libelle: 'Arrêt cardiaque : la conduite à tenir' },
+            geste: 'arret-cardiaque',
           },
           {
             titre: 'Hôtels et restaurants',
             texte:
               'Couteaux, friteuses, fours, sols glissants : coupures et brûlures font partie du métier. Avec des services du matin, du soir et de nuit, il faut des SST dans chaque équipe.',
-            lien: { href: '/gestes-qui-sauvent/brulure', libelle: 'Brûlure : la conduite à tenir' },
+            geste: 'brulure',
           },
         ],
       },
@@ -627,6 +627,21 @@ export const formations: Formation[] = [
         question: 'La formation SST est-elle obligatoire en entreprise ?',
         reponse:
           'Le Code du travail n’impose pas le SST par son nom. Son article R4224-15 exige en revanche un membre du personnel formé aux premiers secours dans chaque atelier où sont accomplis des travaux dangereux, et sur chaque chantier d’au moins vingt travailleurs, pendant plus de quinze jours, où sont réalisés des travaux dangereux. Dans les autres entreprises, l’employeur organise les premiers secours après avis du médecin du travail. Le SST est la formation que l’INRS recommande pour répondre à ces obligations, parce qu’elle ajoute la prévention des risques aux gestes de secours.',
+      },
+      {
+        question: 'C’est quoi, le SST ?',
+        reponse:
+          'SST veut dire sauveteur secouriste du travail. C’est un salarié formé pour porter les premiers secours à un collègue victime d’un accident ou d’un malaise, et pour repérer les dangers dans son entreprise. Il obtient un certificat après une formation de 14 heures, valable 24 mois.',
+      },
+      {
+        question: 'Quel est le programme de la formation SST ?',
+        reponse:
+          'Cinq parties : le rôle du SST dans l’entreprise, protéger, examiner et alerter, secourir (saignement, étouffement, malaise, brûlure, traumatisme, arrêt cardiaque), et la prévention des risques. La pratique sur mannequin occupe la majeure partie des deux journées.',
+      },
+      {
+        question: 'Le SST donne-t-il le PSC1 ?',
+        reponse:
+          'Oui. Tant que son certificat SST est à jour, son titulaire est réputé détenir le PSC1, d’après l’arrêté du 5 décembre 2002. Il n’a pas de formation supplémentaire à suivre.',
       },
       {
         question: 'Combien de temps dure la formation SST ?',
@@ -1105,7 +1120,7 @@ export const formations: Formation[] = [
           titre: 'Dans vos locaux, pour votre équipe',
           texte:
             'Pour un groupe constitué de 4 à 10 salariés, le MAC SST se tient dans votre entreprise, à Nice et dans les Alpes-Maritimes. Une seule journée suffit à remettre toute une équipe à jour.',
-          lien: { href: '/contact', libelle: 'Demander un devis' },
+          lien: { href: '/contact?motif=entreprise', libelle: 'Demander un devis' },
         },
         {
           titre: 'Une formation finançable',
@@ -1116,6 +1131,21 @@ export const formations: Formation[] = [
       ],
     },
     faq: [
+      {
+        question: 'Que veut dire MAC SST ?',
+        reponse:
+          'MAC veut dire maintien et actualisation des compétences. Le MAC SST est la journée de recyclage du sauveteur secouriste du travail : 7 heures, tous les 24 mois, pour prolonger le certificat SST.',
+      },
+      {
+        question: 'Combien de temps dure le MAC SST ?',
+        reponse:
+          'Le MAC SST dure 7 heures, sur une journée, en présentiel. Il prolonge le certificat SST de 24 mois.',
+      },
+      {
+        question: 'Quel est le programme du MAC SST ?',
+        reponse:
+          'Un retour sur les accidents survenus depuis la dernière session, la révision de l’analyse de situation et de la recherche des détresses, la reprise des gestes de secours sur mannequin, et la prévention dans l’entreprise.',
+      },
       {
         question: 'Quand faut-il passer le MAC SST ?',
         reponse:
@@ -1143,7 +1173,7 @@ export const formations: Formation[] = [
       },
     ],
     seo: {
-      title: 'MAC SST à Nice | Recyclage Sauveteur Secouriste du Travail',
+      title: 'Formation MAC SST à Nice | Recyclage SST en 7 heures',
       description:
         'Maintenez le certificat SST de vos salariés à Nice : 7 h, 90 €, tous les 24 mois. Organisme certifié Qualiopi, intervention en entreprise.',
     },

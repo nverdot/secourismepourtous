@@ -159,7 +159,7 @@ export const ECRANS: Ecran[] = [
       { texte: 'Ce que la loi me demande', icone: 'liste', vers: '/gestes-qui-sauvent/au-travail#obligations', note: 'Les trois articles du code du travail' },
       { texte: 'Le SST dans ma ville', icone: 'lieu', ecran: 'entreprise-villes' },
       { texte: 'Faire financer la formation', icone: 'euro', vers: '/financement', note: 'OPCO, plan de développement des compétences' },
-      { texte: 'Demander un devis', icone: 'bulle', vers: '/contact' },
+      { texte: 'Demander un devis', icone: 'bulle', vers: '/contact?motif=entreprise&formation=SST' },
     ],
   },
   {
@@ -171,7 +171,7 @@ export const ECRANS: Ecran[] = [
     actions: [
       { texte: 'Nice', icone: 'lieu', vers: '/formations/sst' },
       ...sstVilles.map((v) => ({ texte: v.nom, icone: 'lieu', vers: `/sst-en-entreprise/${v.slug}` })),
-      { texte: 'Une autre commune du 06', icone: 'bulle', vers: '/contact' },
+      { texte: 'Une autre commune du 06', icone: 'bulle', vers: '/contact?motif=entreprise&formation=SST' },
     ],
   },
   {
