@@ -6,6 +6,7 @@ import { sstVilles, type SstVille } from '../../data/sst-villes';
 import { acces } from '../../data/acces-communes';
 import { asso } from '../../data/association';
 import { situations } from '../../data/situations';
+import { parVille } from '../../data/villes';
 import { filAriane, questionsFrequentes } from '../../lib/schema';
 
 /**
@@ -23,6 +24,7 @@ const sst = parSlug('sst')!;
 const mac = parSlug('mac-sst')!;
 const trajet = acces.find((a) => a.commune === v.communeAcces);
 const autres = sstVilles.filter((x) => x.slug !== v.slug);
+const terrain = v.postes ? parVille(v.postes) : undefined;
 
 const balisages = [
   filAriane([
@@ -122,6 +124,21 @@ const balisages = [
       </p>
     </div>
   </section>
+
+  {terrain && (
+    <section class="section section--sunk">
+      <div class="wrap texte">
+        <p class="eyebrow">Déjà sur place</p>
+        <h2 class="h-section">Nous connaissons {terrain.nom}</h2>
+        <p>
+          Nos formateurs sont des secouristes de terrain. {terrain.article.charAt(0).toUpperCase() + terrain.article.slice(1)},
+          l’association tient des postes de secours : {terrain.references.slice(0, 4).map((r) => r.nom).join(', ')}.
+          Les exemples qu’ils donnent en formation viennent de là.
+        </p>
+        <p><a href={`/postes-de-secours/${terrain.slug}`}>Nos postes de secours {terrain.article}</a></p>
+      </div>
+    </section>
+  )}
 
   <section class="section section--navy">
     <div class="wrap wrap--etroit">

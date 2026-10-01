@@ -12,6 +12,8 @@
  * elles prennent donc le rouge secours sur l'écran d'urgence sans un octet de
  * CSS supplémentaire.
  */
+import { sstVilles } from './sst-villes';
+
 export const ICONES: Record<string, string> = {
   croix: 'M12 6v12M6 12h12',
   bouclier: 'M12 3.2l7 2.8v5.4c0 4.2-2.9 7.3-7 9.4-4.1-2.1-7-5.2-7-9.4V6z',
@@ -71,6 +73,7 @@ export const ECRANS: Ecran[] = [
     actions: [
       { texte: 'Je veux apprendre les premiers secours', icone: 'diplome', ecran: 'formation' },
       { texte: 'Je viens recycler mon diplôme', icone: 'recyclage', ecran: 'recyclage' },
+      { texte: 'Je veux former mes salariés', icone: 'bouclier', ecran: 'entreprise', note: 'SST, dans vos locaux ou à Nice' },
       { texte: 'Je cherche des secouristes pour mon événement', icone: 'trousse', ecran: 'dispositif' },
       { texte: 'Je veux devenir bénévole', icone: 'equipe', ecran: 'benevolat' },
       { texte: 'Je nage, je fais du sauvetage sportif', icone: 'medaille', ecran: 'sport' },
@@ -95,6 +98,7 @@ export const ECRANS: Ecran[] = [
     actions: [
       { texte: 'Pour savoir réagir dans ma vie de tous les jours', icone: 'coeur', ecran: 'perso' },
       { texte: 'Parce que mon travail le demande', icone: 'trousse', ecran: 'pro' },
+      { texte: 'Pour former mes salariés', icone: 'bouclier', ecran: 'entreprise' },
       { texte: 'Pour intervenir en équipe sur le terrain', icone: 'equipe', ecran: 'terrain' },
       { texte: 'Pour surveiller une piscine ou une plage', icone: 'eau', ecran: 'aquatique' },
       { texte: 'Pour enseigner les premiers secours', icone: 'diplome', ecran: 'pedagogique' },
@@ -133,7 +137,41 @@ export const ECRANS: Ecran[] = [
       { texte: 'Passer le PSC1', icone: 'diplome', vers: '/formations/psc', note: '7 heures · 50 €' },
       { texte: 'Je vais surveiller une piscine ou une plage', icone: 'eau', ecran: 'aquatique', note: 'Le SSA y est exigé' },
       { texte: 'Qui peut financer ma formation ?', icone: 'euro', vers: '/financement' },
-      { texte: 'Former toute mon équipe', icone: 'equipe', vers: '/contact' },
+      { texte: 'Former toute mon équipe', icone: 'equipe', ecran: 'entreprise' },
+    ],
+  },
+  /*
+   * L'employeur n'est pas le salarié : il ne cherche pas « quel diplôme me
+   * faut-il », mais « que dois-je faire, et comment ». Il a donc son écran.
+   * Le message suit les articles R4224-15 et R4224-16 du code du travail, qui
+   * ne nomment pas le SST : on ne le dit pas « obligatoire ».
+   */
+  {
+    id: 'entreprise',
+    pose: 'idle',
+    oeil: 'Pour votre entreprise',
+    titre: 'Former vos salariés au SST',
+    message: 'Le code du travail vous demande d’organiser les premiers secours. Le SST est la formation recommandée pour cela : vos salariés apprennent à secourir un collègue et à repérer les dangers. Pour un groupe de 4 à 10, nous venons dans vos locaux.',
+    actions: [
+      { texte: 'Pourquoi former mes salariés au SST ?', icone: 'question', vers: '/sst-en-entreprise', note: 'Les raisons, les entreprises concernées, le parcours ensuite' },
+      { texte: 'Voir la formation SST', icone: 'trousse', vers: '/formations/sst', note: '14 heures · 190 € par personne à Nice' },
+      { texte: 'Le recyclage de mes SST', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · tous les 24 mois' },
+      { texte: 'Ce que la loi me demande', icone: 'liste', vers: '/gestes-qui-sauvent/au-travail#obligations', note: 'Les trois articles du code du travail' },
+      { texte: 'Le SST dans ma ville', icone: 'lieu', ecran: 'entreprise-villes' },
+      { texte: 'Faire financer la formation', icone: 'euro', vers: '/financement', note: 'OPCO, plan de développement des compétences' },
+      { texte: 'Demander un devis', icone: 'bulle', vers: '/contact' },
+    ],
+  },
+  {
+    id: 'entreprise-villes',
+    pose: 'search',
+    oeil: 'Dans le 06',
+    titre: 'Où est votre entreprise ?',
+    message: 'Nos sessions au calendrier ont lieu à Nice. Pour un groupe, nous nous déplaçons dans votre entreprise.',
+    actions: [
+      { texte: 'Nice', icone: 'lieu', vers: '/formations/sst' },
+      ...sstVilles.map((v) => ({ texte: v.nom, icone: 'lieu', vers: `/sst-en-entreprise/${v.slug}` })),
+      { texte: 'Une autre commune du 06', icone: 'bulle', vers: '/contact' },
     ],
   },
   {
