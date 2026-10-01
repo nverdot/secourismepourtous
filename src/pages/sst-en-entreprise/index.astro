@@ -1,0 +1,325 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { parSlug } from '../../data/formations';
+import { sstVilles } from '../../data/sst-villes';
+import { filAriane, questionsFrequentes } from '../../lib/schema';
+
+/**
+ * Le SST expliqué à celui qui décide : l'employeur, le responsable RH ou QSE.
+ *
+ * La fiche /formations/sst dit ce qu'on apprend. Cette page dit pourquoi former,
+ * qui est concerné et ce que le salarié peut faire ensuite. Chaque affirmation
+ * juridique cite son texte (Code du travail R4224-14 à 16, arrêté du
+ * 5 décembre 2002, document de référence SST de l'INRS), relevés le
+ * 1er octobre 2026. Aucune statistique : nous n'en avons pas de sourcée.
+ */
+
+const sst = parSlug('sst')!;
+const mac = parSlug('mac-sst')!;
+const pse1 = parSlug('pse-1')!;
+
+const faq = [
+  {
+    question: 'Pourquoi former ses salariés au SST ?',
+    reponse:
+      'Parce qu’en cas d’accident, le premier à agir est un collègue, et que les premières minutes comptent plus que tout ce qui suit. Le SST apprend aussi à repérer les dangers avant l’accident. Enfin, il répond aux obligations du Code du travail sur l’organisation des premiers secours (articles R4224-15 et R4224-16).',
+  },
+  {
+    question: 'Quelles entreprises sont concernées par le SST ?',
+    reponse:
+      'Toutes. L’article R4224-15 du Code du travail exige un secouriste formé dans chaque atelier où sont accomplis des travaux dangereux et sur certains chantiers. Les autres entreprises doivent organiser les premiers secours après avis du médecin du travail (article R4224-16) : bureaux, commerces, hôtels, restaurants, associations.',
+  },
+  {
+    question: 'Combien de SST faut-il dans une entreprise ?',
+    reponse:
+      'Aucun texte ne fixe de nombre ni de pourcentage. D’après l’INRS, il s’évalue selon l’effectif, les risques et l’organisation du travail : équipes, horaires décalés, sites éloignés, salariés isolés.',
+  },
+  {
+    question: 'Que peut faire un salarié après le SST ?',
+    reponse:
+      `Il maintient son certificat par un MAC SST de ${mac.duree} tous les 24 mois. Tant que son SST est à jour, il est réputé détenir le PSC1 (arrêté du 5 décembre 2002). Il peut ensuite passer le PSE1, ${pse1.duree}, pour intervenir en équipe sur des postes de secours.`,
+  },
+  {
+    question: 'Où se déroule la formation SST dans les Alpes-Maritimes ?',
+    reponse:
+      'Dans nos locaux à Nice, ou dans votre entreprise pour un groupe constitué de 4 à 10 salariés, partout dans les Alpes-Maritimes.',
+  },
+];
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'SST en entreprise', chemin: '/sst-en-entreprise' },
+  ]),
+  questionsFrequentes(faq),
+];
+---
+
+<Base
+  title="SST en entreprise : pourquoi former vos salariés | Nice et 06"
+  description="Pourquoi former vos salariés au SST, quelles entreprises sont concernées, ce que dit le Code du travail et le parcours possible ensuite. À Nice et dans tout le 06."
+  chemin="/sst-en-entreprise"
+  filiere="entreprise"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><b>SST en entreprise</b>
+      </nav>
+      <h1 class="tete__h1">Pourquoi former vos salariés au SST</h1>
+      <p class="tete__t">
+        Le sauveteur secouriste du travail porte les premiers secours à un
+        collègue et repère les dangers avant l’accident. Voici ce que cette
+        formation apporte à votre entreprise, ce que la loi vous demande, et où
+        elle peut mener vos salariés.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--fantome" href="/formations/sst">Voir la formation SST</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Les raisons</p>
+      <h2 class="h-section">Trois raisons de former, dans l’ordre</h2>
+      <ul class="cartes">
+        <li>
+          <h3>Les premières minutes</h3>
+          <p>
+            Quand un salarié s’effondre, se coupe ou s’étouffe, les secours ne
+            sont pas encore là. Ce que fait le collègue le plus proche pendant
+            ces minutes compte plus que tout ce qui suit.
+          </p>
+          <a href="/gestes-qui-sauvent/au-travail">Les premiers gestes au travail →</a>
+        </li>
+        <li>
+          <h3>La prévention</h3>
+          <p>
+            Le SST n’apprend pas seulement à secourir. Il apprend à repérer une
+            situation dangereuse et à la faire remonter. C’est ce qui le
+            distingue d’une formation de premiers secours grand public.
+          </p>
+        </li>
+        <li>
+          <h3>La loi</h3>
+          <p>
+            Le Code du travail vous demande du matériel de premiers secours, un
+            secouriste formé là où le travail est dangereux, et une organisation
+            des secours écrite. Le SST y répond.
+          </p>
+          <a href="/gestes-qui-sauvent/au-travail#obligations">Les trois articles, cités →</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Qui est concerné</p>
+      <h2 class="h-section">Quelles entreprises forment des SST</h2>
+      <p class="lede">
+        Toutes sont concernées, mais pas pour les mêmes raisons. L’accident le
+        plus probable n’est pas le même dans un atelier et dans un bureau.
+      </p>
+      <ul class="cartes">
+        <li>
+          <h3>Ateliers, industrie, chantiers</h3>
+          <p>
+            C’est là que l’obligation est directe : un membre du personnel formé
+            aux premiers secours dans chaque atelier où sont accomplis des
+            travaux dangereux, et sur les chantiers d’au moins vingt
+            travailleurs pendant plus de quinze jours.
+          </p>
+          <small>Code du travail, article R4224-15</small>
+        </li>
+        <li>
+          <h3>Hôtels, restaurants, métiers de bouche</h3>
+          <p>
+            Couteaux, friteuses, fours, sols glissants : coupures et brûlures
+            font partie du métier. Avec plusieurs services, il faut des
+            secouristes le matin, le soir et la nuit.
+          </p>
+        </li>
+        <li>
+          <h3>Bureaux et sociétés de services</h3>
+          <p>
+            Peu d’accidents, mais des malaises et des arrêts cardiaques, comme
+            partout. L’employeur doit organiser les premiers secours après avis
+            du médecin du travail.
+          </p>
+          <small>Code du travail, article R4224-16</small>
+        </li>
+        <li>
+          <h3>Commerces et accueil du public</h3>
+          <p>
+            Le SST est formé pour ses collègues. Dans un magasin ou à un
+            guichet, il est aussi, de fait, le premier auprès d’un client qui
+            fait un malaise.
+          </p>
+        </li>
+        <li>
+          <h3>Équipes décalées, sites éloignés, salariés isolés</h3>
+          <p>
+            Aucun texte ne fixe un nombre de secouristes. D’après l’INRS, il
+            s’évalue selon l’effectif, les risques et l’organisation : un SST
+            doit être là quand on travaille, où l’on travaille.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Et après</p>
+      <h2 class="h-section">Le parcours possible pour vos salariés</h2>
+      <p class="lede">
+        Le SST n’est pas une fin. Pour certains salariés, c’est le début d’un
+        engagement qui dépasse l’entreprise.
+      </p>
+      <ol class="etapes">
+        <li>
+          <strong>Le SST · {sst.duree}</strong>
+          <span>
+            Deux journées, sans prérequis. Le salarié apprend à protéger,
+            examiner, alerter et secourir, et à participer à la prévention.
+            <a href="/formations/sst">Voir le programme</a>
+          </span>
+        </li>
+        <li>
+          <strong>Le MAC SST · {mac.duree}, tous les 24 mois</strong>
+          <span>
+            Une journée pour garder le certificat. Passé le délai, le salarié ne
+            peut plus exercer comme SST.
+            <a href="/formations/mac-sst">Voir le MAC SST</a>
+          </span>
+        </li>
+        <li>
+          <strong>Le PSC1, sans formation de plus</strong>
+          <span>
+            Tant que son SST est à jour, le salarié est réputé détenir le PSC1,
+            le diplôme citoyen de premiers secours (arrêté du 5 décembre 2002).
+          </span>
+        </li>
+        <li>
+          <strong>Le PSE1 · {pse1.duree}</strong>
+          <span>
+            Pour ceux qui veulent aller plus loin : intervenir en équipe, avec
+            du matériel, sur des postes de secours.
+            <a href="/formations/pse-1">Voir le PSE1</a>
+          </span>
+        </li>
+        <li>
+          <strong>Secouriste bénévole, puis formateur</strong>
+          <span>
+            Beaucoup de nos bénévoles ont commencé comme stagiaires. Certains
+            enseignent aujourd’hui.
+            <a href="/secouriste-actif">Devenir secouriste actif</a> ·
+            <a href="/devenir-formateur">Devenir formateur</a>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Dans le 06</p>
+      <h2 class="h-section">À Nice, ou dans vos locaux</h2>
+      <p class="lede">
+        Nos sessions au calendrier ont lieu à Nice. Pour un groupe constitué de
+        4 à 10 salariés, c’est nous qui venons, partout dans les
+        Alpes-Maritimes.
+      </p>
+      <ul class="cartes">
+        {sstVilles.map((v) => (
+          <li>
+            <h3>SST {v.article}</h3>
+            <p>{v.contexte}</p>
+            <a href={`/sst-en-entreprise/${v.slug}`}>Le SST {v.article} →</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Passer à l’acte</p>
+      <h2 class="form__h">Former votre équipe</h2>
+      <p class="lede">
+        Dites-nous combien de salariés, où et quand. Nous sommes certifiés
+        Qualiopi : l’OPCO de votre branche ou votre plan de développement des
+        compétences peuvent prendre en charge la formation.
+      </p>
+      <div class="form__actions">
+        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--fantome" href="/financement">Faire financer</a>
+        <a class="btn btn--fantome" href="/formations/sst">SST · {sst.duree} · {sst.tarif}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <Faq titre="Le SST en entreprise : vos questions" questions={faq} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.75rem; }
+  .tete__t { max-width: 64ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  .cartes {
+    list-style: none; margin: 2rem 0 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  }
+  .cartes > li {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.4rem 1.5rem;
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .cartes h3 { font-size: 1.08rem; font-weight: 700; margin: 0; }
+  .cartes p { margin: 0; font-size: 1rem; color: var(--ink-soft); line-height: 1.65; }
+  .cartes a {
+    margin-top: auto; padding-top: .5rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem; color: var(--azur);
+  }
+  .cartes small { font-size: .82rem; color: var(--ink-mute); font-family: 'Archivo', sans-serif; font-weight: 700; }
+
+  .texte { max-width: 70ch; }
+  .texte p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin: 1rem 0 0; }
+  .texte a { color: var(--azur); font-weight: 600; }
+
+  .etapes { list-style: none; counter-reset: e; margin: 2rem 0 0; padding: 0; display: grid; gap: .8rem; max-width: 78ch; }
+  .etapes li {
+    counter-increment: e; position: relative;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.2rem 1.4rem 1.2rem 4rem;
+  }
+  .etapes li::before {
+    content: counter(e); position: absolute; left: 1.2rem; top: 1.15rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--navy); color: #fff;
+    font-family: 'Archivo', sans-serif; font-weight: 800;
+  }
+  .etapes strong { display: block; font-size: 1.05rem; margin-bottom: .25rem; }
+  .etapes span { font-size: 1rem; color: var(--ink-soft); line-height: 1.6; }
+  .etapes a { color: var(--azur); font-weight: 600; }
+
+  .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
+  .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+</style>

@@ -4,7 +4,9 @@ import Equipe from '../../components/Equipe.astro';
 import { quizParFormation } from '../../data/quiz-fc';
 import ProgressionPse from '../../components/ProgressionPse.astro';
 import Terrain from '../../components/Terrain.astro';
-import { coursFormation, filAriane } from '../../lib/schema';
+import { coursFormation, filAriane, questionsFrequentes } from '../../lib/schema';
+import CoteEntreprise from '../../components/CoteEntreprise.astro';
+import Faq from '../../components/Faq.astro';
 import Lieu from '../../components/Lieu.astro';
 import HeroFormation from '../../components/HeroFormation.astro';
 import ObjectifsProgramme from '../../components/ObjectifsProgramme.astro';
@@ -43,6 +45,7 @@ const balisages = [
     { nom: 'Formations', chemin: '/formations' },
     { nom: f.sigle, chemin: `/formations/${f.slug}` },
   ]),
+  ...(f.faq ? [questionsFrequentes(f.faq)] : []),
 ];
 ---
 
@@ -117,6 +120,25 @@ const balisages = [
   )}
 
   <ObjectifsProgramme formation={f} />
+
+  {f.entreprise && <CoteEntreprise entreprise={f.entreprise} />}
+
+  {f.filiere === 'entreprise' && (
+    <section class="section">
+      <div class="wrap">
+        <a class="oblig" href="/gestes-qui-sauvent/au-travail">
+          <span class="oblig__ic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M9 15h6M9 11h6" /></svg>
+          </span>
+          <span class="oblig__txt">
+            <strong>Accident du travail&nbsp;: les premiers gestes</strong>
+            <span>Coupure, brûlure, malaise, arrêt cardiaque : la conduite à tenir, et ce que le Code du travail demande à l’employeur.</span>
+          </span>
+          <svg class="oblig__f" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+      </div>
+    </section>
+  )}
 
   {/* Juste après « Et après » : c'est le moment où le lecteur se projette
       dans la suite du parcours, donc celui où l'offre groupée fait sens. */}
@@ -267,6 +289,14 @@ const balisages = [
       />
     </div>
   </section>
+
+  {f.faq && (
+    <section class="section">
+      <div class="wrap">
+        <Faq titre={`Vos questions sur le ${f.sigle}`} questions={f.faq} />
+      </div>
+    </section>
+  )}
 
   <section class="section section--navy">
     <div class="wrap wrap--etroit accessibilite">

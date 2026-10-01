@@ -1,0 +1,207 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { parSlug } from '../../data/formations';
+import { sstVilles, type SstVille } from '../../data/sst-villes';
+import { acces } from '../../data/acces-communes';
+import { asso } from '../../data/association';
+import { situations } from '../../data/situations';
+import { filAriane, questionsFrequentes } from '../../lib/schema';
+
+/**
+ * Le SST dans une commune du département. Voir sst-villes.ts pour la règle :
+ * une page n'existe que si le tissu d'entreprises y pose une question propre.
+ */
+export function getStaticPaths() {
+  return sstVilles.map((v) => ({ params: { ville: v.slug }, props: { v } }));
+}
+
+interface Props { v: SstVille }
+const { v } = Astro.props;
+
+const sst = parSlug('sst')!;
+const mac = parSlug('mac-sst')!;
+const trajet = acces.find((a) => a.commune === v.communeAcces);
+const autres = sstVilles.filter((x) => x.slug !== v.slug);
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'SST en entreprise', chemin: '/sst-en-entreprise' },
+    { nom: v.nom, chemin: `/sst-en-entreprise/${v.slug}` },
+  ]),
+  questionsFrequentes(v.faq),
+];
+---
+
+<Base title={v.seo.title} description={v.seo.description} chemin={`/sst-en-entreprise/${v.slug}`} filiere="entreprise" schemas={balisages}>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><a href="/sst-en-entreprise">SST en entreprise</a><i aria-hidden="true">›</i><b>{v.nom}</b>
+      </nav>
+      <h1 class="tete__h1">Formation SST {v.article}</h1>
+      <p class="tete__t">{v.contexte}</p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--fantome" href="/formations/sst">Voir la formation SST</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Deux façons de se former</p>
+      <h2 class="h-section">Chez vous, ou à Nice</h2>
+      <ul class="cartes">
+        <li>
+          <h3>Dans vos locaux {v.article}</h3>
+          <p>
+            Pour un groupe constitué de 4 à 10 salariés, nous venons former
+            dans votre entreprise : {v.secteur}. Les mises en situation partent
+            de vos postes de travail. La date se fixe avec vous.
+          </p>
+          <a href="/contact">Demander un devis →</a>
+        </li>
+        <li>
+          <h3>Dans nos locaux à Nice</h3>
+          <p>
+            Pour un ou deux salariés, le plus simple est de rejoindre une
+            session au calendrier, {asso.contact.adresse}.
+            {trajet && <> Depuis {v.nom} : {trajet.ligne}, {trajet.duree}.</>}
+          </p>
+          <a href="/formations/sst#sessions">Voir les dates SST →</a>
+        </li>
+        <li>
+          <h3>Les deux formations</h3>
+          <p>
+            SST initial : {sst.duree}, deux journées, {sst.tarif} par personne en
+            session à Nice. MAC SST : {mac.duree}, une journée, {mac.tarif}, tous
+            les 24 mois. En entreprise, le tarif se fait sur devis.
+          </p>
+          <a href="/formations/mac-sst">Voir le MAC SST →</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <p class="eyebrow">Vos risques</p>
+      <h2 class="h-section">Ce qui arrive vraiment, {v.article}</h2>
+      <ul class="cartes">
+        {v.risques.map((r) => {
+          const s = r.geste && situations.find((x) => x.slug === r.geste);
+          return (
+            <li>
+              <h3>{r.titre}</h3>
+              <p>{r.texte}</p>
+              {s && <a href={`/gestes-qui-sauvent/${s.slug}`}>{s.court} : la conduite à tenir →</a>}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap texte">
+      <p class="eyebrow">Côté employeur</p>
+      <h2 class="h-section">Ce que la loi vous demande</h2>
+      <p>{v.loi}</p>
+      <p>
+        <a href="/gestes-qui-sauvent/au-travail#obligations">Lire les trois articles du Code du travail</a> ·
+        <a href="/sst-en-entreprise">Pourquoi former vos salariés au SST</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Passer à l’acte</p>
+      <h2 class="form__h">Former votre équipe {v.article}</h2>
+      <p class="lede">
+        Dites-nous combien de salariés, où et quand. Nous sommes certifiés
+        Qualiopi : l’OPCO de votre branche ou votre plan de développement des
+        compétences peuvent prendre en charge la formation.
+      </p>
+      <div class="form__actions">
+        <a class="btn btn--primaire" href="/contact">Demander un devis</a>
+        <a class="btn btn--fantome" href="/financement">Faire financer</a>
+        <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sunk">
+    <div class="wrap">
+      <Faq titre={`Le SST ${v.article} : vos questions`} questions={v.faq} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap texte">
+      <p class="eyebrow">Ailleurs dans le 06</p>
+      <p>
+        {autres.map((a, i) => (
+          <>{i > 0 && ' · '}<a href={`/sst-en-entreprise/${a.slug}`}>SST {a.article}</a></>
+        ))}
+        {' · '}<a href="/formations/sst">SST à Nice</a>
+        {' · '}<a href="/ou-se-former">Venir depuis votre commune</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.75rem; }
+  .tete__t { max-width: 64ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  .cartes {
+    list-style: none; margin: 2rem 0 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  }
+  .cartes > li {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.4rem 1.5rem;
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .cartes h3 { font-size: 1.08rem; font-weight: 700; margin: 0; }
+  .cartes p { margin: 0; font-size: 1rem; color: var(--ink-soft); line-height: 1.65; }
+  .cartes a {
+    margin-top: auto; padding-top: .5rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem; color: var(--azur);
+  }
+  .cartes small { font-size: .82rem; color: var(--ink-mute); font-family: 'Archivo', sans-serif; font-weight: 700; }
+
+  .texte { max-width: 70ch; }
+  .texte p { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); margin: 1rem 0 0; }
+  .texte a { color: var(--azur); font-weight: 600; }
+
+  .etapes { list-style: none; counter-reset: e; margin: 2rem 0 0; padding: 0; display: grid; gap: .8rem; max-width: 78ch; }
+  .etapes li {
+    counter-increment: e; position: relative;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.2rem 1.4rem 1.2rem 4rem;
+  }
+  .etapes li::before {
+    content: counter(e); position: absolute; left: 1.2rem; top: 1.15rem;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--navy); color: #fff;
+    font-family: 'Archivo', sans-serif; font-weight: 800;
+  }
+  .etapes strong { display: block; font-size: 1.05rem; margin-bottom: .25rem; }
+  .etapes span { font-size: 1rem; color: var(--ink-soft); line-height: 1.6; }
+  .etapes a { color: var(--azur); font-weight: 600; }
+
+  .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
+  .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+</style>

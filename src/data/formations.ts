@@ -151,6 +151,19 @@ export interface Formation {
    */
   lancement?: { normal: string; economie: string; jusquau: string };
 
+  /**
+   * Bloc « côté employeur » : ce que la fiche standard ne dit pas — l'obligation,
+   * la formation dans l'entreprise, le financement. Réservé aux formations que
+   * l'on achète pour ses salariés ; chaque affirmation juridique cite son texte.
+   */
+  entreprise?: {
+    titre: string;
+    intro: string;
+    points: { titre: string; texte: string; lien?: { href: string; libelle: string } }[];
+  };
+  /** Questions propres à cette formation, balisées en FAQPage sur sa fiche. */
+  faq?: { question: string; reponse: string }[];
+
   seo: { title: string; description: string };
 }
 
@@ -554,6 +567,68 @@ export const formations: Formation[] = [
     recyclage: 'mac-sst',
     image: '/img/sst.jpg',
     wixEvent: 'SST',
+    entreprise: {
+      titre: 'Former vos salariés au SST à Nice et dans les Alpes-Maritimes',
+      intro:
+        'Le sauveteur secouriste du travail est le salarié qui porte les premiers secours à un collègue, et qui repère les dangers avant l’accident. Le dispositif est défini par l’INRS ; voici ce qu’il implique pour l’employeur.',
+      points: [
+        {
+          titre: 'Ce que demande le Code du travail',
+          texte:
+            'L’article R4224-15 impose un membre du personnel formé aux premiers secours dans chaque atelier où sont accomplis des travaux dangereux, et sur chaque chantier d’au moins vingt travailleurs, pendant plus de quinze jours, où sont réalisés des travaux dangereux. Partout ailleurs, l’article R4224-16 demande à l’employeur d’organiser les premiers secours après avis du médecin du travail. Le texte ne nomme pas le SST : c’est la formation que l’INRS recommande pour y répondre.',
+        },
+        {
+          titre: 'Dans vos locaux, pour votre équipe',
+          texte:
+            'Pour un groupe constitué de 4 à 10 salariés, la formation SST se tient dans votre entreprise, à Nice et dans les Alpes-Maritimes. Les mises en situation partent alors de vos postes de travail et de vos risques.',
+          lien: { href: '/contact', libelle: 'Demander un devis' },
+        },
+        {
+          titre: 'Une formation finançable',
+          texte:
+            'L’OPCO de votre branche ou votre plan de développement des compétences peuvent prendre en charge le SST. Nous sommes certifiés Qualiopi, et notre formulaire recueille d’emblée ce qu’il faut pour la convention.',
+          lien: { href: '/financement', libelle: 'Faire financer la formation' },
+        },
+        {
+          titre: 'Un certificat valable 24 mois',
+          texte:
+            'Le certificat SST se prolonge par une journée de maintien et d’actualisation des compétences, le MAC SST, tous les 24 mois. Passé ce délai, le salarié ne peut plus exercer comme sauveteur secouriste du travail.',
+          lien: { href: '/formations/mac-sst', libelle: 'Voir le MAC SST' },
+        },
+      ],
+    },
+    faq: [
+      {
+        question: 'La formation SST est-elle obligatoire en entreprise ?',
+        reponse:
+          'Le Code du travail n’impose pas le SST par son nom. Son article R4224-15 exige en revanche un membre du personnel formé aux premiers secours dans chaque atelier où sont accomplis des travaux dangereux, et sur chaque chantier d’au moins vingt travailleurs, pendant plus de quinze jours, où sont réalisés des travaux dangereux. Dans les autres entreprises, l’employeur organise les premiers secours après avis du médecin du travail. Le SST est la formation que l’INRS recommande pour répondre à ces obligations, parce qu’elle ajoute la prévention des risques aux gestes de secours.',
+      },
+      {
+        question: 'Combien de temps dure la formation SST ?',
+        reponse:
+          'La formation initiale SST dure 14 heures, soit deux journées, en présentiel. Elle réunit de 4 à 10 participants et ne demande aucun prérequis.',
+      },
+      {
+        question: 'Combien de temps le certificat SST est-il valable ?',
+        reponse:
+          'Le certificat SST est valable 24 mois. Il se prolonge par un MAC SST, une journée de 7 heures, à suivre tous les deux ans.',
+      },
+      {
+        question: 'La formation SST peut-elle avoir lieu dans notre entreprise ?',
+        reponse:
+          'Oui. Pour un groupe constitué de 4 à 10 salariés, nous formons dans vos locaux, à Nice et dans les Alpes-Maritimes. Contactez-nous pour fixer une date et recevoir un devis.',
+      },
+      {
+        question: 'Comment financer une formation SST ?',
+        reponse:
+          'Selon votre situation, la prise en charge peut venir de l’OPCO de votre branche ou du plan de développement des compétences de l’entreprise. Notre formulaire de financement recueille les éléments nécessaires à la convention.',
+      },
+      {
+        question: 'Quelle différence entre le SST et le PSC ?',
+        reponse:
+          'Le PSC est la formation citoyenne : 7 heures, pour porter secours partout. Le SST est la formation du salarié : 14 heures, elle ajoute à ces gestes la prévention des risques propres à l’entreprise, et se maintient par un MAC tous les 24 mois.',
+      },
+    ],
     seo: {
       title: 'Formation SST à Nice | Sauveteur Secouriste du Travail',
       description:
@@ -985,6 +1060,63 @@ export const formations: Formation[] = [
     suites: [],
     image: '/img/sst.jpg',
     wixEvent: 'MAC SST',
+    entreprise: {
+      titre: 'Le recyclage SST de vos salariés, à Nice et dans les Alpes-Maritimes',
+      intro:
+        'Le MAC SST est la journée qui prolonge le certificat de sauveteur secouriste du travail. Sans elle, le salarié cesse d’être compté parmi vos secouristes.',
+      points: [
+        {
+          titre: 'Tous les 24 mois',
+          texte:
+            'Le certificat SST est valable deux ans. Le MAC SST doit être suivi avant la date de fin de validité pour que le salarié reste sauveteur secouriste du travail sans interruption.',
+        },
+        {
+          titre: 'Si la date est dépassée',
+          texte:
+            'Le salarié ne peut plus exercer comme SST. D’après le document de référence de l’INRS, il peut tout de même suivre un MAC pour retrouver son certificat, tant que le temps écoulé ne compromet pas sa réussite aux épreuves. Sinon, mieux vaut reprendre la formation initiale.',
+          lien: { href: '/formations/sst', libelle: 'Voir la formation initiale SST' },
+        },
+        {
+          titre: 'Dans vos locaux, pour votre équipe',
+          texte:
+            'Pour un groupe constitué de 4 à 10 salariés, le MAC SST se tient dans votre entreprise, à Nice et dans les Alpes-Maritimes. Une seule journée suffit à remettre toute une équipe à jour.',
+          lien: { href: '/contact', libelle: 'Demander un devis' },
+        },
+        {
+          titre: 'Une formation finançable',
+          texte:
+            'L’OPCO de votre branche ou votre plan de développement des compétences peuvent prendre en charge le MAC SST. Nous sommes certifiés Qualiopi.',
+          lien: { href: '/financement', libelle: 'Faire financer la formation' },
+        },
+      ],
+    },
+    faq: [
+      {
+        question: 'Quand faut-il passer le MAC SST ?',
+        reponse:
+          'Tous les 24 mois, avant la date de fin de validité du certificat SST. Le MAC SST dure 7 heures, sur une journée.',
+      },
+      {
+        question: 'Que se passe-t-il si mon SST est périmé ?',
+        reponse:
+          'Vous ne pouvez plus exercer comme sauveteur secouriste du travail. D’après le document de référence de l’INRS, vous pouvez tout de même suivre un MAC pour retrouver votre certificat, tant que le temps écoulé ne compromet pas votre réussite aux épreuves. Au-delà, il est conseillé de reprendre la formation initiale de 14 heures.',
+      },
+      {
+        question: 'Le MAC SST est-il obligatoire ?',
+        reponse:
+          'Oui pour rester sauveteur secouriste du travail : sans MAC dans les 24 mois, le certificat SST n’est plus valide et le salarié ne compte plus parmi les secouristes de l’entreprise.',
+      },
+      {
+        question: 'Le MAC SST peut-il avoir lieu dans notre entreprise ?',
+        reponse:
+          'Oui. Pour un groupe constitué de 4 à 10 salariés, nous formons dans vos locaux, à Nice et dans les Alpes-Maritimes. Contactez-nous pour fixer une date et recevoir un devis.',
+      },
+      {
+        question: 'Comment financer un MAC SST ?',
+        reponse:
+          'Selon votre situation, la prise en charge peut venir de l’OPCO de votre branche ou du plan de développement des compétences de l’entreprise. Notre formulaire de financement recueille les éléments nécessaires à la convention.',
+      },
+    ],
     seo: {
       title: 'MAC SST à Nice | Recyclage Sauveteur Secouriste du Travail',
       description:

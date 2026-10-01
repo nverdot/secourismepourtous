@@ -1,0 +1,285 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { parSlug } from '../../data/formations';
+import { situations, referentiel } from '../../data/situations';
+import { filAriane, questionsFrequentes } from '../../lib/schema';
+
+/**
+ * Les gestes qui sauvent, vus depuis le lieu de travail.
+ *
+ * AUCUNE conduite à tenir n'est écrite ici. Cette page situe les accidents dans
+ * l'entreprise et renvoie, pour le geste, aux pages tirées du référentiel PSC :
+ * une seule source par geste, un seul endroit à corriger quand il change.
+ * Seuls figurent des accidents que ce référentiel couvre — l'électrisation,
+ * par exemple, n'y est pas, donc elle n'est pas ici non plus.
+ *
+ * Les obligations de l'employeur citent le Code du travail mot pour mot
+ * (articles R4224-14 à R4224-16, relevés le 1er octobre 2026).
+ */
+
+const sst = parSlug('sst')!;
+const mac = parSlug('mac-sst')!;
+
+/** Où l'accident arrive au travail. Le geste, lui, est sur la page liée. */
+const AU_TRAVAIL: { slug: string; titre: string; contexte: string }[] = [
+  {
+    slug: 'saignement-abondant',
+    titre: 'Une coupure qui saigne beaucoup',
+    contexte:
+      'Une lame en cuisine, une machine à l’atelier, une tôle ou une vitre sur un chantier. Le collègue le plus proche est le seul à pouvoir agir tout de suite.',
+  },
+  {
+    slug: 'brulure',
+    titre: 'Une brûlure',
+    contexte:
+      'Une friteuse, un four, une pièce chaude, de la vapeur. En restauration comme en atelier, c’est l’un des accidents les plus courants.',
+  },
+  {
+    slug: 'malaise',
+    titre: 'Un collègue fait un malaise',
+    contexte:
+      'À son poste, en réunion, sur la route. Les signes sont parfois discrets et passent pour de la fatigue : ils peuvent annoncer un AVC ou un problème cardiaque.',
+  },
+  {
+    slug: 'perte-de-connaissance',
+    titre: 'Un collègue est inconscient mais respire',
+    contexte:
+      'Après une chute, un choc ou un malaise. On le découvre parfois seul, dans une réserve, un vestiaire ou un bureau isolé.',
+  },
+  {
+    slug: 'arret-cardiaque',
+    titre: 'Un collègue s’effondre et ne respire plus',
+    contexte:
+      'L’arrêt cardiaque survient aussi au travail. Savoir où se trouve le défibrillateur de l’entreprise fait partie de la réponse.',
+  },
+  {
+    slug: 'etouffement',
+    titre: 'Un collègue s’étouffe',
+    contexte:
+      'À la pause déjeuner, à la cantine, pendant un repas d’équipe. Tout se joue avant qu’aucun secours n’ait le temps d’arriver.',
+  },
+];
+const cartes = AU_TRAVAIL.map((a) => ({ ...a, s: situations.find((x) => x.slug === a.slug)! })).filter((a) => a.s);
+
+const faq = [
+  {
+    question: 'L’employeur doit-il former des salariés aux premiers secours ?',
+    reponse:
+      'Oui dans deux cas fixés par l’article R4224-15 du Code du travail : un membre du personnel reçoit la formation de secouriste dans chaque atelier où sont accomplis des travaux dangereux, et sur chaque chantier employant vingt travailleurs au moins pendant plus de quinze jours où sont réalisés des travaux dangereux. Dans les autres cas, l’article R4224-16 lui demande de prendre, après avis du médecin du travail, les mesures nécessaires pour assurer les premiers secours.',
+  },
+  {
+    question: 'Quelle formation de premiers secours choisir pour une entreprise ?',
+    reponse:
+      `Le SST, sauveteur secouriste du travail. Le Code du travail ne l’impose pas par son nom, mais c’est la formation que l’INRS recommande : ${sst.duree} pour apprendre les gestes de secours et la prévention des risques de l’entreprise. Le certificat se maintient par un MAC SST de ${mac.duree} tous les 24 mois.`,
+  },
+  {
+    question: 'Combien de secouristes faut-il dans une entreprise ?',
+    reponse:
+      'Aucun texte ne fixe de nombre ni de pourcentage. D’après l’INRS, le nombre de secouristes s’évalue selon l’effectif, les risques et l’organisation du travail : horaires décalés, sites éloignés, salariés isolés.',
+  },
+  {
+    question: 'Quel numéro appeler en cas d’accident au travail ?',
+    reponse:
+      'Le 15 (SAMU), le 18 (pompiers) ou le 112. Si votre entreprise a une consigne d’alerte interne, appliquez-la : elle indique qui prévenir et comment guider les secours jusqu’à la victime.',
+  },
+];
+
+const balisages = [
+  filAriane([
+    { nom: 'Accueil', chemin: '/' },
+    { nom: 'Gestes qui sauvent', chemin: '/gestes-qui-sauvent' },
+    { nom: 'Au travail', chemin: '/gestes-qui-sauvent/au-travail' },
+  ]),
+  questionsFrequentes(faq),
+];
+---
+
+<Base
+  title="Accident du travail : premiers gestes et obligations de l’employeur"
+  description="Coupure, brûlure, malaise, arrêt cardiaque au travail : les premiers gestes d’après le référentiel PSC 2026, et ce que le Code du travail demande à l’employeur."
+  chemin="/gestes-qui-sauvent/au-travail"
+  filiere="entreprise"
+  schemas={balisages}
+>
+  <header class="tete">
+    <div class="wrap">
+      <nav class="fil" aria-label="Fil d'ariane">
+        <a href="/">Accueil</a><i aria-hidden="true">›</i><a href="/gestes-qui-sauvent">Gestes qui sauvent</a><i aria-hidden="true">›</i><b>Au travail</b>
+      </nav>
+      <h1 class="tete__h1">Accident du travail&nbsp;: les premiers gestes</h1>
+      <p class="tete__t">
+        Quand un accident arrive au travail, le premier secouriste est un
+        collègue. Voici les situations les plus courantes, la conduite à tenir
+        pour chacune, et ce que le Code du travail demande à l’employeur.
+      </p>
+      <div class="tete__actions">
+        <a class="btn btn--primaire" href="/formations/sst">Former vos salariés au SST</a>
+        <a class="btn btn--fantome" href="#obligations">Les obligations de l’employeur</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <aside class="urgence" role="note">
+      <div>
+        <strong>Urgence en cours&nbsp;?</strong>
+        <p>
+          Appelez le <a href="tel:15">15</a> (SAMU), le <a href="tel:18">18</a>
+          {' '}(pompiers) ou le <a href="tel:112">112</a>. Le médecin régulateur
+          vous guide au téléphone.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Situation par situation</p>
+      <h2 class="h-section">Les accidents les plus courants au travail</h2>
+      <div class="grille">
+        {cartes.map((c) => (
+          <a class="sit" href={`/gestes-qui-sauvent/${c.slug}`}>
+            <span class="sit__e">{c.s.court}</span>
+            <strong>{c.titre}</strong>
+            <span class="sit__x">{c.contexte}</span>
+            <span class="sit__f" aria-hidden="true">Lire la conduite à tenir →</span>
+          </a>
+        ))}
+      </div>
+      <p class="source">
+        Les conduites à tenir reprennent le {referentiel.nom}, {referentiel.edition},
+        publié par la {referentiel.auteur}. Elles informent&nbsp;; elles ne
+        remplacent pas une formation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sunk" id="obligations">
+    <div class="wrap">
+      <p class="eyebrow">Côté employeur</p>
+      <h2 class="h-section">Ce que le Code du travail vous demande</h2>
+      <p class="lede">
+        Trois articles encadrent les premiers secours dans l’entreprise. Nous
+        les citons tels qu’ils sont écrits.
+      </p>
+      <ul class="loi">
+        <li>
+          <h3>Du matériel de premiers secours</h3>
+          <blockquote>«&nbsp;Les lieux de travail sont équipés d’un matériel de premiers secours adapté à la nature des risques et facilement accessible.&nbsp;»</blockquote>
+          <cite>Article R4224-14</cite>
+        </li>
+        <li>
+          <h3>Un secouriste formé là où le travail est dangereux</h3>
+          <p>
+            Un membre du personnel reçoit la formation de secouriste dans chaque
+            atelier où sont accomplis des travaux dangereux, et sur chaque
+            chantier employant vingt travailleurs au moins pendant plus de
+            quinze jours où sont réalisés des travaux dangereux.
+          </p>
+          <cite>Article R4224-15</cite>
+        </li>
+        <li>
+          <h3>Une organisation des secours, partout</h3>
+          <blockquote>«&nbsp;En l’absence d’infirmiers, ou lorsque leur nombre ne permet pas d’assurer une présence permanente, l’employeur prend, après avis du médecin du travail, les mesures nécessaires pour assurer les premiers secours aux accidentés et aux malades.&nbsp;»</blockquote>
+          <cite>Article R4224-16</cite>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="wrap wrap--etroit">
+      <p class="eyebrow">Se former</p>
+      <h2 class="form__h">Le SST&nbsp;: les gestes, et la prévention</h2>
+      <p class="lede">
+        Le Code du travail ne nomme pas le SST, mais c’est la formation que
+        l’INRS recommande pour l’entreprise. En {sst.duree}, vos salariés
+        apprennent à secourir un collègue et à repérer les dangers avant
+        l’accident. Nous formons à Nice, ou dans vos locaux pour un groupe
+        constitué.
+      </p>
+      <div class="form__actions">
+        <a class="btn btn--primaire" href="/formations/sst">Formation SST · {sst.duree} · {sst.tarif}</a>
+        <a class="btn btn--fantome" href="/formations/mac-sst">MAC SST · {mac.duree} · {mac.tarif}</a>
+        <a class="btn btn--fantome" href="/contact">Demander un devis</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <Faq titre="Premiers secours au travail : vos questions" questions={faq} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tete {
+    background: linear-gradient(158deg, var(--navy-lift) 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    color: var(--on-navy);
+    padding-block: clamp(1.5rem, 4vw, 2.25rem) clamp(2.25rem, 5vw, 3.25rem);
+  }
+  .tete__h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; margin-bottom: .8rem; }
+  .tete__actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 1.75rem; }
+  .tete__t { max-width: 64ch; color: var(--on-navy-text); font-size: clamp(1rem, 2.2vw, 1.12rem); }
+
+  .urgence {
+    background: var(--secours); color: #fff;
+    border-radius: var(--r-lg); padding: 1.15rem 1.35rem;
+    margin-top: clamp(-1.5rem, -3vw, -1rem); position: relative; z-index: 2;
+    box-shadow: var(--sh-lg);
+  }
+  .urgence strong { font-family: 'Archivo', sans-serif; font-size: 1rem; display: block; margin-bottom: .2rem; }
+  .urgence p { font-size: 1rem; color: rgba(255,255,255,.92); }
+  .urgence a { color: #fff; font-weight: 700; text-underline-offset: 3px; }
+
+  .grille {
+    margin-top: 1.75rem;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .sit {
+    display: flex; flex-direction: column; gap: .5rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: clamp(1.15rem, 2.6vw, 1.45rem);
+    text-decoration: none; color: inherit;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .sit:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
+  .sit__e {
+    font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--secours);
+  }
+  .sit strong { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+  .sit__x { font-size: .95rem; color: var(--ink-soft); }
+  .sit__f {
+    margin-top: auto; padding-top: .5rem;
+    font-family: 'Archivo', sans-serif; font-size: .88rem; font-weight: 600; color: var(--azur);
+  }
+
+  .source {
+    margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+    font-size: .85rem; color: var(--ink-mute); max-width: 80ch;
+  }
+
+  .loi {
+    list-style: none; margin: 2rem 0 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .loi li {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 1.4rem 1.5rem;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .loi h3 { font-size: 1.08rem; font-weight: 700; margin: 0; }
+  .loi p, .loi blockquote { margin: 0; font-size: 1rem; color: var(--ink-soft); line-height: 1.65; }
+  .loi cite {
+    margin-top: auto; padding-top: .5rem; font-style: normal;
+    font-family: 'Archivo', sans-serif; font-size: .82rem; font-weight: 700; color: var(--ink-mute);
+  }
+
+  .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
+  .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+</style>

@@ -1,0 +1,61 @@
+---
+import type { Formation } from '../data/formations';
+import { sstVilles } from '../data/sst-villes';
+
+/**
+ * Le bloc « côté employeur » d'une fiche formation.
+ *
+ * Celui qui achète un SST n'est pas celui qui le suit : il cherche l'obligation,
+ * la formation dans ses locaux, le financement. La fiche standard parle au
+ * stagiaire ; ce bloc parle à l'employeur.
+ */
+interface Props { entreprise: NonNullable<Formation['entreprise']> }
+const { entreprise: e } = Astro.props;
+---
+
+<section class="section section--sunk" aria-labelledby="t-entreprise">
+  <div class="wrap">
+    <p class="eyebrow">Côté employeur</p>
+    <h2 class="h-section" id="t-entreprise">{e.titre}</h2>
+    <p class="lede">{e.intro}</p>
+
+    <ul class="ent">
+      {e.points.map((p) => (
+        <li class="ent__c">
+          <h3>{p.titre}</h3>
+          <p>{p.texte}</p>
+          {p.lien && <a href={p.lien.href}>{p.lien.libelle} →</a>}
+        </li>
+      ))}
+    </ul>
+
+    <p class="ent__plus">
+      <a href="/sst-en-entreprise">Pourquoi former vos salariés au SST</a>
+      {sstVilles.map((v) => <> · <a href={`/sst-en-entreprise/${v.slug}`}>SST {v.article}</a></>)}
+    </p>
+  </div>
+</section>
+
+<style>
+  .ent {
+    list-style: none; margin: 2rem 0 0; padding: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  }
+  .ent__c {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1.4rem 1.5rem;
+    display: flex; flex-direction: column;
+  }
+  .ent__c h3 { font-size: 1.08rem; font-weight: 700; margin: 0 0 .55rem; }
+  .ent__c p { font-size: 1rem; color: var(--ink-soft); line-height: 1.65; margin: 0; }
+  .ent__c a {
+    margin-top: auto; padding-top: .9rem;
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .95rem;
+    color: var(--accent);
+  }
+  .ent__plus { margin-top: 1.5rem; font-size: 1rem; color: var(--ink-soft); }
+  .ent__plus a { color: var(--azur); font-weight: 600; }
+</style>
