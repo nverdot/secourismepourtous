@@ -139,11 +139,11 @@ const balisages = [
       <h2 class="h-section">Les accidents les plus courants au travail</h2>
       <div class="grille">
         {cartes.map((c) => (
-          <a class="sit" href={`/gestes-qui-sauvent/${c.slug}`}>
-            <span class="sit__e">{c.s.court}</span>
+          <a class="acc" href={`/gestes-qui-sauvent/${c.slug}`}>
+            <span class="acc__e">{c.s.court}</span>
             <strong>{c.titre}</strong>
-            <span class="sit__x">{c.contexte}</span>
-            <span class="sit__f" aria-hidden="true">Lire la conduite à tenir →</span>
+            <span class="acc__x">{c.contexte}</span>
+            <span class="acc__f" aria-hidden="true">Lire la conduite à tenir →</span>
           </a>
         ))}
       </div>
@@ -239,21 +239,21 @@ const balisages = [
     display: grid; gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   }
-  .sit {
+  .acc {
     display: flex; flex-direction: column; gap: .5rem;
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--r-lg); padding: clamp(1.15rem, 2.6vw, 1.45rem);
     text-decoration: none; color: inherit;
     transition: border-color .15s, box-shadow .15s;
   }
-  .sit:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
-  .sit__e {
+  .acc:hover { border-color: var(--secours); box-shadow: var(--sh-md); }
+  .acc__e {
     font-family: 'Archivo', sans-serif; font-size: .7rem; font-weight: 700;
     letter-spacing: .11em; text-transform: uppercase; color: var(--secours);
   }
-  .sit strong { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
-  .sit__x { font-size: .95rem; color: var(--ink-soft); }
-  .sit__f {
+  .acc strong { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+  .acc__x { font-size: .95rem; color: var(--ink-soft); }
+  .acc__f {
     margin-top: auto; padding-top: .5rem;
     font-family: 'Archivo', sans-serif; font-size: .88rem; font-weight: 600; color: var(--azur);
   }
