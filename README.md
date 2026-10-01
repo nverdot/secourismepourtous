@@ -77,6 +77,8 @@ Pour modifier un tarif, une durée ou un programme : tout est dans
 
 ## Ce qui reste à faire
 
+- **Référencement SST (branche `sst-enrichi`, en attente de validation, 01/10/2026)** : bloc employeur et FAQ sur les fiches SST et MAC SST, page `/gestes-qui-sauvent/au-travail`, guide `/sst-en-entreprise` et pages Sophia Antipolis, Carros, Cannes (`src/data/sst-villes.ts`). À confirmer par l'association avant publication : habilitation INRS, formation en entreprise dans tout le 06, épreuves certificatives du SST (la fiche dit « pas d'examen final »). Ajouter une ville seulement avec un angle propre et, si possible, des références réelles.
+
 **Contenu à valider par l'association**
 - Durée, prérequis et tarif du SSA et de son recyclage : les champs affichent
   « Nous consulter » en attendant le référentiel FFSS, ce qui ne publie aucun
