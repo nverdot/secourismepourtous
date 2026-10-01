@@ -153,7 +153,7 @@ export const ECRANS: Ecran[] = [
     titre: 'Former vos salariés au SST',
     message: 'Le code du travail vous demande d’organiser les premiers secours. Le SST est la formation recommandée pour cela : vos salariés apprennent à secourir un collègue et à repérer les dangers. Pour un groupe de 4 à 10, nous venons dans vos locaux.',
     actions: [
-      { texte: 'Pourquoi former mes salariés au SST ?', icone: 'question', vers: '/sst-en-entreprise', note: 'Les raisons, les entreprises concernées, le parcours ensuite' },
+      { texte: 'Pourquoi former mes salariés au SST ?', icone: 'question', vers: '/sst-en-entreprise', note: 'Les raisons, la RSE, les entreprises concernées, le parcours ensuite' },
       { texte: 'Voir la formation SST', icone: 'trousse', vers: '/formations/sst', note: '14 heures · 190 € par personne à Nice' },
       { texte: 'Le recyclage de mes SST', icone: 'recyclage', vers: '/formations/mac-sst', note: 'MAC SST · 7 heures · tous les 24 mois' },
       { texte: 'Ce que la loi me demande', icone: 'liste', vers: '/gestes-qui-sauvent/au-travail#obligations', note: 'Les trois articles du code du travail' },
