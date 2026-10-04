@@ -80,6 +80,9 @@
 
   body[data-appli] :is(.tete__badges, .hero__badges) { gap: 0.4rem; margin-bottom: 0.7rem; }
   body[data-appli] :is(.tete__badges, .hero__badges) > :not(:first-child) { display: none; }
+  /* La pastille d'une opération (journée nationale…) reste : c'est la raison
+     d'être de la page, pas un label parmi d'autres. */
+  body[data-appli] .hero__badges > .badge--evenement { display: inline-flex; }
 
   body[data-appli] .tete__h1 {
     font-size: 1.85rem;
@@ -117,6 +120,8 @@
   body[data-appli] main:has(> .hero + .faits):has(> .sessions) { display: flex; flex-direction: column; }
   body[data-appli] main:has(> .hero + .faits):has(> .sessions) > .hero { order: -3; }
   body[data-appli] main:has(> .hero + .faits):has(> .sessions) > .faits { order: -2; }
+  /* Le bandeau d'une opération reste entre les informations clés et les dates. */
+  body[data-appli] main:has(> .hero + .faits):has(> .sessions) > .evenement { order: -2; }
   body[data-appli] main:has(> .hero + .faits):has(> .sessions) > .sessions { order: -1; }
 
   body[data-appli] .hero + .faits { margin-top: 0.9rem; }

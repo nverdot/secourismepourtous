@@ -34,6 +34,7 @@ const SESSIONS_WIX = [
   ['fc-bsb', 'fc-bsb'],
   ['formations-recyclage-bsb', 'fc-bsb'],
   ['mac-sst', 'mac-sst'],
+  ['gqs', 'gqs-gestes-qui-sauvent'],
   ['psc-', 'psc'],
   ['pse1', 'pse-1'],
   ['pse2', 'pse-2'],

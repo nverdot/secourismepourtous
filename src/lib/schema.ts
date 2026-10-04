@@ -115,8 +115,10 @@ export function filAriane(etapes: { nom: string; chemin: string }[]) {
   };
 }
 
-/** Extrait le premier nombre d'un tarif (« 280 € » → 280). */
+/** Extrait le premier nombre d'un tarif (« 280 € » → 280, « Gratuit » → 0). */
 const montant = (t: string) => {
+  // Une séance gratuite se balise à 0 € : sans prix, Google n'annonce rien.
+  if (/gratuit/i.test(t)) return 0;
   const m = t.replace(/\s/g, '').match(/(\d+([.,]\d+)?)/);
   return m ? Number(m[1].replace(',', '.')) : null;
 };

@@ -163,6 +163,12 @@ export interface Formation {
     /** Ce que le SST change selon l'activité, dans la ville de la fiche. */
     secteurs?: { titre: string; items: { titre: string; texte: string; geste: string }[] };
   };
+  /**
+   * Opération dans laquelle la séance s'inscrit (une journée nationale, par
+   * exemple). Elle a sa pastille dans l'en-tête et son bandeau juste dessous :
+   * c'est la raison d'être de la page, pas un détail de l'accroche.
+   */
+  evenement?: { nom: string; texte: string };
   /** Questions propres à cette formation, balisées en FAQPage sur sa fiche. */
   faq?: { question: string; reponse: string }[];
 
@@ -1191,7 +1197,9 @@ export const formations: Formation[] = [
  */
 export const horsCatalogue: Formation[] = [
   {
-    slug: 'gqs',
+    // L'adresse porte le sigle ET les mots : on cherche « gestes qui sauvent
+    // Nice » bien plus souvent que « GQS ».
+    slug: 'gqs-gestes-qui-sauvent',
     sigle: 'GQS',
     intitule: 'Sensibilisation aux Gestes Qui Sauvent',
     filiere: 'citoyenne',
@@ -1263,6 +1271,11 @@ export const horsCatalogue: Formation[] = [
       effectif: '15 participants au maximum par formateur.',
     },
     image: '/img/filiere-citoyenne.jpg',
+    evenement: {
+      nom: 'Journée nationale de la résilience',
+      texte:
+        'À cette occasion, nous ouvrons une séance gratuite de sensibilisation aux gestes qui sauvent. Chacun peut y participer, dès 10 ans, et repartir en sachant quoi faire avant l’arrivée des secours.',
+    },
     wixEvent: 'GQS',
     faq: [
       {
@@ -1281,7 +1294,7 @@ export const horsCatalogue: Formation[] = [
       },
     ],
     seo: {
-      title: 'Gestes qui sauvent (GQS) à Nice | Sensibilisation de 2 h',
+      title: 'Formation Gestes qui sauvent (GQS) à Nice | Gratuit, 2 h',
       description:
         'Sensibilisation gratuite aux Gestes Qui Sauvent à Nice, pour la Journée nationale de la résilience : 2 heures, dès 10 ans, sans prérequis. Dates et inscription.',
     },

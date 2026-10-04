@@ -38,6 +38,7 @@ const faits = [
         Certifié Qualiopi
       </a>
       {f.certifiante && <span class="badge badge--secours">Formation certifiante</span>}
+      {f.evenement && <span class="badge badge--secours badge--evenement">{f.evenement.nom}</span>}
       <span class="badge badge--contour">Affiliée FFSS · Agréée sécurité civile</span>
     </div>
 

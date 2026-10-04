@@ -1,16 +1,16 @@
 [
   {
-    "id": "0e863ce8-3960-43a2-a271-571ae584aaa6",
-    "titre": "PSC - Formation",
-    "slug": "psc-formation-23",
-    "debut": "2026-10-04T07:00:00Z",
-    "fin": "2026-10-04T15:00:00.783Z",
+    "id": "eee576e2-d428-49a5-8c42-1fe6396a8b08",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-14",
+    "debut": "2026-10-10T07:00:00Z",
+    "fin": "2026-10-11T15:00:00Z",
     "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/psc-formation-23",
-    "complet": true,
+    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-14",
+    "complet": false,
     "champs": [
       {
-        "nom": "custom-50af34299949036c",
+        "nom": "custom-c06fb1316c427242",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -44,28 +44,6 @@
     ]
   },
   {
-    "id": "eee576e2-d428-49a5-8c42-1fe6396a8b08",
-    "titre": "PSE2 - Formation",
-    "slug": "pse2-formation-14",
-    "debut": "2026-10-10T07:00:00Z",
-    "fin": "2026-10-11T15:00:00Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-14",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-c06fb1316c427242",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "a96f9554-071f-46d5-9439-dc55377c3665",
     "titre": "Formations Recyclage BSB - 18h",
     "slug": "formations-recyclage-bsb-18h-9",
@@ -86,6 +64,28 @@
     "url": "https://reservation.secourismepourtous.org/event-details/formations-bsb-35h-9",
     "complet": false,
     "champs": []
+  },
+  {
+    "id": "e7e32e69-cfa6-40ed-b540-c3fbc5367960",
+    "titre": "GQS",
+    "slug": "gqs",
+    "debut": "2026-10-14T17:00:00Z",
+    "fin": "2026-10-15T18:00:00.783Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/gqs",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-50af34299949036c",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
   },
   {
     "id": "b62e575f-598f-4b23-8167-e1f1594c3e89",
@@ -330,28 +330,6 @@
     ]
   },
   {
-    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
-    "titre": "FC PSE1 - Formation",
-    "slug": "fc-pse1-formation-26",
-    "debut": "2027-01-09T08:00:00Z",
-    "fin": "2027-01-09T16:00:00.061Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-7892ed38993536b8",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "56dea5b6-dc4c-4584-a2f9-d127da5793fe",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-22",
@@ -363,6 +341,28 @@
     "champs": [
       {
         "nom": "custom-ceffd922ff194831",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-26",
+    "debut": "2027-01-09T08:00:00Z",
+    "fin": "2027-01-09T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7892ed38993536b8",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -572,28 +572,6 @@
     ]
   },
   {
-    "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
-    "titre": "FC PSE1 - Formation",
-    "slug": "fc-pse1-formation-28",
-    "debut": "2027-03-20T08:00:00Z",
-    "fin": "2027-03-20T16:00:00.061Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-28",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-7ea84cebde0ee3a4",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "66840a80-bbe4-40fd-b80f-76700be0f5bb",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-24",
@@ -605,6 +583,28 @@
     "champs": [
       {
         "nom": "custom-34001b554b4f8bcf",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "89cba4fb-5e30-40a0-b019-1e882fae2221",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-28",
+    "debut": "2027-03-20T08:00:00Z",
+    "fin": "2027-03-20T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-28",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7ea84cebde0ee3a4",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
