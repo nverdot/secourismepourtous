@@ -1180,5 +1180,116 @@ export const formations: Formation[] = [
   },
 ];
 
-export const parSlug = (slug: string) => formations.find((f) => f.slug === slug);
+/**
+ * Fiches hors catalogue : la page existe à son adresse, mais elle n'est listée
+ * nulle part — ni menu, ni catalogue, ni pied de page, ni accueil. On y arrive
+ * par un lien direct.
+ *
+ * Elles vivent dans un tableau à part plutôt que derrière un drapeau : tout ce
+ * qui parcourt `formations` pour bâtir une liste les ignore sans avoir à y
+ * penser, y compris les listes qu'on écrira plus tard.
+ */
+export const horsCatalogue: Formation[] = [
+  {
+    slug: 'gqs',
+    sigle: 'GQS',
+    intitule: 'Sensibilisation aux Gestes Qui Sauvent',
+    filiere: 'citoyenne',
+    certifiante: false,
+    accroche:
+      'Deux heures pour apprendre les gestes d’urgence : protéger, alerter, arrêter un saignement, réagir face à une personne qui a perdu connaissance ou dont le cœur s’est arrêté. Une séance gratuite, proposée pour la Journée nationale de la résilience, dès 10 ans et sans aucun prérequis.',
+    resume: 'Deux heures pour s’initier aux gestes d’urgence, ouvertes à tous dès 10 ans.',
+    duree: '2 heures',
+    prerequis: 'Dès 10 ans',
+    prerequisNote: 'Aucun prérequis',
+    certification: 'Attestation GQS',
+    // Action menée pour la Journée nationale de la résilience : le billet Wix
+    // est à tarif libre, sans montant imposé.
+    tarif: 'Gratuit',
+    tarifNote: 'Participation libre',
+    objectifs: [
+      {
+        titre: 'Protéger et alerter',
+        texte:
+          'Assurer votre sécurité, celle de la victime et des personnes présentes, puis transmettre aux secours les informations nécessaires à leur intervention.',
+        icone: 'bouclier',
+      },
+      {
+        titre: 'Arrêter une hémorragie',
+        texte:
+          'Agir immédiatement face à un saignement abondant, et installer la victime dans une position d’attente adaptée.',
+        icone: 'urgence',
+      },
+      {
+        titre: 'Agir face à une perte de connaissance',
+        texte:
+          'Réagir face à une personne inconsciente qui respire, et face à un arrêt cardiaque, avec ou sans défibrillateur.',
+        icone: 'coeur',
+      },
+    ],
+    modules: [
+      {
+        titre: 'Protection',
+        texte:
+          'Repérer un danger, le supprimer ou l’écarter sans vous exposer, et savoir quand dégager une victime en urgence. La conduite à tenir face à une attaque ou une situation de violence est aussi abordée.',
+      },
+      {
+        titre: 'Alerte',
+        texte:
+          'Choisir le bon numéro d’urgence et transmettre un message clair, pour que les secours partent vite et avec les bonnes informations.',
+      },
+      {
+        titre: 'La victime saigne abondamment',
+        texte:
+          'Comprimer directement la plaie, puis poser un garrot lorsque la compression ne suffit pas ou n’est pas possible. Vous apprenez aussi à installer la victime d’une plaie grave en position d’attente.',
+      },
+      {
+        titre: 'La victime a perdu connaissance et respire',
+        texte:
+          'Libérer les voies aériennes, vérifier la respiration et placer la victime en position latérale de sécurité.',
+      },
+      {
+        titre: 'La victime a perdu connaissance et ne respire pas',
+        texte:
+          'Réaliser les compressions thoraciques et mettre en œuvre un défibrillateur automatisé externe, en attendant les secours.',
+      },
+    ],
+    suites: ['Poursuivre vers le PSC, la formation complète d’une journée'],
+    modalites: {
+      pedagogie:
+        'Sensibilisation en présentiel. De courts exposés, puis chaque geste est réalisé par le formateur en même temps que les participants, sur mannequin et entre stagiaires.',
+      evaluation:
+        'Pas d’examen. L’attestation « Gestes qui sauvent » est remise à l’issue de la séance aux participants présents qui ont réalisé tous les gestes demandés.',
+      effectif: '15 participants au maximum par formateur.',
+    },
+    image: '/img/filiere-citoyenne.jpg',
+    wixEvent: 'GQS',
+    faq: [
+      {
+        question: 'Quelle différence entre les GQS et le PSC ?',
+        reponse:
+          'Les Gestes Qui Sauvent sont une sensibilisation de 2 heures, centrée sur les gestes d’urgence, qui donne lieu à une attestation. Le PSC est la formation complète : 7 heures en une journée, avec en plus l’étouffement, les malaises, les brûlures et les traumatismes. Les GQS sont une première marche vers le PSC.',
+      },
+      {
+        question: 'À partir de quel âge peut-on suivre les Gestes Qui Sauvent ?',
+        reponse: 'À partir de 10 ans. Aucun prérequis n’est demandé.',
+      },
+      {
+        question: 'Y a-t-il un examen à la fin ?',
+        reponse:
+          'Non. Il suffit d’être présent et de réaliser tous les gestes demandés pendant la séance. L’attestation est remise à la fin.',
+      },
+    ],
+    seo: {
+      title: 'Gestes qui sauvent (GQS) à Nice | Sensibilisation de 2 h',
+      description:
+        'Sensibilisation gratuite aux Gestes Qui Sauvent à Nice, pour la Journée nationale de la résilience : 2 heures, dès 10 ans, sans prérequis. Dates et inscription.',
+    },
+  },
+];
+
+/** Toutes les fiches qui ont une page, listées au catalogue ou non. */
+export const toutesLesFormations: Formation[] = [...formations, ...horsCatalogue];
+
+export const parSlug = (slug: string) => toutesLesFormations.find((f) => f.slug === slug);
 export const parFiliere = (f: Filiere) => formations.filter((x) => x.filiere === f);

@@ -16,7 +16,7 @@ import Pack from '../../components/Pack.astro';
 import Temoignages from '../../components/Temoignages.astro';
 import ModuleInscription from '../../components/ModuleInscription.astro';
 import Documents from '../../components/Documents.astro';
-import { formations, type Formation } from '../../data/formations';
+import { toutesLesFormations, type Formation } from '../../data/formations';
 import { asso } from '../../data/association';
 import { sessionsAVenir, sessionsDe } from '../../lib/wix';
 
@@ -27,7 +27,8 @@ import { sessionsAVenir, sessionsDe } from '../../lib/wix';
  */
 export async function getStaticPaths() {
   const toutes = await sessionsAVenir();
-  return formations.map((f) => ({
+  // Fiches hors catalogue comprises : elles ont une page, sans être listées.
+  return toutesLesFormations.map((f) => ({
     params: { slug: f.slug },
     // Une formation suspendue n'affiche aucune session, même si des dates
     // subsistent dans Wix : on ne propose pas de réserver ce qu'on n'assure pas.
