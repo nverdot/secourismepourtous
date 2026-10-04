@@ -198,6 +198,11 @@ const balisages = [
         </a>
         <a class="btn btn--fantome" href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
       </div>
+      {/* Volontairement discret : la séance GQS est hors catalogue. Ce lien sert
+          surtout à ce que Google la rattache au reste du site. */}
+      <p class="form__aussi">
+        Il existe aussi une <a href="/formations/gqs-gestes-qui-sauvent">sensibilisation aux gestes qui sauvent (GQS)</a>, en 2 heures.
+      </p>
     </div>
   </section>
 
@@ -280,6 +285,8 @@ const balisages = [
 
   .form__h { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 800; margin-bottom: .7rem; }
   .form__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .form__aussi { margin-top: 1.1rem; font-size: .8rem; color: var(--on-navy-soft); opacity: .8; }
+  .form__aussi a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
   .quiz-app {
     display: flex; align-items: center; gap: 1rem;
