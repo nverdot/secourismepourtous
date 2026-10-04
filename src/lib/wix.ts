@@ -64,26 +64,38 @@ export interface ChampFormulaire {
 /** Champs présents sur tous les événements : le module les gère déjà. */
 const CHAMPS_STANDARDS = new Set(['firstName', 'lastName', 'email', 'phone', 'comment']);
 
+/**
+ * Ramène une date à l'heure de Paris, quel que soit le fuseau de la machine
+ * qui construit le site. Chez Cloudflare, c'est UTC : sans cela, une session
+ * de 9 h s'affichait à 7 h, et une soirée pouvait changer de jour.
+ */
+const paris = (d: Date) => new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+
 /** Clé de regroupement par mois, ex. « 2026-09 ». */
-export const cleMois = (d: Date) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+export const cleMois = (date: Date) => {
+  const d = paris(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
 
 const MOIS_LONGS = [
   'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
   'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
 ];
-export const libelleMois = (d: Date) => `${MOIS_LONGS[d.getMonth()]} ${d.getFullYear()}`;
+export const libelleMois = (date: Date) => {
+  const d = paris(date);
+  return `${MOIS_LONGS[d.getMonth()]} ${d.getFullYear()}`;
+};
 
 /** « du 19/09/2026 au 27/09/2026 » ou une date seule si la formation tient sur un jour. */
 export function periode(s: Session): string {
-  const jj = (d: Date) =>
+  const jj = (date: Date, d = paris(date)) =>
     `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
   if (!s.fin || jj(s.fin) === jj(s.debut)) return `le ${jj(s.debut)}`;
   return `du ${jj(s.debut)} au ${jj(s.fin)}`;
 }
 
 /** Signale les sessions qui tombent un samedi ou un dimanche. */
-export const estWeekEnd = (d: Date) => d.getDay() === 0 || d.getDay() === 6;
+export const estWeekEnd = (d: Date) => paris(d).getDay() === 0 || paris(d).getDay() === 6;
 
 const API = 'https://www.wixapis.com/events/v3/events/query';
 
@@ -157,9 +169,9 @@ export function sessionsDe(toutes: Session[], titreWix: string): Session[] {
 const JOURS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 const MOIS = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
 
-export const formatJour = (d: Date) => JOURS[d.getDay()];
-export const formatNumero = (d: Date) => String(d.getDate()).padStart(2, '0');
-export const formatMois = (d: Date) => MOIS[d.getMonth()];
-export const formatAnnee = (d: Date) => d.getFullYear();
+export const formatJour = (d: Date) => JOURS[paris(d).getDay()];
+export const formatNumero = (d: Date) => String(paris(d).getDate()).padStart(2, '0');
+export const formatMois = (d: Date) => MOIS[paris(d).getMonth()];
+export const formatAnnee = (d: Date) => paris(d).getFullYear();
 export const formatHeure = (d: Date) =>
-  `${String(d.getHours()).padStart(2, '0')}h${String(d.getMinutes()).padStart(2, '0')}`;
+  `${String(paris(d).getHours()).padStart(2, '0')}h${String(paris(d).getMinutes()).padStart(2, '0')}`;
