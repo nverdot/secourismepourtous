@@ -55,6 +55,10 @@ formations initiales — sans quoi les deux se mélangeraient.
 Vérification faite au 20/08/2026 : PSC 8 sessions, PSE1 7, PSE2 3, BNSSA 3,
 SST 0 (aucun événement SST côté Wix).
 
+### Fiches hors catalogue
+
+Une fiche placée dans `horsCatalogue` (dans `src/data/formations.ts`) a sa page, mais n'apparaît dans aucun menu ni aucune liste : on y arrive par un lien direct. C'est le cas des Gestes qui sauvent, `/formations/gqs-gestes-qui-sauvent`, séance gratuite pour la Journée nationale de la résilience (publiée le 04/10/2026). Pour la remettre au catalogue, déplacer la fiche dans `formations`.
+
 ## Structure
 
 ```
