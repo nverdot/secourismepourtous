@@ -1,27 +1,5 @@
 [
   {
-    "id": "b62e575f-598f-4b23-8167-e1f1594c3e89",
-    "titre": "FC PSE2 - Formation",
-    "slug": "fc-pse2-formation-19",
-    "debut": "2026-10-17T07:00:00Z",
-    "fin": "2026-10-17T15:00:00.444Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse2-formation-19",
-    "complet": true,
-    "champs": [
-      {
-        "nom": "custom-0a877822ffec855b",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "6b4344e2-d561-4ebf-a7b8-add7263b4c18",
     "titre": "PSE1 - Formation",
     "slug": "pse1-formation-21",
@@ -132,28 +110,6 @@
     ]
   },
   {
-    "id": "ed7eab5d-7e0f-4fca-9a3e-e4f10ecd8e88",
-    "titre": "PSE2 - Formation",
-    "slug": "pse2-formation-18",
-    "debut": "2026-11-21T08:00:00Z",
-    "fin": "2026-11-29T16:00:00Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-18",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-c06fb1316c427242",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "eb7be6d8-dc03-47ba-a975-212bf0f17a03",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-20",
@@ -165,6 +121,28 @@
     "champs": [
       {
         "nom": "custom-34beb5478acf4f67",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "ed7eab5d-7e0f-4fca-9a3e-e4f10ecd8e88",
+    "titre": "PSE2 - Formation",
+    "slug": "pse2-formation-18",
+    "debut": "2026-11-21T08:00:00Z",
+    "fin": "2026-11-29T16:00:00Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/pse2-formation-18",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-c06fb1316c427242",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
@@ -264,28 +242,6 @@
     ]
   },
   {
-    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
-    "titre": "FC PSE1 - Formation",
-    "slug": "fc-pse1-formation-26",
-    "debut": "2027-01-09T08:00:00Z",
-    "fin": "2027-01-09T16:00:00.061Z",
-    "lieu": "31 Boulevard Impératrice Eugénie",
-    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
-    "complet": false,
-    "champs": [
-      {
-        "nom": "custom-7892ed38993536b8",
-        "libelle": "Êtes-vous en situation de handicap ?",
-        "genre": "LISTE",
-        "options": [
-          "Non, je ne suis pas concerné(e)",
-          "Oui, je suis en situation de handicap"
-        ],
-        "obligatoire": false
-      }
-    ]
-  },
-  {
     "id": "56dea5b6-dc4c-4584-a2f9-d127da5793fe",
     "titre": "FC PSE2 - Formation",
     "slug": "fc-pse2-formation-22",
@@ -297,6 +253,28 @@
     "champs": [
       {
         "nom": "custom-ceffd922ff194831",
+        "libelle": "Êtes-vous en situation de handicap ?",
+        "genre": "LISTE",
+        "options": [
+          "Non, je ne suis pas concerné(e)",
+          "Oui, je suis en situation de handicap"
+        ],
+        "obligatoire": false
+      }
+    ]
+  },
+  {
+    "id": "92723e3f-9d0c-41ef-8741-edfa0e148aa0",
+    "titre": "FC PSE1 - Formation",
+    "slug": "fc-pse1-formation-26",
+    "debut": "2027-01-09T08:00:00Z",
+    "fin": "2027-01-09T16:00:00.061Z",
+    "lieu": "31 Boulevard Impératrice Eugénie",
+    "url": "https://reservation.secourismepourtous.org/event-details/fc-pse1-formation-26",
+    "complet": false,
+    "champs": [
+      {
+        "nom": "custom-7892ed38993536b8",
         "libelle": "Êtes-vous en situation de handicap ?",
         "genre": "LISTE",
         "options": [
