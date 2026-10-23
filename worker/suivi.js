@@ -144,6 +144,9 @@ async function donnees(env) {
           commande: o.orderNumber,
           groupe: tickets.length > 1 ? tickets.length : 0,
           reponses,
+          // La seule question propre aux sessions est « Êtes-vous en situation
+          // de handicap ? » ; toute réponse autre que « Non… » compte.
+          handicap: reponses.some((r) => !/^non\b/i.test(r)),
           billet: t.ticketDefinitionId,
         });
       }
@@ -209,6 +212,10 @@ function niveau(s) {
 }
 
 /** Nom court pour les cases du calendrier : « Formations Recyclage BSB » → « FC BSB ». */
+/** Pictogramme fauteuil roulant, avec un nom lisible par les lecteurs d'écran. */
+const FAUTEUIL = '<span class="fauteuil" role="img" aria-label="situation de handicap">♿</span>';
+const nbHandicap = (s) => s.participants.filter((p) => p.handicap).length;
+
 const court = (titre) => famille(titre).replace(/^Formations Recyclage /i, 'FC ').replace(/^Formations /i, '');
 
 /** Jour civil à Paris, « 2026-11-07 » : la clé des cases du calendrier. */
@@ -224,8 +231,9 @@ function puce(s) {
   const debut = new Date(s.debut);
   const fin = s.fin ? new Date(s.fin) : null;
   const jusque = fin && cleJour(fin) !== cleJour(debut) ? ` → ${DATE_COURTE.format(fin)}` : '';
-  const titre = `${s.titre} · ${DATE_COURTE.format(debut)}${jusque} · ${n} inscrits / ${s.capacite ?? '?'}${nv ? ' · ' + nv.texte : ''}`;
-  return `<a class="puce ${nv ? 'n-' + nv.cle : ''}" href="#s-${esc(s.id)}" data-id="${esc(s.id)}" data-famille="${esc(famille(s.titre))}" title="${esc(titre)}"><b>${esc(court(s.titre))}</b> <span>${n}/${s.capacite ?? '?'}</span></a>`;
+  const h = nbHandicap(s);
+  const titre = `${s.titre} · ${DATE_COURTE.format(debut)}${jusque} · ${n} inscrits / ${s.capacite ?? '?'}${nv ? ' · ' + nv.texte : ''}${h ? ` · ${h} en situation de handicap` : ''}`;
+  return `<a class="puce ${nv ? 'n-' + nv.cle : ''}" href="#s-${esc(s.id)}" data-id="${esc(s.id)}" data-famille="${esc(famille(s.titre))}" title="${esc(titre)}"><b>${esc(court(s.titre))}</b> <span>${n}/${s.capacite ?? '?'}${h ? ' ' + FAUTEUIL : ''}</span></a>`;
 }
 
 /**
@@ -292,7 +300,7 @@ function carte(s) {
           <span class="qui"><strong>${esc(p.nom.toUpperCase())}</strong> ${esc(p.prenom)}
             ${p.aRegler ? '<em class="tag tag-regler">paiement en attente</em>' : ''}
             ${p.groupe ? `<em class="tag">commande de ${p.groupe}</em>` : ''}
-            ${p.reponses.filter((r) => !/^non\b/i.test(r)).map((r) => `<em class="tag tag-info">Handicap : ${esc(r)}</em>`).join('')}
+            ${p.handicap ? `<em class="tag tag-info">${FAUTEUIL} situation de handicap</em>` : ''}
           </span>
           <span class="contact">
             ${p.tel ? `<a href="tel:${esc(p.tel.replace(/\s/g, ''))}">${esc(p.tel)}</a>` : ''}
@@ -316,6 +324,7 @@ function carte(s) {
         </div>
         ${s.types.length ? `<p class="types">${s.types.map((t) => `<span>${esc(t.nom)} : <b>${t.vendus}</b>/${t.limite ?? '∞'}</span>`).join('')}</p>` : ''}
         <p class="etat">
+          ${nbHandicap(s) ? `<span class="alerte-handicap">${FAUTEUIL} ${nbHandicap(s)} personne${nbHandicap(s) > 1 ? 's' : ''} en situation de handicap</span>` : ''}
           ${nv ? `<span class="badge">${nv.texte}</span>` : ''}
           ${restantes !== null && restantes > 0 ? `<span>${restantes} place${restantes > 1 ? 's' : ''} libre${restantes > 1 ? 's' : ''}</span>` : ''}
           ${s.annulations ? `<span class="discret">${s.annulations} annulation${s.annulations > 1 ? 's' : ''}</span>` : ''}
@@ -503,6 +512,8 @@ summary { cursor: pointer; color: var(--azur); font-weight: 700; padding: 6px 0 
 .quand { grid-column: 2 / -1; color: var(--doux); font-size: .8rem; }
 .tag { display: inline-block; font-style: normal; font-size: .75rem; background: #eef2f6; color: var(--doux); border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
 .tag-regler { background: var(--gold-wash); color: var(--gold); }
+.fauteuil { font-style: normal; }
+.alerte-handicap { font-weight: 700; color: var(--secours); }
 .tag-info { background: var(--secours-wash); color: var(--secours); }
 .copier { margin-top: 10px; border: 1px solid var(--trait); background: var(--carte); border-radius: 8px; padding: 8px 14px; font: inherit; font-size: .9rem; cursor: pointer; }
 .connexion { max-width: 380px; padding-top: 12vh; }
