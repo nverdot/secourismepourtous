@@ -2,7 +2,7 @@
 /**
  * DPS Game, l'application d'entraînement de l'association.
  *
- * Le jeu prolonge la formation : on le présente là où le visiteur pense à se
+ * Le jeu accompagne avant la formation (« Je découvre ») et après : on le présente là où le visiteur pense à se
  * former (accueil) et là où il vient de choisir sa formation (PSC, PSE 1,
  * PSE 2 et leurs recyclages). Deux portes d'entrée : l'App Store pour
  * l'iPhone, le navigateur pour tous les autres téléphones (Android compris).
@@ -19,6 +19,18 @@ const { sigle } = Astro.props;
 const appStore = 'https://apps.apple.com/fr/app/dps-game/id6819717274';
 const web = 'https://app.secourismepourtous.org';
 const presentation = 'https://app.secourismepourtous.org/presentation';
+
+/* Les sept captures de la fiche App Store, dans le même ordre. Elles défilent
+   dans le téléphone ; le second, penché derrière, montre déjà la suivante. */
+const ecrans = [
+  { img: 'parcours', nom: 'Le parcours' },
+  { img: 'question', nom: 'Une question' },
+  { img: 'correction', nom: 'La correction' },
+  { img: 'garde', nom: 'Une garde sur un poste de secours' },
+  { img: 'missions', nom: 'Les missions' },
+  { img: 'carrefour', nom: 'Le carrefour des techniques' },
+  { img: 'profil', nom: 'Votre profil' },
+];
 ---
 
 <section class="section section--navy dg" aria-labelledby="t-dpsgame">
@@ -28,16 +40,17 @@ const presentation = 'https://app.secourismepourtous.org/presentation';
       <div class="dg__tete">
         <img class="dg__icone" src="/img/dps-game/icone.png" alt="" width="192" height="192" loading="lazy" decoding="async" />
         <h2 class="h-section dg__h" id="t-dpsgame">
-          {sigle ? <>Après votre {sigle}, gardez les bons réflexes</> : <>DPS Game, le jeu pour garder les bons réflexes</>}
+          {sigle ? <>Après votre {sigle}, continuez à cultiver votre savoir</> : <>Découvrir les premiers secours, puis ne plus les oublier</>}
         </h2>
       </div>
       <p class="lede dg__lede">
-        DPS Game est le jeu d'entraînement de Secourisme pour tous. Quelques minutes
-        par jour pour réviser entre deux formations, du PSC au PSE&nbsp;2.
+        DPS Game, l'application de Secourisme pour tous, vous accompagne avant et
+        après la formation&nbsp;: pour découvrir les premiers secours, puis pour
+        continuer à cultiver votre savoir, quelques minutes par jour.
       </p>
       <ul class="dg__l">
-        <li>Des questions courtes et des cas concrets, une victime après l'autre.</li>
-        <li>Des gardes sur un poste de secours : match, concert, course…</li>
+        <li><strong>Jamais formé&nbsp;?</strong> Le parcours «&nbsp;Je découvre&nbsp;» présente cinq situations des gestes qui sauvent, puis les prochaines dates de PSC.</li>
+        <li><strong>Déjà formé&nbsp;?</strong> Questions courtes, cas concrets et gardes sur un poste de secours, du PSC au PSE&nbsp;2.</li>
         <li>Chaque question s'appuie sur les recommandations officielles.</li>
         <li>Gratuit, sans publicité. Vous pouvez jouer sans créer de compte.</li>
       </ul>
@@ -57,9 +70,30 @@ const presentation = 'https://app.secourismepourtous.org/presentation';
       </p>
     </div>
 
-    <div class="dg__visuel" aria-hidden="true">
-      <img src="/img/dps-game/parcours.webp" alt="" width="506" height="1100" loading="lazy" decoding="async" />
-    </div>
+    <figure class="dg__visuel" data-dg-defile>
+      <div class="dg__scene">
+        {[ 'arriere', 'avant' ].map((plan) => (
+          <div class={`dg__tel dg__tel--${plan}`} aria-hidden="true">
+            {ecrans.map((e, i) => (
+              <img
+                src={`/img/dps-game/${e.img}.webp`} alt="" width="506" height="1100"
+                loading="lazy" decoding="async"
+                data-i={i}
+                class={(plan === 'avant' ? i === 0 : i === 1) ? 'est-vu' : undefined}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+      <figcaption class="dg__legende">
+        <span class="dg__nom" aria-live="polite">{ecrans[0].nom}</span>
+        <span class="dg__points">
+          {ecrans.map((e, i) => (
+            <button type="button" class={i === 0 ? 'est-vu' : undefined} data-i={i} aria-label={`Voir : ${e.nom}`}></button>
+          ))}
+        </span>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
@@ -80,6 +114,7 @@ const presentation = 'https://app.secourismepourtous.org/presentation';
     color: var(--on-navy-text);
   }
   .dg__l li { position: relative; padding-left: 1.6rem; }
+  .dg__l strong { color: var(--on-navy); }
   .dg__l li::before {
     content: ''; position: absolute; left: 0; top: .5em;
     width: .65rem; height: .65rem; border-radius: 50%;
@@ -108,26 +143,98 @@ const presentation = 'https://app.secourismepourtous.org/presentation';
   .dg__note a { color: var(--on-navy); font-weight: 600; }
   .dg__avert { margin-top: .8rem; font-size: .88rem; color: var(--on-navy-soft); }
 
-  .dg__visuel img {
-    display: block; width: clamp(200px, 22vw, 260px); height: auto;
-    border-radius: 30px;
-    border: 7px solid #04101c;
-    box-shadow: 0 24px 48px rgba(0, 0, 0, .4);
+  /*
+   * Deux téléphones, comme sur l'en-tête de la fiche App Store : celui de
+   * devant fait défiler les captures, celui de derrière, penché, montre la
+   * suivante. Les images se relaient en fondu, sans rien déplacer.
+   */
+  .dg__visuel { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .dg__scene { position: relative; width: clamp(290px, 30vw, 360px); aspect-ratio: 360 / 520; }
+  .dg__tel {
+    position: absolute; overflow: hidden;
+    aspect-ratio: 506 / 1100;
+    border: 7px solid #04101c; border-radius: 30px;
+    background: #04101c;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, .45);
+  }
+  .dg__tel--avant { width: 66%; right: 0; bottom: 0; z-index: 1; }
+  .dg__tel--arriere {
+    width: 58%; left: 0; top: 0;
+    transform: rotate(-8deg); transform-origin: bottom right;
+    opacity: .55; filter: saturate(.8);
+  }
+  .dg__tel img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transform: scale(1.03);
+    transition: opacity .7s ease, transform 1.4s ease;
+  }
+  .dg__tel img.est-vu { opacity: 1; transform: none; }
+
+  .dg__legende { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+  .dg__nom { font-weight: 600; font-size: 1rem; color: var(--on-navy); text-align: center; min-height: 1.5em; }
+  .dg__points { display: flex; gap: .15rem; }
+  /* La cible fait 24 px pour le doigt ; le point visible, 8 px. */
+  .dg__points button {
+    width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .dg__points button::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(242, 246, 250, .35);
+    transition: background-color .3s ease, width .3s ease;
+  }
+  .dg__points button.est-vu::before { width: 20px; border-radius: 4px; background: var(--ocre-vif); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dg__tel img { transition: none; transform: none; }
   }
 
   /* Accueil du téléphone : les sections y perdent leur fond. Le jeu garde le
-     sien, en carte, et laisse la capture d'écran : le bloc reste court entre
-     les prochaines dates et les bons réflexes. */
+     sien, en carte. */
   :global(main:has(.appli)) > .dg .dg__in {
     background: var(--navy-deep); color: var(--on-navy);
     border-radius: 18px; padding: 1.3rem 1.1rem 1.2rem;
   }
-  :global(main:has(.appli)) > .dg .dg__visuel { display: none; }
 
   @media (max-width: 760px) {
     .dg__in { grid-template-columns: 1fr; }
     .dg__visuel { justify-self: center; }
-    .dg__visuel img { width: 190px; }
+    .dg__visuel { order: -1; }
+    .dg__scene { width: 260px; }
     .dg__icone { width: 52px; height: 52px; border-radius: 12px; }
   }
 </style>
+
+<script>
+  /**
+   * Le défilement des captures. Il ne tourne que si le bloc est à l'écran, et
+   * s'arrête quand on le survole ou qu'on choisit un écran. Sans animation
+   * voulue (réglage du système), rien ne bouge seul : les points restent.
+   */
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-dg-defile]')) {
+    const avant = [...fig.querySelectorAll<HTMLImageElement>('.dg__tel--avant img')];
+    const arriere = [...fig.querySelectorAll<HTMLImageElement>('.dg__tel--arriere img')];
+    const points = [...fig.querySelectorAll<HTMLButtonElement>('.dg__points button')];
+    const nom = fig.querySelector('.dg__nom')!;
+    const n = avant.length;
+    let i = 0, minuterie = 0, visible = false, arrete = false;
+    const sobre = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const montrer = (k: number) => {
+      i = (k + n) % n;
+      avant.forEach((im, j) => im.classList.toggle('est-vu', j === i));
+      arriere.forEach((im, j) => im.classList.toggle('est-vu', j === (i + 1) % n));
+      points.forEach((b, j) => b.classList.toggle('est-vu', j === i));
+      nom.textContent = points[i].getAttribute('aria-label')!.replace('Voir : ', '');
+    };
+    const relancer = () => {
+      clearInterval(minuterie);
+      if (!sobre && visible && !arrete) minuterie = window.setInterval(() => montrer(i + 1), 3200);
+    };
+
+    points.forEach((b, j) => b.addEventListener('click', () => { arrete = true; montrer(j); relancer(); }));
+    fig.addEventListener('mouseenter', () => { clearInterval(minuterie); });
+    fig.addEventListener('mouseleave', relancer);
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; relancer(); }, { threshold: 0.3 }).observe(fig);
+  }
+</script>
