@@ -212,8 +212,15 @@ function niveau(s) {
 }
 
 /** Nom court pour les cases du calendrier : « Formations Recyclage BSB » → « FC BSB ». */
-/** Pictogramme fauteuil roulant, avec un nom lisible par les lecteurs d'écran. */
-const FAUTEUIL = '<span class="fauteuil" role="img" aria-label="situation de handicap">♿</span>';
+/**
+ * Pictogramme fauteuil roulant : blanc sur carré rouge, pour sauter aux yeux.
+ * Dessiné en SVG plutôt qu'avec l'emoji ♿, que chaque système colore à sa
+ * façon (en bleu le plus souvent) sans qu'on puisse le passer en rouge.
+ */
+const FAUTEUIL = `<span class="fauteuil" role="img" aria-label="situation de handicap"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+<circle cx="10" cy="3.6" r="2.2"/>
+<path d="M9 6.8h2.3v4.8H16l3.3 6.6-2 1-2.6-5.4H9.7A1.7 1.7 0 0 1 8 12.1V7.8a1 1 0 0 1 1-1z"/>
+<path d="M7 10v2.3a4.4 4.4 0 1 0 6.6 4.8h2.3A6.6 6.6 0 1 1 7 10z"/></svg></span>`;
 const nbHandicap = (s) => s.participants.filter((p) => p.handicap).length;
 
 const court = (titre) => famille(titre).replace(/^Formations Recyclage /i, 'FC ').replace(/^Formations /i, '');
@@ -233,7 +240,7 @@ function puce(s) {
   const jusque = fin && cleJour(fin) !== cleJour(debut) ? ` → ${DATE_COURTE.format(fin)}` : '';
   const h = nbHandicap(s);
   const titre = `${s.titre} · ${DATE_COURTE.format(debut)}${jusque} · ${n} inscrits / ${s.capacite ?? '?'}${nv ? ' · ' + nv.texte : ''}${h ? ` · ${h} en situation de handicap` : ''}`;
-  return `<a class="puce ${nv ? 'n-' + nv.cle : ''}" href="#s-${esc(s.id)}" data-id="${esc(s.id)}" data-famille="${esc(famille(s.titre))}" title="${esc(titre)}"><b>${esc(court(s.titre))}</b> <span>${n}/${s.capacite ?? '?'}${h ? ' ' + FAUTEUIL : ''}</span></a>`;
+  return `<a class="puce ${nv ? 'n-' + nv.cle : ''}" href="#s-${esc(s.id)}" data-id="${esc(s.id)}" data-famille="${esc(famille(s.titre))}" title="${esc(titre)}"><b>${esc(court(s.titre))}</b> <span>${n}/${s.capacite ?? '?'}</span>${h ? FAUTEUIL : ''}</a>`;
 }
 
 /**
@@ -512,8 +519,12 @@ summary { cursor: pointer; color: var(--azur); font-weight: 700; padding: 6px 0 
 .quand { grid-column: 2 / -1; color: var(--doux); font-size: .8rem; }
 .tag { display: inline-block; font-style: normal; font-size: .75rem; background: #eef2f6; color: var(--doux); border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
 .tag-regler { background: var(--gold-wash); color: var(--gold); }
-.fauteuil { font-style: normal; }
-.alerte-handicap { font-weight: 700; color: var(--secours); }
+.fauteuil { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; width: 28px; height: 28px; border-radius: 5px; background: var(--secours); color: #fff; flex: none; }
+.fauteuil svg { width: 80%; height: 80%; }
+.puce .fauteuil { display: flex; width: 26px; height: 26px; margin-top: 3px; box-shadow: 0 0 0 2px #fff; }
+.tag .fauteuil { width: 18px; height: 18px; border-radius: 3px; margin-right: 2px; }
+.alerte-handicap { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--secours); }
+.alerte-handicap .fauteuil { width: 34px; height: 34px; }
 .tag-info { background: var(--secours-wash); color: var(--secours); }
 .copier { margin-top: 10px; border: 1px solid var(--trait); background: var(--carte); border-radius: 8px; padding: 8px 14px; font: inherit; font-size: .9rem; cursor: pointer; }
 .connexion { max-width: 380px; padding-top: 12vh; }
