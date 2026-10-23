@@ -135,6 +135,12 @@ const balisages = [
 
   <ObjectifsProgramme formation={f} />
 
+  {/* Le jeu couvre le PSC, le PSE 1 et le PSE 2 : on le propose sur ces
+      formations et sur leurs recyclages, pas ailleurs. Juste après « Et
+      après ? », qui ferme le programme : la suite de la formation, c'est
+      aussi entretenir ce qu'on a appris (demande de Nicolas). */}
+  {jeu.includes(f.slug) && <DpsGame sigle={f.sigle} />}
+
   {f.entreprise && <CoteEntreprise entreprise={f.entreprise} />}
 
   {f.filiere === 'entreprise' && (
@@ -154,8 +160,8 @@ const balisages = [
     </section>
   )}
 
-  {/* Juste après « Et après » : c'est le moment où le lecteur se projette
-      dans la suite du parcours, donc celui où l'offre groupée fait sens. */}
+  {/* Après « Et après » (et DPS Game) : c'est le moment où le lecteur se
+      projette dans la suite du parcours, donc celui où l'offre groupée fait sens. */}
   {f.pack && <Pack formation={f} />}
 
   <section class="section">
@@ -294,10 +300,6 @@ const balisages = [
 
   {sessions.length > 0 && <PopupDates sessions={sessions} sigle={f.sigle} />}
   {sessions.length > 0 && <ModuleInscription />}
-
-  {/* Le jeu couvre le PSC, le PSE 1 et le PSE 2 : on le propose sur ces
-      formations et sur leurs recyclages, pas ailleurs. */}
-  {jeu.includes(f.slug) && <DpsGame sigle={f.sigle} />}
 
   <section class="section section--sunk">
     <div class="wrap">

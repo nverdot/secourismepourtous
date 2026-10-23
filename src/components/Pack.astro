@@ -28,8 +28,10 @@ const p = f.pack!;
           <span class="pack__eco-l">d’économie</span>
         </p>
         <p class="pack__chiffres">
-          <b>{p.tarif}</b>
+          {/* L'ancien prix d'abord, barré, puis le prix du pack : on lit
+              « avant, après » dans le sens de la lecture. */}
           <s>{p.separement}</s>
+          <b>{p.tarif}</b>
         </p>
         <p class="pack__note">
           au lieu de {f.tarif} par formation prise séparément
