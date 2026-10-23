@@ -16,6 +16,7 @@ import Pack from '../../components/Pack.astro';
 import Temoignages from '../../components/Temoignages.astro';
 import ModuleInscription from '../../components/ModuleInscription.astro';
 import Documents from '../../components/Documents.astro';
+import DpsGame from '../../components/DpsGame.astro';
 import { toutesLesFormations, type Formation } from '../../data/formations';
 import { asso } from '../../data/association';
 import { sessionsAVenir, sessionsDe } from '../../lib/wix';
@@ -38,6 +39,7 @@ export async function getStaticPaths() {
 
 interface Props { formation: Formation; sessions: any[] }
 const { formation: f, sessions } = Astro.props;
+const jeu = ['psc', 'pse-1', 'pse-2', 'fc-psc', 'fc-pse-1', 'fc-pse-2'];
 
 const balisages = [
   coursFormation(f, sessions),
@@ -292,6 +294,10 @@ const balisages = [
 
   {sessions.length > 0 && <PopupDates sessions={sessions} sigle={f.sigle} />}
   {sessions.length > 0 && <ModuleInscription />}
+
+  {/* Le jeu couvre le PSC, le PSE 1 et le PSE 2 : on le propose sur ces
+      formations et sur leurs recyclages, pas ailleurs. */}
+  {jeu.includes(f.slug) && <DpsGame sigle={f.sigle} />}
 
   <section class="section section--sunk">
     <div class="wrap">

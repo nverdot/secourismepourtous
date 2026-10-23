@@ -1,0 +1,133 @@
+---
+/**
+ * DPS Game, l'application d'entraînement de l'association.
+ *
+ * Le jeu prolonge la formation : on le présente là où le visiteur pense à se
+ * former (accueil) et là où il vient de choisir sa formation (PSC, PSE 1,
+ * PSE 2 et leurs recyclages). Deux portes d'entrée : l'App Store pour
+ * l'iPhone, le navigateur pour tous les autres téléphones (Android compris).
+ *
+ * Les textes reprennent la fiche App Store (appli-quiz/docs/app-store/fiche.md) :
+ * rien n'est promis ici que l'application ne fasse déjà.
+ */
+interface Props {
+  /** Sigle de la formation de la page, pour adresser le titre. */
+  sigle?: string;
+}
+const { sigle } = Astro.props;
+
+const appStore = 'https://apps.apple.com/fr/app/dps-game/id6819717274';
+const web = 'https://app.secourismepourtous.org';
+const presentation = 'https://app.secourismepourtous.org/presentation';
+---
+
+<section class="section section--navy dg" aria-labelledby="t-dpsgame">
+  <div class="wrap dg__in">
+    <div class="dg__texte">
+      <p class="eyebrow dg__eyebrow">Notre application</p>
+      <div class="dg__tete">
+        <img class="dg__icone" src="/img/dps-game/icone.png" alt="" width="192" height="192" loading="lazy" decoding="async" />
+        <h2 class="h-section dg__h" id="t-dpsgame">
+          {sigle ? <>Après votre {sigle}, gardez les bons réflexes</> : <>DPS Game, le jeu pour garder les bons réflexes</>}
+        </h2>
+      </div>
+      <p class="lede dg__lede">
+        DPS Game est le jeu d'entraînement de Secourisme pour tous. Quelques minutes
+        par jour pour réviser entre deux formations, du PSC au PSE&nbsp;2.
+      </p>
+      <ul class="dg__l">
+        <li>Des questions courtes et des cas concrets, une victime après l'autre.</li>
+        <li>Des gardes sur un poste de secours : match, concert, course…</li>
+        <li>Chaque question s'appuie sur les recommandations officielles.</li>
+        <li>Gratuit, sans publicité. Vous pouvez jouer sans créer de compte.</li>
+      </ul>
+      <div class="dg__actions">
+        <a class="dg__store" href={appStore} target="_blank" rel="noopener">
+          <svg viewBox="0 0 384 512" aria-hidden="true"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" /></svg>
+          <span><small>Télécharger dans</small>l'App Store</span>
+        </a>
+        <a class="btn dg__web" href={web} target="_blank" rel="noopener">Jouer dans le navigateur</a>
+      </div>
+      <p class="dg__note">
+        Sur Android ou sur ordinateur, le jeu s'ouvre dans le navigateur.
+        <a href={presentation} target="_blank" rel="noopener">Découvrir l'application</a>
+      </p>
+      <p class="dg__avert">
+        Un quiz ne remplace pas une formation : les gestes s'apprennent en les faisant, avec un formateur.
+      </p>
+    </div>
+
+    <div class="dg__visuel" aria-hidden="true">
+      <img src="/img/dps-game/parcours.webp" alt="" width="506" height="1100" loading="lazy" decoding="async" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .dg__in {
+    display: grid; gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  .dg__eyebrow { color: var(--ocre-vif); }
+  .dg__tete { display: flex; align-items: center; gap: 1rem; }
+  .dg__icone { flex: none; width: 64px; height: 64px; border-radius: 15px; box-shadow: 0 6px 18px rgba(0, 0, 0, .35); }
+  .dg__h { margin: 0; }
+  .dg__lede { margin-top: 1.1rem; color: var(--on-navy-text); }
+  .dg__l {
+    list-style: none; margin: 1.4rem 0 0; padding: 0;
+    display: flex; flex-direction: column; gap: .55rem;
+    color: var(--on-navy-text);
+  }
+  .dg__l li { position: relative; padding-left: 1.6rem; }
+  .dg__l li::before {
+    content: ''; position: absolute; left: 0; top: .5em;
+    width: .65rem; height: .65rem; border-radius: 50%;
+    background: var(--ocre-vif);
+  }
+  .dg__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; align-items: center; }
+  /* Même allure que le badge officiel d'Apple : fond noir, liseré clair. */
+  .dg__store {
+    display: inline-flex; align-items: center; gap: .6rem;
+    min-height: 52px; padding: .45rem 1.15rem .45rem .95rem;
+    background: #000; color: #fff; text-decoration: none;
+    border: 1px solid #a6a6a6; border-radius: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 1.3rem; font-weight: 600; line-height: 1.05; letter-spacing: -.01em;
+  }
+  .dg__store svg { width: 24px; height: 28px; flex: none; }
+  .dg__store small { display: block; font-size: .72rem; font-weight: 400; letter-spacing: 0; }
+  .dg__store:hover { background: #1a1a1a; }
+  .dg__web {
+    min-height: 52px;
+    background: transparent; color: var(--on-navy);
+    border: 1.5px solid rgba(242, 246, 250, .55);
+  }
+  .dg__web:hover { background: rgba(242, 246, 250, .1); }
+  .dg__note { margin-top: 1.1rem; font-size: 1rem; color: var(--on-navy-text); }
+  .dg__note a { color: var(--on-navy); font-weight: 600; }
+  .dg__avert { margin-top: .8rem; font-size: .88rem; color: var(--on-navy-soft); }
+
+  .dg__visuel img {
+    display: block; width: clamp(200px, 22vw, 260px); height: auto;
+    border-radius: 30px;
+    border: 7px solid #04101c;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, .4);
+  }
+
+  /* Accueil du téléphone : les sections y perdent leur fond. Le jeu garde le
+     sien, en carte, et laisse la capture d'écran : le bloc reste court entre
+     les prochaines dates et les bons réflexes. */
+  :global(main:has(.appli)) > .dg .dg__in {
+    background: var(--navy-deep); color: var(--on-navy);
+    border-radius: 18px; padding: 1.3rem 1.1rem 1.2rem;
+  }
+  :global(main:has(.appli)) > .dg .dg__visuel { display: none; }
+
+  @media (max-width: 760px) {
+    .dg__in { grid-template-columns: 1fr; }
+    .dg__visuel { justify-self: center; }
+    .dg__visuel img { width: 190px; }
+    .dg__icone { width: 52px; height: 52px; border-radius: 12px; }
+  }
+</style>

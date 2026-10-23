@@ -7,6 +7,7 @@ import { formations, filieres, type Filiere } from '../data/formations';
 import { sessionsAVenir, sessionsDe } from '../lib/wix';
 import CartesFilieres from '../components/CartesFilieres.astro';
 import AccueilCompagnon from '../components/AccueilCompagnon.astro';
+import DpsGame from '../components/DpsGame.astro';
 
 const sessions = await sessionsAVenir();
 const prochaines = sessions.slice(0, 3);
@@ -165,6 +166,8 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
   </section>
 
   <CartesFilieres />
+
+  <DpsGame />
 
   <!-- ============ POLES ============ -->
   <section class="section section--sunk" aria-labelledby="t-poles">
@@ -487,6 +490,7 @@ const groupes = (['citoyenne', 'operationnelle', 'aquatique', 'entreprise'] as F
        d'onglets (Formations, DPS, S'engager) : sur téléphone, l'accueil s'en
        passe. La section reste dans le HTML, et entière sur ordinateur. */
     :global(main:has(.appli) > section[aria-labelledby='t-poles']) { display: none; }
+    :global(main:has(.appli) > .dg) { order: 5; }
     .appli--gestes { order: 6; }
     .appli--chiffres { order: 7; }
     :global(main:has(.appli) > section[aria-labelledby='t-partenaires']) { order: 8; }
