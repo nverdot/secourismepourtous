@@ -208,6 +208,77 @@ function niveau(s) {
   return null;
 }
 
+/** Nom court pour les cases du calendrier : « Formations Recyclage BSB » → « FC BSB ». */
+const court = (titre) => famille(titre).replace(/^Formations Recyclage /i, 'FC ').replace(/^Formations /i, '');
+
+/** Jour civil à Paris, « 2026-11-07 » : la clé des cases du calendrier. */
+const JOUR_ISO = fmt({ year: 'numeric', month: '2-digit', day: '2-digit' });
+const cleJour = (d) => {
+  const p = Object.fromEntries(JOUR_ISO.formatToParts(d).map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}`;
+};
+
+function puce(s) {
+  const n = s.participants.length;
+  const nv = niveau(s);
+  const debut = new Date(s.debut);
+  const fin = s.fin ? new Date(s.fin) : null;
+  const jusque = fin && cleJour(fin) !== cleJour(debut) ? ` → ${DATE_COURTE.format(fin)}` : '';
+  const titre = `${s.titre} · ${DATE_COURTE.format(debut)}${jusque} · ${n} inscrits / ${s.capacite ?? '?'}${nv ? ' · ' + nv.texte : ''}`;
+  return `<a class="puce ${nv ? 'n-' + nv.cle : ''}" href="#s-${esc(s.id)}" data-id="${esc(s.id)}" data-famille="${esc(famille(s.titre))}" title="${esc(titre)}"><b>${esc(court(s.titre))}</b> <span>${n}/${s.capacite ?? '?'}</span></a>`;
+}
+
+/**
+ * Une grille par mois, du mois en cours au dernier mois qui a une session.
+ * Chaque session apparaît à son premier jour : une formation sur plusieurs
+ * week-ends n'occupe pas toutes les cases jusqu'à sa fin (la bulle donne la fin).
+ * Celles déjà commencées sont listées au-dessus, leur premier jour étant passé.
+ */
+function calendrier(sessions) {
+  const parJour = {};
+  for (const s of sessions.filter((x) => !x.enCours)) (parJour[cleJour(new Date(s.debut))] ??= []).push(s);
+  const jours = Object.keys(parJour).sort();
+  const enCours = sessions.filter((x) => x.enCours);
+  const aujourdhui = cleJour(new Date());
+  const [ay, am] = aujourdhui.split('-').map(Number);
+  const dernier = jours.length ? jours[jours.length - 1] : aujourdhui;
+  const [zy, zm] = dernier.split('-').map(Number);
+
+  const grilles = [];
+  for (let y = ay, m = am; y < zy || (y === zy && m <= zm); m === 12 ? (y++, m = 1) : m++) {
+    const premier = new Date(Date.UTC(y, m - 1, 1));
+    const nbJours = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    const decalage = (premier.getUTCDay() + 6) % 7; // lundi en premier
+    const cases = [];
+    const fins = []; // clé du jour de chaque case, pour écarter les semaines passées
+    for (let i = 0; i < decalage; i++) { cases.push('<div class="case vide-case"></div>'); fins.push(''); }
+    for (let j = 1; j <= nbJours; j++) {
+      const cle = `${y}-${String(m).padStart(2, '0')}-${String(j).padStart(2, '0')}`;
+      const we = (decalage + j - 1) % 7 >= 5;
+      cases.push(`<div class="case${we ? ' we' : ''}${cle === aujourdhui ? ' auj' : ''}${cle < aujourdhui ? ' passe' : ''}">
+        <span class="nj">${j}</span>${(parJour[cle] ?? []).map(puce).join('')}</div>`);
+      fins.push(cle);
+    }
+    // Une semaine entièrement passée n'apprend plus rien : on ne la dessine pas.
+    const semaines = [];
+    for (let i = 0; i < cases.length; i += 7) {
+      const derniere = fins.slice(i, i + 7).filter(Boolean).pop();
+      if (derniere >= aujourdhui) semaines.push(cases.slice(i, i + 7).join(''));
+    }
+    grilles.push(`
+    <section class="mois-cal">
+      <h3>${esc(MOIS.format(new Date(Date.UTC(y, m - 1, 15))))}</h3>
+      <div class="grille">
+        ${['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'].map((d) => `<div class="jsem">${d}</div>`).join('')}
+        ${semaines.join('')}
+      </div>
+    </section>`);
+  }
+  return `
+    ${enCours.length ? `<p class="encours-cal"><span>En cours :</span> ${enCours.map(puce).join(' ')}</p>` : ''}
+    ${grilles.join('')}`;
+}
+
 function carte(s) {
   const d = new Date(s.debut);
   const n = s.participants.length;
@@ -231,7 +302,7 @@ function carte(s) {
         </li>`).join('');
 
   return `
-    <article class="session ${nv ? 'n-' + nv.cle : ''}" data-famille="${esc(famille(s.titre))}">
+    <article id="s-${esc(s.id)}" class="session ${nv ? 'n-' + nv.cle : ''}" data-famille="${esc(famille(s.titre))}">
       <div class="date">
         <span class="jour">${esc(JOUR.format(d))}</span>
         <span class="chiffre">${esc(NUM.format(d))}</span>
@@ -280,10 +351,14 @@ function tableau(sessions) {
       <p class="resume">${sessions.length} sessions à venir · <strong>${total}</strong> inscrits · mis à jour à ${esc(HEURE.format(new Date()))}</p>
     </div>
     <div class="actions">
-      <a class="bouton" href="${CHEMIN}">Actualiser</a>
+      <a class="bouton" href="${CHEMIN}" id="actualiser">Actualiser</a>
       <a class="lien" href="${CHEMIN}?sortir">Se déconnecter</a>
     </div>
   </header>
+  <div class="barre-vues"><nav class="vues" aria-label="Affichage">
+    <button type="button" data-vue="liste" class="actif">Liste</button>
+    <button type="button" data-vue="calendrier">Calendrier</button>
+  </nav></div>
   <nav class="filtres" aria-label="Filtrer par formation">
     <button type="button" class="actif" data-f="">Toutes</button>
     ${familles.map((f) => `<button type="button" data-f="${esc(f)}">${esc(f)}</button>`).join('')}
@@ -293,13 +368,39 @@ function tableau(sessions) {
     <span class="pastille p-presque"></span>75 % et plus
     <span class="pastille p-faible"></span>Peu d’inscrits à moins de 15 jours
   </p>
-  <main>${corps || '<p class="vide">Aucune session à venir dans Wix.</p>'}</main>
+  <main id="liste">${corps || '<p class="vide">Aucune session à venir dans Wix.</p>'}</main>
+  <main id="calendrier" hidden>${calendrier(sessions)}</main>
   <script>
+    function afficher(vue) {
+      document.getElementById('liste').hidden = vue !== 'liste';
+      document.getElementById('calendrier').hidden = vue !== 'calendrier';
+      document.querySelectorAll('.vues button').forEach(function (x) { x.classList.toggle('actif', x.dataset.vue === vue); });
+      history.replaceState(null, '', vue === 'calendrier' ? '#calendrier' : location.pathname);
+    }
+    document.querySelectorAll('.vues button').forEach(function (b) {
+      b.addEventListener('click', function () { afficher(b.dataset.vue); });
+    });
+    if (location.hash === '#calendrier') afficher('calendrier');
+    // Actualiser garde la vue choisie.
+    document.getElementById('actualiser').addEventListener('click', function (e) { e.preventDefault(); location.reload(); });
+    // Un clic sur une session du calendrier ouvre sa fiche dans la liste.
+    document.querySelectorAll('.puce').forEach(function (p) {
+      p.addEventListener('click', function (e) {
+        e.preventDefault();
+        afficher('liste');
+        var a = document.getElementById('s-' + p.dataset.id);
+        var d = a.querySelector('details');
+        if (d) d.open = true;
+        a.scrollIntoView({ block: 'start' });
+      });
+    });
     document.querySelectorAll('.filtres button').forEach(function (b) {
       b.addEventListener('click', function () {
         document.querySelectorAll('.filtres button').forEach(function (x) { x.classList.toggle('actif', x === b); });
         var f = b.dataset.f;
-        document.querySelectorAll('.session').forEach(function (s) { s.hidden = f && s.dataset.famille !== f; });
+        document.querySelectorAll('.session, .puce').forEach(function (s) { s.hidden = f && s.dataset.famille !== f; });
+        var ec = document.querySelector('.encours-cal');
+        if (ec) ec.hidden = !ec.querySelector('.puce:not([hidden])');
         document.querySelectorAll('.mois-titre').forEach(function (h) {
           var n = h.nextElementSibling, vu = false;
           while (n && !n.matches('.mois-titre')) { if (!n.hidden) vu = true; n = n.nextElementSibling; }
@@ -408,7 +509,36 @@ summary { cursor: pointer; color: var(--azur); font-weight: 700; padding: 6px 0 
 .connexion form { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
 .connexion input { font: inherit; padding: 10px 12px; border: 1px solid var(--trait); border-radius: 8px; }
 .erreur { color: var(--secours); margin: 0; }
+.barre-vues { margin-top: 20px; }
+.vues { display: inline-flex; border: 1px solid var(--trait); border-radius: 8px; overflow: hidden; background: var(--carte); }
+.vues button { border: 0; background: none; font: inherit; font-weight: 700; padding: 8px 16px; cursor: pointer; color: var(--doux); }
+.vues button.actif { background: var(--navy); color: #fff; }
+main[hidden], .puce[hidden] { display: none !important; }
+.mois-cal h3 { margin: 28px 0 10px; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; color: var(--doux); }
+.grille { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.jsem { font-size: .75rem; color: var(--doux); text-align: center; text-transform: uppercase; }
+.case { min-height: 92px; background: var(--carte); border: 1px solid var(--trait); border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.case.we { background: #f9fafc; }
+.case.passe { opacity: .5; }
+.case.auj { border-color: var(--azur); box-shadow: inset 0 0 0 1px var(--azur); }
+.vide-case { background: none; border: 0; }
+.nj { font-size: .8rem; color: var(--doux); }
+.auj .nj { color: var(--azur); font-weight: 700; }
+.puce { display: block; border-radius: 4px; padding: 3px 5px; font-size: .78rem; line-height: 1.25; text-decoration: none; background: var(--azur-wash, #e7f1f8); color: var(--azur); overflow-wrap: anywhere; }
+.puce b { font-family: Archivo, system-ui, sans-serif; }
+.puce.n-complet { background: var(--navy); color: #fff; }
+.puce.n-presque { background: var(--ocre-vif); color: #221900; }
+.puce.n-faible { background: var(--secours-wash); color: var(--secours); box-shadow: inset 3px 0 0 var(--secours); }
+.puce.n-ferme { background: #eef2f6; color: var(--doux); }
+.encours-cal[hidden] { display: none; }
+.encours-cal { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 20px 0 0; }
+.encours-cal > span { color: var(--doux); font-size: .9rem; }
+.encours-cal .puce { display: inline-block; }
 @media (max-width: 600px) {
+  .grille { gap: 2px; }
+  .case { min-height: 64px; padding: 2px; }
+  .puce { font-size: .68rem; padding: 2px 3px; }
+  .puce span { display: block; }
   .session { grid-template-columns: 48px 1fr auto; gap: 4px 12px; padding: 12px; }
   .chiffre { font-size: 1.35rem; }
   .compte strong { font-size: 1.5rem; }
