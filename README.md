@@ -59,6 +59,19 @@ SST 0 (aucun événement SST côté Wix).
 
 Une fiche placée dans `horsCatalogue` (dans `src/data/formations.ts`) a sa page, mais n'apparaît dans aucun menu ni aucune liste : on y arrive par un lien direct. C'est le cas des Gestes qui sauvent, `/formations/gqs-gestes-qui-sauvent`, séance gratuite pour la Journée nationale de la résilience (publiée le 04/10/2026). Pour la remettre au catalogue, déplacer la fiche dans `formations`.
 
+### Suivi des inscriptions (page interne)
+
+`/suivi-inscriptions` (publiée le 23/10/2026) : les prochaines sessions, leur
+remplissage et la liste des participants, en liste ou en calendrier, lus en
+direct chez Wix à chaque ouverture. Une icône rouge de fauteuil roulant signale
+les sessions où un participant a déclaré une situation de handicap.
+
+- Réservée à l'équipe : aucun lien n'y mène, « noindex », mot de passe.
+- Le mot de passe est un secret du Worker (`SUIVI_MDP`), jamais dans ce dépôt
+  public. Pour le changer : `npx wrangler secret put SUIVI_MDP` (déconnecte
+  tous les appareils).
+- Code : `worker/suivi.js`. En local, `.dev.vars` doit contenir `SUIVI_MDP`.
+
 ## Structure
 
 ```
