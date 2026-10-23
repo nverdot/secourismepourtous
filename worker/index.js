@@ -3,14 +3,15 @@
  *
  * Le site est entièrement statique : Cloudflare sert `dist/` directement, sans
  * passer par ce code. Ce Worker n'est appelé que pour les chemins qui ne
- * correspondent à aucun fichier — c'est-à-dire /api/contact et les anciennes
- * pages de session Wix.
+ * correspondent à aucun fichier — c'est-à-dire /api/contact, les anciennes
+ * pages de session Wix et la page interne /suivi-inscriptions.
  *
  * Tout le reste retombe sur `env.ASSETS`, qui applique les règles déclarées
  * dans wrangler.toml (dont la page 404).
  */
 
 import { contact } from './contact.js';
+import { suivi } from './suivi.js';
 
 /**
  * Anciennes pages de session Wix (/event-details/…).
@@ -60,6 +61,7 @@ export default {
     const { pathname } = url;
 
     if (pathname === '/api/contact') return contact(request, env);
+    if (pathname === '/suivi-inscriptions') return suivi(request, env);
     if (pathname.startsWith('/event-details/')) return ancienneSession(url);
 
     return env.ASSETS.fetch(request);
