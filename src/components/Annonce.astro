@@ -21,10 +21,13 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
 )}
 
 <style>
+  /* Orange vif, choisi par Nicolas le 29/10/2026 pour trancher sur le bleu
+     nuit de l'en-tête. Le texte est en bleu nuit : du blanc sur cet orange
+     tombe à 2,7:1, sous le seuil de lisibilité, le bleu nuit atteint 6,7:1. */
   .annonce {
     display: block;
-    background: var(--ocean, #0e7c86);
-    color: #fff;
+    background: #f57c1f;
+    color: var(--navy-deep);
     text-decoration: none;
     font-size: 1rem;
     line-height: 1.35;
@@ -42,8 +45,8 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
   }
   .annonce__new {
     flex: none;
-    background: #fff;
-    color: var(--ocean, #0e7c86);
+    background: var(--navy-deep);
+    color: #fff;
     font-family: 'Archivo', sans-serif;
     font-weight: 800;
     font-size: 0.72rem;
@@ -59,7 +62,7 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     display: inline-block;
     margin-left: 0.4rem;
     padding: 0.05rem 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--navy-deep);
     border-radius: 999px;
     white-space: nowrap;
   }
