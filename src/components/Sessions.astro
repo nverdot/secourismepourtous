@@ -28,9 +28,13 @@ const reste = sessions.length - visibles.length;
         <h2 class="h-section" id="t-sessions">Prochaines sessions {sigle}</h2>
       </div>
       <p class="sessions__lieu">
-        {asso.contact.adresse}, {asso.contact.ville}
+        {fiche?.lieuSessions ?? `${asso.contact.adresse}, ${asso.contact.ville}`}
       </p>
     </div>
+
+    {visibles.length > 0 && fiche?.noteSessions && (
+      <p class="sessions__note">{fiche.noteSessions}</p>
+    )}
 
     {visibles.length > 0 ? (
       <>
@@ -94,6 +98,16 @@ const reste = sessions.length - visibles.length;
     margin-bottom: 1.75rem;
   }
   .sessions__lieu { font-size: 0.9rem; color: var(--ink-mute); }
+  .sessions__note {
+    max-width: 68ch;
+    margin: -0.5rem 0 1.5rem;
+    padding: 0.9rem 1.1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--sunk);
+    border-radius: var(--r-sm);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
 
   .sessions__grille {
     list-style: none;

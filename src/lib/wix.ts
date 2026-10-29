@@ -69,7 +69,7 @@ const CHAMPS_STANDARDS = new Set(['firstName', 'lastName', 'email', 'phone', 'co
  * qui construit le site. Chez Cloudflare, c'est UTC : sans cela, une session
  * de 9 h s'affichait à 7 h, et une soirée pouvait changer de jour.
  */
-const paris = (d: Date) => new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+export const paris = (d: Date) => new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
 
 /** Clé de regroupement par mois, ex. « 2026-09 ». */
 export const cleMois = (date: Date) => {

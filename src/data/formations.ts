@@ -88,6 +88,15 @@ export interface Formation {
   wixEvent: string;
 
   /**
+   * Ce que le visiteur doit savoir des sessions affichées et que la carte de
+   * date ne dit pas : un tarif différent de celui de la fiche, un rythme.
+   * Affiché au-dessus des dates, seulement quand il y en a.
+   */
+  noteSessions?: string;
+  /** Lieu des sessions, quand ce n'est pas le local de l'association. */
+  lieuSessions?: string;
+
+  /**
    * Formation continue associée (slug). Le visiteur qui arrive sur la filière
    * doit choisir entre « je me forme » et « je me recycle » : c'est la première
    * question qu'il se pose, avant même le choix du niveau.
@@ -498,14 +507,13 @@ export const formations: Formation[] = [
     // l'association ne conviennent pas ici, on les remplace.
     modalites: {
       effectif: 'Jusqu’à 20 candidats par session.',
-      lieu: 'Piscine Jean Médecin pour la pratique aquatique, les mardi et jeudi soir de 20 h 30 à 22 h. Le PSE1 et le PSE2 se déroulent au 31 boulevard Impératrice Eugénie.',
+      // Le lieu et les horaires changent d'une promotion à l'autre : ceux-ci
+      // sont ceux de la session du 1er décembre 2026, donnés par Nicolas le
+      // 29/10/2026. À revoir à chaque nouvelle promotion.
+      lieu: 'Piscine Jean Bouin, 2 rue Jean Allègre à Nice, pour la pratique aquatique : entraînements le lundi et le mercredi soir, de 21 h à 22 h 30. Le PSE1 et le PSE2 se déroulent au 31 boulevard Impératrice Eugénie.',
       pedagogie: 'Formation en présentiel alternant apports théoriques, démonstrations techniques et mises en situation pratiques. La formation privilégie l’apprentissage par la pratique : exercices de natation et de sauvetage aquatique, techniques de dégagement et de sortie d’eau, conduite à tenir face à une victime, surveillance, prévention et mises en situation simulant des interventions réelles. Les stagiaires sont placés progressivement dans des situations proches des conditions d’exercice du surveillant-sauveteur.',
       evaluation: 'Deux épreuves à réussir pendant la formation. Un parcours de sauvetage aquatique en 2 min 30 maximum — nage, apnées, recherche d’un mannequin immergé puis remorquage jusqu’au bord de départ. Puis 300 m nage libre avec palmes en 4 min 30 maximum, le chronomètre étant déclenché avant la mise en place des palmes : le temps de les chausser compte. Au moins 10 minutes de récupération séparent les deux épreuves.',
     },
-    // Le contenu, le prix et les prérequis sont arrêtés ; seul le calendrier
-    // attend la validation. On garde donc toute l'information et on retire la
-    // seule chose qu'on ne peut pas tenir : la réservation.
-    datesAVenir: {},
     objectifs: [
       { titre: 'Prévenir avant de sauver', texte: 'Repérer les signes avant-coureurs d’une noyade et agir avant l’accident, plutôt que pendant.', icone: 'bouclier' },
       { titre: 'Tenir un poste de surveillance', texte: 'Organiser la sécurité d’un bassin ou d’une plage, gérer le public et rendre compte.', icone: 'eau' },
@@ -533,7 +541,13 @@ export const formations: Formation[] = [
       'Recyclage annuel du PSE2, dont dépend votre employabilité',
     ],
     image: '/img/filiere-aquatique.jpg',
-    wixEvent: 'BNSSA',
+    // L'événement Wix s'intitule « SSA » depuis la session du 1er décembre 2026.
+    wixEvent: 'SSA',
+    // Le billet de cette session est le SSA seul : le prix de la fiche (900 €)
+    // est celui du cursus complet. Sans cette note, le visiteur croirait payer
+    // le cursus et découvrirait trop tard qu'il lui manque le PSE2.
+    noteSessions: 'Ces sessions portent sur le SSA seul, au tarif de 420 € : le PSE1 et le PSE2 ne sont pas compris. Le PSE2 reste exigé par l’arrêté : si vous ne l’avez pas, prévoyez nos sessions PSE1 et PSE2. Entraînements le lundi et le mercredi soir, de 21 h à 22 h 30.',
+    lieuSessions: 'Piscine Jean Bouin, 2 rue Jean Allègre, Nice',
     recyclage: 'fc-bnssa',
     seo: {
       title: 'SSA — ex-BNSSA à Nice | Sauveteur aquatique',

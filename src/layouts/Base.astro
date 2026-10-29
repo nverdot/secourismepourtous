@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '../styles/appli.css';
 import Header from '../components/Header.astro';
+import Annonce from '../components/Annonce.astro';
 import Footer from '../components/Footer.astro';
 import Compagnon from '../components/Compagnon.astro';
 import BarreOnglets from '../components/BarreOnglets.astro';
@@ -99,6 +100,7 @@ const canonical = new URL(chemin, Astro.site ?? 'https://www.secourismepourtous.
 
   <body class={filiere ? `filiere-${filiere}` : undefined} data-appli>
     <a class="saut-contenu" href="#contenu">Aller au contenu</a>
+    <Annonce />
     <Header />
     <main id="contenu">
       <slot />

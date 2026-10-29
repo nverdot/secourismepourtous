@@ -1,0 +1,83 @@
+---
+import { sessionsAVenir, sessionsDe, formatNumero, paris } from '../lib/wix';
+import { formations } from '../data/formations';
+
+/**
+ * Bandeau d'annonce, tout en haut de chaque page.
+ *
+ * Il ne s'affiche que si la formation annoncée a une session ouverte à
+ * l'inscription : quand la vente est en pause dans Wix, que la session est
+ * pleine ou passée, il disparaît de lui-même. On n'annonce jamais une date
+ * qu'on ne peut pas réserver.
+ *
+ * Pour annoncer autre chose, changer `SLUG` ; pour l'arrêter, le vider.
+ */
+const SLUG = 'ssa';
+
+const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+const f = formations.find((x) => x.slug === SLUG);
+const prochaine = f ? sessionsDe(await sessionsAVenir(), f.wixEvent)[0] : undefined;
+const date = prochaine
+  ? `${paris(prochaine.debut).getDate() === 1 ? '1er' : Number(formatNumero(prochaine.debut))} ${MOIS[paris(prochaine.debut).getMonth()]} ${paris(prochaine.debut).getFullYear()}`
+  : '';
+// Sur la fiche elle-même, l'annonce ferait doublon avec les dates.
+const surLaFiche = Astro.url.pathname.replace(/\.html$|\/$/, '') === `/formations/${SLUG}`;
+---
+
+{f && prochaine && !surLaFiche && (
+  <a class="annonce" href={`/formations/${f.slug}#sessions`}>
+    <span class="wrap annonce__in">
+      <span class="annonce__new">Nouveau</span>
+      <span class="annonce__txt">
+        <span class="annonce__long">Inscriptions ouvertes : </span><strong>{f.sigle} — ex-BNSSA</strong><span class="annonce__long">, prochaine session le</span><span class="annonce__court">, le</span>{' '}<strong>{date}</strong>
+      </span>
+      <span class="annonce__cta" aria-hidden="true"><span class="annonce__long">S’inscrire </span>→</span>
+    </span>
+  </a>
+)}
+
+<style>
+  .annonce {
+    display: block;
+    background: var(--ocean, #0e7c86);
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  .annonce:hover .annonce__cta,
+  .annonce:focus-visible .annonce__cta { text-decoration: underline; }
+  .annonce__in {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    padding-block: 0.6rem;
+    text-align: center;
+  }
+  .annonce__new {
+    flex: none;
+    background: #fff;
+    color: var(--ocean, #0e7c86);
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+  .annonce__cta { flex: none; font-weight: 700; }
+  .annonce__court { display: none; }
+
+  /* Sur téléphone, le bandeau tient sur une ligne ou deux : l'essentiel
+     (quoi, quand) et la flèche, le reste se lit sur la fiche. */
+  @media (max-width: 600px) {
+    .annonce__in { flex-wrap: nowrap; justify-content: flex-start; text-align: left; gap: 0.6rem; padding-block: 0.5rem; }
+    .annonce__long { display: none; }
+    .annonce__court { display: inline; }
+    .annonce__txt { flex: 1; min-width: 0; }
+  }
+</style>
