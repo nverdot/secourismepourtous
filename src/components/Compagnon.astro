@@ -35,7 +35,31 @@
  *    personnage garde sa place quel que soit le visage tiré.
  */
 
-import { ICONES, PLEINES, ECRANS } from '../data/compagnon';
+import { ICONES, PLEINES, ECRANS as BASE, type Ecran } from '../data/compagnon';
+import { annonce } from '../lib/annonce';
+
+/*
+ * L'annonce du moment (src/lib/annonce.ts) s'ajoute en tête de l'accueil, et
+ * la session SSA seul dans l'écran « Piscines, plages » — seulement tant
+ * qu'une session est ouverte à l'inscription.
+ */
+const an = await annonce();
+const ECRANS: Ecran[] = !an ? BASE : BASE.map((e) => {
+  if (e.id === 'accueil') {
+    return { ...e, actions: [
+      { texte: `Nouveau : ${an.nom}, session le ${an.date}`, icone: 'eau', vers: an.url, note: `${an.tarif} ${an.tarifNote}` },
+      ...e.actions,
+    ] };
+  }
+  if (e.id === 'aquatique') {
+    return { ...e, actions: [
+      e.actions[0],
+      { texte: 'SSA seul, si vous avez déjà le PSE2', icone: 'eau', vers: an.url, note: `Session le ${an.date} · ${an.tarif} ${an.tarifNote}` },
+      ...e.actions.slice(1),
+    ] };
+  }
+  return e;
+});
 
 const POSES = [...new Set(ECRANS.map((e) => e.pose))];
 const accueil = ECRANS[0];

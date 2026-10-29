@@ -1,36 +1,19 @@
 ---
-import { sessionsAVenir, sessionsDe, formatNumero, paris } from '../lib/wix';
-import { formations } from '../data/formations';
+import { annonce } from '../lib/annonce';
 
-/**
- * Bandeau d'annonce, tout en haut de chaque page.
- *
- * Il ne s'affiche que si la formation annoncée a une session ouverte à
- * l'inscription : quand la vente est en pause dans Wix, que la session est
- * pleine ou passée, il disparaît de lui-même. On n'annonce jamais une date
- * qu'on ne peut pas réserver.
- *
- * Pour annoncer autre chose, changer `SLUG` ; pour l'arrêter, le vider.
- */
-const SLUG = 'ssa';
-
-const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-
-const f = formations.find((x) => x.slug === SLUG);
-const prochaine = f ? sessionsDe(await sessionsAVenir(), f.wixEvent)[0] : undefined;
-const date = prochaine
-  ? `${paris(prochaine.debut).getDate() === 1 ? '1er' : Number(formatNumero(prochaine.debut))} ${MOIS[paris(prochaine.debut).getMonth()]} ${paris(prochaine.debut).getFullYear()}`
-  : '';
+/** Bandeau d'annonce, tout en haut de chaque page. Le contenu vient de src/lib/annonce.ts. */
+const a = await annonce();
 // Sur la fiche elle-même, l'annonce ferait doublon avec les dates.
-const surLaFiche = Astro.url.pathname.replace(/\.html$|\/$/, '') === `/formations/${SLUG}`;
+const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') === `/formations/${a.slug}`;
 ---
 
-{f && prochaine && !surLaFiche && (
-  <a class="annonce" href={`/formations/${f.slug}#sessions`}>
+{a && !surLaFiche && (
+  <a class="annonce" href={a.url}>
     <span class="wrap annonce__in">
       <span class="annonce__new">Nouveau</span>
       <span class="annonce__txt">
-        <span class="annonce__long">Inscriptions ouvertes : </span><strong>{f.sigle} — ex-BNSSA</strong><span class="annonce__long">, prochaine session le</span><span class="annonce__court">, le</span>{' '}<strong>{date}</strong>
+        <span class="annonce__long">Inscriptions ouvertes : </span><strong>{a.nom}</strong><span class="annonce__long">, prochaine session le</span><span class="annonce__court">, le</span>{' '}<strong>{a.date}</strong>
+        <span class="annonce__prix"><strong>{a.tarif}</strong>{' '}{a.tarifNote}</span>
       </span>
       <span class="annonce__cta" aria-hidden="true"><span class="annonce__long">S’inscrire </span>→</span>
     </span>
@@ -70,6 +53,16 @@ const surLaFiche = Astro.url.pathname.replace(/\.html$|\/$/, '') === `/formation
     border-radius: 999px;
   }
   .annonce__cta { flex: none; font-weight: 700; }
+  /* Le tarif se détache du reste : c'est lui qui distingue cette session du
+     cursus complet à 900 €. */
+  .annonce__prix {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
   .annonce__court { display: none; }
 
   /* Sur téléphone, le bandeau tient sur une ligne ou deux : l'essentiel
@@ -79,5 +72,6 @@ const surLaFiche = Astro.url.pathname.replace(/\.html$|\/$/, '') === `/formation
     .annonce__long { display: none; }
     .annonce__court { display: inline; }
     .annonce__txt { flex: 1; min-width: 0; }
+    .annonce__prix { margin: 0.2rem 0 0; }
   }
 </style>
