@@ -13,7 +13,7 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
       <span class="annonce__new">Nouveau</span>
       <span class="annonce__txt">
         <span class="annonce__new annonce__new--court">Nouveau</span>{' '}
-        <span class="annonce__long annonce__large">Inscriptions ouvertes : </span><strong>{a.nom}</strong><span>, le</span>{' '}<strong>{a.date}</strong>
+        <strong>{a.nom}</strong><span>, le</span>{' '}<strong>{a.date}</strong>
         <span class="annonce__prix-groupe">
           {a.tarifs.map((t) => (
             <span class="annonce__prix"><strong>{t.prix}</strong>{' '}<span class="annonce__long">{t.note}</span><span class="annonce__court">{t.court}</span></span>
@@ -72,14 +72,13 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     white-space: nowrap;
   }
   .annonce__court { display: none; }
-  /* Avec deux tarifs en 16 px, la phrase complète ne tient sur une ligne
-     qu'en très grand écran : en dessous, « Nouveau » et « S'inscrire »
-     suffisent à dire que les inscriptions sont ouvertes. */
-  @media (max-width: 1399px) { .annonce__large { display: none; } }
+  /* Pas de « Inscriptions ouvertes » : avec deux tarifs en 16 px, la phrase
+     ne tenait plus sur une ligne, même sur grand écran (Nicolas, 29/10/2026).
+     « Nouveau » et « S'inscrire » le disent déjà. */
 
-  /* Sur téléphone, le bandeau tient sur une ligne ou deux : l'essentiel
+  /* Sur téléphone et tablette, le bandeau tient sur une ligne ou deux : l'essentiel
      (quoi, quand) et la flèche, le reste se lit sur la fiche. */
-  @media (max-width: 600px) {
+  @media (max-width: 960px) {
     .annonce__in { flex-wrap: nowrap; justify-content: flex-start; text-align: left; gap: 0.6rem; padding-block: 0.5rem; }
     .annonce__long { display: none; }
     .annonce__court { display: inline; }
