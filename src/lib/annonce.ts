@@ -42,6 +42,7 @@ export async function annonce(): Promise<Annonce | null> {
     date: `${d.getDate() === 1 ? '1er' : d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}`,
     tarif: TARIF,
     tarifNote: TARIF_NOTE,
-    url: `/formations/${f.slug}#sessions`,
+    // Le haut de la fiche, pas les dates : arriver au milieu de la page désoriente.
+    url: `/formations/${f.slug}`,
   };
 }
