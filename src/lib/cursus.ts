@@ -1,7 +1,7 @@
 /**
  * Le cursus complet d'une formation (voir `cursus` dans formations.ts),
- * proposé dans les dates d'une autre fiche — le cursus SSA sur le PSE1 et le
- * PSE2. Rien tant que la formation n'a pas de session ouverte : on ne propose
+ * proposé dans les dates d'une autre fiche — le cursus SSA sur le PSE1.
+ * Rien tant que la formation n'a pas de session ouverte : on ne propose
  * jamais un billet qu'on ne peut pas acheter.
  */
 import { sessionsAVenir, sessionsDe, type Session } from './wix';

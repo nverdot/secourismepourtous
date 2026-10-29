@@ -12,8 +12,13 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     <span class="wrap annonce__in">
       <span class="annonce__new">Nouveau</span>
       <span class="annonce__txt">
-        <span class="annonce__long">Inscriptions ouvertes : </span><strong>{a.nom}</strong><span class="annonce__long">, prochaine session le</span><span class="annonce__court">, le</span>{' '}<strong>{a.date}</strong>
-        <span class="annonce__prix"><strong>{a.tarif}</strong>{' '}{a.tarifNote}</span>
+        <span class="annonce__new annonce__new--court">Nouveau</span>{' '}
+        <span class="annonce__long annonce__large">Inscriptions ouvertes : </span><strong>{a.nom}</strong><span>, le</span>{' '}<strong>{a.date}</strong>
+        <span class="annonce__prix-groupe">
+          {a.tarifs.map((t) => (
+            <span class="annonce__prix"><strong>{t.prix}</strong>{' '}<span class="annonce__long">{t.note}</span><span class="annonce__court">{t.court}</span></span>
+          ))}
+        </span>
       </span>
       <span class="annonce__cta" aria-hidden="true"><span class="annonce__long">S’inscrire </span>→</span>
     </span>
@@ -55,8 +60,9 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     border-radius: 999px;
   }
   .annonce__cta { flex: none; font-weight: 700; }
-  /* Le tarif se détache du reste : c'est lui qui distingue cette session du
-     cursus complet à 900 €. */
+  .annonce__new--court { display: none; }
+  /* Les deux tarifs se détachent du reste : SSA seul à 420 €, ou cursus
+     complet avec le PSE1 et le PSE2 à 900 €. */
   .annonce__prix {
     display: inline-block;
     margin-left: 0.4rem;
@@ -66,6 +72,10 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     white-space: nowrap;
   }
   .annonce__court { display: none; }
+  /* Avec deux tarifs en 16 px, la phrase complète ne tient sur une ligne
+     qu'en très grand écran : en dessous, « Nouveau » et « S'inscrire »
+     suffisent à dire que les inscriptions sont ouvertes. */
+  @media (max-width: 1399px) { .annonce__large { display: none; } }
 
   /* Sur téléphone, le bandeau tient sur une ligne ou deux : l'essentiel
      (quoi, quand) et la flèche, le reste se lit sur la fiche. */
@@ -74,6 +84,11 @@ const surLaFiche = a !== null && Astro.url.pathname.replace(/\.html$|\/$/, '') =
     .annonce__long { display: none; }
     .annonce__court { display: inline; }
     .annonce__txt { flex: 1; min-width: 0; }
-    .annonce__prix { margin: 0.2rem 0 0; }
+    /* La pastille « Nouveau » passe dans le texte : la place gagnée tient
+       les deux tarifs sur une ligne. */
+    .annonce__in > .annonce__new { display: none; }
+    .annonce__new--court { display: inline-block; vertical-align: 0.1em; margin-right: 0.2rem; }
+    .annonce__prix-groupe { display: flex; flex-wrap: wrap; gap: 0.3rem 0.4rem; margin-top: 0.3rem; }
+    .annonce__prix { margin: 0; }
   }
 </style>

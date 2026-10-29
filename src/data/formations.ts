@@ -565,10 +565,11 @@ export const formations: Formation[] = [
     noteSessions: 'Deux formules pour cette session. SSA seul, 420 €, si vous avez déjà le PSE2 : le PSE1 et le PSE2 ne sont pas compris, et l’arrêté exige le PSE2. Ou cursus complet avec le PSE1 et le PSE2, 900 €. Entraînements le lundi et le mercredi soir, de 21 h à 22 h 30.',
     lieuSessions: 'Piscine Jean Bouin, 2 rue Jean Allègre, Nice',
     // Le billet à 900 € de l'événement Wix « SSA », proposé aussi dans les
-    // dates du PSE1 et du PSE2. Les dates du détail viennent de la description
+    // dates du PSE1. Pas sur le PSE2 (choix de Nicolas, 29/10/2026) : le
+    // cursus commence par le PSE1, il ne vaut rien à qui l'a déjà. Les dates du détail viennent de la description
     // du billet dans Wix (29/10/2026) : à revoir à chaque promotion.
     cursus: {
-      pages: ['pse-1', 'pse-2'],
+      pages: ['pse-1'],
       libelle: 'Cursus SSA : PSE1, PSE2 et SSA',
       tarif: '900 €',
       detail: 'PSE1 les 28-29 novembre et 5-6 décembre, PSE2 les 12-13 et 19-20 décembre, puis entraînements SSA du 1er décembre 2026 au 19 février 2027, le lundi et le mercredi soir à la piscine Jean Bouin.',

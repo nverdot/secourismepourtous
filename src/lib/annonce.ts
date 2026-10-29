@@ -13,11 +13,20 @@ import { sessionsAVenir, sessionsDe, paris } from './wix';
 import { formations } from '../data/formations';
 
 const SLUG = 'ssa';
-// Prix du billet Wix de la session SSA, qui ne comprend pas le PSE1 ni le PSE2.
-const TARIF = '420 €';
-const TARIF_NOTE = 'hors PSE1 et PSE2';
+// Les deux billets Wix de la session SSA. `court` sert sur téléphone, où le
+// bandeau doit tenir en peu de lignes.
+const TARIFS: Tarif[] = [
+  { prix: '420 €', note: 'hors PSE1 et PSE2', court: 'sans PSE' },
+  { prix: '900 €', note: 'avec PSE1 et PSE2', court: 'PSE inclus' },
+];
 
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+export interface Tarif {
+  prix: string;
+  note: string;
+  court: string;
+}
 
 export interface Annonce {
   slug: string;
@@ -25,8 +34,7 @@ export interface Annonce {
   nom: string;
   /** « 1er décembre 2026 » */
   date: string;
-  tarif: string;
-  tarifNote: string;
+  tarifs: Tarif[];
   url: string;
 }
 
@@ -40,8 +48,7 @@ export async function annonce(): Promise<Annonce | null> {
     slug: f.slug,
     nom: `${f.sigle} — ex-BNSSA`,
     date: `${d.getDate() === 1 ? '1er' : d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}`,
-    tarif: TARIF,
-    tarifNote: TARIF_NOTE,
+    tarifs: TARIFS,
     // Le haut de la fiche, fenêtre des dates ouverte (voir PopupDates.astro) :
     // arriver au milieu de la page, sur la liste des dates, désorientait.
     url: `/formations/${f.slug}#dates`,
