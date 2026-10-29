@@ -42,7 +42,8 @@ export async function annonce(): Promise<Annonce | null> {
     date: `${d.getDate() === 1 ? '1er' : d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}`,
     tarif: TARIF,
     tarifNote: TARIF_NOTE,
-    // Le haut de la fiche, pas les dates : arriver au milieu de la page désoriente.
-    url: `/formations/${f.slug}`,
+    // Le haut de la fiche, fenêtre des dates ouverte (voir PopupDates.astro) :
+    // arriver au milieu de la page, sur la liste des dates, désorientait.
+    url: `/formations/${f.slug}#dates`,
   };
 }

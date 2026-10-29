@@ -14,7 +14,8 @@ interface Props {
 const { sessions, sigle } = Astro.props;
 
 // Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
-const masques = formations.find((f) => f.sigle === sigle)?.billetsMasques ?? [];
+const fiche = formations.find((f) => f.sigle === sigle);
+const masques = fiche?.billetsMasques ?? [];
 
 // Les onglets de mois sont calculés au build : pas de tri côté visiteur.
 const mois = [...new Map(sessions.map((s) => [cleMois(s.debut), s.debut])).entries()]
@@ -94,7 +95,7 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
   </div>
 
   <footer class="pop__pied">
-    <span>{asso.contact.adresse}, {asso.contact.ville}</span>
+    <span>{fiche?.lieuSessions ?? `${asso.contact.adresse}, ${asso.contact.ville}`}</span>
     <a href={`tel:${asso.contact.telephoneLien}`}>{asso.contact.telephone}</a>
   </footer>
 </dialog>
@@ -115,6 +116,14 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
         pop.showModal();
       })
     );
+
+    // Arrivée par une adresse en « #dates » (bandeau d'annonce, Compagnon) :
+    // la fenêtre s'ouvre d'elle-même, en haut de la fiche. On efface ensuite
+    // le « #dates » pour qu'un rechargement ne la rouvre pas.
+    if (location.hash === '#dates') {
+      history.replaceState(null, '', location.pathname + location.search);
+      pop.showModal();
+    }
 
     // Fermeture au clic sur le fond, hors de la boîte.
     pop.addEventListener('click', (e) => {
