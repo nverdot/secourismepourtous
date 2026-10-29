@@ -97,6 +97,22 @@ export interface Formation {
   lieuSessions?: string;
 
   /**
+   * Billet « cursus complet » vendu sur l'événement de cette formation, à
+   * proposer aussi dans les dates d'autres fiches. Celui qui s'inscrit au PSE1
+   * en visant le SSA doit pouvoir le dire là, sans chercher la fiche SSA.
+   * N'apparaît que tant qu'une session de cette formation est ouverte.
+   */
+  cursus?: {
+    /** Slugs des fiches où le proposer. */
+    pages: string[];
+    libelle: string;
+    tarif: string;
+    detail: string;
+    /** Billets de l'événement à cacher : on ne garde que le cursus. */
+    billetsMasques: string[];
+  };
+
+  /**
    * Formation continue associée (slug). Le visiteur qui arrive sur la filière
    * doit choisir entre « je me forme » et « je me recycle » : c'est la première
    * question qu'il se pose, avant même le choix du niveau.
@@ -546,8 +562,18 @@ export const formations: Formation[] = [
     // Le billet de cette session est le SSA seul : le prix de la fiche (900 €)
     // est celui du cursus complet. Sans cette note, le visiteur croirait payer
     // le cursus et découvrirait trop tard qu'il lui manque le PSE2.
-    noteSessions: 'Ces sessions portent sur le SSA seul, au tarif de 420 € : le PSE1 et le PSE2 ne sont pas compris. Le PSE2 reste exigé par l’arrêté : si vous ne l’avez pas, prévoyez nos sessions PSE1 et PSE2. Entraînements le lundi et le mercredi soir, de 21 h à 22 h 30.',
+    noteSessions: 'Deux formules pour cette session. SSA seul, 420 €, si vous avez déjà le PSE2 : le PSE1 et le PSE2 ne sont pas compris, et l’arrêté exige le PSE2. Ou cursus complet avec le PSE1 et le PSE2, 900 €. Entraînements le lundi et le mercredi soir, de 21 h à 22 h 30.',
     lieuSessions: 'Piscine Jean Bouin, 2 rue Jean Allègre, Nice',
+    // Le billet à 900 € de l'événement Wix « SSA », proposé aussi dans les
+    // dates du PSE1 et du PSE2. Les dates du détail viennent de la description
+    // du billet dans Wix (29/10/2026) : à revoir à chaque promotion.
+    cursus: {
+      pages: ['pse-1', 'pse-2'],
+      libelle: 'Cursus SSA : PSE1, PSE2 et SSA',
+      tarif: '900 €',
+      detail: 'PSE1 les 28-29 novembre et 5-6 décembre, PSE2 les 12-13 et 19-20 décembre, puis entraînements SSA du 1er décembre 2026 au 19 février 2027, le lundi et le mercredi soir à la piscine Jean Bouin.',
+      billetsMasques: ['hors PSE'],
+    },
     recyclage: 'fc-bnssa',
     seo: {
       title: 'SSA — ex-BNSSA à Nice | Sauveteur aquatique',

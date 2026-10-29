@@ -3,6 +3,7 @@ import type { Session } from '../lib/wix';
 import { formatJour, formatNumero, formatMois, formatAnnee, formatHeure } from '../lib/wix';
 import { asso } from '../data/association';
 import { formations } from '../data/formations';
+import { cursusPour } from '../lib/cursus';
 
 interface Props {
   sessions: Session[];
@@ -13,6 +14,8 @@ const { sessions, sigle } = Astro.props;
 // Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
 const fiche = formations.find((f) => f.sigle === sigle);
 const masques = fiche?.billetsMasques ?? [];
+// Le cursus d'une autre formation qui commence par celle-ci (SSA sur le PSE1).
+const cursus = await cursusPour(fiche?.slug);
 const entreprise = Boolean(fiche?.entreprise);
 
 // Au-delà de 12 dates la liste devient illisible ; le lien vers l'agenda prend le relais.
@@ -39,6 +42,24 @@ const reste = sessions.length - visibles.length;
     {visibles.length > 0 ? (
       <>
         <ul class="sessions__grille">
+          {cursus && (
+            <li class="sessions__cursus">
+              <button type="button" class="cursus" data-inscription
+                  data-event-id={cursus.session.id}
+                  data-slug={cursus.session.slug}
+                  data-champs={JSON.stringify(cursus.session.champs ?? [])}
+                  data-masquer={JSON.stringify(cursus.billetsMasques)}
+                  data-url={cursus.session.urlInscription ?? ''}
+                  data-libelle={cursus.libelle}>
+                <span class="cursus__txt">
+                  <span class="cursus__eyebrow">Vous visez le SSA ?</span>
+                  <strong class="cursus__titre">{cursus.libelle} — {cursus.tarif}</strong>
+                  <span class="cursus__detail">{cursus.detail}</span>
+                </span>
+                <span class="cursus__cta">S’inscrire au cursus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+              </button>
+            </li>
+          )}
           {visibles.map((s) => (
             <li>
               <button type="button" class="sess" data-inscription
@@ -108,6 +129,28 @@ const reste = sessions.length - visibles.length;
     font-size: 1rem;
     line-height: 1.55;
   }
+
+  /* Le cursus SSA, sur le PSE1 et le PSE2 : une ligne entière, au-dessus des
+     dates, pour qu'on ne la prenne pas pour une session de plus. */
+  .sessions__cursus { grid-column: 1 / -1; }
+  .cursus {
+    width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.9rem 1.5rem;
+    background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--secours);
+    border-radius: var(--r-md); padding: 1.1rem 1.25rem;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  }
+  .cursus:hover { border-color: var(--secours); box-shadow: var(--sh-sm); }
+  .cursus__txt { display: flex; flex-direction: column; gap: 0.3rem; flex: 1 1 22rem; min-width: 0; }
+  .cursus__eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--secours); }
+  .cursus__titre { font-family: 'Archivo', sans-serif; font-size: 1.15rem; font-weight: 800; line-height: 1.25; }
+  .cursus__detail { font-size: 1rem; color: var(--ink-soft); line-height: 1.5; }
+  .cursus__cta {
+    flex: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--secours); color: #fff; font-weight: 700;
+    padding: 0.7rem 1.1rem; border-radius: 999px;
+  }
+  .cursus__cta svg { width: 16px; height: 16px; }
 
   .sessions__grille {
     list-style: none;

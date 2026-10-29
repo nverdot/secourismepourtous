@@ -6,6 +6,7 @@ import {
 } from '../lib/wix';
 import { asso } from '../data/association';
 import { formations } from '../data/formations';
+import { cursusPour } from '../lib/cursus';
 
 interface Props {
   sessions: Session[];
@@ -16,6 +17,7 @@ const { sessions, sigle } = Astro.props;
 // Certaines formations vendent un forfait qu'on ne montre pas ici (voir formations.ts).
 const fiche = formations.find((f) => f.sigle === sigle);
 const masques = fiche?.billetsMasques ?? [];
+const cursus = await cursusPour(fiche?.slug);
 
 // Les onglets de mois sont calculés au build : pas de tri côté visiteur.
 const mois = [...new Map(sessions.map((s) => [cleMois(s.debut), s.debut])).entries()]
@@ -64,6 +66,25 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
     )}
 
     <ul class="pop__liste">
+      {/* Le cursus reste affiché quel que soit le mois choisi. */}
+      {cursus && (
+        <li data-mois="toujours">
+          <button type="button" class="pdate pdate--cursus" data-inscription
+                  data-event-id={cursus.session.id}
+                  data-slug={cursus.session.slug}
+                  data-champs={JSON.stringify(cursus.session.champs ?? [])}
+                  data-masquer={JSON.stringify(cursus.billetsMasques)}
+                  data-url={cursus.session.urlInscription ?? ''}
+                  data-libelle={cursus.libelle}>
+            <span class="pdate__corps pdate__corps--cursus">
+              <span class="pdate__eyebrow">Vous visez le SSA ?</span>
+              <span class="pdate__titre">{cursus.libelle} — {cursus.tarif}</span>
+              <span class="pdate__periode">{cursus.detail}</span>
+              <span class="pdate__cta">Inscription au cursus <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </span>
+          </button>
+        </li>
+      )}
       {sessions.map((s) => (
         <li data-mois={cleMois(s.debut)}>
           <button type="button" class="pdate" data-inscription
@@ -141,9 +162,9 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
         const cible = o.dataset.mois;
         let visibles = 0;
         lignes.forEach((li) => {
-          const ok = cible === 'tous' || li.dataset.mois === cible;
+          const ok = cible === 'tous' || li.dataset.mois === cible || li.dataset.mois === 'toujours';
           li.hidden = !ok;
-          if (ok) visibles++;
+          if (ok && li.dataset.mois !== 'toujours') visibles++;
         });
         if (vide) vide.hidden = visibles > 0;
       })
@@ -228,6 +249,9 @@ const lieux = [...new Set(sessions.map((s) => s.lieu).filter(Boolean))] as strin
     overflow: hidden;
     transition: border-color 0.15s ease, background-color 0.15s ease;
   }
+  .pdate--cursus { border-left: 4px solid var(--secours); }
+  .pdate__corps--cursus { padding-left: 1rem; }
+  .pdate__eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--secours); }
   .pdate:hover { border-color: var(--accent); background: var(--surface); }
 
   .pdate__cal {
